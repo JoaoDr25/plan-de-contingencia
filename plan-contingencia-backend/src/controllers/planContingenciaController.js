@@ -6,7 +6,10 @@ export const crearPlan = async (req, res) => {
         await nuevoPlan.save();
         res.status(201).json(nuevoPlan);
     } catch (error) {
-        res.status(500).json({mensaje: "Error al crear el plan de contingencia"})
+        res.status(500).json({
+            mensaje: "Error al crear el plan de contingencia",
+            error: error.mensaje
+        });
     }
 };
 
@@ -37,7 +40,7 @@ export const obtenerPlanId = async (req, res) => {
 export const actualizarPlan = async (req, res) => {
     try {
         const {id} = req.params;
-        const actualizar = await PlanContingencia.findByIdAndUpdate(id, req.body, { new: true });
+        const actualizar = await PlanContingencia.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
         
         if (!actualizar) {
             return res.status(404).json({mensaje: "No se pudo actualizar el plan: Plan de contingencia no existe"})
@@ -58,7 +61,7 @@ export const cambiarEstadoPlan = async (req, res) => {
         const {estado} = req.body;
         const cambiarEstado = await  PlanContingencia.findByIdAndUpdate(id, 
             { estado },
-            { new: true }
+            { new: true, runValidators: true }
         );
 
         if (!cambiarEstado) {

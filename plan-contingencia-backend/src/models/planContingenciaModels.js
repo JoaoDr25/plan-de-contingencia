@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const urlValidator = {
-    validator: function(v) {
+    validator: function (v) {
         if (!v) return true;
         return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v);
-        },
-        message:  props => `${props.value} no es una URL válida!`
-    };
+    },
+    message: props => `${props.value} no es una URL válida!`
+};
 
 const planContingenciaSchema = new mongoose.Schema({
     clasificacionInformacion: {
@@ -44,10 +44,16 @@ const planContingenciaSchema = new mongoose.Schema({
     },
     fecha: {
         type: Date,
-        required: true
+        required: true,
+        validate: {
+            validator: v => v instanceof Date && !isNaN(v),
+            message: "Fecha inválida"
+        }
     },
     horaSalida: {
-        type: String
+        type: String,
+        match: [/^\d{2}:\d{2}$/, "Formato HH:mm inválido"],
+        required: true
     },
     tipoTransporte: {
         type: String,
@@ -168,6 +174,7 @@ const planContingenciaSchema = new mongoose.Schema({
                 },
                 aplica: {
                     type: Boolean,
+                    default: Boolean
                 },
                 soporteLink: {
                     type: String,
