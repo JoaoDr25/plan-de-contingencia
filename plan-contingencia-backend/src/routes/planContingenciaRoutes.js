@@ -7,18 +7,19 @@ import {
     cambiarEstadoPlan,
     validarPlan,
     generarPlan
-} from '../controllers/planContingenciaController.js'
-
+} from '../controllers/planContingenciaController.js';
+import { validarObjectId } from "../middlewares/validateObjectId.js";
+import { validarCuerpoNoVacio, validarEstadoPlan } from "../middlewares/validatePlan.js";
 
 const router = express.Router();
 
 
 router.get('/planes', listarPlanes);
-router.post('/planes', crearPlan);
-router.get('/planes/:id', obtenerPlanId);
-router.put('/planes/:id', actualizarPlan);
-router.patch('/planes/:id/estado', cambiarEstadoPlan);
-router.post('/planes/:id/validar', validarPlan);
-router.post('/planes/:id/generar', generarPlan);
+router.post('/planes', validarCuerpoNoVacio, crearPlan);
+router.get('/planes/:id', validarObjectId, obtenerPlanId);
+router.put('/planes/:id', [validarObjectId, validarCuerpoNoVacio], actualizarPlan);
+router.patch('/planes/:id/estado', [validarObjectId, validarCuerpoNoVacio, validarEstadoPlan], cambiarEstadoPlan);
+router.post('/planes/:id/validar', validarObjectId, validarPlan);
+router.post('/planes/:id/generar', validarObjectId, generarPlan);
 
 export default router;
