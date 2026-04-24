@@ -24,6 +24,10 @@ const planContingenciaSchema = new mongoose.Schema({
         ref: "Actividad",
         required: true
     },
+    descripcionActividad: { 
+        type: String,
+        trim: true
+    },
     usuarioId: {
         type: mongoose.Schema.Types.ObjectId,
         // ref: "Usuario" si se usa localmente
@@ -203,3 +207,4 @@ const planContingenciaSchema = new mongoose.Schema({
 
 
 export default mongoose.model('PlanContingencia', planContingenciaSchema);
+

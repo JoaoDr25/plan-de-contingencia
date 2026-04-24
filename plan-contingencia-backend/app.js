@@ -2,6 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 
+import { conectarDB } from './src/config/db.js'
+
 import planRoutes from './src/routes/planContingenciaRoutes.js'
 
 dotenv.config();
@@ -21,6 +23,8 @@ app.use('/api', planRoutes);
 app.use((req, res) => {
     res.status(404).json({error: 'Ruta no encontrada'});
 });
+
+conectarDB();
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);

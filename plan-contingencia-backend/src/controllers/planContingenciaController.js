@@ -8,7 +8,7 @@ export const crearPlan = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             mensaje: "Error al crear el plan de contingencia",
-            error: error.mensaje
+            error: error.message
         });
     }
 };
@@ -19,7 +19,10 @@ export const listarPlanes = async (req, res) => {
         const listar = await PlanContingencia.find();
         res.status(200).json(listar);
     } catch (error) {
-        res.status(500).json({mensaje: "Error al obtener los planes de contingencia"})
+        res.status(500).json({
+            mensaje: "Error al obtener los planes de contingencia",
+            error: error.message
+        })
     }
 };
 
@@ -32,7 +35,10 @@ export const obtenerPlanId = async (req, res) => {
         }
         res.status(200).json(listarId);
     } catch (error) {
-        res.status(500).json({mensaje: "Error al obtener el plan de contingencia"})
+        res.status(500).json({
+            mensaje: "Error al obtener el plan de contingencia",
+            error: error.message
+        })
     }
 };
 
@@ -40,6 +46,14 @@ export const obtenerPlanId = async (req, res) => {
 export const actualizarPlan = async (req, res) => {
     try {
         const {id} = req.params;
+
+        const plan = await PlanContingencia.findById(id);
+        if (plan && (plan.estado = "ejecutado")) {
+            return res.status(400).json({
+                message: "No se puede actualizar un plan que ya ha sido ejecutado"
+            });
+        }
+
         const actualizar = await PlanContingencia.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
         
         if (!actualizar) {
@@ -50,7 +64,10 @@ export const actualizarPlan = async (req, res) => {
             plan: actualizar
         });
     } catch (error) {
-        res.status(500).json({mensaje: "Error al actualizar el plan de contingencia"})
+        res.status(500).json({
+            mensaje: "Error al actualizar el plan de contingencia",
+            error: error.message
+        })
     }
 };
 
@@ -72,7 +89,10 @@ export const cambiarEstadoPlan = async (req, res) => {
             plan: cambiarEstado
         });
     } catch (error) {
-        res.status(500).json({mensaje: "Error al cambiar el estado del plan de contingencia"})
+        res.status(500).json({
+            mensaje: "Error al cambiar el estado del plan de contingencia",
+            error: error.message
+        })
     }
 };
 
@@ -90,7 +110,10 @@ export const validarPlan = async (req, res) => {
             plan: validar
         });
     } catch (error) {
-        res.status(500).json({mensaje: "Error al validar el plan de contingencia"})
+        res.status(500).json({
+            mensaje: "Error al validar el plan de contingencia",
+            error: error.message
+        })
     }
 };
 
@@ -108,6 +131,9 @@ export const generarPlan = async (req, res) => {
             plan: generar
         });
     } catch (error) {
-        res.status(500).json({mensaje: "Error al generar el plan de contingencia"})
+        res.status(500).json({
+            mensaje: "Error al generar el plan de contingencia",
+            error: error.message
+        })
     }
 };
