@@ -61,7 +61,7 @@ export const actualizarPlan = async (req, res) => {
         }
 
         const datosActualizacion = { ...req.body, estado: "borrador" };
-        let mensajeEstado = "Cambios guardados exitosamente. El plan permanece en estado borrador.";
+        let mensajeEstado = "Cambios guardados exitosamente. El plan está listo para aprobarse.";
 
         if (plan && plan.estado === "aprobado") {
             mensajeEstado = "Plan en actualización y requiere una nueva aprobación";
@@ -122,27 +122,6 @@ export const cambiarEstadoPlan = async (req, res) => {
 };
 
 
-export const validarPlan = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const validar = await PlanContingencia.findById(id)
-
-        if (!validar) {
-            return res.status(404).json({ mensaje: "No se encontro el plan para validar" })
-        }
-        res.status(200).json({
-            mensaje: "Plan validado correctamente",
-            plan: validar
-        });
-    } catch (error) {
-        res.status(500).json({
-            mensaje: "Error al validar el plan de contingencia",
-            error: error.message
-        })
-    }
-};
-
-
 export const generarPlan = async (req, res) => {
     try {
         const { id } = req.params;
@@ -151,6 +130,13 @@ export const generarPlan = async (req, res) => {
         if (!generar) {
             return res.status(404).json({ mensaje: "No se encontro el plan para generar el documento" })
         }
+
+        if (generar.estado === "borrador") {
+            return res.status(400).json({
+                mensaje: "No se puede generar el documento. El plan debe estar aprobado primero"
+            })
+        }
+
         res.status(200).json({
             mensaje: "Plan generado correctamente",
             plan: generar

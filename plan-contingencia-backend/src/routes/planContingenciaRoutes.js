@@ -5,7 +5,6 @@ import {
     obtenerPlanId,
     actualizarPlan,
     cambiarEstadoPlan,
-    validarPlan,
     generarPlan
 } from '../controllers/planContingenciaController.js';
 import { validarObjectId } from "../middlewares/validateObjectId.js";
@@ -19,7 +18,6 @@ router.post('/planes', validarCuerpoNoVacio, crearPlan);
 router.get('/planes/:id', validarObjectId, obtenerPlanId);
 router.put('/planes/:id', [validarObjectId, validarCuerpoNoVacio], actualizarPlan);
 router.patch('/planes/:id/estado', [validarObjectId, validarCuerpoNoVacio, validarEstadoPlan], cambiarEstadoPlan);
-router.post('/planes/:id/validar', validarObjectId, validarPlan);
 router.post('/planes/:id/generar', validarObjectId, generarPlan);
 
 export default router;

@@ -12,8 +12,8 @@ import { validarObjectId } from "../middlewares/validateObjectId.js";
 const router = express.Router();
 
 
-router.get("/programas", listarProgramas);
 router.post("/programas", crearPrograma);
+router.get("/programas", listarProgramas);
 router.get("/programas/:id", validarObjectId, obtenerProgramaId);
 router.put("/programas/:id", validarObjectId, actualizarPrograma);
 router.delete("/programas/:id", validarObjectId, eliminarPrograma);

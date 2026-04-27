@@ -71,6 +71,7 @@ const planContingenciaSchema = new mongoose.Schema({
     },
     contactoLugar: {
         type: String,
+        required: true,
         trim: true
     },
     contactosEmergencia: {

@@ -17,6 +17,51 @@ export const validarCuerpoNoVacio = (req, res, next) => {
     };
 };
 
+
+// Función Privada
+const calcularCamposFaltantes = (plan) => {
+    const camposFaltantes = [];
+
+    if (!plan.clasificacionInformacion) camposFaltantes.push("clasificacionInformacion");
+    if (!plan.programaFormacionId) camposFaltantes.push("programaFormacionId");
+    if (!plan.actividadId) camposFaltantes.push("actividadId");
+    if (!plan.instructorId) camposFaltantes.push("instructorId");
+    if (!plan.instructorNombre) camposFaltantes.push("instructorNombre");
+    if (!plan.fecha) camposFaltantes.push("fecha");
+    if (!plan.lugar) camposFaltantes.push("lugar");
+    if (!plan.contactoLugar) camposFaltantes.push("contactoLugar");
+
+    const articulacion = plan?.articulacionFormativa;
+    if (!articulacion || (!articulacion.proyectoFormativo && !articulacion.visitaEmpresa && !articulacion.investigacion && !articulacion.otro?.trim())) {
+        camposFaltantes.push("articulacionFormativa (Debe seleccionar al menos una opción o especificar en 'otro')");
+    }
+
+    if (!plan?.contactosEmergencia?.centroSalud) camposFaltantes.push("contactosEmergencia.centroSalud");
+    if (!plan?.contactosEmergencia?.policia) camposFaltantes.push("contactosEmergencia.policia");
+    if (!plan?.contactosEmergencia?.poliza) camposFaltantes.push("contactosEmergencia.poliza");
+
+    if (!plan?.planTrabajo?.length) {
+        camposFaltantes.push("planTrabajo");
+    }
+
+    if (!plan?.contextoAcademico?.objetivoSoporteLink) camposFaltantes.push("contextoAcademico.objetivoSoporteLink");
+    if (!plan?.contextoAcademico?.actasComportamientoLink) camposFaltantes.push("contextoAcademico.actasComportamientoLink");
+    if (plan?.contextoAcademico?.consentimientoMenores && !plan?.contextoAcademico?.consentimientoLink) {
+        camposFaltantes.push("contextoAcademico.consentimientoLink");
+    }
+
+    if (plan?.seguridadVial?.aplica && plan?.seguridadVial?.items?.length > 0) {
+        plan.seguridadVial.items.forEach((item, index) => {
+            if (item.aplica && !item.soporteLink) {
+                camposFaltantes.push(`Seguridad Vial: Soporte link en ítem ${index + 1}`);
+            }
+        });
+    }
+
+    return camposFaltantes;
+};
+
+
 export const validarEstadoPlan = async (req, res, next) => {
 
     try {
@@ -41,56 +86,10 @@ export const validarEstadoPlan = async (req, res, next) => {
         const estadoActual = planExistente.estado;
 
         if (nuevoEstado === "aprobado" && estadoActual !== "aprobado") {
-            const camposFaltantes = [];
-
-            if (!planExistente.clasificacionInformacion) camposFaltantes.push("clasificacionInformacion");
-            if (!planExistente.programaFormacionId) camposFaltantes.push("programaFormacionId");
-            if (!planExistente.actividadId) camposFaltantes.push("actividadId");
-            if (!planExistente.instructorId) camposFaltantes.push("instructorId");
-            if (!planExistente.instructorNombre) camposFaltantes.push("instructorNombre");
-            if (!planExistente.fecha) camposFaltantes.push("fecha");
-            if (!planExistente.lugar) camposFaltantes.push("lugar");
-            if (!planExistente.contactoLugar) camposFaltantes.push("contactoLugar");
-
-            const articulacion = planExistente.articulacionFormativa;
-            if (!articulacion || (!articulacion.proyectoFormativo && !articulacion.visitaEmpresa && !articulacion.investigacion && !articulacion.otro?.trim())) {
-                camposFaltantes.push("articulacionFormativa (Debe seleccionar al menos una opción o especificar en 'otro')");
-            } 
-
-            if (!planExistente.contactosEmergencia) {
-                camposFaltantes.push("contactosEmergencia");
-            } else {
-                if (!planExistente.contactosEmergencia.centroSalud) camposFaltantes.push("contactosEmergencia.centroSalud");
-                if (!planExistente.contactosEmergencia.policia) camposFaltantes.push("contactosEmergencia.policia");
-                if (!planExistente.contactosEmergencia.poliza) camposFaltantes.push("contactosEmergencia.poliza");
-            }
-
-            if (!planExistente.planTrabajo?.length) {
-                camposFaltantes.push("planTrabajo");
-            }
-
-            if (!planExistente.contextoAcademico) {
-                camposFaltantes.push("contextoAcademico");
-            } else {
-                if (!planExistente.contextoAcademico.objetivoSoporteLink) camposFaltantes.push("contextoAcademico.objetivoSoporteLink");
-                if (!planExistente.contextoAcademico.actasComportamientoLink) camposFaltantes.push("contextoAcademico.actasComportamientoLink");
-                if (planExistente.contextoAcademico.consentimientoMenores && !planExistente.contextoAcademico.consentimientoLink) {
-                    camposFaltantes.push("contextoAcademico.consentimientoLink");
-                }
-            }
-
-
-            if (planExistente.seguridadVial?.aplica && planExistente.seguridadVial?.items?.length > 0) {
-                planExistente.seguridadVial.items.forEach((item, index) => {
-                    if (item.aplica && !item.soporteLink) {
-                        camposFaltantes.push(`Seguridad Vial: Soporte link en ítem ${index + 1}`);
-                    }
-                });
-            }
-
+            const camposFaltantes = calcularCamposFaltantes(planExistente);
             if (camposFaltantes.length > 0) {
                 return res.status(400).json({
-                    mensaje: "No se puede aprobar el plan, faltan campos o información obligatoria",
+                    mensaje: "No se puede aprobar el plan: faltan requisitos obligatorios",
                     campos: camposFaltantes
                 });
             }
