@@ -14,7 +14,7 @@ export const validarCuerpoNoVacio = (req, res, next) => {
             mensaje: "Error al validar el cuerpo de la petición",
             error: error.message
         });
-    }
+    };
 };
 
 export const validarEstadoPlan = async (req, res, next) => {
@@ -47,11 +47,18 @@ export const validarEstadoPlan = async (req, res, next) => {
             if (!planExistente.programaFormacionId) camposFaltantes.push("programaFormacionId");
             if (!planExistente.actividadId) camposFaltantes.push("actividadId");
             if (!planExistente.instructorId) camposFaltantes.push("instructorId");
+            if (!planExistente.instructorNombre) camposFaltantes.push("instructorNombre");
             if (!planExistente.fecha) camposFaltantes.push("fecha");
             if (!planExistente.lugar) camposFaltantes.push("lugar");
+            if (!planExistente.contactoLugar) camposFaltantes.push("contactoLugar");
+
+            const articulacion = planExistente.articulacionFormativa;
+            if (!articulacion || (!articulacion.proyectoFormativo && !articulacion.visitaEmpresa && !articulacion.investigacion && !articulacion.otro?.trim())) {
+                camposFaltantes.push("articulacionFormativa (Debe seleccionar al menos una opción o especificar en 'otro')");
+            } 
 
             if (!planExistente.contactosEmergencia) {
-                camposFaltantes.push("contactosEmergencia (objeto completo)");
+                camposFaltantes.push("contactosEmergencia");
             } else {
                 if (!planExistente.contactosEmergencia.centroSalud) camposFaltantes.push("contactosEmergencia.centroSalud");
                 if (!planExistente.contactosEmergencia.policia) camposFaltantes.push("contactosEmergencia.policia");
@@ -87,11 +94,6 @@ export const validarEstadoPlan = async (req, res, next) => {
                     campos: camposFaltantes
                 });
             }
-        }
-
-
-        if (estadoActual === "aprobado" && nuevoEstado === "borrador") {
-            return res.status(400).json({ mensaje: "No se permite cambiar de estado 'aprobado' a 'borrador'" });
         }
 
         if (estadoActual === "ejecutado" && (nuevoEstado === "aprobado" || nuevoEstado === "borrador")) {
