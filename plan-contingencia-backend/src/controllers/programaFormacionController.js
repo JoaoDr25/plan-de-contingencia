@@ -4,7 +4,6 @@ export const crearPrograma = async (req, res) => {
     try {
         const { nombre, ficha } = req.body;
 
-        // Solo verificamos si la ficha ya existe
         const programaExistente = await ProgramaFormacion.findOne({ ficha });
         
         if (programaExistente) {

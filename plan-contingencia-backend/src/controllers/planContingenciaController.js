@@ -4,6 +4,10 @@ export const crearPlan = async (req, res) => {
     try {
         const nuevoPlan = new PlanContingencia(req.body);
         await nuevoPlan.save();
+
+        await nuevoPlan.populate("programaFormacionId", "nombre ficha");
+        await nuevoPlan.populate("actividadId", "nombre categoria");
+
         res.status(201).json({
             mensaje: "Plan de contingencia creado exitosamente",
             plan: nuevoPlan
@@ -25,7 +29,10 @@ export const crearPlan = async (req, res) => {
 
 export const listarPlanes = async (req, res) => {
     try {
-        const listar = await PlanContingencia.find();
+        const listar = await PlanContingencia.find()
+            .populate("programaFormacionId", "nombre ficha")
+            .populate("actividadId", "nombre categoria");
+
         res.status(200).json({
             mensaje: "Planes de contingencia listados exitosamente",
             planes: listar
@@ -41,7 +48,10 @@ export const listarPlanes = async (req, res) => {
 
 export const obtenerPlanId = async (req, res) => {
     try {
-        const listarId = await PlanContingencia.findById(req.params.id);
+        const listarId = await PlanContingencia.findById(req.params.id)
+            .populate("programaFormacionId", "nombre ficha")
+            .populate("actividadId", "nombre categoria");
+
         if (!listarId) {
             return res.status(404).json({ mensaje: "No se encontró el plan de contingencia" })
         }
@@ -63,6 +73,7 @@ export const actualizarPlan = async (req, res) => {
         const { id } = req.params;
 
         const plan = await PlanContingencia.findById(id);
+
         if (plan && plan.estado === "ejecutado") {
             return res.status(400).json({
                 mensaje: "No se puede actualizar un plan que ya ha sido ejecutado"
@@ -76,7 +87,9 @@ export const actualizarPlan = async (req, res) => {
             mensajeEstado = "Plan en actualización y requiere una nueva aprobación";
         }
 
-        const actualizar = await PlanContingencia.findByIdAndUpdate(id, datosActualizacion, { new: true, runValidators: true });
+        const actualizar = await PlanContingencia.findByIdAndUpdate(id, datosActualizacion, { new: true, runValidators: true })
+            .populate("programaFormacionId", "nombre ficha")
+            .populate("actividadId", "nombre categoria");
 
         if (!actualizar) {
             return res.status(404).json({ mensaje: "No se pudo actualizar el plan: Plan de contingencia no existe" })
@@ -108,7 +121,9 @@ export const cambiarEstadoPlan = async (req, res) => {
             id,
             { estado },
             { new: true, runValidators: true }
-        );
+        )
+            .populate("programaFormacionId", "nombre ficha")
+            .populate("actividadId", "nombre categoria");
 
         if (!cambiarEstado) {
             return res.status(404).json({ mensaje: "No se pudo cambiar el estado del plan: Plan de contingencia no existe" })
@@ -135,7 +150,9 @@ export const cambiarEstadoPlan = async (req, res) => {
 export const generarPlan = async (req, res) => {
     try {
         const { id } = req.params;
-        const generar = await PlanContingencia.findById(id);
+        const generar = await PlanContingencia.findById(id)
+            .populate("programaFormacionId", "nombre ficha")
+            .populate("actividadId", "nombre categoria");
 
         if (!generar) {
             return res.status(404).json({ mensaje: "No se encontro el plan para generar el documento" })
