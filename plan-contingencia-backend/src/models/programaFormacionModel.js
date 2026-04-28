@@ -4,7 +4,6 @@ const programaFormacionSchema = new mongoose.Schema ({
     nombre: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
     ficha: {

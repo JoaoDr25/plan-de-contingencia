@@ -4,13 +4,12 @@ export const crearPrograma = async (req, res) => {
     try {
         const { nombre, ficha } = req.body;
 
-        const programaExistente = await ProgramaFormacion.findOne({
-            $or: [{ nombre }, { ficha }]
-        })
+        // Solo verificamos si la ficha ya existe
+        const programaExistente = await ProgramaFormacion.findOne({ ficha });
+        
         if (programaExistente) {
-            const campoDuplicado = programaExistente.nombre === nombre ? "nombre" : "ficha";
             return res.status(400).json({
-                mensaje: `No se pudo crear el programa: ya existe un registro con este campo duplicado: ${campoDuplicado}`
+                mensaje: "No se pudo crear el programa: ya existe un registro con este número de ficha"
             });
         }
         const nuevoPrograma = new ProgramaFormacion(req.body);
@@ -71,10 +70,19 @@ export const actualizarPrograma = async (req, res) => {
         const { id } = req.params;
         const { nombre, ficha } = req.body;
 
-        if (nombre || ficha ) {
-            const query = {_id: { $ne: id }};
-            
+        if (ficha) {
+            const programaExistente = await ProgramaFormacion.findOne({ 
+                ficha, 
+                _id: { $ne: id } 
+            });
+
+            if (programaExistente) {
+                return res.status(400).json({
+                    mensaje: "No se pudo actualizar: ya existe otro programa con este número de ficha"
+                });
+            }
         }
+        
         const actualizar = await ProgramaFormacion.findByIdAndUpdate(
             id,
             req.body,
