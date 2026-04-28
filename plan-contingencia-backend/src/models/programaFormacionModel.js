@@ -1,15 +1,21 @@
-import mongoose, { model, Schema } from "mongoose";
+import mongoose from "mongoose";
 
 const programaFormacionSchema = new mongoose.Schema ({
     nombre: {
-        type: "String",
+        type: String,
         required: true,
+        unique: true,
         trim: true
     },
     ficha: {
-        type: "String",
+        type: String,
         required: true,
+        unique: true,
         trim: true
+    },
+    estado: {
+        type: Boolean,
+        default: true
     }
 }, {
     timestamps: true

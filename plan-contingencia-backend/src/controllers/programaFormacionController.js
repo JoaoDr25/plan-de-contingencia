@@ -2,6 +2,17 @@ import ProgramaFormacion from "../models/programaFormacionModel.js";
 
 export const crearPrograma = async (req, res) => {
     try {
+        const { nombre, ficha } = req.body;
+
+        const programaExistente = await ProgramaFormacion.findOne({
+            $or: [{ nombre }, { ficha }]
+        })
+        if (programaExistente) {
+            const campoDuplicado = programaExistente.nombre === nombre ? "nombre" : "ficha";
+            return res.status(400).json({
+                mensaje: `No se pudo crear el programa: ya existe un registro con este campo duplicado: ${campoDuplicado}`
+            });
+        }
         const nuevoPrograma = new ProgramaFormacion(req.body);
         await nuevoPrograma.save();
         res.status(201).json({
@@ -24,9 +35,9 @@ export const crearPrograma = async (req, res) => {
 
 export const listarProgramas = async (req, res) => {
     try {
-        const listar = await ProgramaFormacion.find();
+        const listar = await ProgramaFormacion.find({ estado: true });
         res.status(200).json({
-            mensaje: "Programas de formación Listados exitosamente",
+            mensaje: "Lista de programas activos obtenida exitosamente",
             programas: listar
         });
     } catch (error) {
@@ -41,7 +52,7 @@ export const obtenerProgramaId = async (req, res) => {
     try {
         const obtenerId = await ProgramaFormacion.findById(req.params.id);
         if (!obtenerId) {
-            return res.status(404).json({mensaje: "No se encontro el programa de formación"})
+            return res.status(404).json({ mensaje: "No se encontro el programa de formación" })
         }
         res.status(200).json({
             mensaje: "Programa de formación obtenido exitosamente",
@@ -57,14 +68,20 @@ export const obtenerProgramaId = async (req, res) => {
 
 export const actualizarPrograma = async (req, res) => {
     try {
-        const { id } = req.params
+        const { id } = req.params;
+        const { nombre, ficha } = req.body;
+
+        if (nombre || ficha ) {
+            const query = {_id: { $ne: id }};
+            
+        }
         const actualizar = await ProgramaFormacion.findByIdAndUpdate(
             id,
             req.body,
             { new: true, runValidators: true }
         );
         if (!actualizar) {
-            return res.status(404).json({mensaje: "Programa no encontrado"})
+            return res.status(404).json({ mensaje: "Programa no encontrado" })
         }
         res.status(200).json({
             mensaje: "Programa de formación actualizado correctamente",
@@ -84,14 +101,42 @@ export const actualizarPrograma = async (req, res) => {
     }
 };
 
+export const cambiarEstadoPrograma = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { estado } = req.body;
+
+        if (typeof estado !== "boolean") {
+            return res.status(400).json({ mensaje: "El campo 'estado' es obligatorio y debe ser un valor booleano (true/false)" });
+        }
+        const cambiarEstado = await ProgramaFormacion.findByIdAndUpdate(id,
+            { estado },
+            { new: true, runValidators: true }
+        );
+        if (!cambiarEstado) {
+            return res.status(404).json({ mensaje: "No se puede cambiar el estado: Programa de formación no existe" });
+        }
+        res.status(200).json({
+            mensaje: `Programa de formación ${estado ? "activado" : "desactivado"} exitosamente`,
+            programa: cambiarEstado
+        });
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Error al cambiar de estado del programa de formación",
+            error: error.message
+        });
+    }
+}
+
 export const eliminarPrograma = async (req, res) => {
     try {
-        const eliminar = await ProgramaFormacion.findByIdAndDelete(req.params.id);
+        const { id } = req.params;
+        const eliminar = await ProgramaFormacion.findByIdAndDelete(id);
         if (!eliminar) {
             return res.status(404).json({ mensaje: "Programa no encontrado" });
         }
         res.status(200).json({
-            mensaje: "Programa de formación eliminado correctamente",
+            mensaje: "Programa de formación eliminado exitosamente",
             programa: eliminar
         });
     } catch (error) {

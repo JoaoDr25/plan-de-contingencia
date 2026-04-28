@@ -104,7 +104,8 @@ export const cambiarEstadoPlan = async (req, res) => {
     try {
         const { id } = req.params;
         const { estado } = req.body;
-        const cambiarEstado = await PlanContingencia.findByIdAndUpdate(id,
+        const cambiarEstado = await PlanContingencia.findByIdAndUpdate(
+            id,
             { estado },
             { new: true, runValidators: true }
         );
