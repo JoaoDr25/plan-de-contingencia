@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import { conectarDB } from './src/config/db.js'
 
 import planRoutes from './src/routes/planContingenciaRoutes.js'
+import programasRoutes from './src/routes/programaFormacionRoutes.js'
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ app.get('/api', (req, res) => {
     res.send('¡Servidor funcionando!');
 });
 
-app.use('/api', planRoutes);
+app.use('/api', planRoutes, programasRoutes);
 
 app.use((req, res) => {
     res.status(404).json({error: 'Ruta no encontrada'});

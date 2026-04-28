@@ -4,7 +4,10 @@ export const crearPlan = async (req, res) => {
     try {
         const nuevoPlan = new PlanContingencia(req.body);
         await nuevoPlan.save();
-        res.status(201).json(nuevoPlan);
+        res.status(201).json({
+            mensaje: "Plan de contingencia creado exitosamente",
+            plan: nuevoPlan
+        });
     } catch (error) {
         if (error.name === "ValidationError") {
             return res.status(400).json({
@@ -23,7 +26,10 @@ export const crearPlan = async (req, res) => {
 export const listarPlanes = async (req, res) => {
     try {
         const listar = await PlanContingencia.find();
-        res.status(200).json(listar);
+        res.status(200).json({
+            mensaje: "Planes de contingencia listados exitosamente",
+            planes: listar
+        });
     } catch (error) {
         res.status(500).json({
             mensaje: "Error al obtener los planes de contingencia",
@@ -39,7 +45,10 @@ export const obtenerPlanId = async (req, res) => {
         if (!listarId) {
             return res.status(404).json({ mensaje: "No se encontró el plan de contingencia" })
         }
-        res.status(200).json(listarId);
+        res.status(200).json({
+            mensaje: "Plan de contingencia obtenido exitosamente",
+            plan: listarId
+        });
     } catch (error) {
         res.status(500).json({
             mensaje: "Error al obtener el plan de contingencia",
@@ -138,7 +147,7 @@ export const generarPlan = async (req, res) => {
         }
 
         res.status(200).json({
-            mensaje: "Plan generado correctamente",
+            mensaje: "Plan de contingencia generado correctamente",
             plan: generar
         });
     } catch (error) {

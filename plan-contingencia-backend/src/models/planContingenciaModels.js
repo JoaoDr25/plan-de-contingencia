@@ -179,7 +179,7 @@ const planContingenciaSchema = new mongoose.Schema({
                 },
                 aplica: {
                     type: Boolean,
-                    default: Boolean
+                    default: false
                 },
                 soporteLink: {
                     type: String,
@@ -208,4 +208,3 @@ const planContingenciaSchema = new mongoose.Schema({
 
 
 export default mongoose.model('PlanContingencia', planContingenciaSchema);
-
