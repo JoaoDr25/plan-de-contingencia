@@ -34,6 +34,7 @@ export const crearPrograma = async (req, res) => {
 export const listarProgramas = async (req, res) => {
     try {
         const listar = await ProgramaFormacion.find({ estado: true });
+        
         res.status(200).json({
             mensaje: "Lista de programas activos obtenida exitosamente",
             programas: listar

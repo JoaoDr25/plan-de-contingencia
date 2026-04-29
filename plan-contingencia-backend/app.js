@@ -7,6 +7,8 @@ import { conectarDB } from './src/config/db.js'
 import planRoutes from './src/routes/planContingenciaRoutes.js'
 import programasRoutes from './src/routes/programaFormacionRoutes.js'
 import actividadRoutes from './src/routes/actividadRoutes.js'
+import peligroRoutes from './src/routes/peligroRoutes.js'
+import riesgosRoutes from './src/routes/riesgoRoutes.js'
 
 dotenv.config();
 
@@ -20,7 +22,13 @@ app.get('/api', (req, res) => {
     res.send('¡Servidor funcionando!');
 });
 
-app.use('/api', planRoutes, programasRoutes, actividadRoutes);
+app.use('/api', 
+    planRoutes, 
+    programasRoutes, 
+    actividadRoutes, 
+    peligroRoutes,
+    riesgosRoutes
+);
 
 app.use((req, res) => {
     res.status(404).json({error: 'Ruta no encontrada'});
@@ -30,4 +38,4 @@ conectarDB();
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
-})
+});

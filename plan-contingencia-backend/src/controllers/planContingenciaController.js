@@ -31,7 +31,8 @@ export const listarPlanes = async (req, res) => {
     try {
         const listar = await PlanContingencia.find()
             .populate("programaFormacionId", "nombre ficha")
-            .populate("actividadId", "nombre categoria");
+            .populate("actividadId", "nombre categoria")
+            .populate("riesgos");
 
         res.status(200).json({
             mensaje: "Planes de contingencia listados exitosamente",

@@ -34,6 +34,7 @@ export const crearActividad = async (req, res) => {
 export const listarActividades = async (req, res) => {
     try {
         const listar = await Actividad.find();
+        
         return res.status(200).json({
             mensaje: "Lista de actividades obtenidas exitosamente",
             actividades: listar

@@ -7,6 +7,7 @@ import {
     actualizarActividad,
     eliminarActividad
  } from "../controllers/actividadController.js";
+ 
  import { validarObjectId } from "../middlewares/validateObjectId.js";
 
  const router = express.Router();

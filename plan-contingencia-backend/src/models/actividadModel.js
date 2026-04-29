@@ -17,6 +17,10 @@ const actividadSchema = new mongoose.Schema({
         enum: ["Académico", "Técnico", "Cultural", "Deportivo", "Administrativo"],
         default: "Académico"
     },
+    peligros: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: peligros
+    }
 },{
     timestamps: true
 });
