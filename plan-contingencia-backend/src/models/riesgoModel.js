@@ -10,6 +10,11 @@ const riesgosSchema = new mongoose.Schema({
     descripcion: {
         type: String,
         trim: true
+    },
+    peligroId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Peligro",
+        required: true
     }
 },{
     timestamps: true

@@ -15,8 +15,6 @@ export const crearPeligro = async (req, res) => {
         const nuevoPeligro = new Peligro(req.body);
         await nuevoPeligro.save();
 
-        await nuevoPeligro.populate("riesgos");
-
         return res.status(201).json({
             mensaje: "Peligro creado exitosamente",
             peligro: nuevoPeligro
@@ -121,6 +119,14 @@ export const eliminarPeligro = async (req, res) => {
     try {
         const { id } = req.params;
 
+        const riesgosAsociados = await Riesgo.findOne({ peligroId: id })
+        if (riesgosAsociados) {
+            return res.status(400).json({
+                mensaje: "No se puede eliminar el peligro: existe riesgos asociados a este registro",
+                sugerencia: "Elimine o reasigne los riesgos primero"
+            });
+        }
+
         const eliminar = await Peligro.findByIdAndDelete(id);
         if (!eliminar) {
             return res.status(404).json({ mensaje: "Peligro no encontrado" });
@@ -138,7 +144,7 @@ export const eliminarPeligro = async (req, res) => {
     }
 };
 
-export const asociarPeligrosRiesgos = async (req, res) => {
+export const asociarRiesgosPeligro = async (req, res) => {
     try {
         const { id } = req.params;
         const { riesgos } = req.body;
@@ -147,19 +153,18 @@ export const asociarPeligrosRiesgos = async (req, res) => {
             return res.status(400).json({ mensaje: "El campo 'riesgos' debe ser un arreglo de IDs (ObjectIds)" });
         }
 
-        const asociar = await Peligro.findByIdAndUpdate(
-            id,
-            { $set: { riesgos: riesgos }},
-            { new: true, runValidators: true }
-        ).populate("riesgos");
-
-        if (!asociar) {
+        const peligro = await Peligro.findById(id);
+        if (!peligro) {
             return res.status(404).json({ mensaje: "Peligro no encontrado"});
         }
 
+        await Riesgo.updateMany(
+            { _id: { $in: riesgos } },
+            { $set: { peligroId: id } }
+        );
+
         return res.status(200).json({
-            mensaje: `Se han asociado ${riesgos.length} riesgos al peligro exitosamente`,
-            peligro: asociar
+            mensaje: `Se han asociado ${riesgos.length} riesgos al peligro exitosamente`
         });
     } catch (error) {
         return res.status(500).json({

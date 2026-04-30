@@ -11,13 +11,18 @@ const peligroSchema = new mongoose.Schema ({
         type: String,
         required: true,
         enum: ["Físico", "Químico", "Biológico", "Mecánico", "Psicosocial", "Ergonómico", "Locativo"],
-    },
-    riesgos: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Riesgo"
-    }]
+    }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+peligroSchema.virtual('riesgos', {
+    ref: 'Riesgo',
+    localField: '_id',
+    foreignField: 'peligroId',
+    justOne: false
 });
 
 export default mongoose.model("Peligro", peligroSchema);

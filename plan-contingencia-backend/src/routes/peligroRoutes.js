@@ -6,7 +6,7 @@ import {
     obtenerPeligro,
     actualizarPeligro,
     eliminarPeligro,
-    asociarPeligrosRiesgos
+    asociarRiesgosPeligro
 } from "../controllers/peligroController.js";
 
 import { validarObjectId } from "../middlewares/validateObjectId.js";
@@ -20,6 +20,6 @@ router.get('/peligros/:id', validarObjectId, obtenerPeligro);
 router.put('/peligros/:id', validarObjectId, actualizarPeligro);
 router.delete('/peligros/:id', validarObjectId, eliminarPeligro);
 
-router.post('/peligros/:id/riesgos', validarObjectId, asociarPeligrosRiesgos); 
+router.post('/peligros/:id/riesgos', validarObjectId, asociarRiesgosPeligro); 
 
 export default router;

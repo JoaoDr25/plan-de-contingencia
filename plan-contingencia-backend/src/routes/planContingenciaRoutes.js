@@ -22,4 +22,3 @@ router.patch('/planes/:id/estado', [validarObjectId, validarCuerpoNoVacio, valid
 router.post('/planes/:id/generar', validarObjectId, generarPlan);
 
 export default router;
-

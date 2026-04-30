@@ -25,7 +25,7 @@ export const crearRiesgo = async (req, res) => {
 
 export const listarRiesgos = async (req, res) => {
     try {
-        const listar = await Riesgo.find();
+        const listar = await Riesgo.find().populate("peligroId");
 
         return res.status(200).json({
             mensaje: "Lista de riesgos obtenidos exitosamente",
@@ -41,7 +41,7 @@ export const listarRiesgos = async (req, res) => {
 
 export const obtenerRiesgoid = async (req, res) => {
     try {
-        const obtenerId = await Riesgo.findById(req.params.id);
+        const obtenerId = await Riesgo.findById(req.params.id).populate("peligroId");
         if (!obtenerId) {
             return res.status(404).json({ mensaje: "No se encontró el riesgo" })
         }
@@ -67,6 +67,12 @@ export const actualizarRiesgo = async (req, res) => {
                 nombre,
                 _id: { $ne: id }
             });
+
+            if (riesgoExistente) {
+                return res.status(400).json({
+                    mensaje: "No se pudo actualizar: ya existe otro riesgo con ese nombre"
+                });
+            }
         }
 
         const actualizar = await Riesgo.findByIdAndUpdate(
@@ -96,6 +102,9 @@ export const actualizarRiesgo = async (req, res) => {
 export const eliminarRiesgo = async (req, res) => {
     try {
         const { id } = req.params;
+
+        // const protocolosAsociados = await Protocolo.findOne({ riesgoId: id });
+
         const eliminar = await Riesgo.findByIdAndDelete(id);
         if (!eliminar) {
             return res.status(404).json({ mensaje: "Riesgo no encontrado"});
