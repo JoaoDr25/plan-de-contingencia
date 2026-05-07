@@ -1,4 +1,4 @@
-import PlanContingencia from "../models/planContingenciaModels.js";
+import PlanContingencia from "../../models/planContingenciaModels.js";
 
 export const crearPlan = async (req, res) => {
     try {

@@ -195,7 +195,7 @@ const planContingenciaSchema = new mongoose.Schema({
     },
     estado: {
         type: String,
-        enum: ["borrador", "aprobado", "ejecutado"],
+        enum: ["borrador", "aprobado", "anulado", "ejecutado"],
         default: "borrador"
     },
     observaciones: {

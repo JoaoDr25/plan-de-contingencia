@@ -4,11 +4,11 @@ import dotenv from 'dotenv'
 
 import { conectarDB } from './src/config/db.js'
 
-import planRoutes from './src/routes/planContingenciaRoutes.js'
-import programasRoutes from './src/routes/programaFormacionRoutes.js'
-import actividadRoutes from './src/routes/actividadRoutes.js'
-import peligroRoutes from './src/routes/peligroRoutes.js'
-import riesgosRoutes from './src/routes/riesgoRoutes.js'
+import planRoutes from './src/routes/planes/planContingenciaRoutes.js'
+import programasRoutes from './src/routes/configuracion/programaFormacionRoutes.js'
+import actividadRoutes from './src/routes/configuracion/actividadRoutes.js'
+import peligroRoutes from './src/routes/configuracion/peligroRoutes.js'
+import riesgosRoutes from './src/routes/configuracion/riesgoRoutes.js'
 
 dotenv.config();
 

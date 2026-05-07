@@ -1,5 +1,5 @@
-import Peligro from '../models/peligroModel.js'
-import Riesgo from '../models/riesgoModel.js'
+import Peligro from '../../models/peligroModel.js'
+import Riesgo from '../../models/riesgoModel.js'
 
 export const crearPeligro = async (req, res) => {
     try {

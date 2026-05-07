@@ -5,8 +5,9 @@ import {
     obtenerRiesgoid,
     actualizarRiesgo,
     eliminarRiesgo,
- } from "../controllers/riesgoController.js";
-import { validarObjectId } from "../middlewares/validateObjectId.js";
+ } from "../../controllers/configuracion/riesgoController.js";
+
+import { validarObjectId } from "../../middlewares/validateObjectId.js";
 
 const router = express.Router();
 
