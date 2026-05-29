@@ -30,4 +30,4 @@ const protocoloSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model("Protocolo", protocoloSchemaSchema);
+export default mongoose.model("Protocolo", protocoloSchema);

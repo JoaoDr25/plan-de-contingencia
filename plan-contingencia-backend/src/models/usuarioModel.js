@@ -6,13 +6,13 @@ const usuarioSchema = new mongoose.Schema ({
         required: true,
         trim: true
     },
-    ficha: {
+    documento: {
         type: String,
         required: true,
         unique: true,
         trim: true
     },
-    nivelFormacion: {
+    correoInstitucional: {
         type: String,
         required: true,
         trim: true
@@ -22,9 +22,10 @@ const usuarioSchema = new mongoose.Schema ({
         required: true,
         trim: true
     },
-    estado: {
-        type: Boolean,
-        default: true
+    rolAsignado: {
+        type: String,
+        required: true,
+        enum: ["usuario", "administrador"]
     },
 }, {
     timestamps: true
