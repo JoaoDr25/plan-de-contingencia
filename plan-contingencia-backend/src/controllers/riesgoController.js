@@ -1,5 +1,5 @@
-import Riesgo from '../../models/riesgoModel.js';
-import Actividad from '../../models/actividadModel.js';
+import Riesgo from '../models/riesgoModel.js';
+import Actividad from '../models/actividadModel.js';
 
 export const crearRiesgo = async (req, res) => {
     try {

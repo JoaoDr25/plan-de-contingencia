@@ -7,7 +7,7 @@ import {
     eliminarRiesgo,
  } from "../../controllers/configuracion/riesgoController.js";
 
-import { validarObjectId } from "../../middlewares/validateObjectId.js";
+import { validarObjectId } from "../middlewares/validateObjectId.js";
 
 const router = express.Router();
 

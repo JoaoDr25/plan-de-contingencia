@@ -8,8 +8,8 @@ import {
     generarPlan
 } from '../../controllers/planes/planContingenciaController.js'
 
-import { validarObjectId } from "../../middlewares/validateObjectId.js";
-import { validarCuerpoNoVacio, validarEstadoPlan } from "../../middlewares/validatePlan.js";
+import { validarObjectId } from "../middlewares/validateObjectId.js";
+import { validarCuerpoNoVacio, validarEstadoPlan } from "../middlewares/validatePlan.js";
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import ProgramaFormacion from "../../models/programaFormacionModel.js";
+import ProgramaFormacion from "../models/programaFormacionModel.js";
 
 export const crearPrograma = async (req, res) => {
     try {

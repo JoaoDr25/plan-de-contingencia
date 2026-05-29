@@ -9,7 +9,7 @@ import {
     eliminarPrograma
 } from '../../controllers/configuracion/programaFormacionController.js';
 
-import { validarObjectId } from "../../middlewares/validateObjectId.js";
+import { validarObjectId } from "../middlewares/validateObjectId.js";
 
 const router = express.Router();
 
