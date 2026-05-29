@@ -65,7 +65,7 @@ export const obtenerProgramaId = async (req, res) => {
     }
 };
 
-export const actualizarPrograma = async (req, res) => {
+export const actualizarProgramaId = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, ficha } = req.body;
@@ -109,7 +109,7 @@ export const actualizarPrograma = async (req, res) => {
     }
 };
 
-export const cambiarEstadoPrograma = async (req, res) => {
+export const cambiarEstadoProgramaId = async (req, res) => {
     try {
         const { id } = req.params;
         const { estado } = req.body;
@@ -136,7 +136,7 @@ export const cambiarEstadoPrograma = async (req, res) => {
     }
 }
 
-export const eliminarPrograma = async (req, res) => {
+export const eliminarProgramaId = async (req, res) => {
     try {
         const { id } = req.params;
         const eliminar = await ProgramaFormacion.findByIdAndDelete(id);

@@ -47,7 +47,7 @@ export const listarActividades = async (req, res) => {
     }
 };
 
-export const obtenerActividad = async (req, res) => {
+export const obtenerActividadId = async (req, res) => {
     try {
         const obtenerId = await Actividad.findById(req.params.id);
         if (!obtenerId) {
@@ -65,7 +65,7 @@ export const obtenerActividad = async (req, res) => {
     }
 };
 
-export const actualizarActividad = async (req, res) => {
+export const actualizarActividadId = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, descripcion, categoria } = req.body;
@@ -109,7 +109,7 @@ export const actualizarActividad = async (req, res) => {
     }
 };
 
-export const eliminarActividad = async (req, res) => {
+export const eliminarActividadId = async (req, res) => {
     try {
         const { id } = req.params;
         const eliminar = await Actividad.findByIdAndDelete(id);

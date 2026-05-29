@@ -7,10 +7,15 @@ const peligroSchema = new mongoose.Schema ({
         unique: true,
         trim: true
     },
-    tipo: {
+    categoria: {
         type: String,
         required: true,
         enum: ["Físico", "Químico", "Biológico", "Mecánico", "Psicosocial", "Ergonómico", "Locativo"],
+    },
+    descripcion: {
+        type: String,
+        required: true,
+        trim: true
     }
 }, {
     timestamps: true,

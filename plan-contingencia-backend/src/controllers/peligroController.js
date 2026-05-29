@@ -49,7 +49,7 @@ export const listarPeligros = async (req, res) => {
     }
 };
 
-export const obtenerPeligro = async (req, res) => {
+export const obtenerPeligroId = async (req, res) => {
     try {
         const obtenerId = await Peligro.findById(req.params.id)
         .populate("riesgos");
@@ -70,7 +70,7 @@ export const obtenerPeligro = async (req, res) => {
     }
 };
 
-export const actualizarPeligro = async (req, res) => {
+export const actualizarPeligroId = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, tipo } = req.body;
@@ -115,7 +115,7 @@ export const actualizarPeligro = async (req, res) => {
     }
 };
 
-export const eliminarPeligro = async (req, res) => {
+export const eliminarPeligroId = async (req, res) => {
     try {
         const { id } = req.params;
 

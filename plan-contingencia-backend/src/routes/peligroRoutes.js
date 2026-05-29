@@ -3,9 +3,9 @@ import express from "express";
 import {
     crearPeligro,
     listarPeligros,
-    obtenerPeligro,
-    actualizarPeligro,
-    eliminarPeligro,
+    obtenerPeligroId,
+    actualizarPeligroId,
+    eliminarPeligroId,
     asociarRiesgosPeligro
 } from "../../controllers/configuracion/peligroController.js";
 
@@ -16,9 +16,9 @@ const router = express.Router();
 
 router.post('/peligros', crearPeligro);
 router.get('/peligros', listarPeligros);
-router.get('/peligros/:id', validarObjectId, obtenerPeligro);
-router.put('/peligros/:id', validarObjectId, actualizarPeligro);
-router.delete('/peligros/:id', validarObjectId, eliminarPeligro);
+router.get('/peligros/:id', validarObjectId, obtenerPeligroId);
+router.put('/peligros/:id', validarObjectId, actualizarPeligroId);
+router.delete('/peligros/:id', validarObjectId, eliminarPeligroId);
 
 router.post('/peligros/:id/riesgos', validarObjectId, asociarRiesgosPeligro); 
 

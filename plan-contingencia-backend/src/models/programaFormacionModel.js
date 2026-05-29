@@ -12,10 +12,20 @@ const programaFormacionSchema = new mongoose.Schema ({
         unique: true,
         trim: true
     },
+    nivelFormacion: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    centroFormacion: {
+        type: String,
+        required: true,
+        trim: true
+    },
     estado: {
         type: Boolean,
         default: true
-    }
+    },
 }, {
     timestamps: true
 });

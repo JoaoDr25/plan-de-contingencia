@@ -7,6 +7,11 @@ const actividadSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    tipoSalida: {
+        type: String,
+        required: true,
+        trim: true
+    },
     descripcion: {
         type: String,
         trim: true

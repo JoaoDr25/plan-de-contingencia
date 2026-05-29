@@ -57,7 +57,7 @@ export const obtenerRiesgoid = async (req, res) => {
     }
 };
 
-export const actualizarRiesgo = async (req, res) => {
+export const actualizarRiesgoId = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, descripcion } = req.body;
@@ -99,7 +99,7 @@ export const actualizarRiesgo = async (req, res) => {
     }
 };
 
-export const eliminarRiesgo = async (req, res) => {
+export const eliminarRiesgoId = async (req, res) => {
     try {
         const { id } = req.params;
 

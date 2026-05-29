@@ -162,10 +162,6 @@ const planContingenciaSchema = new mongoose.Schema({
             },
             _id: false
         }],
-    botiquin: {
-        type: Boolean,
-        default: false
-    },
     seguridadVial: {
         aplica: {
             type: Boolean,
@@ -195,7 +191,7 @@ const planContingenciaSchema = new mongoose.Schema({
     },
     estado: {
         type: String,
-        enum: ["borrador", "aprobado", "cancelado", "ejecutado"],
+        enum: ["borrador", "en revision", "aprobado", "cancelado", "ejecutado"],
         default: "borrador"
     },
     observaciones: {
