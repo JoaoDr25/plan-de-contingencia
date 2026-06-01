@@ -28,7 +28,7 @@ const actividadSchema = new mongoose.Schema({
 
 export default mongoose.model("Actividad", actividadSchema);
 
-actividadSchemaSchema.pre("save", async function(next){
+actividadSchema.pre("save", async function(next){
 
     if (!this.numero) {
         this.numero =

@@ -7,7 +7,7 @@ import {
     actualizarPeligroId,
     eliminarPeligroId,
     asociarRiesgosPeligro
-} from "../../controllers/configuracion/peligroController.js";
+} from "../controllers/peligroController.js";
 
 import { validarObjectId } from "../middlewares/validateObjectId.js";
 

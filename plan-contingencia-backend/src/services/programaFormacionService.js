@@ -7,7 +7,8 @@ class programaFormacionService extends BaseCrudService {
         super(programaFormacionModel)
     }
 
-    async create(data) {
+
+    async crearPrograma(data) {
 
         const { nombre, ficha } = data;
 
@@ -26,6 +27,20 @@ class programaFormacionService extends BaseCrudService {
 
         return await
             super.create(data);
+    }
+
+
+    async listarProgramasActivos() {
+
+            return await
+            this.model.find({
+                estado: true
+            });
+    }
+
+
+    async obtenerProgramaId(id) {
+        
     }
 }
 

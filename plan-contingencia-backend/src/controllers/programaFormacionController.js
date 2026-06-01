@@ -2,9 +2,17 @@ import programaFormacionService from "../services/programaFormacionService.js";
 
 export const crearPrograma = async (req, res) => {
     try {
-        
-        const nuevoPrograma = await programaFormacionService.create(req.body);
+        // const { nombre, ficha } = req.body;
 
+        // const programaExistente = await ProgramaFormacion.findOne({ ficha });
+        
+        // if (programaExistente) {
+        //     return res.status(400).json({
+        //         mensaje: "No se pudo crear el programa: ya existe un registro con este número de ficha"
+        //     });
+        // }
+        const nuevoPrograma = await programaFormacionService.create(req.body);
+        // await nuevoPrograma.save();
         res.status(201).json({
             mensaje: "Programa de formación creado correctamente",
             programa: nuevoPrograma
@@ -25,7 +33,7 @@ export const crearPrograma = async (req, res) => {
 
 export const listarProgramas = async (req, res) => {
     try {
-        const listar = await ProgramaFormacion.find({ estado: true });
+        const listar = await programaFormacionService.getAllActivos();
         
         res.status(200).json({
             mensaje: "Lista de programas activos obtenida exitosamente",
@@ -41,10 +49,10 @@ export const listarProgramas = async (req, res) => {
 
 export const obtenerProgramaId = async (req, res) => {
     try {
-        const obtenerId = await ProgramaFormacion.findById(req.params.id);
-        if (!obtenerId) {
-            return res.status(404).json({ mensaje: "No se encontro el programa de formación" })
-        }
+        const obtenerId = await programaFormacionService.findById(req.params.id);
+        // if (!obtenerId) {
+        //     return res.status(404).json({ mensaje: "No se encontro el programa de formación" })
+        // }
         res.status(200).json({
             mensaje: "Programa de formación obtenido exitosamente",
             programa: obtenerId
@@ -59,23 +67,23 @@ export const obtenerProgramaId = async (req, res) => {
 
 export const actualizarProgramaId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nombre, ficha } = req.body;
+        // const { id } = req.params;
+        // const { nombre, ficha } = req.body;
 
         if (ficha) {
-            const programaExistente = await ProgramaFormacion.findOne({ 
-                ficha, 
-                _id: { $ne: id } 
-            });
+            // const programaExistente = await programaFormacionService.findOne({ 
+            //     ficha, 
+            //     _id: { $ne: id } 
+            // });
 
-            if (programaExistente) {
-                return res.status(400).json({
-                    mensaje: "No se pudo actualizar: ya existe otro programa con este número de ficha"
-                });
-            }
+            // if (programaExistente) {
+            //     return res.status(400).json({
+            //         mensaje: "No se pudo actualizar: ya existe otro programa con este número de ficha"
+            //     });
+            // }
         }
         
-        const actualizar = await ProgramaFormacion.findByIdAndUpdate(
+        const actualizar = await programaFormacionService.findByIdAndUpdate(
             id,
             req.body,
             { new: true, runValidators: true }

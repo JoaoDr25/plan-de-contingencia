@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 import { generarNumero } from "../utils/generarNumero.js";
 
+const urlValidator = {
+    validator: function (v) {
+        if (!v) return true;
+        return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v);
+    },
+    message: props => `${props.value} no es una URL válida!`
+};
+
 const planContingenciaSchema = new mongoose.Schema({
     numero: {
         type: Number,
@@ -153,9 +161,7 @@ const planContingenciaSchema = new mongoose.Schema({
             lugar: {
                 type: String,
                 trim: true
-            },
-
-            _id: false
+            }
         }],
     epp: [
         {

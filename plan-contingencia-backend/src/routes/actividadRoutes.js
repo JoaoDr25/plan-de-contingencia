@@ -6,7 +6,7 @@ import {
     obtenerActividadId,
     actualizarActividadId,
     eliminarActividadId
- } from "../../controllers/configuracion/actividadController.js";
+ } from "../controllers/actividadController.js";
  
  import { validarObjectId } from "../middlewares/validateObjectId.js";
 

@@ -6,7 +6,7 @@ import {
     actualizarPlan,
     cambiarEstadoPlan,
     generarPlan
-} from '../../controllers/planes/planContingenciaController.js'
+} from '../controllers/planContingenciaController.js'
 
 import { validarObjectId } from "../middlewares/validateObjectId.js";
 import { validarCuerpoNoVacio, validarEstadoPlan } from "../middlewares/validatePlan.js";

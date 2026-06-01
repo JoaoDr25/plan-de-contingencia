@@ -5,7 +5,7 @@ import {
     obtenerRiesgoid,
     actualizarRiesgoId,
     eliminarRiesgoId,
- } from "../../controllers/configuracion/riesgoController.js";
+ } from "../controllers/riesgoController.js"
 
 import { validarObjectId } from "../middlewares/validateObjectId.js";
 
