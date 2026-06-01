@@ -1,18 +1,10 @@
-import ProgramaFormacion from "../models/programaFormacionModel.js";
+import programaFormacionService from "../services/programaFormacionService.js";
 
 export const crearPrograma = async (req, res) => {
     try {
-        const { nombre, ficha } = req.body;
-
-        const programaExistente = await ProgramaFormacion.findOne({ ficha });
         
-        if (programaExistente) {
-            return res.status(400).json({
-                mensaje: "No se pudo crear el programa: ya existe un registro con este número de ficha"
-            });
-        }
-        const nuevoPrograma = new ProgramaFormacion(req.body);
-        await nuevoPrograma.save();
+        const nuevoPrograma = await programaFormacionService.create(req.body);
+
         res.status(201).json({
             mensaje: "Programa de formación creado correctamente",
             programa: nuevoPrograma

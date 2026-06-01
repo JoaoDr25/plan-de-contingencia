@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
+import { generarNumero } from "../utils/generarNumero.js";
 
 const contactosEmergenciaSchema = new mongoose.Schema ({
+    numero: {
+        type: Number,
+        unique: true
+    },
     nombreEntidad: {
         type: String,
         required: true,
@@ -30,3 +35,13 @@ const contactosEmergenciaSchema = new mongoose.Schema ({
 });
 
 export default mongoose.model("ContactosEmergencia", contactosEmergenciaSchema);
+
+contactosEmergenciaSchema.pre("save", async function(next){
+
+    if (!this.numero) {
+        this.numero =
+        await generarNumero("ContactosEmergencia");
+    }
+
+    next();
+});

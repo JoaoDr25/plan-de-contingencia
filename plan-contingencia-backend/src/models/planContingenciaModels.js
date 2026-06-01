@@ -1,14 +1,12 @@
 import mongoose from "mongoose";
-
-const urlValidator = {
-    validator: function (v) {
-        if (!v) return true;
-        return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v);
-    },
-    message: props => `${props.value} no es una URL válida!`
-};
+import { generarNumero } from "../utils/generarNumero.js";
 
 const planContingenciaSchema = new mongoose.Schema({
+    numero: {
+        type: Number,
+        unique: true,
+        index: true
+    },
     clasificacionInformacion: {
         type: String,
         required: true,
@@ -24,25 +22,16 @@ const planContingenciaSchema = new mongoose.Schema({
         ref: "Actividad",
         required: true
     },
-    descripcionActividad: { 
+    descripcionActividad: {
         type: String,
         trim: true
     },
     usuarioId: {
         type: mongoose.Schema.Types.ObjectId,
-        // ref: "Usuario" si se usa localmente
+        ref: 'Usuario',
         index: true
     },
     usuarioNombre: {
-        type: String,
-        trim: true
-    },
-    instructorId: {
-        type: mongoose.Schema.Types.ObjectId,
-        // ref: "Usuario" si se usa localmente
-        index: true
-    },
-    instructorNombre: {
         type: String,
         trim: true
     },
@@ -74,22 +63,28 @@ const planContingenciaSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    contactosEmergencia: {
-        centroSalud: {
-            type: String,
-            trim: true
-        },
-        policia: {
-            type: String,
-            trim: true
-        },
-        poliza: {
-            type: String,
-            trim: true
-        },
+    contactosEmergencia:
+    {
+        contactosBase: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'ContactosEmergencia',
+            }
+        ],
+
         otro: {
-            type: String,
-            trim: true
+            nombreEntidad: {
+                type: String,
+                trim: true
+            },
+            telefono: {
+                type: String,
+                trim: true
+            },
+            descripcion: {
+                type: String,
+                trim: true
+            }
         }
     },
     articulacionFormativa: {
@@ -141,27 +136,33 @@ const planContingenciaSchema = new mongoose.Schema({
     },
     planTrabajo: [
         {
-            hora: {
+            horaInicio: {
+                type: String,
+            },
+            horaFin: {
                 type: String,
             },
             actividad: {
                 type: String,
                 trim: true
             },
+            descripcion: {
+                type: String,
+                trim: true
+            },
+            lugar: {
+                type: String,
+                trim: true
+            },
+
             _id: false
         }],
     epp: [
         {
-            nombre: {
-                type: String,
-                trim: true
-            },
-            seleccionado: {
-                type: Boolean,
-                default: false
-            },
-            _id: false
-        }],
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'ElementosProteccionPersonal'
+        }
+    ],
     seguridadVial: {
         aplica: {
             type: Boolean,
@@ -169,20 +170,25 @@ const planContingenciaSchema = new mongoose.Schema({
         },
         items: [
             {
+                itemId: {
+                    type: String,
+                    required: true
+                },
                 nombre: {
                     type: String,
+                    required: true,
                     trim: true
                 },
-                aplica: {
+                cumple: {
                     type: Boolean,
                     default: false
                 },
-                soporteLink: {
+                soporte: {
                     type: String,
                     trim: true,
                     validate: urlValidator
                 },
-                observaciones: {
+                observacion: {
                     type: String,
                     trim: true
                 },

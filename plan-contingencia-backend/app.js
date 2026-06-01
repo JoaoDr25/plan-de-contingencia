@@ -10,6 +10,8 @@ import actividadRoutes from './src/routes/configuracion/actividadRoutes.js'
 import peligroRoutes from './src/routes/configuracion/peligroRoutes.js'
 import riesgosRoutes from './src/routes/configuracion/riesgoRoutes.js'
 
+import { mockAuth } from './src/middlewares/authMiddleware.js'
+
 dotenv.config();
 
 const app = express();
@@ -29,6 +31,8 @@ app.use('/api',
     peligroRoutes,
     riesgosRoutes
 );
+
+app.use(mockAuth); //Autenticación temporal
 
 app.use((req, res) => {
     res.status(404).json({error: 'Ruta no encontrada'});

@@ -1,22 +1,22 @@
 import mongoose from "mongoose";
+import { generarNumero } from "../utils/generarNumero.js";
 
 const actividadSchema = new mongoose.Schema({
+    numero: {
+        type: Number,
+        unique: true
+    },
     nombre: {
         type: String,
         required: true,
         unique: true,
         trim: true
     },
-    tipoSalida: {
-        type: String,
-        required: true,
-        trim: true
-    },
     descripcion: {
         type: String,
         trim: true
     },
-    categoria: {
+    tipoActividad: {
         type: String,
         required: true,
         enum: ["Académico", "Técnico", "Cultural", "Deportivo", "Administrativo"],
@@ -27,3 +27,13 @@ const actividadSchema = new mongoose.Schema({
 });
 
 export default mongoose.model("Actividad", actividadSchema);
+
+actividadSchemaSchema.pre("save", async function(next){
+
+    if (!this.numero) {
+        this.numero =
+        await generarNumero("Actividad");
+    }
+
+    next();
+});

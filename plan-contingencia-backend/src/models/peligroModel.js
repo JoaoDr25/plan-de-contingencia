@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
+import { generarNumero } from "../utils/generarNumero.js";
 
 const peligroSchema = new mongoose.Schema ({
+    numero: {
+        type: Number,
+        unique: true
+    },
     nombre: {
         type: String,
         required: true,
@@ -31,3 +36,13 @@ peligroSchema.virtual('riesgos', {
 });
 
 export default mongoose.model("Peligro", peligroSchema);
+
+peligroSchema.pre("save", async function(next){
+
+    if (!this.numero) {
+        this.numero =
+        await generarNumero("Peligro");
+    }
+
+    next();
+});

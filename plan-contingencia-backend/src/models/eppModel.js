@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
+import { generarNumero } from "../utils/generarNumero.js";
 
 const elementosProteccionPersonalSchema = new mongoose.Schema ({
+    numero: {
+        type: Number,
+        unique: true
+    },
     nombreEPP: {
         type: String,
         required: true,
@@ -14,7 +19,7 @@ const elementosProteccionPersonalSchema = new mongoose.Schema ({
     nivelProteccion: {
         type: String,
         required: true,
-        enum: ["Alto", "Medio", "Bajo"]
+        enum: ["BAJO", "MEDIO", "ALTO"]
     },
     descripcion: {
         type: String,
@@ -30,3 +35,13 @@ const elementosProteccionPersonalSchema = new mongoose.Schema ({
 });
 
 export default mongoose.model("ElementosProteccionPersonal", elementosProteccionPersonalSchema);
+
+elementosProteccionPersonalSchema.pre("save", async function(next){
+
+    if (!this.numero) {
+        this.numero =
+        await generarNumero("ElementosProteccionPersonal");
+    }
+
+    next();
+});
