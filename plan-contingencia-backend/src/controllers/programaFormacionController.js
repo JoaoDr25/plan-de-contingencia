@@ -2,17 +2,9 @@ import programaFormacionService from "../services/programaFormacionService.js";
 
 export const crearPrograma = async (req, res) => {
     try {
-        // const { nombre, ficha } = req.body;
 
-        // const programaExistente = await ProgramaFormacion.findOne({ ficha });
-        
-        // if (programaExistente) {
-        //     return res.status(400).json({
-        //         mensaje: "No se pudo crear el programa: ya existe un registro con este número de ficha"
-        //     });
-        // }
         const nuevoPrograma = await programaFormacionService.create(req.body);
-        // await nuevoPrograma.save();
+
         res.status(201).json({
             mensaje: "Programa de formación creado correctamente",
             programa: nuevoPrograma
@@ -31,10 +23,12 @@ export const crearPrograma = async (req, res) => {
     }
 };
 
+
 export const listarProgramas = async (req, res) => {
     try {
-        const listar = await programaFormacionService.getAllActivos();
         
+        const listar = await programaFormacionService.getAll({ estado: true });
+
         res.status(200).json({
             mensaje: "Lista de programas activos obtenida exitosamente",
             programas: listar
@@ -47,12 +41,12 @@ export const listarProgramas = async (req, res) => {
     }
 };
 
+
 export const obtenerProgramaId = async (req, res) => {
     try {
-        const obtenerId = await programaFormacionService.findById(req.params.id);
-        // if (!obtenerId) {
-        //     return res.status(404).json({ mensaje: "No se encontro el programa de formación" })
-        // }
+
+        const obtenerId = await programaFormacionService.getById( req.params.id );
+
         res.status(200).json({
             mensaje: "Programa de formación obtenido exitosamente",
             programa: obtenerId
@@ -65,32 +59,12 @@ export const obtenerProgramaId = async (req, res) => {
     }
 };
 
+
 export const actualizarProgramaId = async (req, res) => {
     try {
-        // const { id } = req.params;
-        // const { nombre, ficha } = req.body;
 
-        if (ficha) {
-            // const programaExistente = await programaFormacionService.findOne({ 
-            //     ficha, 
-            //     _id: { $ne: id } 
-            // });
+        const actualizar = await programaFormacionService.updateById( req.params.id, req.body );
 
-            // if (programaExistente) {
-            //     return res.status(400).json({
-            //         mensaje: "No se pudo actualizar: ya existe otro programa con este número de ficha"
-            //     });
-            // }
-        }
-        
-        const actualizar = await programaFormacionService.findByIdAndUpdate(
-            id,
-            req.body,
-            { new: true, runValidators: true }
-        );
-        if (!actualizar) {
-            return res.status(404).json({ mensaje: "Programa no encontrado" })
-        }
         res.status(200).json({
             mensaje: "Programa de formación actualizado correctamente",
             programa: actualizar
@@ -109,21 +83,12 @@ export const actualizarProgramaId = async (req, res) => {
     }
 };
 
+
 export const cambiarEstadoProgramaId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { estado } = req.body;
 
-        if (typeof estado !== "boolean") {
-            return res.status(400).json({ mensaje: "El campo 'estado' es obligatorio y debe ser un valor booleano (true/false)" });
-        }
-        const cambiarEstado = await ProgramaFormacion.findByIdAndUpdate(id,
-            { estado },
-            { new: true, runValidators: true }
-        );
-        if (!cambiarEstado) {
-            return res.status(404).json({ mensaje: "No se puede cambiar el estado: Programa de formación no existe" });
-        }
+        const cambiarEstado = await programaFormacionService.cambiarEstadoId( req.params.id, estado );
+   
         res.status(200).json({
             mensaje: `Programa de formación ${estado ? "activado" : "desactivado"} exitosamente`,
             programa: cambiarEstado
@@ -136,13 +101,12 @@ export const cambiarEstadoProgramaId = async (req, res) => {
     }
 }
 
+
 export const eliminarProgramaId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const eliminar = await ProgramaFormacion.findByIdAndDelete(id);
-        if (!eliminar) {
-            return res.status(404).json({ mensaje: "Programa no encontrado" });
-        }
+
+        const eliminar = await programaFormacionService.deleteById( req.params.id );
+      
         res.status(200).json({
             mensaje: "Programa de formación eliminado exitosamente",
             programa: eliminar

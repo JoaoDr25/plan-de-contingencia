@@ -1,35 +1,27 @@
-class BaseCrudService {
+export const createCrudService = (model) => ({
 
-    constructor(model) {
-        this.model = model;
-    }
+    create: (data) =>
+        model.create(data),
 
-    async create(data) {
-        return await this.model.create(data);
-    }
+    getAll: (filter = {}) =>
+        model.find(filter),
 
-    async getAll(filter= {}, options = {}) {
-        return await this.model.find(filter, null, options);
-    }
 
-    async getById(id) {
-        return await this.model.findById(id);
-    }
+    getById: (id) =>
+        model.findById(id),
 
-    async update(id, data) {
-        return await this.model.findByIdAndUpdate(
+
+    update: (id, data) =>
+        model.findByIdAndUpdate(
             id,
             data,
             {
                 new: true,
                 runValidators: true
             }
-        );
-    }
+        ),
 
-    async delete(id) {
-        return await this.model.findByIdAndDelete(id);
-    }
-}
 
-export default BaseCrudService;
+    delete: (id) =>
+        model.findByIdAndDelete(id)
+});

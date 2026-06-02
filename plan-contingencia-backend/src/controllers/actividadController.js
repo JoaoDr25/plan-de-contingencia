@@ -1,18 +1,10 @@
-import Actividad from '../models/actividadModel.js'
+import actividadService from "../services/actividadService.js";
 
 export const crearActividad = async (req, res) => {
     try {
-        const { nombre, descripcion, categoria } = req.body;
 
-        const actividadExistente = await Actividad.findOne({ nombre });
-
-        if (actividadExistente) {
-            return res.status(400).json({ 
-                mensaje: "No se pudo crear la actividad: ya existe una actividad con el mismo nombre"
-            });
-        }
-        const nuevaActividad = new Actividad(req.body);
-        await nuevaActividad.save();
+        const nuevaActividad = await actividadService.create(req.body);
+       
         res.status(201).json({
             mensaje: "Actividad creada exitosamente",
             actividad: nuevaActividad
@@ -31,9 +23,11 @@ export const crearActividad = async (req, res) => {
     }
 };
 
+
 export const listarActividades = async (req, res) => {
     try {
-        const listar = await Actividad.find();
+        
+        const listar = await actividadService.getAll();
         
         return res.status(200).json({
             mensaje: "Lista de actividades obtenidas exitosamente",
@@ -47,12 +41,12 @@ export const listarActividades = async (req, res) => {
     }
 };
 
+
 export const obtenerActividadId = async (req, res) => {
     try {
-        const obtenerId = await Actividad.findById(req.params.id);
-        if (!obtenerId) {
-            return res.status(404).json({ mensaje: "No se encontró la actividad"});
-        }
+
+        const obtenerId = await actividadService.getById(req.params.id);
+        
         return res.status(200).json({ 
             mensaje: "Actividad obtenida exitosamente",
             actividad: obtenerId
@@ -65,32 +59,12 @@ export const obtenerActividadId = async (req, res) => {
     }
 };
 
+
 export const actualizarActividadId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nombre, descripcion, categoria } = req.body;
 
-
-        if (nombre) {
-            const actividadExistente = await Actividad.findOne({
-                nombre,
-                _id: { $ne: id } 
-            });
-            if (actividadExistente) {
-                return res.status(400).json({
-                    mensaje: "No se pudo actualizar: ya existe otra actividad con este nombre"
-                });
-            }
-        }
-
-        const actualizar = await Actividad.findByIdAndUpdate(
-            id,
-            req.body,
-            { new: true, runValidators: true }
-        );
-        if (!actualizar) {
-            return res.status(404).json({ mensaje: "Actividad no encontrada"});
-        }
+        const actualizar = await actividadService.updateById(req.params.id, req.body);
+      
         return res.status(200).json({
             mensaje: "Actividad actualizada exitosamente",
             actividad: actualizar
@@ -109,13 +83,12 @@ export const actualizarActividadId = async (req, res) => {
     }
 };
 
+
 export const eliminarActividadId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const eliminar = await Actividad.findByIdAndDelete(id);
-        if (!eliminar) {
-            return res.status(404).json({ mensaje: "Actividad no encontrada"});
-        }
+        
+        const eliminar = await actividadService.deleteById(req.params.id);
+
         return res.status(200).json({
             mensaje: "Actividad eliminada exitosamente",
             actividad: eliminar

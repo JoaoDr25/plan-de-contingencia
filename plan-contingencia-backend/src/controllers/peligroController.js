@@ -3,17 +3,17 @@ import Riesgo from '../models/riesgoModel.js'
 
 export const crearPeligro = async (req, res) => {
     try {
-        const { nombre, tipo } = req.body;
+        // const { nombre, tipo } = req.body;
 
-        const peligroExistente = await Peligro.findOne({ nombre });
+        // const peligroExistente = await Peligro.findOne({ nombre });
 
-        if (peligroExistente) {
-            return res.status(400).json({
-                mensaje: "No se pudo crear el peligro: ya existe un peligro con el mismo nombre",
-            });
-        }
-        const nuevoPeligro = new Peligro(req.body);
-        await nuevoPeligro.save();
+        // if (peligroExistente) {
+        //     return res.status(400).json({
+        //         mensaje: "No se pudo crear el peligro: ya existe un peligro con el mismo nombre",
+        //     });
+        // }
+        // const nuevoPeligro = new Peligro(req.body);
+        // await nuevoPeligro.save();
 
         return res.status(201).json({
             mensaje: "Peligro creado exitosamente",
@@ -35,7 +35,7 @@ export const crearPeligro = async (req, res) => {
 
 export const listarPeligros = async (req, res) => {
     try {
-        const listar = await Peligro.find().populate("riesgos");
+        // const listar = await Peligro.find().populate("riesgos");
 
         return res.status(200).json({
             mensaje: "Lista de peligros obtenidos exitosamente",
@@ -51,12 +51,12 @@ export const listarPeligros = async (req, res) => {
 
 export const obtenerPeligroId = async (req, res) => {
     try {
-        const obtenerId = await Peligro.findById(req.params.id)
-        .populate("riesgos");
+        // const obtenerId = await Peligro.findById(req.params.id)
+        // .populate("riesgos");
         
-        if (!obtenerId) {
-            return res.status(404).json({ mensaje: "No se encontró el peligro" });
-        }
+        // if (!obtenerId) {
+        //     return res.status(404).json({ mensaje: "No se encontró el peligro" });
+        // }
 
         return res.status(200).json({
             mensaje: "Peligro obtenido exitosamente",
@@ -72,30 +72,30 @@ export const obtenerPeligroId = async (req, res) => {
 
 export const actualizarPeligroId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nombre, tipo } = req.body;
+        // const { id } = req.params;
+        // const { nombre, tipo } = req.body;
 
-        if (nombre) {
-            const peligroExistente = await Peligro.findOne({
-                nombre,
-                _id: { $ne: id }
-            });
-            if (peligroExistente) {
-                return res.status(400).json({
-                    mensaje: "No se pudo actualizar: ya existe otro peligro con este nombre"
-                });
-            }
-        }
+        // if (nombre) {
+        //     const peligroExistente = await Peligro.findOne({
+        //         nombre,
+        //         _id: { $ne: id }
+        //     });
+        //     if (peligroExistente) {
+        //         return res.status(400).json({
+        //             mensaje: "No se pudo actualizar: ya existe otro peligro con este nombre"
+        //         });
+        //     }
+        // }
 
-        const actualizar = await Peligro.findByIdAndUpdate(
-            id,
-            req.body,
-            { new: true, runValidators: true }
-        ).populate("riesgos");
+        // const actualizar = await Peligro.findByIdAndUpdate(
+        //     id,
+        //     req.body,
+        //     { new: true, runValidators: true }
+        // ).populate("riesgos");
 
-        if (!actualizar) {
-            return res.status(404).json({ mensaje: "Peligro no encontrado" });
-        }
+        // if (!actualizar) {
+        //     return res.status(404).json({ mensaje: "Peligro no encontrado" });
+        // }
 
         return res.status(200).json({
             mensaje: "Peligro actualizado exitosamente",
@@ -117,20 +117,20 @@ export const actualizarPeligroId = async (req, res) => {
 
 export const eliminarPeligroId = async (req, res) => {
     try {
-        const { id } = req.params;
+        // const { id } = req.params;
 
-        const riesgosAsociados = await Riesgo.findOne({ peligroId: id })
-        if (riesgosAsociados) {
-            return res.status(400).json({
-                mensaje: "No se puede eliminar el peligro: existe riesgos asociados a este registro",
-                sugerencia: "Elimine o reasigne los riesgos primero"
-            });
-        }
+        // const riesgosAsociados = await Riesgo.findOne({ peligroId: id })
+        // if (riesgosAsociados) {
+        //     return res.status(400).json({
+        //         mensaje: "No se puede eliminar el peligro: existe riesgos asociados a este registro",
+        //         sugerencia: "Elimine o reasigne los riesgos primero"
+        //     });
+        // }
 
-        const eliminar = await Peligro.findByIdAndDelete(id);
-        if (!eliminar) {
-            return res.status(404).json({ mensaje: "Peligro no encontrado" });
-        }
+        // const eliminar = await Peligro.findByIdAndDelete(id);
+        // if (!eliminar) {
+        //     return res.status(404).json({ mensaje: "Peligro no encontrado" });
+        // }
 
         return res.status(200).json({
             mensaje: "Peligro eliminado exitosamente",
@@ -146,22 +146,22 @@ export const eliminarPeligroId = async (req, res) => {
 
 export const asociarRiesgosPeligro = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { riesgos } = req.body;
+        // const { id } = req.params;
+        // const { riesgos } = req.body;
 
-        if (!Array.isArray(riesgos)) {
-            return res.status(400).json({ mensaje: "El campo 'riesgos' debe ser un arreglo de IDs (ObjectIds)" });
-        }
+        // if (!Array.isArray(riesgos)) {
+        //     return res.status(400).json({ mensaje: "El campo 'riesgos' debe ser un arreglo de IDs (ObjectIds)" });
+        // }
 
-        const peligro = await Peligro.findById(id);
-        if (!peligro) {
-            return res.status(404).json({ mensaje: "Peligro no encontrado"});
-        }
+        // const peligro = await Peligro.findById(id);
+        // if (!peligro) {
+        //     return res.status(404).json({ mensaje: "Peligro no encontrado"});
+        // }
 
-        await Riesgo.updateMany(
-            { _id: { $in: riesgos } },
-            { $set: { peligroId: id } }
-        );
+        // await Riesgo.updateMany(
+        //     { _id: { $in: riesgos } },
+        //     { $set: { peligroId: id } }
+        // );
 
         return res.status(200).json({
             mensaje: `Se han asociado ${riesgos.length} riesgos al peligro exitosamente`
