@@ -2,7 +2,6 @@ import programaFormacionService from "../services/programaFormacionService.js";
 
 export const crearPrograma = async (req, res) => {
     try {
-
         const nuevoPrograma = await programaFormacionService.create(req.body);
 
         res.status(201).json({
@@ -26,11 +25,10 @@ export const crearPrograma = async (req, res) => {
 
 export const listarProgramas = async (req, res) => {
     try {
-        
-        const listar = await programaFormacionService.getAll({ estado: true });
+        const listar = await programaFormacionService.getAll({ estado: true }); //Actualmente solo activos, pendiente crear filtros
 
         res.status(200).json({
-            mensaje: "Lista de programas activos obtenida exitosamente",
+            mensaje: "Lista de programas activos obtenidos exitosamente",
             programas: listar
         });
     } catch (error) {
@@ -44,7 +42,6 @@ export const listarProgramas = async (req, res) => {
 
 export const obtenerProgramaId = async (req, res) => {
     try {
-
         const obtenerId = await programaFormacionService.getById( req.params.id );
 
         res.status(200).json({
@@ -62,7 +59,6 @@ export const obtenerProgramaId = async (req, res) => {
 
 export const actualizarProgramaId = async (req, res) => {
     try {
-
         const actualizar = await programaFormacionService.updateById( req.params.id, req.body );
 
         res.status(200).json({
@@ -86,7 +82,7 @@ export const actualizarProgramaId = async (req, res) => {
 
 export const cambiarEstadoProgramaId = async (req, res) => {
     try {
-
+        const { estado } = req.body;
         const cambiarEstado = await programaFormacionService.cambiarEstadoId( req.params.id, estado );
    
         res.status(200).json({
@@ -104,7 +100,6 @@ export const cambiarEstadoProgramaId = async (req, res) => {
 
 export const eliminarProgramaId = async (req, res) => {
     try {
-
         const eliminar = await programaFormacionService.deleteById( req.params.id );
       
         res.status(200).json({
@@ -113,7 +108,7 @@ export const eliminarProgramaId = async (req, res) => {
         });
     } catch (error) {
         return res.status(500).json({
-            mensaje: "Error al eliminar un programa de formación",
+            mensaje: "Error al eliminar el programa de formación",
             error: error.message
         });
     }

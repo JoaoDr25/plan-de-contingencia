@@ -15,7 +15,7 @@ const create = async (data) => {
     if (programaExistente) {
         const error =
             new Error(
-                "No se pudo crear el programa: ya existe un registro con este número de ficha"
+                "No se puede crear el programa: ya existe un registro con este número de ficha"
             );
 
         error.statusCode = 400;
@@ -25,6 +25,7 @@ const create = async (data) => {
 
     return await crud.create(data);
 }
+
 
 
 const getById = async (id) => {
@@ -59,10 +60,10 @@ const updateById = async (id, data) => {
     if (programaExistente) {
         const error =
             new Error(
-                "No se pudo actualizar: ya existe otro programa con ese número de ficha"
+                "No se puede actualizar: ya existe otro programa con ese número de ficha"
             );
 
-        error.statusCode = 404;
+        error.statusCode = 400;
 
         throw error;
     }
@@ -92,10 +93,19 @@ const cambiarEstadoId = async (id, estado) => {
 
       if (typeof estado !== "boolean") {
         const error =
-        new Error("El campo 'estado' es obligatorio y debe ser un valor booleano")
+        new Error(
+            "El campo 'estado' es obligatorio y debe ser un valor booleano"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
     }
 
-    const cambiarEstado = await crud.update( id, { estado });
+    const cambiarEstado = await crud.update( 
+        id, 
+        { estado }
+    );
 
     if (!cambiarEstado) {
         const error =
@@ -116,9 +126,9 @@ const cambiarEstadoId = async (id, estado) => {
 
 const deleteById = async (id) => {
 
-    const eliminarProgramaFormacion = await crud.delete(id)
+    const eliminarProgramaFormacionId = await crud.delete(id);
 
-    if (!eliminarProgramaFormacion) {
+    if (!eliminarProgramaFormacionId) {
         const error =
             new Error(
                 "Programa de formación no encontrado"
@@ -129,7 +139,7 @@ const deleteById = async (id) => {
         throw error;
     }
 
-    return eliminarProgramaFormacion;
+    return eliminarProgramaFormacionId;
 }
 
 

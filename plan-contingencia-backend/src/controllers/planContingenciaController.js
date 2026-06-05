@@ -69,7 +69,7 @@ export const obtenerPlanId = async (req, res) => {
 };
 
 
-export const actualizarPlan = async (req, res) => {
+export const actualizarPlanId = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -114,7 +114,7 @@ export const actualizarPlan = async (req, res) => {
 };
 
 
-export const cambiarEstadoPlan = async (req, res) => {
+export const cambiarEstadoPlanId = async (req, res) => {
     try {
         const { id } = req.params;
         const { estado } = req.body;

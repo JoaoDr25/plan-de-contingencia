@@ -4,7 +4,6 @@ import {
     listarUsuario,
     obtenerUsuarioId,
     actualizarUsuarioId,
-    cambiarEstadoUsuario,
     eliminarUsuarioId,
  } from "../controllers/usuarioController.js";
 
@@ -12,11 +11,10 @@ import { validarObjectId } from "../middlewares/validateObjectId.js";
 
 const router = express.Router();
 
-router.post('/usuario', crearUsuario);
-router.get('usuario', listarUsuario);
-router.get('/usuario/:id', validarObjectId, obtenerUsuarioId);
-router.put('/usuario/:id', validarObjectId, actualizarUsuarioId);
-router.patch('/usuario/:id/estado', validarObjectId, cambiarEstadoUsuario);
-router.delete('/usuario/:id', validarObjectId, eliminarUsuarioId);
+router.post('/usuarios', crearUsuario);
+router.get('/usuarios', listarUsuario);
+router.get('/usuarios/:id', validarObjectId, obtenerUsuarioId);
+router.put('/usuarios/:id', validarObjectId, actualizarUsuarioId);
+router.delete('/usuarios/:id', validarObjectId, eliminarUsuarioId);
 
 export default router;

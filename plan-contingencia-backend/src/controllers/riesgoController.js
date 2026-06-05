@@ -1,10 +1,8 @@
-import Riesgo from '../models/riesgoModel.js';
-import Actividad from '../models/actividadModel.js';
+import riesgoService from "../services/riesgoService.js";
 
 export const crearRiesgo = async (req, res) => {
     try {
-        const nuevoRiesgo = new Riesgo(req.body);
-        await nuevoRiesgo.save();
+        const nuevoRiesgo = await riesgoService.create(req.body);
 
         return res.status(201).json({
             mensaje: "Riesgo creado exitosamente",
@@ -23,9 +21,10 @@ export const crearRiesgo = async (req, res) => {
     }
 };
 
+
 export const listarRiesgos = async (req, res) => {
     try {
-        const listar = await Riesgo.find().populate("peligroId");
+        const listar = await riesgoService.getAll();
 
         return res.status(200).json({
             mensaje: "Lista de riesgos obtenidos exitosamente",
@@ -39,12 +38,11 @@ export const listarRiesgos = async (req, res) => {
     }
 };
 
+
 export const obtenerRiesgoid = async (req, res) => {
     try {
-        const obtenerId = await Riesgo.findById(req.params.id).populate("peligroId");
-        if (!obtenerId) {
-            return res.status(404).json({ mensaje: "No se encontró el riesgo" })
-        }
+        const obtenerId = await riesgoService.getById(req.params.id)
+
         return res.status(200).json({
             mensaje: "Riesgo obtenido exitosamente",
             riesgo: obtenerId
@@ -57,32 +55,11 @@ export const obtenerRiesgoid = async (req, res) => {
     }
 };
 
+
 export const actualizarRiesgoId = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nombre, descripcion } = req.body;
+        const actualizar = await riesgoService.updateById(req.params.id, req.body);
 
-        if (nombre) {
-            const riesgoExistente = await Riesgo.findOne({
-                nombre,
-                _id: { $ne: id }
-            });
-
-            if (riesgoExistente) {
-                return res.status(400).json({
-                    mensaje: "No se pudo actualizar: ya existe otro riesgo con ese nombre"
-                });
-            }
-        }
-
-        const actualizar = await Riesgo.findByIdAndUpdate(
-            id,
-            req.body,
-            { new: true, runValidators: true }
-        );
-        if (!actualizar) {
-            return res.status(404).json({ mensaje: "Riesgo no encontrado" });
-        }
         return res.status(200).json({
             mensaje: "Riesgo actualizado exitosamente",
             riesgo: actualizar
@@ -90,7 +67,7 @@ export const actualizarRiesgoId = async (req, res) => {
 
     } catch (error) {
         if (error.name === "ValidationError") {
-            return res.status(400).json({ mensaje: "Los datos proporcionados no son válidos"});
+            return res.status(400).json({ mensaje: "Los datos proporcionados no son válidos" });
         }
         return res.status(500).json({
             mensaje: "Error al actualizar el riesgo",
@@ -99,21 +76,16 @@ export const actualizarRiesgoId = async (req, res) => {
     }
 };
 
+
 export const eliminarRiesgoId = async (req, res) => {
     try {
-        const { id } = req.params;
+        const eliminar = await riesgoService.deleteById(req.params.id);
 
-        // const protocolosAsociados = await Protocolo.findOne({ riesgoId: id });
-
-        const eliminar = await Riesgo.findByIdAndDelete(id);
-        if (!eliminar) {
-            return res.status(404).json({ mensaje: "Riesgo no encontrado"});
-        }
         return res.status(200).json({
             mensaje: "Riesgo eliminado exitosamente",
             riesgo: eliminar
         });
-        
+
     } catch (error) {
         return res.status(500).json({
             mensaje: "Error al eliminar el riesgo",
@@ -121,3 +93,56 @@ export const eliminarRiesgoId = async (req, res) => {
         });
     }
 };
+
+
+export const asociarProtocolosRiesgo = async (req, res) => {
+    try {
+        const { protocoloId } = req.body;
+
+        const asociar = await riesgoService.asociarProtocoloRiesgo(req.params.id, protocoloId);
+
+        return res.status(200).json({
+            mensaje: "Protocolos asociados obtenidos exitosamente",
+            asociar: asociar
+        });
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Error al asociar el protocolo al riesgo",
+            error: error.message
+        });
+    }
+}
+
+
+export const obtenerAsociacionProtocoloRiesgo = async (req, res) => {
+    try {
+        const obtenerAsociacion = await riesgoService.obtenerProtocoloRiesgo(req.params.id);
+
+        return res.status(200).json({
+            mensaje: "Protocolos asociados obtenidos exitosamente",
+            asociar: obtenerAsociacion
+        });
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Error al obtener el riesgo",
+            error: error.message
+        });
+    }
+}
+
+
+export const eliminarAsociacionProtocoloRiesgo = async (req, res) => {
+    try {
+        const eliminarAsociacion = await riesgoService.eliminarProtocoloRiesgo(req.params.id, req.params.protocoloId);
+
+        return res.status(200).json({
+            mensaje: "Asociación de protocolo eliminado exitosamente",
+            asociar: eliminarAsociacion
+        });
+    } catch (error) {
+        return res.status(500).json({
+            mensaje: "Error al eliminar la asociación",
+            error: error.message
+        });
+    }
+}
