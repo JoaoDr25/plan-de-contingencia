@@ -1,6 +1,6 @@
 import protocoloService from "../services/protocoloService.js";
 
-export const crearProtocolo = async (req, res) => {
+export const crearProtocolo = async (req, res, next) => {
     try {
         const nuevoProtocolo = await protocoloService.create(req.body);
 
@@ -9,20 +9,12 @@ export const crearProtocolo = async (req, res) => {
             protocolo: nuevoProtocolo
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error en la validación de los datos"
-            })
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear el protocolo",
-            error: error.message
-        });
+       next(error);
     }
 }
 
 
-export const listarProtocolos = async (req, res) => {
+export const listarProtocolos = async (req, res, next) => {
     try {
         const listar = await protocoloService.getAll();
 
@@ -31,15 +23,12 @@ export const listarProtocolos = async (req, res) => {
             protocolo: listar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al listar los protocolos",
-            error: error.message
-        });
+      next(error);
     }
 }
 
 
-export const obtenerProtocoloId = async (req, res) => {
+export const obtenerProtocoloId = async (req, res, next) => {
     try {
         const obtenerId = await protocoloService.getById(req.params.id);
 
@@ -48,15 +37,12 @@ export const obtenerProtocoloId = async (req, res) => {
             protocolo: obtenerId
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el protocolo",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const actualizarProtocoloId = async (req, res) => {
+export const actualizarProtocoloId = async (req, res, next) => {
     try {
         const actualizar = await protocoloService.updateById(req.params.id, req.body);
 
@@ -65,18 +51,12 @@ export const actualizarProtocoloId = async (req, res) => {
             protocolo: actualizar
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({ mensaje: "Los datos proporcionados no son válidos" });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar el protocolo",
-            error: error.message
-        });
+       next(error);
     }
 }
 
 
-export const eliminarProtocoloId = async (req, res) => {
+export const eliminarProtocoloId = async (req, res, next) => {
     try {
         const eliminar = await protocoloService.deleteById(req.params.id);
 
@@ -85,15 +65,12 @@ export const eliminarProtocoloId = async (req, res) => {
             protocolo: eliminar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al eliminar el protocolo",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const obtenerRiesgosProtocolo = async (req, res) => {
+export const obtenerRiesgosProtocolo = async (req, res, next) => {
     try {
         const obtenerAsociacion = await protocoloService.obtenerRiesgoProtocolo(req.params.id);
 
@@ -102,9 +79,6 @@ export const obtenerRiesgosProtocolo = async (req, res) => {
             asociar: obtenerAsociacion
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el protocolo asociado al riesgo",
-            error: error.message
-        });
+       next(error);
     }
 }

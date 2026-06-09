@@ -118,7 +118,6 @@ const cambiarEstadoId = async (id, estado) => {
         throw error;
     }
 
-
     return cambiarEstado;
 } 
 

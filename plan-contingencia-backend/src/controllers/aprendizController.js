@@ -1,6 +1,6 @@
 import aprendizService from "../services/aprendizService.js";
 
-export const crearAprendiz = async (req, res) => {
+export const crearAprendiz = async (req, res, next) => {
     try {
         const nuevoAprendiz = await aprendizService.create(req.body);
 
@@ -9,21 +9,12 @@ export const crearAprendiz = async (req, res) => {
             aprendiz: nuevoAprendiz
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al crear el aprendiz",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear el aprendiz",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const listarAprendiz = async (req, res) => {
+export const listarAprendiz = async (req, res, next) => {
     try {
         const listar = await aprendizService.getAll({ estado: true }); //Actualmente solo activos, pendiente crear filtros
 
@@ -32,15 +23,12 @@ export const listarAprendiz = async (req, res) => {
             aprendiz: listar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener los aprendices",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const obtenerAprendizId = async (req, res) => {
+export const obtenerAprendizId = async (req, res, next) => {
     try {
         const obtenerId = await aprendizService.getById( req.params.id );
 
@@ -49,15 +37,12 @@ export const obtenerAprendizId = async (req, res) => {
             aprendiz: obtenerId
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el aprendiz",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const actualizarAprendizId = async (req, res) => {
+export const actualizarAprendizId = async (req, res, next) => {
     try {
         const actualizar = await aprendizService.updateById( req.params.id, req.body );
 
@@ -66,21 +51,12 @@ export const actualizarAprendizId = async (req, res) => {
             aprendiz: actualizar
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Los datos proporcionados no son válidos",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar el aprendiz",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const cambiarEstadoAprendizId = async (req, res) => {
+export const cambiarEstadoAprendizId = async (req, res, next) => {
     try {
         const { estado } = req.body;
 
@@ -91,15 +67,12 @@ export const cambiarEstadoAprendizId = async (req, res) => {
             aprendiz: cambiarEstado
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al cambiar de estado del aprendiz",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const eliminarAprendizId = async (req, res) => {
+export const eliminarAprendizId = async (req, res, next) => {
     try {
         const eliminar = await aprendizService.deleteById( req.params.id );
 
@@ -108,9 +81,6 @@ export const eliminarAprendizId = async (req, res) => {
             aprendiz: eliminar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al eliminar el aprendiz",
-            error: error.message
-        });
+        next(error);
     }
 };

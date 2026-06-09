@@ -1,6 +1,6 @@
 import programaFormacionService from "../services/programaFormacionService.js";
 
-export const crearPrograma = async (req, res) => {
+export const crearPrograma = async (req, res, next) => {
     try {
         const nuevoPrograma = await programaFormacionService.create(req.body);
 
@@ -9,21 +9,12 @@ export const crearPrograma = async (req, res) => {
             programa: nuevoPrograma
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al crear el programa de formación",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear el programa de formación",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const listarProgramas = async (req, res) => {
+export const listarProgramas = async (req, res, error) => {
     try {
         const listar = await programaFormacionService.getAll({ estado: true }); //Actualmente solo activos, pendiente crear filtros
 
@@ -32,15 +23,12 @@ export const listarProgramas = async (req, res) => {
             programas: listar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener los programas de formación",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const obtenerProgramaId = async (req, res) => {
+export const obtenerProgramaId = async (req, res, error) => {
     try {
         const obtenerId = await programaFormacionService.getById( req.params.id );
 
@@ -49,15 +37,12 @@ export const obtenerProgramaId = async (req, res) => {
             programa: obtenerId
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el programa de formación",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const actualizarProgramaId = async (req, res) => {
+export const actualizarProgramaId = async (req, res, next) => {
     try {
         const actualizar = await programaFormacionService.updateById( req.params.id, req.body );
 
@@ -66,21 +51,12 @@ export const actualizarProgramaId = async (req, res) => {
             programa: actualizar
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Los datos proporcionados no son válidos",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar el programa de formación",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const cambiarEstadoProgramaId = async (req, res) => {
+export const cambiarEstadoProgramaId = async (req, res, next) => {
     try {
         const { estado } = req.body;
         const cambiarEstado = await programaFormacionService.cambiarEstadoId( req.params.id, estado );
@@ -90,15 +66,12 @@ export const cambiarEstadoProgramaId = async (req, res) => {
             programa: cambiarEstado
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al cambiar de estado del programa de formación",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const eliminarProgramaId = async (req, res) => {
+export const eliminarProgramaId = async (req, res, next) => {
     try {
         const eliminar = await programaFormacionService.deleteById( req.params.id );
       
@@ -107,9 +80,6 @@ export const eliminarProgramaId = async (req, res) => {
             programa: eliminar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al eliminar el programa de formación",
-            error: error.message
-        });
+       next(error);
     }
 };

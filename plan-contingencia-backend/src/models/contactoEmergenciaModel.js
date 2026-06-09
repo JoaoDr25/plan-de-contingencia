@@ -34,8 +34,6 @@ const contactosEmergenciaSchema = new mongoose.Schema ({
     timestamps: true
 });
 
-export default mongoose.model("ContactosEmergencia", contactosEmergenciaSchema);
-
 contactosEmergenciaSchema.pre("save", async function(next){
 
     if (!this.numero) {
@@ -45,3 +43,5 @@ contactosEmergenciaSchema.pre("save", async function(next){
 
     next();
 });
+
+export default mongoose.model("ContactosEmergencia", contactosEmergenciaSchema);

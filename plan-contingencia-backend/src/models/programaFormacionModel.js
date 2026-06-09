@@ -35,9 +35,6 @@ const programaFormacionSchema = new mongoose.Schema ({
     timestamps: true
 });
 
-export default mongoose.model("ProgramaFormacion", programaFormacionSchema);
-
-
 programaFormacionSchema.pre("save", async function(next){
 
     if (!this.numero) {
@@ -47,3 +44,5 @@ programaFormacionSchema.pre("save", async function(next){
 
     next();
 });
+
+export default mongoose.model("ProgramaFormacion", programaFormacionSchema);

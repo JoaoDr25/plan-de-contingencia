@@ -4,13 +4,20 @@ import dotenv from 'dotenv'
 
 import { conectarDB } from './src/config/db.js'
 
-import planRoutes from './src/routes/planContingenciaRoutes.js'
-import programasRoutes from './src/routes/programaFormacionRoutes.js'
+import planContingenciaRoutes from './src/routes/planContingenciaRoutes.js'
+import programaFormacionRoutes from './src/routes/programaFormacionRoutes.js'
 import actividadRoutes from './src/routes/actividadRoutes.js'
 import peligroRoutes from './src/routes/peligroRoutes.js'
-import riesgosRoutes from './src/routes/riesgoRoutes.js'
+import riesgoRoutes from './src/routes/riesgoRoutes.js'
+import protocoloRoutes from './src/routes/protocoloRoutes.js'
+import configuracionPeligroRoutes from './src/routes/configuracionPeligroRoutes.js'
+import aprendizRoutes from './src/routes/aprendizRoutes.js'
+import usuarioRoutes from './src/routes/usuarioRoutes.js'
+import contactoEmergenciaRoutes from './src/routes/contactoEmergenciaRoutes.js'
+import eppRoutes from './src/routes/eppRoutes.js'
 
 import { mockAuth } from './src/middlewares/authMiddleware.js'
+import { errorHandler } from './src/middlewares/errorHandler.js'
 
 dotenv.config();
 
@@ -24,19 +31,27 @@ app.get('/api', (req, res) => {
     res.send('¡Servidor funcionando!');
 });
 
+app.use(mockAuth); //Autenticación temporal
+
 app.use('/api', 
-    planRoutes, 
-    programasRoutes, 
+    planContingenciaRoutes, 
+    programaFormacionRoutes, 
     actividadRoutes, 
     peligroRoutes,
-    riesgosRoutes
+    riesgoRoutes,
+    protocoloRoutes,
+    configuracionPeligroRoutes,
+    aprendizRoutes,
+    usuarioRoutes,
+    contactoEmergenciaRoutes,
+    eppRoutes
 );
-
-app.use(mockAuth); //Autenticación temporal
 
 app.use((req, res) => {
     res.status(404).json({error: 'Ruta no encontrada'});
 });
+
+app.use(errorHandler); //Middleware de manejo de errores del servidor
 
 conectarDB();
 

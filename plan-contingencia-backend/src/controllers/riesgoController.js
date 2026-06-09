@@ -1,6 +1,6 @@
 import riesgoService from "../services/riesgoService.js";
 
-export const crearRiesgo = async (req, res) => {
+export const crearRiesgo = async (req, res, next) => {
     try {
         const nuevoRiesgo = await riesgoService.create(req.body);
 
@@ -9,20 +9,12 @@ export const crearRiesgo = async (req, res) => {
             riesgo: nuevoRiesgo
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error en la validación de los datos"
-            })
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear el riesgo",
-            error: error.message
-        });
+      next(error);
     }
 };
 
 
-export const listarRiesgos = async (req, res) => {
+export const listarRiesgos = async (req, res, next) => {
     try {
         const listar = await riesgoService.getAll();
 
@@ -31,15 +23,12 @@ export const listarRiesgos = async (req, res) => {
             riesgos: listar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al listar los riesgos",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const obtenerRiesgoid = async (req, res) => {
+export const obtenerRiesgoid = async (req, res, next) => {
     try {
         const obtenerId = await riesgoService.getById(req.params.id)
 
@@ -48,15 +37,12 @@ export const obtenerRiesgoid = async (req, res) => {
             riesgo: obtenerId
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el riesgo",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const actualizarRiesgoId = async (req, res) => {
+export const actualizarRiesgoId = async (req, res, next) => {
     try {
         const actualizar = await riesgoService.updateById(req.params.id, req.body);
 
@@ -66,18 +52,12 @@ export const actualizarRiesgoId = async (req, res) => {
         });
 
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({ mensaje: "Los datos proporcionados no son válidos" });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar el riesgo",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const eliminarRiesgoId = async (req, res) => {
+export const eliminarRiesgoId = async (req, res, next) => {
     try {
         const eliminar = await riesgoService.deleteById(req.params.id);
 
@@ -87,15 +67,12 @@ export const eliminarRiesgoId = async (req, res) => {
         });
 
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al eliminar el riesgo",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const asociarProtocolosRiesgo = async (req, res) => {
+export const asociarProtocolosRiesgo = async (req, res, next) => {
     try {
         const { protocoloId } = req.body;
 
@@ -106,15 +83,12 @@ export const asociarProtocolosRiesgo = async (req, res) => {
             asociar: asociar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al asociar el protocolo al riesgo",
-            error: error.message
-        });
+      next(error);
     }
 }
 
 
-export const obtenerAsociacionProtocoloRiesgo = async (req, res) => {
+export const obtenerAsociacionProtocoloRiesgo = async (req, res, next) => {
     try {
         const obtenerAsociacion = await riesgoService.obtenerProtocoloRiesgo(req.params.id);
 
@@ -123,15 +97,12 @@ export const obtenerAsociacionProtocoloRiesgo = async (req, res) => {
             asociar: obtenerAsociacion
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el riesgo",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const eliminarAsociacionProtocoloRiesgo = async (req, res) => {
+export const eliminarAsociacionProtocoloRiesgo = async (req, res, next) => {
     try {
         const eliminarAsociacion = await riesgoService.eliminarProtocoloRiesgo(req.params.id, req.params.protocoloId);
 
@@ -140,9 +111,6 @@ export const eliminarAsociacionProtocoloRiesgo = async (req, res) => {
             asociar: eliminarAsociacion
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al eliminar la asociación",
-            error: error.message
-        });
+       next(error);
     }
 }

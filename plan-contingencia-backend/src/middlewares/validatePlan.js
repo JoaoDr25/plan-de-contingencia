@@ -1,8 +1,6 @@
-import mongoose from "mongoose";
-import PlanContingencia from "../models/planContingenciaModels.js";
+import PlanContingencia from "../models/planContingenciaModel.js";
 
 export const validarCuerpoNoVacio = (req, res, next) => {
-
     try {
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({ mensaje: "El cuerpo de la petición no puede estar vacío" });
@@ -18,15 +16,14 @@ export const validarCuerpoNoVacio = (req, res, next) => {
 };
 
 
-// Función Privada
-const calcularCamposFaltantes = (plan) => {
+export const calcularCamposFaltantes = (plan) => {
     const camposFaltantes = [];
 
     if (!plan.clasificacionInformacion) camposFaltantes.push("clasificacionInformacion");
     if (!plan.programaFormacionId) camposFaltantes.push("programaFormacionId");
     if (!plan.actividadId) camposFaltantes.push("actividadId");
-    if (!plan.instructorId) camposFaltantes.push("instructorId");
-    if (!plan.instructorNombre) camposFaltantes.push("instructorNombre");
+    if (!plan.usuarioId) camposFaltantes.push("usuarioId");
+    if (!plan.usuarioNombre) camposFaltantes.push("usuarioNombre");
     if (!plan.fecha) camposFaltantes.push("fecha");
     if (!plan.lugar) camposFaltantes.push("lugar");
     if (!plan.contactoLugar) camposFaltantes.push("contactoLugar");
@@ -36,9 +33,9 @@ const calcularCamposFaltantes = (plan) => {
         camposFaltantes.push("articulacionFormativa (Debe seleccionar al menos una opción o especificar en 'otro')");
     }
 
-    if (!plan?.contactosEmergencia?.centroSalud) camposFaltantes.push("contactosEmergencia.centroSalud");
-    if (!plan?.contactosEmergencia?.policia) camposFaltantes.push("contactosEmergencia.policia");
-    if (!plan?.contactosEmergencia?.poliza) camposFaltantes.push("contactosEmergencia.poliza");
+    if (!plan.contactosEmergencia?.contactosBase?.length && !plan.contactosEmergencia?.otro.nombreEntidad) {
+        camposFaltantes.push("contactosEmergencia")
+    };
 
     if (!plan?.planTrabajo?.length) {
         camposFaltantes.push("planTrabajo");
@@ -52,10 +49,23 @@ const calcularCamposFaltantes = (plan) => {
 
     if (plan?.seguridadVial?.aplica && plan?.seguridadVial?.items?.length > 0) {
         plan.seguridadVial.items.forEach((item, index) => {
-            if (item.aplica && !item.soporteLink) {
-                camposFaltantes.push(`Seguridad Vial: Soporte link en ítem ${index + 1}`);
+            if (item.cumple && !item.soporte) {
+                camposFaltantes.push(`Seguridad Vial.items [${index}]`
+                );
             }
         });
+    }
+
+    if (!plan.epp?.length) {
+        camposFaltantes.push("epp");
+    }
+
+    if (!plan.riesgosId?.length) {
+        camposFaltantes.push("riesgosId");
+    }
+
+    if (!plan.aprendicesId?.length) {
+        camposFaltantes.push("aprendicesId")
     }
 
     return camposFaltantes;
@@ -63,48 +73,70 @@ const calcularCamposFaltantes = (plan) => {
 
 
 export const validarEstadoPlan = async (req, res, next) => {
-
     try {
         const { id } = req.params;
         const { estado: nuevoEstado } = req.body;
-        const estadosValidos = ["borrador", "aprobado", "ejecutado"];
+
+        const estadosValidos = [
+            "borrador", 
+            "en revision", 
+            "aprobado", 
+            "cancelado", 
+            "ejecutado"];
 
         if (!nuevoEstado) {
-            return res.status(400).json({ mensaje: "Debe enviar el campo 'estado'" });
+            return res.status(400).json({
+                mensaje: "Debe enviar el campo 'estado'"
+            });
         }
 
         if (nuevoEstado && !estadosValidos.includes(nuevoEstado)) {
-            return res.status(400).json({ mensaje: `El estado '${nuevoEstado}' no es válido. Estados permitidos: ${estadosValidos.join(", ")}` })
+            return res.status(400).json({
+                mensaje: `El estado '${nuevoEstado}' no es válido. Estados permitidos: ${estadosValidos.join(", ")}`
+            })
         }
 
         const planExistente = await PlanContingencia.findById(id);
 
         if (!planExistente) {
-            return res.status(404).json({ mensaje: "Plan de contingencia no encontrado para validar la transición de estado" })
+            return res.status(404).json({
+                mensaje: "Plan de contingencia no encontrado para validar la transición de estado"
+            })
         }
 
         const estadoActual = planExistente.estado;
 
-        if (nuevoEstado === "aprobado" && estadoActual !== "aprobado") {
-            const camposFaltantes = calcularCamposFaltantes(planExistente);
-            if (camposFaltantes.length > 0) {
-                return res.status(400).json({
-                    mensaje: "No se puede aprobar el plan: faltan requisitos obligatorios",
-                    campos: camposFaltantes
-                });
-            }
+        const transicionesPermitidas = {
+            "borrador": [
+                "en revision",
+                "cancelado"
+            ],
+            "en revision": [
+                "aprobado",
+                "cancelado",
+                "borrador"
+            ],
+            "aprobado": [
+                "ejecutado",
+                "cancelado",
+                "borrador"
+            ],
+            "ejecutado": [],
+            "cancelado": [],
         }
 
-        if (estadoActual === "ejecutado" && (nuevoEstado === "aprobado" || nuevoEstado === "borrador")) {
-            return res.status(400).json({ mensaje: "No se permite cambiar de estado 'ejecutado' a 'aprobado' o 'borrador'" });
+        if (!transicionesPermitidas[estadoActual].includes(nuevoEstado)
+        ) {
+            return res.status(400).json({
+                mensaje:
+                `No se permite cambiar de '${estadoActual}' a '${nuevoEstado}' `
+            });
         }
 
         next();
 
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al validar el estado del plan",
-            error: error.message
-        });
+        next(error)
+
     }
 };

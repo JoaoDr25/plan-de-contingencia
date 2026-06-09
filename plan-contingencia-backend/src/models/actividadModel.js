@@ -26,8 +26,6 @@ const actividadSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model("Actividad", actividadSchema);
-
 actividadSchema.pre("save", async function(next){
 
     if (!this.numero) {
@@ -37,3 +35,5 @@ actividadSchema.pre("save", async function(next){
 
     next();
 });
+
+export default mongoose.model("Actividad", actividadSchema);

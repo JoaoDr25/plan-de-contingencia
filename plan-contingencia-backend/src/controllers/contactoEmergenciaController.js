@@ -1,6 +1,6 @@
 import contactoEmergenciaService from "../services/contactoEmergenciaService.js";
 
-export const crearContactoEmergencia = async (req, res) => {
+export const crearContactoEmergencia = async (req, res, next) => {
     try {
         const nuevoContacto = await contactoEmergenciaService.create(req.body);
 
@@ -9,21 +9,12 @@ export const crearContactoEmergencia = async (req, res) => {
             contacto: nuevoContacto
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al crear el contacto de emergencia",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear el contacto de emergencia",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const listarContactosEmergencia = async (req,res) => {
+export const listarContactosEmergencia = async (req,res, next) => {
     try {
         const listar = await contactoEmergenciaService.getAll({ estado: true });
 
@@ -32,15 +23,12 @@ export const listarContactosEmergencia = async (req,res) => {
             contactos: listar
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al obtener los contactos de emergencia",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const obtenerContactoEmergenciaId = async (req, res) => {
+export const obtenerContactoEmergenciaId = async (req, res, next) => {
     try {
         const obtenerId = await contactoEmergenciaService.getById(req.params.id);
 
@@ -49,15 +37,12 @@ export const obtenerContactoEmergenciaId = async (req, res) => {
             contacto: obtenerId
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al obtener el contacto de emergencia",
-            error: error.message
-        });
+       next(error);
     }
 }
 
 
-export const actualizarContactoEmergenciaId = async (req, res) => {
+export const actualizarContactoEmergenciaId = async (req, res, next) => {
     try {
         const actualizar = await contactoEmergenciaService.updateById(req.params.id, req.body);
 
@@ -66,21 +51,12 @@ export const actualizarContactoEmergenciaId = async (req, res) => {
             contacto: actualizar
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Los datos proporcionados no son válidos",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar el contacto de emergencia",
-            error: error.message
-        });
+       next(error);
     }
 }
 
 
-export const cambiarEstadoContactoEmergenciaId = async (req, res) => {
+export const cambiarEstadoContactoEmergenciaId = async (req, res, next) => {
     try {
         const { estado } = req.body;
 
@@ -91,15 +67,12 @@ export const cambiarEstadoContactoEmergenciaId = async (req, res) => {
             contacto: cambiarEstado
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al cambiar de estado del contacto de emergencia",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const eliminarContactoEmergenciaId = async (req, res) => {
+export const eliminarContactoEmergenciaId = async (req, res, next) => {
     try {
         const eliminar = await contactoEmergenciaService.deleteById(req.params.id);
 
@@ -108,9 +81,6 @@ export const eliminarContactoEmergenciaId = async (req, res) => {
             contacto: eliminar
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al eliminar el contacto de emergencia",
-            error: error.message
-        });
+        next(error);
     }
 }

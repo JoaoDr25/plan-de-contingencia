@@ -54,8 +54,6 @@ const aprendizSchema = new mongoose.Schema ({
     timestamps: true
 });
 
-export default mongoose.model("Aprendiz", aprendizSchema);
-
 aprendizSchema.pre("save", async function(next){
 
     if (!this.numero) {
@@ -65,3 +63,5 @@ aprendizSchema.pre("save", async function(next){
 
     next();
 });
+
+export default mongoose.model("Aprendiz", aprendizSchema);

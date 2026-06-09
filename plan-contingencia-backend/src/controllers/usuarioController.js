@@ -1,6 +1,6 @@
 import usuarioService from "../services/usuarioService.js";
 
-export const crearUsuario = async (req, res) => {
+export const crearUsuario = async (req, res, next) => {
     try {
         const nuevoUsuario = await usuarioService.create(req.body);
 
@@ -9,21 +9,12 @@ export const crearUsuario = async (req, res) => {
             usuario: nuevoUsuario
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al crear el usuario",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear el usuario",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const listarUsuario = async (req, res) => {
+export const listarUsuario = async (req, res, next) => {
     try {
         const listar = await usuarioService.getAll();
 
@@ -32,15 +23,12 @@ export const listarUsuario = async (req, res) => {
             usuarios: listar
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al obtener los usuarios",
-            error: error.message
-        });
+         next(error);
     }
 }
 
 
-export const obtenerUsuarioId = async (req, res) => {
+export const obtenerUsuarioId = async (req, res, next) => {
     try {
         const obtenerId = await usuarioService.getById(req.params.id);
 
@@ -49,15 +37,12 @@ export const obtenerUsuarioId = async (req, res) => {
             usuario: obtenerId
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el usuario",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const actualizarUsuarioId = async (req, res) => {
+export const actualizarUsuarioId = async (req, res, next) => {
     try {
         const actualizar = await usuarioService.updateById(req.params.id, req.body);
 
@@ -66,21 +51,12 @@ export const actualizarUsuarioId = async (req, res) => {
             usuario: actualizar
         });
     } catch (error) {
-          if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Los datos proporcionados no son válidos",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar el usuario",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const eliminarUsuarioId = async (req, res) => {
+export const eliminarUsuarioId = async (req, res, next) => {
     try {
         const eliminar = await usuarioService.deleteById(req.params.id);
 
@@ -89,9 +65,6 @@ export const eliminarUsuarioId = async (req, res) => {
             usuario: eliminar
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al eliminar el usuario",
-            error: error.message
-        });
+         next(error);
     }
 }

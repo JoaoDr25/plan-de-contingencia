@@ -1,178 +1,262 @@
-import PlanContingencia from "../models/planContingenciaModels.js";
+import planContingenciaService from '../services/planContingenciaService.js'
 
-export const crearPlan = async (req, res) => {
+export const crearPlan = async (req, res, next) => {
     try {
-        const nuevoPlan = new PlanContingencia(req.body);
-        await nuevoPlan.save();
-
-        await nuevoPlan.populate("programaFormacionId", "nombre ficha");
-        await nuevoPlan.populate("actividadId", "nombre categoria");
-
+        const nuevoPlan = await planContingenciaService.create(req.body);
+        
         res.status(201).json({
             mensaje: "Plan de contingencia creado exitosamente",
             plan: nuevoPlan
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al crear el plan",
-                error: error.message
-            });
-        }
-        res.status(500).json({
-            mensaje: "Error al crear el plan de contingencia",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const listarPlanes = async (req, res) => {
+export const listarPlanes = async (req, res, next) => {
     try {
-        const listar = await PlanContingencia.find()
-            .populate("programaFormacionId", "nombre ficha")
-            .populate("actividadId", "nombre categoria")
-            .populate("riesgos");
+        const listar = await planContingenciaService.getAll();
 
         res.status(200).json({
             mensaje: "Planes de contingencia listados exitosamente",
             planes: listar
         });
     } catch (error) {
-        res.status(500).json({
-            mensaje: "Error al obtener los planes de contingencia",
-            error: error.message
-        })
+        next(error);
     }
 };
 
 
-export const obtenerPlanId = async (req, res) => {
+export const obtenerPlanId = async (req, res, next) => {
     try {
-        const listarId = await PlanContingencia.findById(req.params.id)
-            .populate("programaFormacionId", "nombre ficha")
-            .populate("actividadId", "nombre categoria");
+        const obtenerId = await planContingenciaService.getById(req.params.id);
 
-        if (!listarId) {
+        if (!obtenerId) {
             return res.status(404).json({ mensaje: "No se encontró el plan de contingencia" })
         }
         res.status(200).json({
             mensaje: "Plan de contingencia obtenido exitosamente",
-            plan: listarId
+            plan: obtenerId
         });
     } catch (error) {
-        res.status(500).json({
-            mensaje: "Error al obtener el plan de contingencia",
-            error: error.message
-        })
+        next(error);
     }
 };
 
 
-export const actualizarPlanId = async (req, res) => {
+export const actualizarPlanId = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const actualizar = await planContingenciaService.updateById(req.params.id, req.body);
 
-        const plan = await PlanContingencia.findById(id);
-
-        if (plan && plan.estado === "ejecutado") {
-            return res.status(400).json({
-                mensaje: "No se puede actualizar un plan que ya ha sido ejecutado"
-            });
-        }
-
-        const datosActualizacion = { ...req.body, estado: "borrador" };
-        let mensajeEstado = "Cambios guardados exitosamente. El plan está listo para aprobarse.";
-
-        if (plan && plan.estado === "aprobado") {
-            mensajeEstado = "Plan en actualización y requiere una nueva aprobación";
-        }
-
-        const actualizar = await PlanContingencia.findByIdAndUpdate(id, datosActualizacion, { new: true, runValidators: true })
-            .populate("programaFormacionId", "nombre ficha")
-            .populate("actividadId", "nombre categoria");
-
-        if (!actualizar) {
-            return res.status(404).json({ mensaje: "No se pudo actualizar el plan: Plan de contingencia no existe" })
-        }
         res.status(200).json({
-            mensaje: mensajeEstado,
+            mensaje: "Plan actualizado correctamente",
             plan: actualizar
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Los datos proporcionados no son válidos",
-                error: error.message
-            });
-        }
-        res.status(500).json({
-            mensaje: "Error al actualizar el plan de contingencia",
-            error: error.message
-        })
+        next(error);
     }
 };
 
 
-export const cambiarEstadoPlanId = async (req, res) => {
+export const cambiarEstadoPlanId = async (req, res, next) => {
     try {
-        const { id } = req.params;
         const { estado } = req.body;
-        const cambiarEstado = await PlanContingencia.findByIdAndUpdate(
-            id,
-            { estado },
-            { new: true, runValidators: true }
-        )
-            .populate("programaFormacionId", "nombre ficha")
-            .populate("actividadId", "nombre categoria");
 
-        if (!cambiarEstado) {
-            return res.status(404).json({ mensaje: "No se pudo cambiar el estado del plan: Plan de contingencia no existe" })
-        }
+        const cambiarEstado = await planContingenciaService.cambiarEstadoId(req.params.id, estado)
+
         res.status(200).json({
             mensaje: `Estado actualizado a ${estado} exitosamente`,
             plan: cambiarEstado
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al cambiar el estado del plan",
-                error: error.message
-            });
-        }
-        res.status(500).json({
-            mensaje: "Error al cambiar el estado del plan de contingencia",
-            error: error.message
-        })
+      next(error);
     }
 };
 
 
-export const generarPlan = async (req, res) => {
+export const generarPlan = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const generar = await PlanContingencia.findById(id)
-            .populate("programaFormacionId", "nombre ficha")
-            .populate("actividadId", "nombre categoria");
-
-        if (!generar) {
-            return res.status(404).json({ mensaje: "No se encontro el plan para generar el documento" })
-        }
-
-        if (generar.estado === "borrador") {
-            return res.status(400).json({
-                mensaje: "No se puede generar el documento. El plan debe estar aprobado primero"
-            })
-        }
+        const generar = await planContingenciaService.generarPlan(req.params.id);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Plan de contingencia enviado a revisión exitosamente",
             plan: generar
         });
     } catch (error) {
-        res.status(500).json({
-            mensaje: "Error al generar el plan de contingencia",
-            error: error.message
-        })
+       next(error);
     }
 };
+
+
+export const asociarRiesgosPlan = async (req, res, next) => {
+    try {
+
+        const { riesgoId } = req.body;
+
+        const asociarRiesgo = await planContingenciaService.asociarRiesgosId(req.params.id, riesgoId);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: asociarRiesgo
+        });
+    } catch (error) {
+       next(error);
+    }
+}
+
+
+export const obtenerRiesgosPlan = async (req, res, next) => {
+    try {
+        const obtenerRiesgo = await planContingenciaService.obtenerAsociacionRiesgoId(req.params.id);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: obtenerRiesgo
+        });
+    } catch (error) {
+       next(error);
+    }
+}
+
+
+export const eliminarRiesgosPlan = async (req, res, next) => {
+    try {
+        const eliminarRiesgo = planContingenciaService.eliminarAsociacionRiesgoId(req.params.id, req.params.riesgoId);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: eliminarRiesgo
+        });
+    } catch (error) {
+       next(error);
+    }
+}
+
+
+export const asociarAprendices = async (req, res, next) => {
+    try {
+
+        const { aprendizId } = req.body;
+
+        const asociarAprendiz = await planContingenciaService.asociarAprendicesId(req.params.id, aprendizId);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: asociarAprendiz
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export const obtenerAprendicesAsociados = async (req, res, next) => {
+    try {
+        const obtenerAprendiz = await planContingenciaService.obtenerAsociacionAprendicesId(req.params.id);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: obtenerAprendiz
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export const eliminarAprendizAsociado = async (req, res, next) => {
+    try {
+        const eliminarAprendiz = await planContingenciaService.eliminarAsociacionAprendicesId(req.params.id, req.params.aprendizId);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: eliminarAprendiz
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export const guardarContactosEmergencia = async (req, res, next) => {
+    try {
+        const contactosEmergencia = await planContingenciaService.guardarContactosEmergenciaId(req.params.id, req.body);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: contactosEmergencia
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export const seleccionarEpp = async (req, res, next) => {
+    try {
+        const epp = await planContingenciaService.seleccionarEppId(req.params.id, req.body);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: epp
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export const registrarSeguridadVial = async (req, res, next) => {
+    try {
+        const seguridadVial = await planContingenciaService.registrarSeguridadVialId(req.params.id, req. body);
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: seguridadVial
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export const registrarContextoAcademico = async (req, res, next) => {
+    try {
+        const contextoAcademico = await planContingenciaService.registrarContextoAcademicoId(req.params.id, req.body);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: contextoAcademico
+        });
+    } catch (error) {
+     next(error);
+    }
+}
+
+
+export const registrarArticulacionFormativa = async (req, res, next) => {
+    try {
+        const articulacionFormativa = await planContingenciaService.registrarArticulacionFormativaId(req.params.id, req.body);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: articulacionFormativa
+        });
+    } catch (error) {
+      next(error);
+    }
+}
+
+
+export const registrarPlanTrabajo = async (req, res, next) => {
+    try {
+        const planTrabajo = await planContingenciaService.registrarPlanTrabajoId(req.params.id, req.body);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia generado correctamente",
+            plan: planTrabajo
+        });
+    } catch (error) {
+       next(error);
+    }
+}

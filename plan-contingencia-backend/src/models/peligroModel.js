@@ -35,8 +35,6 @@ peligroSchema.virtual('riesgos', {
     justOne: false
 });
 
-export default mongoose.model("Peligro", peligroSchema);
-
 peligroSchema.pre("save", async function(next){
 
     if (!this.numero) {
@@ -46,3 +44,5 @@ peligroSchema.pre("save", async function(next){
 
     next();
 });
+
+export default mongoose.model("Peligro", peligroSchema);

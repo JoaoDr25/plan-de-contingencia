@@ -1,6 +1,6 @@
 import peligroService from '../services/peligroService.js';
 
-export const crearPeligro = async (req, res) => {
+export const crearPeligro = async (req, res, next) => {
     try {
         const nuevoPeligro = await peligroService.create(req.body);
 
@@ -9,21 +9,12 @@ export const crearPeligro = async (req, res) => {
             peligro: nuevoPeligro
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al crear el peligro",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear peligro",
-            error: error.message
-        });
+       next(error);
     }
 };
 
 
-export const listarPeligros = async (req, res) => {
+export const listarPeligros = async (req, res, next) => {
     try {
         const listar = await peligroService.getAll();
 
@@ -32,15 +23,12 @@ export const listarPeligros = async (req, res) => {
             peligros: listar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al listar los peligros",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const obtenerPeligroId = async (req, res) => {
+export const obtenerPeligroId = async (req, res, next) => {
     try {
         const obtenerId = await peligroService.getById(req.params.id)
 
@@ -49,15 +37,12 @@ export const obtenerPeligroId = async (req, res) => {
             peligro: obtenerId
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener el peligro",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const actualizarPeligroId = async (req, res) => {
+export const actualizarPeligroId = async (req, res, next) => {
     try {
         const actualizar = await peligroService.updateById(req.params.id, req.body);
 
@@ -66,21 +51,12 @@ export const actualizarPeligroId = async (req, res) => {
             peligro: actualizar
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Los datos proporcionados no son válidos",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar el peligro",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const eliminarPeligroId = async (req, res) => {
+export const eliminarPeligroId = async (req, res, next) => {
     try {
         const eliminar = await peligroService.deleteById(req.params.id);
 
@@ -89,15 +65,12 @@ export const eliminarPeligroId = async (req, res) => {
             peligro: eliminar
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al eliminar el peligro",
-            error: error.message
-        });
+        next(error);
     }
 };
 
 
-export const obtenerAsociacionRiesgoPeligro = async (req, res) => {
+export const obtenerAsociacionRiesgoPeligro = async (req, res, next) => {
     try {
         const obtenerAsociacion = await peligroService.obtenerRiesgoPeligro(req.params.id);
 
@@ -106,9 +79,6 @@ export const obtenerAsociacionRiesgoPeligro = async (req, res) => {
             asociar: obtenerAsociacion
         });
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al obtener los riesgos asociados",
-            error: error.message
-        });
+        next(error);
     }
 };

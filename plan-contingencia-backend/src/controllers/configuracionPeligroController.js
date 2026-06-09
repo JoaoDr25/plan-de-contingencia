@@ -1,6 +1,6 @@
 import configuracionPeligroService from "../services/configuracionPeligroService.js";
 
-export const configurarPeligrosActividad = async (req, res) => {
+export const configurarPeligrosActividad = async (req, res, next) => {
     try {
         const nuevaConfiguracion = await configuracionPeligroService.create(req.body);
 
@@ -9,21 +9,12 @@ export const configurarPeligrosActividad = async (req, res) => {
             configuracion: nuevaConfiguracion
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Error de validación al crear la configuración",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al crear la configuración",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const listarPeligrosActividad = async (req, res) => {
+export const listarPeligrosActividad = async (req, res, next) => {
     try {
         const listar = await configuracionPeligroService.getAll()
 
@@ -32,15 +23,12 @@ export const listarPeligrosActividad = async (req, res) => {
             configuracion: listar
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al obtener las configuraciones",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const obtenerPeligrosActividadId = async (req, res) => {
+export const obtenerPeligrosActividadId = async (req, res, next) => {
     try {
         const obtenerId = await configuracionPeligroService.getById(req.params.id);
 
@@ -49,15 +37,12 @@ export const obtenerPeligrosActividadId = async (req, res) => {
             configuracion: obtenerId
         });
     } catch (error) {
-          return res.status(500).json({
-            mensaje: "Error al obtener la configuración",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const obtenerPeligrosPorActividad = async (req, res) => {
+export const obtenerPeligrosPorActividad = async (req, res, next) => {
     try {
         const obtenerPorActividad = await configuracionPeligroService.getByActividad(req.query.actividadId);
 
@@ -66,15 +51,12 @@ export const obtenerPeligrosPorActividad = async (req, res) => {
             configuracion: obtenerPorActividad
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al obtener los peligros asociados",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const actualizarPeligrosActividadId = async (req, res) => {
+export const actualizarPeligrosActividadId = async (req, res, next) => {
     try {
         const actualizar = await configuracionPeligroService.updateById(req.params.id, req.body);
 
@@ -83,21 +65,12 @@ export const actualizarPeligrosActividadId = async (req, res) => {
             configuracion: actualizar
         });
     } catch (error) {
-        if (error.name === "ValidationError") {
-            return res.status(400).json({
-                mensaje: "Los datos proporcionados no son válidos",
-                error: error.message
-            });
-        }
-        return res.status(500).json({
-            mensaje: "Error al actualizar la configuración",
-            error: error.message
-        });
+        next(error);
     }
 }
 
 
-export const eliminarPeligrosActividadId = async (req, res) => {
+export const eliminarPeligrosActividadId = async (req, res, next) => {
     try {
         const eliminar = await configuracionPeligroService.deleteById(req.params.id);
 
@@ -106,9 +79,6 @@ export const eliminarPeligrosActividadId = async (req, res) => {
             configuracion: eliminar
         });
     } catch (error) {
-         return res.status(500).json({
-            mensaje: "Error al eliminar la configuración",
-            error: error.message
-        });
+        next(error);
     }
 }

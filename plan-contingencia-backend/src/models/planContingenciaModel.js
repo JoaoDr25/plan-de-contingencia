@@ -71,6 +71,18 @@ const planContingenciaSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    riesgosId: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Riesgo"
+        }
+    ],
+    aprendicesId: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Aprendiz"
+        }
+    ],
     contactosEmergencia:
     {
         contactosBase: [
@@ -90,6 +102,10 @@ const planContingenciaSchema = new mongoose.Schema({
                 trim: true
             },
             descripcion: {
+                type: String,
+                trim: true
+            },
+            ciudad: {
                 type: String,
                 trim: true
             }
@@ -144,10 +160,16 @@ const planContingenciaSchema = new mongoose.Schema({
     },
     planTrabajo: [
         {
+            numero: {
+                type: Number,
+            },
             horaInicio: {
                 type: String,
             },
             horaFin: {
+                type: String,
+            },
+            duracion: {
                 type: String,
             },
             actividad: {
@@ -214,5 +236,14 @@ const planContingenciaSchema = new mongoose.Schema({
     timestamps: true
 });
 
+planContingenciaSchema.pre("save", async function (next) {
+
+    if (!this.numero) {
+        this.numero =
+            await generarNumero("PlanContingencia")
+    }
+
+    next();
+});
 
 export default mongoose.model('PlanContingencia', planContingenciaSchema);
