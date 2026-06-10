@@ -125,7 +125,7 @@ const updateById = async (id, data) => {
         if (configuracionDuplicada) {
             const error =
             new Error(
-                "Configuración duplicada: ya existe una configuración cone sa actividad y peligro"
+                "Configuración duplicada: ya existe una configuración con esa actividad y peligro"
             );
 
             error.statusCode = 400;

@@ -61,7 +61,7 @@ const updateById = async (id, data) => {
     if (protocoloExistente) {
         const error =
             new Error(
-                "No se puede actualizar. ya existe otro protocolo con ese nombre de tipo de emergencia"
+                "No se puede actualizar, ya existe otro protocolo con ese nombre de tipo de emergencia"
             );
 
         error.statusCode = 400;
@@ -96,9 +96,9 @@ const deleteById = async (id) => {
 
     if (!eliminarProtocoloId) {
         const error =
-        new Error(
-            "Protocolo no encontrado"
-        );
+            new Error(
+                "Protocolo no encontrado"
+            );
 
         error.statusCode = 404;
 
@@ -116,9 +116,9 @@ const obtenerRiesgoProtocolo = async (id) => {
 
     if (!protocolo) {
         const error =
-        new Error(
-            "Protocolo no encontrado"
-        );
+            new Error(
+                "Protocolo no encontrado"
+            );
 
         error.statusCode = 404;
 
@@ -126,10 +126,10 @@ const obtenerRiesgoProtocolo = async (id) => {
     }
 
     return await riesgoModel.find({
-        protocolos:id
+        protocolos: id
     }).populate("protocolos");
 }
 
-export default { ...crud, create, getById, updateById, deleteById, obtenerRiesgoProtocolo}
+export default { ...crud, create, getById, updateById, deleteById, obtenerRiesgoProtocolo }
 
 

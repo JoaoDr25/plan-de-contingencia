@@ -113,7 +113,7 @@ const asociarProtocoloRiesgo = async (id) => {
 
     const riesgoId = await crud.getById(id);
 
-    if (riesgoId) {
+    if (!riesgoId) {
         const error =
             new Error(
                 "Riesgo no encontrado"
@@ -129,7 +129,7 @@ const asociarProtocoloRiesgo = async (id) => {
         {
             $addToSet: {
                 protocolos:
-                    protocoloId
+                    protocolos
             }
         },
         {
@@ -143,7 +143,7 @@ const asociarProtocoloRiesgo = async (id) => {
 const obtenerProtocoloRiesgo = async (id) => {
 
     const riesgoId = await riesgoModel.findById(id)
-        .populte("protocolos");
+        .populate("protocolos");
 
     if (!riesgoId) {
         const error =
@@ -156,7 +156,7 @@ const obtenerProtocoloRiesgo = async (id) => {
         throw error;
     }
 
-    return riesgo.protocolos;
+    return riesgoModel.protocolos;
 }
 
 
@@ -180,12 +180,12 @@ const eliminarProtocoloRiesgo = async (id) => {
         id,
         {
             $pull: {
-                protocolos: 
-                protocoloId
+                protocolos:
+                    protocolos
             }
         },
         {
-            const : true
+            new: true
         }
     ).populate("protocolos");
 }

@@ -1,6 +1,8 @@
+import { ROLES } from '../constants/roles.js'
+
 export const mockAuth = (req, res, next) => {
 
-    const rol = req.headers['x-role'] || INSTRUCTOR;
+    const rol = req.headers['x-role'] || ROLES.INSTRUCTOR;
 
     const usuariosMock = {
         ADMINISTRADOR: {

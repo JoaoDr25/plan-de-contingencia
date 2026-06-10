@@ -62,7 +62,7 @@ const updateById = async (id, data) => {
             "No se puede actualizar: ya existe otra actividad con ese nombre"
         );
 
-        error.statusCode = 404;
+        error.statusCode = 400;
 
         throw error;
     }

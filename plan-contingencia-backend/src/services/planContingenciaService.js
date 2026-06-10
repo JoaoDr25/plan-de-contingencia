@@ -1,5 +1,5 @@
 import { createCrudService } from '../services/baseCrudService.js'
-import { calcularCamposFaltantes } from "../middlewares/validatePlan.js";
+import { calcularCamposFaltantes } from "../utils/planValidation.js";
 import planContingenciaModel from '../models/planContingenciaModel.js'
 import riesgoModels from '../models/riesgoModel.js'
 import aprendizModel from '../models/aprendizModel.js'
@@ -12,10 +12,10 @@ const obtenerPlanFunction = async (id) => {
     const plan = await crud.getById(id);
 
     if (!plan) {
-        const error = 
-        new Error(
-            "Plan de contingencia no encontrado"
-        );
+        const error =
+            new Error(
+                "Plan de contingencia no encontrado"
+            );
 
         error.statusCode = 404;
 
@@ -84,17 +84,7 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error = new Error(
-            "Plan de contingencia no encontrado"
-        );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan)
 
@@ -121,18 +111,7 @@ const updateById = async (id, data) => {
 
 const cambiarEstadoId = async (id, estado) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     const transicionesPermitidas = {
         "borrador": [
@@ -194,10 +173,10 @@ const generarPlan = async (id) => {
     }
 
     if (plan.estado !== "borrador") {
-        const error = 
-        new Error(
-            "Solo los planes en borrador pueden enviarse a revisión"
-        );
+        const error =
+            new Error(
+                "Solo los planes en borrador pueden enviarse a revisión"
+            );
 
         error.statusCode = 400;
 
@@ -230,18 +209,7 @@ const generarPlan = async (id) => {
 
 const asociarRiesgosId = async (id, riesgoId) => {
 
-    const plan = await crud.getById(id)
-
-    if (!plan) {
-        const error =
-            new Error(
-                "No se encontro el plan de contingencia"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     const riesgo = await riesgoModels.findById(riesgoId)
 
@@ -294,7 +262,7 @@ const obtenerAsociacionRiesgoId = async (id) => {
                 "No se encontró el plan de contingencia"
             );
 
-        error.statusCode = 400;
+        error.statusCode = 404;
 
         throw error;
     }
@@ -306,18 +274,7 @@ const obtenerAsociacionRiesgoId = async (id) => {
 
 const eliminarAsociacionRiesgoId = async (id, riesgoId) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "No se encontró el plan de contingencia"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 
@@ -351,18 +308,7 @@ const eliminarAsociacionRiesgoId = async (id, riesgoId) => {
 
 const asociarAprendicesId = async (id, aprendizId) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "No se encontró el plan de contingencia"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     const aprendiz = await aprendizModel.findById(aprendizId);
 
@@ -415,7 +361,7 @@ const obtenerAsociacionAprendicesId = async (id) => {
                 "No se encontró el plan de contingencia"
             );
 
-        error.statusCode = 400;
+        error.statusCode = 404;
 
         throw error;
     }
@@ -427,18 +373,7 @@ const obtenerAsociacionAprendicesId = async (id) => {
 
 const eliminarAsociacionAprendicesId = async (id, aprendizId) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "No se encontró el plan de contingencia"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 
@@ -472,18 +407,7 @@ const eliminarAsociacionAprendicesId = async (id, aprendizId) => {
 
 const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+   const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 
@@ -496,18 +420,7 @@ const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
 
 const seleccionarEppId = async (id, epp) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 
@@ -520,18 +433,7 @@ const seleccionarEppId = async (id, epp) => {
 
 const registrarSeguridadVialId = async (id, seguridadVial) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 
@@ -544,18 +446,7 @@ const registrarSeguridadVialId = async (id, seguridadVial) => {
 
 const registrarContextoAcademicoId = async (id, contextoAcademico) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 
@@ -568,18 +459,7 @@ const registrarContextoAcademicoId = async (id, contextoAcademico) => {
 
 const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 
@@ -592,18 +472,7 @@ const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
 
 const registrarPlanTrabajoId = async (id, planTrabajo) => {
 
-    const plan = await crud.getById(id);
-
-    if (!plan) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
+    const plan = await obtenerPlanFunction(id);
 
     await regresarABorradorSiAplica(plan);
 

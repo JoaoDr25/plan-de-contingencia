@@ -34,7 +34,7 @@ const getById = async (id) => {
     if (!obtenerContactoEmergencia) {
         const error =
         new Error(
-            "No se encontró el programa de formación"
+            "No se encontró el contacto de emergencia"
         );
 
         error.statusCode = 404;
