@@ -14,7 +14,7 @@ export const crearPrograma = async (req, res, next) => {
 };
 
 
-export const listarProgramas = async (req, res, error) => {
+export const listarProgramas = async (req, res, next) => {
     try {
         const listar = await programaFormacionService.getAll({ estado: true }); //Actualmente solo activos, pendiente crear filtros
 
@@ -28,7 +28,7 @@ export const listarProgramas = async (req, res, error) => {
 };
 
 
-export const obtenerProgramaId = async (req, res, error) => {
+export const obtenerProgramaId = async (req, res, next) => {
     try {
         const obtenerId = await programaFormacionService.getById( req.params.id );
 

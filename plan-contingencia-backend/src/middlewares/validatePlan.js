@@ -8,10 +8,7 @@ export const validarCuerpoNoVacio = (req, res, next) => {
         next();
 
     } catch (error) {
-        return res.status(500).json({
-            mensaje: "Error al validar el cuerpo de la petición",
-            error: error.message
-        });
+        next(error)
     };
 };
 

@@ -41,8 +41,6 @@ programaFormacionSchema.pre("save", async function(next){
         this.numero =
         await generarNumero("ProgramaFormacion");
     }
-
-    next();
 });
 
 export default mongoose.model("ProgramaFormacion", programaFormacionSchema);
