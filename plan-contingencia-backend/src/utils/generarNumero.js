@@ -2,11 +2,11 @@ import Counter from '../models/countermodel.js';
 
 export const generarNumero = async (modelo) => {
 
-    const contador = await Counter.findByIdAndUpdate(
+    const contador = await Counter.findOneAndUpdate(
         { nombreModelo: modelo },
         { $inc: { secuencia: 1 }},
         {
-            new : true,
+            returnDocument: "after",
             upsert: true
         }
     );
