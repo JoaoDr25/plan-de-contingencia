@@ -15,5 +15,5 @@ export const errorHandler = (error, req, res, next) => {
         error: process.env.NODE_ENV === "development"
         ? error.stack
         : undefined
-    });
+    })
 };
