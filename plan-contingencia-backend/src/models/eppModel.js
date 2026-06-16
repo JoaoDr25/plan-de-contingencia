@@ -40,8 +40,6 @@ elementosProteccionPersonalSchema.pre("save", async function(next){
         this.numero =
         await generarNumero("ElementosProteccionPersonal");
     }
-
-    next();
 });
 
 export default mongoose.model("ElementosProteccionPersonal", elementosProteccionPersonalSchema);

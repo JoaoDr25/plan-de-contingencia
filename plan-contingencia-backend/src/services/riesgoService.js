@@ -1,12 +1,16 @@
 import { createCrudService } from "./baseCrudService.js";
 import protocoloModel from "../models/protocoloModel.js";
 import riesgoModel from "../models/riesgoModel.js";
+import peligroModel from '../models/peligroModel.js'
 
 const crud = createCrudService(riesgoModel);
 
 const create = async (data) => {
 
-    const { nombre } = data;
+    const { 
+        nombre,
+        peligroId
+     } = data;
 
     const riesgoExistente = await riesgoModel.findOne({
         nombre
@@ -19,6 +23,19 @@ const create = async (data) => {
             );
 
         error.statusCode = 400;
+
+        throw error;
+    }
+
+    const peligro = await peligroModel.findById(peligroId);
+
+    if (!peligro) {
+        const error = 
+        new Error(
+            "No se encontró el peligro asociado"
+        );
+        
+        error.statusCode = 404;
 
         throw error;
     }
@@ -50,7 +67,10 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
-    const { nombre } = data;
+    const { 
+        nombre,
+        peligroId
+     } = data;
 
     const riesgoExistente = await riesgoModel.findOne({
         nombre,
@@ -67,6 +87,8 @@ const updateById = async (id, data) => {
 
         throw error;
     }
+    
+    
 
     const actualizarRiesgoId = await crud.update(
         id,

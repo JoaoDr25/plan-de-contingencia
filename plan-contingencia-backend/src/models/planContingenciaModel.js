@@ -242,8 +242,6 @@ planContingenciaSchema.pre("save", async function (next) {
         this.numero =
             await generarNumero("PlanContingencia")
     }
-
-    next();
 });
 
 export default mongoose.model('PlanContingencia', planContingenciaSchema);

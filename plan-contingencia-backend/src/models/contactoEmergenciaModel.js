@@ -40,8 +40,6 @@ contactosEmergenciaSchema.pre("save", async function(next){
         this.numero =
         await generarNumero("ContactosEmergencia");
     }
-
-    next();
 });
 
 export default mongoose.model("ContactosEmergencia", contactosEmergenciaSchema);

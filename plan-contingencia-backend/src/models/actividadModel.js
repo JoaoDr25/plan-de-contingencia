@@ -20,7 +20,6 @@ const actividadSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ["Académico", "Técnico", "Cultural", "Deportivo", "Administrativo"],
-        default: "Académico"
     }
 },{
     timestamps: true
@@ -32,8 +31,6 @@ actividadSchema.pre("save", async function(next){
         this.numero =
         await generarNumero("Actividad");
     }
-
-    next();
 });
 
 export default mongoose.model("Actividad", actividadSchema);

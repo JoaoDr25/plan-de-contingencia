@@ -41,8 +41,6 @@ protocoloSchema.pre("save", async function(next){
         this.numero =
         await generarNumero("Protocolo");
     }
-
-    next();
 });
 
 export default mongoose.model("Protocolo", protocoloSchema);

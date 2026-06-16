@@ -91,6 +91,21 @@ const updateById = async (id, data) => {
 
 const deleteById = async (id) => {
 
+    const riesgosAsociados = await riesgoModel.findOne({
+        peligroId: id
+    });
+
+    if (riesgosAsociados) {
+        const error =
+        new Error(
+            "No se puede eliminar el peligro porque tiene riesgos asociados"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
     const eliminarPeligroId = await crud.delete(id);
 
     if (!eliminarPeligroId) {

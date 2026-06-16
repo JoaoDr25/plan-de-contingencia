@@ -60,8 +60,6 @@ aprendizSchema.pre("save", async function(next){
         this.numero =
         await generarNumero("Aprendiz");
     }
-
-    next();
 });
 
 export default mongoose.model("Aprendiz", aprendizSchema);

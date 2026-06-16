@@ -52,8 +52,6 @@ riesgosSchema.pre("save", async function(next){
         this.numero =
         await generarNumero("Riesgo");
     }
-
-    next();
 });
 
 export default mongoose.model("Riesgo", riesgosSchema);
