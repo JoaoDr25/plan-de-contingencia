@@ -9,7 +9,7 @@ export const crearPrograma = async (req, res, next) => {
             programa: nuevoPrograma
         });
     } catch (error) {
-       next(error);
+      next(error);
     }
 };
 
