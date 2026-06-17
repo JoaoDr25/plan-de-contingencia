@@ -80,6 +80,6 @@ export const eliminarProgramaId = async (req, res, next) => {
             programa: eliminar
         });
     } catch (error) {
-       next(error)
+       next(error);
     }
 };
