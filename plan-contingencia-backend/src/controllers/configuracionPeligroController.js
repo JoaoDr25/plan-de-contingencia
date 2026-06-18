@@ -44,7 +44,7 @@ export const obtenerPeligrosActividadId = async (req, res, next) => {
 
 export const obtenerPeligrosPorActividad = async (req, res, next) => {
     try {
-        const obtenerPorActividad = await configuracionPeligroService.getByActividad(req.query.actividadId);
+        const obtenerPorActividad = await configuracionPeligroService.getByActividad(req.params.actividadId);
 
         res.status(200).json({
             mensaje: "Peligros asociados obtenidos exitosamente",

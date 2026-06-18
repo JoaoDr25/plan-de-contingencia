@@ -25,3 +25,4 @@ router.get('/riesgos/:id/protocolos', validarObjectId, obtenerAsociacionProtocol
 router.delete('/riesgos/:id/protocolos/:protocoloId', validarObjectId, eliminarAsociacionProtocoloRiesgo);
 
 export default router;
+

@@ -75,8 +75,8 @@ export const obtenerRiesgosProtocolo = async (req, res, next) => {
         const obtenerAsociacion = await protocoloService.obtenerRiesgoProtocolo(req.params.id);
 
         return res.status(200).json({
-            mensaje: "Protocolos asociados obtenidos exitosamente",
-            asociar: obtenerAsociacion
+            mensaje: "Riesgos asociados obtenidos exitosamente",
+            riesgo: obtenerAsociacion
         });
     } catch (error) {
        next(error);

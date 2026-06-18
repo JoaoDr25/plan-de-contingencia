@@ -131,7 +131,7 @@ const deleteById = async (id) => {
 
 
 
-const asociarProtocoloRiesgo = async (id) => {
+const asociarProtocoloRiesgo = async (id, protocoloId) => {
 
     const riesgoId = await crud.getById(id);
 
@@ -151,7 +151,7 @@ const asociarProtocoloRiesgo = async (id) => {
         {
             $addToSet: {
                 protocolos:
-                    protocolos
+                    protocoloId
             }
         },
         {
@@ -178,12 +178,12 @@ const obtenerProtocoloRiesgo = async (id) => {
         throw error;
     }
 
-    return riesgoModel.protocolos;
+    return riesgoId.protocolos;
 }
 
 
 
-const eliminarProtocoloRiesgo = async (id) => {
+const eliminarProtocoloRiesgo = async (id, protocoloId) => {
 
     const riesgoId = await crud.getById(id);
 
@@ -198,12 +198,41 @@ const eliminarProtocoloRiesgo = async (id) => {
         throw error;
     }
 
+    const protocolo = await protocoloModel.findById(protocoloId);
+
+    if (!protocolo) {
+        const error =
+        new Error(
+            "Protocolo no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    const asociado = riesgoId.protocolos.some(
+        protocolo =>
+            protocolo.toString() === protocoloId
+    );
+
+    if (!asociado) {
+        const error =
+        new Error(
+            "El protocolo no está asociado al riesgo"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
     return await riesgoModel.findByIdAndUpdate(
         id,
         {
             $pull: {
                 protocolos:
-                    protocolos
+                    protocoloId
             }
         },
         {

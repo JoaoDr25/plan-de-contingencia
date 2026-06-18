@@ -9,26 +9,26 @@ const create = async (data) => {
 
     const { actividadId, peligroId } = data;
 
-    const actividadExistente = await actividadModel.findById(actividadId);
+    const actividad = await actividadModel.findById(actividadId);
 
-    if (!actividadExistente) {
-        const error = 
-        new Error(
-            "Actividad no encontrada"
-        );
+    if (!actividad) {
+        const error =
+            new Error(
+                "Actividad no encontrada"
+            );
 
         error.statusCode = 404;
 
         throw error;
     }
 
-    const peligroExistente = await peligroModel.findById(peligroId);
+    const peligro = await peligroModel.findById(peligroId);
 
-    if (!peligroExistente) {
+    if (!peligro) {
         const error =
-        new Error(
-            "Peligro no encontrado"
-        );
+            new Error(
+                "Peligro no encontrado"
+            );
 
         error.statusCode = 404;
 
@@ -41,10 +41,10 @@ const create = async (data) => {
     });
 
     if (configuracionExistenteId) {
-        const error = 
-        new Error(
-            "Este peligro ya se encuentra asociado a la actividad"
-        );
+        const error =
+            new Error(
+                "Este peligro ya se encuentra asociado a la actividad"
+            );
 
         error.statusCode = 400;
 
@@ -58,7 +58,7 @@ const create = async (data) => {
 
 const getAll = async () => {
 
-        return await configuracionPeligroModel
+    return await configuracionPeligroModel
         .find()
         .populate("actividadId")
         .populate("peligroId");
@@ -69,15 +69,15 @@ const getAll = async () => {
 const getById = async (id) => {
 
     const obtenerConfiguracionId = await configuracionPeligroModel
-    .findById(id)
-    .populate("actividadId")
-    .populate("peligroId");
+        .findById(id)
+        .populate("actividadId")
+        .populate("peligroId");
 
     if (!obtenerConfiguracionId) {
         const error =
-        new Error(
-            "Configuración no encontrada"
-        );
+            new Error(
+                "Configuración no encontrada"
+            );
 
         error.statusCode = 404;
 
@@ -95,9 +95,9 @@ const getByActividad = async (actividadId) => {
 
     if (!obtenerConfiguracionActividadId) {
         const error =
-        new Error(
-            "Actividad no encontrada"
-        );
+            new Error(
+                "Actividad no encontrada"
+            );
 
         error.statusCode = 404;
 
@@ -105,68 +105,94 @@ const getByActividad = async (actividadId) => {
     }
 
     return await configuracionPeligroModel
-    .find({ actividadId })
-    .populate("actividadId")
-    .populate("peligroId");
+        .find({ actividadId })
+        .populate("actividadId")
+        .populate("peligroId");
 }
 
 
 
 const updateById = async (id, data) => {
 
-        const { actividadId, peligroId } = data;
+    const { actividadId, peligroId } = data;
 
-        const configuracionDuplicada = await configuracionPeligroModel.findOne({
-            actividadId,
-            peligroId,
-            _id: { $ne: id }
-        });
+    const actividad = await actividadModel.findById(actividadId);
 
-        if (configuracionDuplicada) {
-            const error =
+    if (!actividad) {
+        const error =
+            new Error(
+                "Actividad no encontrada"
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    const peligro = await peligroModel.findById(peligroId);
+
+    if (!peligro) {
+        const error =
+            new Error(
+                "Peligro no encontrado"
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    const configuracionDuplicada = await configuracionPeligroModel.findOne({
+        actividadId,
+        peligroId,
+        _id: { $ne: id }
+    });
+
+    if (configuracionDuplicada) {
+        const error =
             new Error(
                 "Configuración duplicada: ya existe una configuración con esa actividad y peligro"
             );
 
-            error.statusCode = 400;
+        error.statusCode = 400;
 
-            throw error;
-        }
+        throw error;
+    }
 
-        const actualizarConfiguracionId = await crud.update(id, data);
+    const actualizarConfiguracionId = await crud.update(id, data);
 
-        if (!actualizarConfiguracionId) {
-            const error = 
+    if (!actualizarConfiguracionId) {
+        const error =
             new Error(
                 "Configuración no encontrada"
             );
 
-            error.statusCode = 404;
+        error.statusCode = 404;
 
-            throw error;
-        }
+        throw error;
+    }
 
-        return actualizarConfiguracionId;
+    return actualizarConfiguracionId;
 }
 
 
 
 const deleteById = async (id) => {
 
-        const eliminarConfiguracionId = await crud.delete(id);
+    const eliminarConfiguracionId = await crud.delete(id);
 
-        if (!eliminarConfiguracionId) {
-            const error =
+    if (!eliminarConfiguracionId) {
+        const error =
             new Error(
                 "Configuración no encontrada"
             );
 
-            error.statusCode = 404;
+        error.statusCode = 404;
 
-            throw error;
-        }
+        throw error;
+    }
 
-        return eliminarConfiguracionId;
+    return eliminarConfiguracionId;
 }
 
 export default { ...crud, create, getAll, getById, getByActividad, updateById, deleteById };
