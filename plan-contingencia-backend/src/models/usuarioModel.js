@@ -15,6 +15,7 @@ const usuarioSchema = new mongoose.Schema ({
     correoInstitucional: {
         type: String,
         required: true,
+        unique: true,
         trim: true
     },
     centroFormacion: {
@@ -25,8 +26,25 @@ const usuarioSchema = new mongoose.Schema ({
     rolAsignado: {
         type: String,
         required: true,
-        enum: ["usuario", "administrador"]
+        enum: [
+            "ADMINISTRADOR",
+            "INSTRUCTOR",
+            "PEDAGOGIA",
+            "SST",
+            "COORDINACION"
+        ]
     },
+    firma:{     //Agregar al documento técnico
+        type: String,
+        default: null
+    },
+    firmaActualizada: {     //Agregar al documento técnico
+        type: Date
+    },
+    estado: {
+        type: Boolean,
+        required: true
+    }
 }, {
     timestamps: true
 });

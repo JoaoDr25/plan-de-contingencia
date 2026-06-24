@@ -7,8 +7,13 @@ export const calcularCamposFaltantes = (plan) => {
     if (!plan.usuarioId) camposFaltantes.push("usuarioId");
     if (!plan.usuarioNombre) camposFaltantes.push("usuarioNombre");
     if (!plan.fecha) camposFaltantes.push("fecha");
-    if (!plan.lugar) camposFaltantes.push("lugar");
+    if (!plan.horaSalida) camposFaltantes.push("horaSalida");
+    if (!plan.horaRegreso) camposFaltantes.push("horaRegreso");
+    if (!plan.lugarSalida) camposFaltantes.push("lugarSalida");
+    if (!plan.lugarDestino) camposFaltantes.push("lugarDestino");
     if (!plan.contactoLugar) camposFaltantes.push("contactoLugar");
+    if (!plan.descripcionActividad) camposFaltantes.push("descripcionActividad");
+    if (!plan.tipoTransporte) camposFaltantes.push("tipoTransporte");
 
     const articulacion = plan?.articulacionFormativa;
     if (!articulacion || (!articulacion.proyectoFormativo && !articulacion.visitaEmpresa && !articulacion.investigacion && !articulacion.otro?.trim())) {
@@ -17,14 +22,23 @@ export const calcularCamposFaltantes = (plan) => {
 
     if (!plan.contactosEmergencia?.contactosBase?.length && !plan.contactosEmergencia?.otro.nombreEntidad) {
         camposFaltantes.push("contactosEmergencia")
-    };
-
-    if (!plan?.planTrabajo?.length) {
-        camposFaltantes.push("planTrabajo");
     }
 
-    if (!plan?.contextoAcademico?.objetivoSoporteLink) camposFaltantes.push("contextoAcademico.objetivoSoporteLink");
-    if (!plan?.contextoAcademico?.actasComportamientoLink) camposFaltantes.push("contextoAcademico.actasComportamientoLink");
+    if (!plan?.contextoAcademico?.objetivo?.trim()) {
+        camposFaltantes.push("contextoAcademico.objetivo");
+    }
+    if (!plan?.contextoAcademico?.competencia?.trim()) {
+        camposFaltantes.push("contextoAcademico.competencia");
+    }
+    if (!plan?.contextoAcademico?.resultadoAprendizaje?.trim()) {
+        camposFaltantes.push("contextoAcademico.resultadoAprendizaje");
+    }
+    if (!plan?.contextoAcademico?.objetivoSoporteLink) {
+        camposFaltantes.push("contextoAcademico.objetivoSoporteLink");
+    }
+    if (!plan?.contextoAcademico?.actasComportamientoLink) {
+        camposFaltantes.push("contextoAcademico.actasComportamientoLink")
+    }
     if (plan?.contextoAcademico?.consentimientoMenores && !plan?.contextoAcademico?.consentimientoLink) {
         camposFaltantes.push("contextoAcademico.consentimientoLink");
     }
@@ -48,6 +62,10 @@ export const calcularCamposFaltantes = (plan) => {
 
     if (!plan.aprendicesId?.length) {
         camposFaltantes.push("aprendicesId")
+    }
+
+     if (!plan?.planTrabajo?.length) {
+        camposFaltantes.push("planTrabajo");
     }
 
     return camposFaltantes;

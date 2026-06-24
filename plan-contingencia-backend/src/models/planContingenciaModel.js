@@ -25,6 +25,10 @@ const planContingenciaSchema = new mongoose.Schema({
         ref: "ProgramaFormacion",
         required: true
     },
+    programaFormacionNombre: {
+        type: String,
+        trim: true
+    },
     actividadId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Actividad",
@@ -37,6 +41,7 @@ const planContingenciaSchema = new mongoose.Schema({
     usuarioId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario',
+        required: true,
         index: true
     },
     usuarioNombre: {
@@ -56,12 +61,21 @@ const planContingenciaSchema = new mongoose.Schema({
         match: [/^\d{2}:\d{2}$/, "Formato HH:mm inválido"],
         required: true
     },
+    horaRegreso: { 
+        type: String,
+        match: [/^\d{2}:\d{2}$/]
+    },
     tipoTransporte: {
         type: String,
         required: true,
         enum: ["SENA", "EXTERNO", "APRENDIZ"]
     },
-    lugar: {
+    lugarSalida: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    lugarDestino: { 
         type: String,
         required: true,
         trim: true

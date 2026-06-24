@@ -1,5 +1,6 @@
 import { createCrudService } from "./baseCrudService.js";
-import aprendizModel from "../models/aprendizModel.js"
+import aprendizModel from "../models/aprendizModel.js";
+import programaFormacionModel from "../models/programaFormacionModel.js";
 
 const crud = createCrudService(aprendizModel);
 
@@ -21,6 +22,21 @@ const create = async (data) => {
 
         throw error;
     }
+
+    const programa = await programaFormacionModel.findById(data.ficha);
+
+    if (!programa) {
+        const error =
+        new Error(
+            "Programa de formación no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    data.programaFormacion = programa.nombre;
 
     return await crud.create(data);
 }
@@ -66,6 +82,21 @@ const updateById = async (id, data) => {
 
         throw error;
     }
+
+    const programa = await programaFormacionModel.findById(data.ficha);
+
+    if (!programa) {
+        const error =
+        new Error(
+            "Programa de formación no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    data.programaFormacion = programa.nombre;
 
     const actualizarAprendizId = await crud.update(
         id,

@@ -77,7 +77,7 @@ export const cambiarEstadoPlanId = async (req, res, next) => {
 
 export const generarPlan = async (req, res, next) => {
     try {
-        const generar = await planContingenciaService.generarPlan(req.params.id);
+        const generar = await planContingenciaService.generarPlanId(req.params.id);
 
         res.status(200).json({
             mensaje: "Plan de contingencia enviado a revisión exitosamente",
@@ -85,6 +85,29 @@ export const generarPlan = async (req, res, next) => {
         });
     } catch (error) {
        next(error);
+    }
+};
+
+
+export const generarPdf = async (req, res, next) => {
+    try {
+        const generarPdf = await planContingenciaService.generarPdfId(req.params.id);
+
+        res.setHeader(
+            "Content-Type",
+            "application/pdf"
+        );
+
+        res.setHeader(
+            "Content-Disposition",
+            "inline; filename=PlanContingencia.pdf"
+        );
+
+        pdf.pipe(res);
+        pdf.end();
+
+    } catch (error) {
+        next(error)
     }
 };
 
@@ -97,7 +120,7 @@ export const asociarRiesgosPlan = async (req, res, next) => {
         const asociarRiesgo = await planContingenciaService.asociarRiesgosId(req.params.id, riesgoId);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Riesgo asociado al plan correctamente",
             plan: asociarRiesgo
         });
     } catch (error) {
@@ -111,7 +134,7 @@ export const obtenerRiesgosPlan = async (req, res, next) => {
         const obtenerRiesgo = await planContingenciaService.obtenerAsociacionRiesgoId(req.params.id);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Riesgos asociados al plan obtenidos exitosamente",
             plan: obtenerRiesgo
         });
     } catch (error) {
@@ -122,10 +145,10 @@ export const obtenerRiesgosPlan = async (req, res, next) => {
 
 export const eliminarRiesgosPlan = async (req, res, next) => {
     try {
-        const eliminarRiesgo = planContingenciaService.eliminarAsociacionRiesgoId(req.params.id, req.params.riesgoId);
+        const eliminarRiesgo = await planContingenciaService.eliminarAsociacionRiesgoId(req.params.id, req.params.riesgoId);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Riesgo asociado al plan eliminado exitosamente",
             plan: eliminarRiesgo
         });
     } catch (error) {
@@ -142,7 +165,7 @@ export const asociarAprendices = async (req, res, next) => {
         const asociarAprendiz = await planContingenciaService.asociarAprendicesId(req.params.id, aprendizId);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Aprendiz asociado al plan correctamente",
             plan: asociarAprendiz
         });
     } catch (error) {
@@ -156,7 +179,7 @@ export const obtenerAprendicesAsociados = async (req, res, next) => {
         const obtenerAprendiz = await planContingenciaService.obtenerAsociacionAprendicesId(req.params.id);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Aprendices asociados al plan obtenidos exitosamente",
             plan: obtenerAprendiz
         });
     } catch (error) {
@@ -170,7 +193,7 @@ export const eliminarAprendizAsociado = async (req, res, next) => {
         const eliminarAprendiz = await planContingenciaService.eliminarAsociacionAprendicesId(req.params.id, req.params.aprendizId);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Aprendiz asociado al plan eliminado exitosamente",
             plan: eliminarAprendiz
         });
     } catch (error) {
@@ -184,7 +207,7 @@ export const guardarContactosEmergencia = async (req, res, next) => {
         const contactosEmergencia = await planContingenciaService.guardarContactosEmergenciaId(req.params.id, req.body);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Contactos de emergencia guardados correctamente",
             plan: contactosEmergencia
         });
     } catch (error) {
@@ -198,7 +221,7 @@ export const seleccionarEpp = async (req, res, next) => {
         const epp = await planContingenciaService.seleccionarEppId(req.params.id, req.body);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Elementos de protección personal seleccionados correctamente",
             plan: epp
         });
     } catch (error) {
@@ -211,7 +234,7 @@ export const registrarSeguridadVial = async (req, res, next) => {
     try {
         const seguridadVial = await planContingenciaService.registrarSeguridadVialId(req.params.id, req. body);
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Seguridad víal registrada correctamente",
             plan: seguridadVial
         });
     } catch (error) {
@@ -225,7 +248,7 @@ export const registrarContextoAcademico = async (req, res, next) => {
         const contextoAcademico = await planContingenciaService.registrarContextoAcademicoId(req.params.id, req.body);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Contexto académico registrado correctamente",
             plan: contextoAcademico
         });
     } catch (error) {
@@ -239,7 +262,7 @@ export const registrarArticulacionFormativa = async (req, res, next) => {
         const articulacionFormativa = await planContingenciaService.registrarArticulacionFormativaId(req.params.id, req.body);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Articulación formativa registrada correctamente",
             plan: articulacionFormativa
         });
     } catch (error) {
@@ -253,7 +276,7 @@ export const registrarPlanTrabajo = async (req, res, next) => {
         const planTrabajo = await planContingenciaService.registrarPlanTrabajoId(req.params.id, req.body);
 
         res.status(200).json({
-            mensaje: "Plan de contingencia generado correctamente",
+            mensaje: "Plan de trabajo registrado correctamente",
             plan: planTrabajo
         });
     } catch (error) {

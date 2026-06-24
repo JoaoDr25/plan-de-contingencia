@@ -5,7 +5,7 @@ const crud = createCrudService(usuarioModel);
 
 const create = async (data) => {
 
-    const { documento } = data;
+    const { documento, correoInstitucional } = data;
 
     const usuarioExistente = await usuarioModel.findOne({
         documento
@@ -15,6 +15,21 @@ const create = async (data) => {
         const error = 
         new Error(
             "No se pudo crear el usuario: ya existe un registro con ese número de documento"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const correoExistente = await usuarioModel.findOne({
+        correoInstitucional
+    });
+
+    if (correoExistente) {
+        const error =
+        new Error(
+            "No se puede crear el usuario: Ya existe un usuario con este correo institucional"
         );
 
         error.statusCode = 400;
@@ -49,7 +64,7 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
-    const { documento } = data;
+    const { documento, correoInstitucional } = data;
 
     const usuarioExistente = await usuarioModel.findOne({
         documento,
@@ -83,7 +98,52 @@ const updateById = async (id, data) => {
         throw error;
     }
 
+    const correoExistente = await usuarioModel.findOne({
+        correoInstitucional
+    });
+
+    if (correoExistente) {
+        const error =
+        new Error(
+            "No se puede actualizar: Ya existe un usuario con ese correo institucional"
+        )
+    }
+
     return actualizarUsuarioId;
+}
+
+
+
+const cambiarEstadoId = async (id, estado) => {
+
+        if (typeof estado !== "boolean") {
+            const error =
+            new Error(
+                "El campo 'estado' es obligatorio y debe ser un valor booleano"
+            );
+
+            error.statusCode = 400;
+
+            throw error;
+        }
+
+        const cambiarEstado = await crud.update(
+            id,
+            { estado }
+        );
+
+        if (!cambiarEstado) {
+            const error =
+            new Error(
+                "No se puede cambiar el estado"
+            );
+
+            error.statusCode = 404;
+
+            throw error;
+        }
+
+        return cambiarEstado;
 }
 
 
@@ -106,6 +166,6 @@ const deleteById = async (id)  => {
     return eliminarUsuarioId;
 }
 
-export default { ...crud, create, getById, updateById, deleteById };
+export default { ...crud, create, getById, updateById, cambiarEstadoId, deleteById };
 
 

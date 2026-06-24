@@ -56,6 +56,21 @@ export const actualizarUsuarioId = async (req, res, next) => {
 }
 
 
+export const cambiarEstadoUsuarioId = async (req, res, next) => {
+    try {
+        const { estado } = req.body;
+        const cambiarEstado = await usuarioService.cambiarEstadoId(req.params.id, estado);
+
+        res.status(200).json({
+            mensaje: `Usuario ${estado ? "activado" : "desactivado"} exitosamente`,
+            usuario: cambiarEstado
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 export const eliminarUsuarioId = async (req, res, next) => {
     try {
         const eliminar = await usuarioService.deleteById(req.params.id);
