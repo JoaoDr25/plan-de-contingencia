@@ -1,5 +1,5 @@
 import { createCrudService } from '../services/baseCrudService.js'
-import { calcularCamposFaltantes } from "../utils/planValidation.js";
+import { calcularCamposFaltantes } from "../utils/planValidation.js"
 import planContingenciaModel from '../models/planContingenciaModel.js'
 import riesgoModel from '../models/riesgoModel.js'
 import aprendizModel from '../models/aprendizModel.js'
@@ -9,8 +9,7 @@ import usuarioModel from '../models/usuarioModel.js'
 import contactosEmergenciaModel from '../models/contactoEmergenciaModel.js'
 import elementosProteccionPersonalModel from '../models/eppModel.js'
 import { SEGURIDAD_VIAL_ITEMS } from '../constants/seguridadVialItems.js'
-import { set } from 'mongoose';
-import { generarPdf } from '../controllers/planContingenciaController.js';
+import { generarDocumentoPdf } from '../utils/pdfGenerator.js'
 
 const crud = createCrudService(planContingenciaModel);
 
@@ -364,9 +363,53 @@ const generarPlanId = async (id) => {
 
 const generarPdfId = async (id) => {
 
-    const plan = await obtenerPlanFunction(id);
+    const plan = await planContingenciaModel.findById(id)
+    .populate("programaFormacionId")
+    .populate("actividadId")
+    .populate("riesgosId")
+    .populate("aprendicesId")
+    .populate("epp")
+    .populate("contactosEmergencia.contactosBase");
 
-    return generarDocumentoPdf(plan);
+    if (!plan) {
+        const error =
+        new Error(
+            "Plan de contingencia no encontrado"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    if (plan.estado === "borrador" || plan.estado === "en revision") {
+        const error =
+        new Error(
+            "Solo se puede generar PDF de un plan en estado 'Aprobado' o 'Ejecutado"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const camposFaltantes = calcularCamposFaltantes(plan);
+
+    if (camposFaltantes.length > 0) {
+        const error =
+        new Error(
+            "El plan tiene infomación pendiente"
+        );
+
+        error.statusCode = 400;
+        error.camposFaltantes = camposFaltantes;
+
+        throw error;
+    }
+
+    const pdfBuffer = await generarDocumentoPdf(plan);
+
+    return pdfBuffer;
 }
 
 

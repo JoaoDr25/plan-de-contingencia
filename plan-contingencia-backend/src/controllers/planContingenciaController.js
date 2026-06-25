@@ -91,7 +91,8 @@ export const generarPlan = async (req, res, next) => {
 
 export const generarPdf = async (req, res, next) => {
     try {
-        const generarPdf = await planContingenciaService.generarPdfId(req.params.id);
+        
+        const pdfBuffer = await planContingenciaService.generarPdfId(req.params.id);
 
         res.setHeader(
             "Content-Type",
@@ -103,8 +104,7 @@ export const generarPdf = async (req, res, next) => {
             "inline; filename=PlanContingencia.pdf"
         );
 
-        pdf.pipe(res);
-        pdf.end();
+        res.send(pdfBuffer);
 
     } catch (error) {
         next(error)
