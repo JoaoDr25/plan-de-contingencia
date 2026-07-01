@@ -115,12 +115,12 @@ export const generarPdf = async (req, res, next) => {
 export const asociarRiesgosPlan = async (req, res, next) => {
     try {
 
-        const { riesgoId } = req.body;
+        const { riesgosId } = req.body;
 
-        const asociarRiesgo = await planContingenciaService.asociarRiesgosId(req.params.id, riesgoId);
+        const asociarRiesgo = await planContingenciaService.asociarRiesgosId(req.params.id, riesgosId);
 
         res.status(200).json({
-            mensaje: "Riesgo asociado al plan correctamente",
+            mensaje: "Riesgos asociados al plan correctamente",
             plan: asociarRiesgo
         });
     } catch (error) {
@@ -160,12 +160,12 @@ export const eliminarRiesgosPlan = async (req, res, next) => {
 export const asociarAprendices = async (req, res, next) => {
     try {
 
-        const { aprendizId } = req.body;
+        const { aprendicesId } = req.body;
 
-        const asociarAprendiz = await planContingenciaService.asociarAprendicesId(req.params.id, aprendizId);
+        const asociarAprendiz = await planContingenciaService.asociarAprendicesId(req.params.id, aprendicesId);
 
         res.status(200).json({
-            mensaje: "Aprendiz asociado al plan correctamente",
+            mensaje: "Aprendices asociados al plan correctamente",
             plan: asociarAprendiz
         });
     } catch (error) {

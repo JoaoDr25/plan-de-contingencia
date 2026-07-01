@@ -20,16 +20,22 @@ const actividadSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ["Académico", "Técnico", "Cultural", "Deportivo", "Administrativo"],
-    }
-},{
+    },
+    peligros: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Peligro"
+        }
+    ]
+}, {
     timestamps: true
 });
 
-actividadSchema.pre("save", async function(next){
+actividadSchema.pre("save", async function (next) {
 
     if (!this.numero) {
         this.numero =
-        await generarNumero("Actividad");
+            await generarNumero("Actividad");
     }
 });
 

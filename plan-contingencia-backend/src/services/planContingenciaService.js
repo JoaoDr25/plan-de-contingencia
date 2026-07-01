@@ -10,6 +10,7 @@ import contactosEmergenciaModel from '../models/contactoEmergenciaModel.js'
 import elementosProteccionPersonalModel from '../models/eppModel.js'
 import { SEGURIDAD_VIAL_ITEMS } from '../constants/seguridadVialItems.js'
 import { generarDocumentoPdf } from '../utils/pdfGenerator.js'
+import path from 'path'
 
 const crud = createCrudService(planContingenciaModel);
 
@@ -41,9 +42,9 @@ const regresarABorradorSiAplica = async (plan) => {
         plan.estado === "cancelado"
     ) {
         const error =
-        new Error(
-            "No se puede modificar un plan ejecutado o anulado"
-        );
+            new Error(
+                "No se puede modificar un plan ejecutado o cancelado"
+            );
 
         error.statusCode = 400;
 
@@ -364,18 +365,28 @@ const generarPlanId = async (id) => {
 const generarPdfId = async (id) => {
 
     const plan = await planContingenciaModel.findById(id)
-    .populate("programaFormacionId")
-    .populate("actividadId")
-    .populate("riesgosId")
-    .populate("aprendicesId")
-    .populate("epp")
-    .populate("contactosEmergencia.contactosBase");
+        .populate("programaFormacionId")
+        .populate("actividadId")
+        .populate("aprendicesId")
+        .populate("epp")
+        .populate("contactosEmergencia.contactosBase")
+        .populate({
+            path: "riesgosId",
+            populate: [
+                {
+                    path: "peligroId"
+                },
+                {
+                    path: "protocolos"
+                }
+            ]
+        })
 
     if (!plan) {
         const error =
-        new Error(
-            "Plan de contingencia no encontrado"
-        );
+            new Error(
+                "Plan de contingencia no encontrado"
+            );
 
         error.statusCode = 400;
 
@@ -384,9 +395,9 @@ const generarPdfId = async (id) => {
 
     if (plan.estado === "borrador" || plan.estado === "en revision") {
         const error =
-        new Error(
-            "Solo se puede generar PDF de un plan en estado 'Aprobado' o 'Ejecutado"
-        );
+            new Error(
+                "Solo se puede generar PDF de un plan en estado 'Aprobado' o 'Ejecutado"
+            );
 
         error.statusCode = 400;
 
@@ -397,9 +408,9 @@ const generarPdfId = async (id) => {
 
     if (camposFaltantes.length > 0) {
         const error =
-        new Error(
-            "El plan tiene infomación pendiente"
-        );
+            new Error(
+                "El plan tiene infomación pendiente"
+            );
 
         error.statusCode = 400;
         error.camposFaltantes = camposFaltantes;
@@ -414,16 +425,29 @@ const generarPdfId = async (id) => {
 
 
 
-const asociarRiesgosId = async (id, riesgoId) => {
+const asociarRiesgosId = async (id, riesgosId) => {
 
     const plan = await obtenerPlanFunction(id);
 
-    const riesgo = await riesgoModel.findById(riesgoId)
+    if (!Array.isArray(riesgosId) || riesgosId.length === 0) {
+        const error =
+        new Error(
+            "Debe enviar al menos un riesgo"
+        );
 
-    if (!riesgo) {
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const riesgos= await riesgoModel.find({
+        _id: { $in: riesgosId }
+    });
+
+    if (riesgos.length !== riesgosId.length) {
         const error =
             new Error(
-                "No se encontro el riesgo"
+                "Uno o mas riesgos no existen"
             );
 
         error.statusCode = 404;
@@ -431,15 +455,16 @@ const asociarRiesgosId = async (id, riesgoId) => {
         throw error;
     }
 
-    const riesgoYaAsociado =
-        plan.riesgosId.some(
-            r => r.toString() === riesgoId
-        );
+    const riesgosAsociados = plan.riesgosId.map( id => id.toString());
 
-    if (riesgoYaAsociado) {
+    const nuevosRiesgos = riesgosId.filter(
+        id => ! riesgosAsociados.includes(id)
+    );
+
+    if (nuevosRiesgos.length === 0) {
         const error =
             new Error(
-                "El riesgo ya esta asociado al plan"
+                "Todos los riesgos ya se encuentran asociados al plan"
             );
 
         error.statusCode = 400;
@@ -449,11 +474,21 @@ const asociarRiesgosId = async (id, riesgoId) => {
 
     await regresarABorradorSiAplica(plan);
 
-    plan.riesgosId.push(riesgoId);
+    plan.riesgosId.push(...nuevosRiesgos);
 
     await plan.save();
 
-    return plan;
+    return await plan.populate({
+        path: "riesgosId",
+        populate: [
+            {
+                path: "peligroId"
+            },
+            {
+                path: "protocolos"
+            }
+        ]
+    });
 }
 
 
@@ -513,16 +548,29 @@ const eliminarAsociacionRiesgoId = async (id, riesgoId) => {
 
 
 
-const asociarAprendicesId = async (id, aprendizId) => {
+const asociarAprendicesId = async (id, aprendicesId) => {
 
     const plan = await obtenerPlanFunction(id);
 
-    const aprendiz = await aprendizModel.findById(aprendizId);
+    if (!Array.isArray(aprendicesId) || aprendicesId.length === 0) {
+        const error =
+        new Error(
+            "Debe enviar al menos un aprendiz"
+        );
 
-    if (!aprendiz) {
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const aprendices = await aprendizModel.find({
+        _id: { $in: aprendicesId }
+    });
+
+    if (aprendices.length !== aprendicesId.length) {
         const error =
             new Error(
-                "No se encontró el aprendiz"
+                "Uno o mas aprendices no existen"
             );
 
         error.statusCode = 404;
@@ -530,15 +578,16 @@ const asociarAprendicesId = async (id, aprendizId) => {
         throw error;
     }
 
-    const aprendizYaAsociado =
-        plan.aprendicesId.some(
-            r => r.toString() === aprendizId
-        );
+    const aprendicesAsociados = plan.aprendicesId.map( id => id.toString());
 
-    if (aprendizYaAsociado) {
+    const nuevosAprendices = aprendicesId.filter(
+        id => ! aprendicesAsociados.includes(id)
+    );
+
+    if (nuevosAprendices.length === 0) {
         const error =
             new Error(
-                "El aprendiz ya está asociado al plan"
+                "Todos los aprendices ya se encuentran asociados al plan"
             );
 
         error.statusCode = 400;
@@ -548,11 +597,11 @@ const asociarAprendicesId = async (id, aprendizId) => {
 
     await regresarABorradorSiAplica(plan);
 
-    plan.aprendicesId.push(aprendizId);
+    plan.aprendicesId.push(...nuevosAprendices);
 
     await plan.save();
 
-    return plan;
+    return await plan.populate("aprendicesId");
 }
 
 
@@ -854,9 +903,9 @@ const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
         !otro?.trim()
     ) {
         const error =
-        new Error(
-            "Debe seleccionar al menos una articulación formativa"
-        );
+            new Error(
+                "Debe seleccionar al menos una articulación formativa"
+            );
 
         error.statusCode = 400;
 
@@ -864,7 +913,7 @@ const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
     }
 
     return await crud.update(id, {
-        articulacionFormativa: articulacionFormativa.articulacionFormativa
+        articulacionFormativa: articulacionFormativa
     });
 }
 

@@ -1,278 +1,302 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<title>Plan de Contingencia</title>
+    <meta charset="UTF-8">
+    <title>Plan de Contingencia</title>
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-    margin: 30px;
-    color: #000;
-}
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            margin: 0;
+            color: #000;
+        }
 
-h1, h2, h3 {
-    margin: 5px 0;
-    text-align: center;
-}
+        h1,
+        h2,
+        h3 {
+            margin: 5px 0;
+            text-align: center;
+        }
 
-.header {
-    text-align: center;
-}
+        .header {
+            text-align: center;
+        }
 
-.logo {
-    height: 60px;
-    margin-bottom: 5px;
-}
+        .logo {
+            height: 60px;
+            margin-bottom: 5px;
+        }
 
-.section {
-    margin-top: 12px;
-}
+        .section {
+            margin-top: 12px;
+        }
 
-.section-title {
-    font-weight: bold;
-    background: #e5e5e5;
-    padding: 4px;
-    border: 1px solid #000;
-}
+        .section-title {
+            font-weight: bold;
+            background: #e5e5e5;
+            padding: 4px;
+            border: 1px solid #000;
+        }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: avoid;
+        }
 
-.table td, .table th {
-    border: 1px solid #000;
-    padding: 4px;
-    vertical-align: top;
-}
+        .table td,
+        .table th {
+            border: 1px solid #000;
+            padding: 4px;
+            vertical-align: top;
+            page-break-inside: avoid;
+        }
 
-.small-text {
-    font-size: 10px;
-}
+        .small-text {
+            font-size: 10px;
+        }
 
-.page-break {
-    page-break-after: always;
-}
+        .page-break {
+            page-break-after: always;
+        }
 
-.footer {
-    text-align: center;
-    font-size: 10px;
-    margin-top: 10px;
-}
-</style>
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            margin-top: 10px;
+        }
+    </style>
 
 </head>
+
 <body>
 
-<!-- ==================== PÁGINA 1 ==================== -->
+    <div class="header">
+        <img src="{{logo}}" class="logo">
+        <h3>PROCESO</h3>
+        <h3>GESTIÓN ORGANIZACIONAL Y DEL RIESGO</h3>
+        <h2>PLAN DE CONTINGENCIA</h2>
+    </div>
 
-<div class="header">
-    <img src="{{logo}}" class="logo">
-    <h3>PROCESO</h3>
-    <h3>GESTIÓN ORGANIZACIONAL Y DEL RIESGO</h3>
-    <h2>PLAN DE CONTINGENCIA – SALIDA PEDAGÓGICA</h2>
-</div>
+    <table class="table">
+        <tr>
+            <td><b>Versión:</b> 01</td>
+            <td><b>Código:</b> {{codigo}}</td>
+        </tr>
+    </table>
 
-<table class="table">
-<tr>
-<td><b>Versión:</b> 01</td>
-<td><b>Código:</b> {{codigo}}</td>
-</tr>
-</table>
+    <div class="section">
+        <div class="section-title">CLASIFICACIÓN DE LA INFORMACIÓN</div>
+        Pública {{publica}}
+        Pública Clasificada {{clasificada}}
+        Pública Reservada {{reservada}}
+    </div>
 
-<div class="section">
-<div class="section-title">CLASIFICACIÓN DE LA INFORMACIÓN</div>
-☑ Pública ☐ Clasificada ☐ Reservada
-</div>
+    <div class="section">
+        <div class="section-title">INFORMACIÓN GENERAL</div>
 
-<div class="section">
-<div class="section-title">INFORMACIÓN GENERAL</div>
+        <table class="table">
+            <tr>
+                <td><b>Programa</b></td>
+                <td>{{programa}}</td>
+                <td><b>Instructor</b></td>
+                <td>{{instructor}}</td>
+            </tr>
+            <tr>
+                <td><b>Ficha</b></td>
+                <td>{{ficha}}</td>
+                <td><b>No. Aprendices</b></td>
+                <td>{{cantidadAprendices}}</td>
+            </tr>
+            <tr>
+                <td><b>Fecha salida</b></td>
+                <td>{{fechaSalida}}</td>
+                <td><b>Lugar</b></td>
+                <td>{{lugarDestino}}</td>
+            </tr>
+            <tr>
+                <td><b>Hora salida</b></td>
+                <td>{{horaSalida}}</td>
+                <td><b>Hora regreso</b></td>
+                <td>{{horaRegreso}}</td>
+            </tr>
+            <tr>
+                <td><b>Transporte</b></td>
+                <td>SENA {{sena}} EXTERNO {{externo}} APRENDIZ {{aprendiz}}</td>
+                <td><b>Contacto</b></td>
+                <td>{{contactoLugar}}</td>
+            </tr>
+        </table>
+    </div>
 
-<table class="table">
-<tr>
-<td><b>Programa</b></td><td>{{programa}}</td>
-<td><b>Instructor</b></td><td>{{instructor}}</td>
-</tr>
-<tr>
-<td><b>Ficha</b></td><td>{{ficha}}</td>
-<td><b>No. Aprendices</b></td><td>{{cantidadAprendices}}</td>
-</tr>
-<tr>
-<td><b>Fecha salida</b></td><td>{{fechaSalida}}</td>
-<td><b>Lugar</b></td><td>{{lugarSalida}}</td>
-</tr>
-<tr>
-<td><b>Hora salida</b></td><td>{{horaSalida}}</td>
-<td><b>Hora regreso</b></td><td>{{horaRegreso}}</td>
-</tr>
-<tr>
-<td><b>Transporte</b></td><td>{{transporte}}</td>
-<td><b>Contacto</b></td><td>{{contactoLugar}}</td>
-</tr>
-</table>
-</div>
+    <div class="section">
+        <div class="section-title">ARTICULACIÓN FORMATIVA</div>
+        <p>{{articulacion}}</p>
+    </div>
 
-<div class="section">
-<div class="section-title">CONTACTOS DE EMERGENCIA</div>
-<p>
-Salud: {{salud}}<br>
-Policía: {{policia}}<br>
-Póliza: {{poliza}}<br>
-Otro: {{otro}}
-</p>
-</div>
+    <div class="section">
+        <div class="section-title">SOPORTES</div>
+        <p>{{soportes}}</p>
+    </div>
 
-<div class="section">
-<div class="section-title">ARTICULACIÓN FORMATIVA</div>
-<p>{{articulacion}}</p>
-</div>
+    <div class="section">
+        <div class="section-title">OBJETIVO</div>
+        <p>{{objetivo}}</p>
+    </div>
 
-<div class="section">
-<div class="section-title">SOPORTES</div>
-<p>{{soportes}}</p>
-</div>
+    <div class="section">
+        <div class="section-title">COMPETENCIA</div>
+        <p>{{competencia}}</p>
+    </div>
 
-<div class="section">
-<div class="section-title">OBJETIVO</div>
-<p>{{objetivo}}</p>
-</div>
+    <div class="section">
+        <div class="section-title">RESULTADOS DE APRENDIZAJE</div>
+        <p>{{resultados}}</p>
+    </div>
 
-<div class="section">
-<div class="section-title">COMPETENCIA</div>
-<p>{{competencia}}</p>
-</div>
+    <div class="section">
+        <div class="section-title">PLAN DE TRABAJO</div>
+        {{planTrabajo}}
+    </div>
 
-<div class="section">
-<div class="section-title">RESULTADOS DE APRENDIZAJE</div>
-<p>{{resultados}}</p>
-</div>
+    <div class="footer">
+        Página 1 de 2
+    </div>
 
-<div class="section">
-<div class="section-title">PLAN DE TRABAJO</div>
-<p>{{planTrabajo}}</p>
-</div>
+    <div class="section">
+        <div class="section-title">PARTICIPANTES</div>
+        {{aprendices}}
+    </div>
 
-<div class="footer">
-Página 1 de 2
-</div>
+    <div class="section">
+        <div class="section-title">RIESGOS IDENTIFICADOS</div>
+        {{riesgos}}
+    </div>
 
-<div class="page-break"></div>
+    <div class="section">
+        <div class="section-title">PROTOCOLOS DE EMERGENCIA</div>
+        {{protocolos}}
+    </div>
 
-<!-- ==================== PÁGINA 2 ==================== -->
+    <div class="section">
+        <div class="section-title">CONTACTOS DE EMERGENCIA</div>
+            {{contactosEmergencia}}
+    </div>
 
-<div class="section">
-<div class="section-title">PARTICIPANTES</div>
-<p>Total: {{cantidadAprendices}}</p>
-</div>
+    <div class="section">
+        <div class="section-title">
+            ELEMENTOS DE PROTECCIÓN PERSONAL
+        </div>
+        {{epp}}
+    </div>
 
-<div class="section">
-<div class="section-title">RIESGOS IDENTIFICADOS</div>
+    <div class="section">
+        <div class="section-title">SEGURIDAD VIAL</div>
+        {{seguridadVial}}
+    </div>
 
-<table class="table">
-<tr>
-<th>Peligro</th>
-<th>Riesgo</th>
-<th>Nivel</th>
-<th>Consecuencia</th>
-<th>Prevención</th>
-<th>Protocolo</th>
-</tr>
+    <div class="section">
+        <div class="section-title">PLAN DE ACCIÓN EN CASO DE ACCIDENTE</div>
 
-{{#riesgos}}
-<tr>
-<td>{{peligro}}</td>
-<td>{{riesgo}}</td>
-<td>{{nivel}}</td>
-<td>{{consecuencia}}</td>
-<td>{{prevencion}}</td>
-<td>{{protocolo}}</td>
-</tr>
-{{/riesgos}}
+        <p>
+            En caso de presentarse un accidente durante el desarrollo de la salida pedagógica o actividad, el instructor
+            responsable deberá seguir el siguiente procedimiento institucional:
+        </p>
 
-</table>
-</div>
+        <ol>
 
-<div class="section">
-<div class="section-title">PROTOCOLOS</div>
-<p>{{protocolos}}</p>
-</div>
+            <li>
+                Brindar atención inmediata al aprendiz afectado. Si cuenta con conocimientos en primeros auxilios,
+                estabilizar al aprendiz mientras se coordina la atención médica.
+            </li>
 
-<div class="section">
-<div class="section-title">PLAN DE ACCIÓN EN EMERGENCIA</div>
+            <li>
+                Informar inmediatamente al Coordinador de Formación y al área de Bienestar al Aprendiz.
+            </li>
 
-<table class="table">
-<tr>
-<th>Emergencia</th>
-<th>Acción</th>
-<th>Responsable</th>
-<th>Comunicación</th>
-</tr>
+            <li>
+                Comunicarse con la aseguradora correspondiente para activar el protocolo de atención.
+            </li>
 
-{{#acciones}}
-<tr>
-<td>{{tipo}}</td>
-<td>{{accion}}</td>
-<td>{{responsable}}</td>
-<td>{{medio}}</td>
-</tr>
-{{/acciones}}
+            <li>
+                Gestionar el traslado al centro asistencial más cercano cuando sea necesario.
+            </li>
 
-</table>
-</div>
+            <li>
+                Registrar el incidente en el formato oficial establecido por el SENA.
+            </li>
 
-<div class="section">
-<div class="section-title">SEGURIDAD VIAL</div>
+        </ol>
+    </div>
 
-<table class="table">
-<tr>
-<th>Ítem</th>
-<th>Aplica</th>
-<th>Observación</th>
-</tr>
+    <div class="section">
+        <div class="section-title">PROTOCOLO DE ACTIVACIÓN DE PÓLIZA</div>
 
-{{#seguridad}}
-<tr>
-<td>{{item}}</td>
-<td>{{aplica}}</td>
-<td>{{observacion}}</td>
-</tr>
-{{/seguridad}}
+        <ol>
 
-</table>
-</div>
+            <li>
+                Verificar que el aprendiz se encuentre cubierto por la póliza institucional.
+            </li>
 
-<div class="section">
-<div class="section-title">OBSERVACIONES</div>
-<p>{{observaciones}}</p>
-</div>
+            <li>
+                Comunicarse con la línea de atención de la aseguradora.
+            </li>
 
-<div class="section">
-<div class="section-title">FIRMAS</div>
+            <li>
+                Suministrar la información solicitada (aprendiz, documento, tipo de accidente, lugar y hora del evento).
+            </li>
 
-<table class="table">
-<tr>
-<td>Instructor</td>
-<td>Coordinador</td>
-<td>Responsable SST</td>
-</tr>
-<tr>
-<td height="50"></td>
-<td></td>
-<td></td>
-</tr>
-</table>
-</div>
+            <li>
+                Esperar la asignación del número de caso y las instrucciones para la atención médica.
+            </li>
 
-<div class="section small-text">
-<b>OBSERVACIÓN TÉCNICA:</b><br>
-Revisado el presente plan, se otorga aval en prevención y gestión de riesgos.
-</div>
+            <li>
+                Conservar el soporte de atención y el número del caso para el respectivo seguimiento institucional.
+            </li>
 
-<div class="footer">
-Página 2 de 2
-</div>
+        </ol>
+    </div>
+
+    <div class="section">
+        <div class="section-title">OBSERVACIONES</div>
+        <p>{{observaciones}}</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">FIRMAS</div>
+
+        <table class="table">
+            <tr>
+                <td>Instructor</td>
+                <td>Pedagogía</td>
+                <td>Responsable SST</td>
+                <td>Coordinador</td>
+            </tr>
+            <tr>
+                <td height="50"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section small-text">
+        <b>OBSERVACIÓN TÉCNICA:</b><br>
+        Revisado el presente plan, se otorga aval en DEPENDENCIA ENCARGADA DE REVISIÓN.
+    </div>
+
+    <div class="footer">
+   
+    </div>
 
 </body>
+
 </html>

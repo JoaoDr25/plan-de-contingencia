@@ -72,45 +72,45 @@ export const eliminarRiesgoId = async (req, res, next) => {
 };
 
 
-export const asociarProtocolosRiesgo = async (req, res, next) => {
-    try {
-        const { protocoloId } = req.body;
+// export const asociarProtocolosRiesgo = async (req, res, next) => {
+//     try {
+//         const { protocoloId } = req.body;
 
-        const asociar = await riesgoService.asociarProtocoloRiesgo(req.params.id, protocoloId);
+//         const asociar = await riesgoService.asociarProtocoloRiesgo(req.params.id, obtenerProtocoloRiesgo);
 
-        return res.status(200).json({
-            mensaje: "Protocolos asociados exitosamente",
-            asociar: asociar
-        });
-    } catch (error) {
-      next(error);
-    }
-}
-
-
-export const obtenerAsociacionProtocoloRiesgo = async (req, res, next) => {
-    try {
-        const obtenerAsociacion = await riesgoService.obtenerProtocoloRiesgo(req.params.id);
-
-        return res.status(200).json({
-            mensaje: "Protocolos asociados obtenidos exitosamente",
-            asociar: obtenerAsociacion
-        });
-    } catch (error) {
-        next(error);
-    }
-}
+//         return res.status(200).json({
+//             mensaje: "Protocolos asociados exitosamente",
+//             asociar: asociar
+//         });
+//     } catch (error) {
+//       next(error);
+//     }
+// }
 
 
-export const eliminarAsociacionProtocoloRiesgo = async (req, res, next) => {
-    try {
-        const eliminarAsociacion = await riesgoService.eliminarProtocoloRiesgo(req.params.id, req.params.protocoloId);
+// export const obtenerAsociacionProtocoloRiesgo = async (req, res, next) => {
+//     try {
+//         const obtenerAsociacion = await riesgoService.obtenerProtocoloRiesgo(req.params.id);
 
-        return res.status(200).json({
-            mensaje: "Asociación de protocolo eliminado exitosamente",
-            asociar: eliminarAsociacion
-        });
-    } catch (error) {
-       next(error);
-    }
-}
+//         return res.status(200).json({
+//             mensaje: "Protocolos asociados obtenidos exitosamente",
+//             asociar: obtenerAsociacion
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// }
+
+
+// export const eliminarAsociacionProtocoloRiesgo = async (req, res, next) => {
+//     try {
+//         const eliminarAsociacion = await riesgoService.eliminarProtocoloRiesgo(req.params.id, req.params.protocoloId);
+
+//         return res.status(200).json({
+//             mensaje: "Asociación de protocolo eliminado exitosamente",
+//             asociar: eliminarAsociacion
+//         });
+//     } catch (error) {
+//        next(error);
+//     }
+// }

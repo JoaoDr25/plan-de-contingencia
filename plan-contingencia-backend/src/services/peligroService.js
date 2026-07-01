@@ -4,19 +4,22 @@ import riesgoModel from "../models/riesgoModel.js";
 
 const crud = createCrudService(peligroModel);
 
-const create = async (data)  => {
+const create = async (data) => {
 
-    const { nombre } = data;
+    const {
+        nombre,
+        riesgos = []
+    } = data;
 
     const peligroExistente = await peligroModel.findOne({
         nombre
     });
 
     if (peligroExistente) {
-        const error = 
-        new Error(
-            "No se puede crear el peligro: ya existe un registro con ese nombre de peligro"
-        );
+        const error =
+            new Error(
+                "No se puede crear el peligro: ya existe un registro con ese nombre de peligro"
+            );
 
         error.statusCode = 400;
 
@@ -28,15 +31,23 @@ const create = async (data)  => {
 
 
 
+const getAll = async () => {
+
+    return await crud.getAll().populate("riesgos");
+}
+
+
+
 const getById = async (id) => {
 
-    const obtenerPeligroId = await crud.getById(id);
+    const obtenerPeligroId = await crud.getById(id)
+    .populate("riesgos");
 
     if (!obtenerPeligroId) {
         const error =
-        new Error(
-            "No se encontró el peligro"
-        );
+            new Error(
+                "No se encontró el peligro"
+            );
 
         error.statusCode = 404;
 
@@ -50,7 +61,10 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
-    const { nombre } = data;
+    const {
+        nombre,
+        riesgos = []
+    } = data;
 
     const peligroExistente = await peligroModel.findOne({
         nombre,
@@ -58,10 +72,10 @@ const updateById = async (id, data) => {
     });
 
     if (peligroExistente) {
-        const error = 
-        new Error (
-            "No se puede actualizar: ya existe otro peligro con ese nombre"
-        );
+        const error =
+            new Error(
+                "No se puede actualizar: ya existe otro peligro con ese nombre"
+            );
 
         error.statusCode = 400;
 
@@ -74,10 +88,10 @@ const updateById = async (id, data) => {
     );
 
     if (!actualizarPeligroId) {
-        const error = 
-        new Error(
-            "Peligro no encontrado"
-        );
+        const error =
+            new Error(
+                "Peligro no encontrado"
+            );
 
         error.statusCode = 404;
 
@@ -97,9 +111,9 @@ const deleteById = async (id) => {
 
     if (riesgosAsociados) {
         const error =
-        new Error(
-            "No se puede eliminar el peligro porque tiene riesgos asociados"
-        );
+            new Error(
+                "No se puede eliminar el peligro porque tiene riesgos asociados"
+            );
 
         error.statusCode = 400;
 
@@ -109,10 +123,10 @@ const deleteById = async (id) => {
     const eliminarPeligroId = await crud.delete(id);
 
     if (!eliminarPeligroId) {
-        const error = 
-        new Error(
-            "Peligro no encontrado"
-        );
+        const error =
+            new Error(
+                "Peligro no encontrado"
+            );
 
         error.statusCode = 404;
 
@@ -124,24 +138,24 @@ const deleteById = async (id) => {
 
 
 
-const obtenerRiesgoPeligro = async (id) => {
+// const obtenerRiesgoPeligro = async (id) => {
 
-    const obtenerAsociacionRiesgoPeligroId = await crud.getById(id);
+//     const obtenerAsociacionRiesgoPeligroId = await crud.getById(id);
 
-    if (!obtenerAsociacionRiesgoPeligroId) {
-        const error = 
-        new Error(
-            "Peligro no encontrado"
-        );
+//     if (!obtenerAsociacionRiesgoPeligroId) {
+//         const error = 
+//         new Error(
+//             "Peligro no encontrado"
+//         );
 
-        error.statusCode = 404;
+//         error.statusCode = 404;
 
-        throw error;
-    }
+//         throw error;
+//     }
 
-    return await riesgoModel.find({
-        peligroId: id
-    });
-}
+//     return await riesgoModel.find({
+//         peligroId: id
+//     });
+// }
 
-export default { ...crud, create, getById, updateById, deleteById, obtenerRiesgoPeligro };
+export default { ...crud, create, getAll, getById, updateById, deleteById };

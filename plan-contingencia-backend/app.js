@@ -10,7 +10,6 @@ import actividadRoutes from './src/routes/actividadRoutes.js'
 import peligroRoutes from './src/routes/peligroRoutes.js'
 import riesgoRoutes from './src/routes/riesgoRoutes.js'
 import protocoloRoutes from './src/routes/protocoloRoutes.js'
-import configuracionPeligroRoutes from './src/routes/configuracionPeligroRoutes.js'
 import aprendizRoutes from './src/routes/aprendizRoutes.js'
 import usuarioRoutes from './src/routes/usuarioRoutes.js'
 import contactoEmergenciaRoutes from './src/routes/contactoEmergenciaRoutes.js'
@@ -40,7 +39,6 @@ app.use('/api',
     peligroRoutes,
     riesgoRoutes,
     protocoloRoutes,
-    configuracionPeligroRoutes,
     aprendizRoutes,
     usuarioRoutes,
     contactoEmergenciaRoutes,

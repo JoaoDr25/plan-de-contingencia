@@ -5,9 +5,9 @@ import {
     obtenerRiesgoid,
     actualizarRiesgoId,
     eliminarRiesgoId,
-    asociarProtocolosRiesgo,
-    obtenerAsociacionProtocoloRiesgo,
-    eliminarAsociacionProtocoloRiesgo
+    // asociarProtocolosRiesgo,
+    // obtenerAsociacionProtocoloRiesgo,
+    // eliminarAsociacionProtocoloRiesgo
  } from "../controllers/riesgoController.js"
 
 import { validarObjectId } from "../middlewares/validateObjectId.js";
@@ -20,9 +20,9 @@ router.get('/riesgos/:id', validarObjectId, obtenerRiesgoid);
 router.put('/riesgos/:id', validarObjectId, actualizarRiesgoId);
 router.delete('/riesgos/:id', validarObjectId, eliminarRiesgoId);
 
-router.post('/riesgos/:id/protocolos', validarObjectId, asociarProtocolosRiesgo);
-router.get('/riesgos/:id/protocolos', validarObjectId, obtenerAsociacionProtocoloRiesgo);
-router.delete('/riesgos/:id/protocolos/:protocoloId', validarObjectId, eliminarAsociacionProtocoloRiesgo);
+// router.post('/riesgos/:id/protocolos', validarObjectId, asociarProtocolosRiesgo);
+// router.get('/riesgos/:id/protocolos', validarObjectId, obtenerAsociacionProtocoloRiesgo);
+// router.delete('/riesgos/:id/protocolos/:protocoloId', validarObjectId, eliminarAsociacionProtocoloRiesgo);
 
 export default router;
 

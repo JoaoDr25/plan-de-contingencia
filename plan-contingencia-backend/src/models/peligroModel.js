@@ -21,18 +21,15 @@ const peligroSchema = new mongoose.Schema ({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    riesgos: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Riesgo"
+            }
+        ]
 }, {
-    timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-});
-
-peligroSchema.virtual('riesgos', {
-    ref: 'Riesgo',
-    localField: '_id',
-    foreignField: 'peligroId',
-    justOne: false
+    timestamps: true
 });
 
 peligroSchema.pre("save", async function(next){
