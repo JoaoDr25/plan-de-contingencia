@@ -5,7 +5,7 @@ import {
     obtenerProtocoloId,
     actualizarProtocoloId,
     eliminarProtocoloId,
-    obtenerRiesgosProtocolo
+    // obtenerRiesgosProtocolo
  } from "../controllers/protocoloController.js";
 
 import { validarObjectId } from "../middlewares/validateObjectId.js";
@@ -18,6 +18,6 @@ router.get('/protocolos/:id', validarObjectId, obtenerProtocoloId);
 router.put('/protocolos/:id', validarObjectId, actualizarProtocoloId);
 router.delete('/protocolos/:id', validarObjectId, eliminarProtocoloId);
 
-router.get('/protocolos/:id/riesgos', validarObjectId, obtenerRiesgosProtocolo);
+// router.get('/protocolos/:id/riesgos', validarObjectId, obtenerRiesgosProtocolo);
 
 export default router;

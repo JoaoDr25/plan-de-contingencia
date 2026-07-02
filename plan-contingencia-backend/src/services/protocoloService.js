@@ -110,26 +110,26 @@ const deleteById = async (id) => {
 
 
 
-const obtenerRiesgoProtocolo = async (id) => {
+// const obtenerRiesgoProtocolo = async (id) => {
 
-    const protocolo = await crud.getById(id)
+//     const protocolo = await crud.getById(id)
 
-    if (!protocolo) {
-        const error =
-            new Error(
-                "Protocolo no encontrado"
-            );
+//     if (!protocolo) {
+//         const error =
+//             new Error(
+//                 "Protocolo no encontrado"
+//             );
 
-        error.statusCode = 404;
+//         error.statusCode = 404;
 
-        throw error;
-    }
+//         throw error;
+//     }
 
-    return await riesgoModel.find({
-        protocolos: id
-    }).populate("protocolos");
-}
+//     return await riesgoModel.find({
+//         protocolos: id
+//     }).populate("protocolos");
+// }
 
-export default { ...crud, create, getById, updateById, deleteById, obtenerRiesgoProtocolo }
+export default { ...crud, create, getById, updateById, deleteById }
 
 
