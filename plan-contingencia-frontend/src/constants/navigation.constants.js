@@ -5,51 +5,63 @@ export const navigation = {
      [ROLES.ADMINISTRADOR]: [
         {
             title: "Crear Plan",
-            icon: "add"
+            icon: "add",
+            routeName: "planes.create"
         },
         {
             title: "Ver Planes",
-            icon: "visibility"
+            icon: "visibility",
+            routeName: "planes.list"
         },
         {
             title: "Programas de Formación",
-            icon: "school"
+            icon: "school",
+            routeName: "programas.list"
         },
         {
             title: "Actividades",
-            icon: "event"
+            icon: "event",
+            routeName: "actividades.list"
         },
         {
             title: "Peligros",
-            icon: "warning"
+            icon: "warning",
+            routeName: "peligros.list"
         },
         {
             title: "Riesgos",
-            icon: "report_problem"
+            icon: "report_problem",
+            routeName: "riesgos.list"
         },
         {
             title: "Protocolos",
-            icon: "assignment"
+            icon: "assignment",
+            routeName: "protocolos.list"
         },
         {
             title: "Usuarios",
-            icon: "group"
+            icon: "group",
+            routeName: "usuarios.list"
         },
         {
             title: "Aprendices",
-            icon: "badge"
+            icon: "badge",
+            routeName: "aprendices.list"
         },
         {
             title: "Contactos de Emergencia",
-            icon: "call"
+            icon: "call",
+            routeName: "contactos.list"
         },
         {
             title: "EPP",
-            icon: "health_and_safety"
+            icon: "health_and_safety",
+            routeName: "epp.list"
         },
         {
             title: "Parámetros del Sistema",
-            icon: "settings"
+            icon: "settings",
+            routeName: "parametros.list"
         }
     ],
 

@@ -1,6 +1,6 @@
 <template>
 
-    <q-drawer v-model="drawerOpen" show-if-above bordered class="app-dawer">
+    <q-drawer v-model="drawerOpen" bordered class="app-dawer" overlay behavior="mobile">
 
         <div class="app-drawer__header">
 
@@ -29,7 +29,7 @@
         <div class="app-drawer__content">
 
             <DrawerMenuItem v-for="item in navigation[ROLES.ADMINISTRADOR]" :key="item.title" :title="item.title"
-                :icon="item.icon" />
+                :icon="item.icon" :route-name="item.routeName" @closeDrawer="handleCloseDrawer"/>
         </div>
 
     </q-drawer>
@@ -42,6 +42,14 @@ import AppLogo from './AppLogo.vue';
 import DrawerMenuItem from '../navigation/DrawerMenuItem.vue';
 import { navigation } from 'src/constants/navigation.constants.js';
 import { ROLES } from 'src/constants/roles.constants.js';
+
+const emit = defineEmits([
+  'closeDrawer'
+])
+
+function handleCloseDrawer() {
+    emit('closeDrawer')
+}
 
 const drawerOpen = defineModel()
 

@@ -34,5 +34,4 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 <style scoped lang="scss">
 
 
-
 </style>

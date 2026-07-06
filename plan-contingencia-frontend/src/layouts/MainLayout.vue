@@ -7,6 +7,7 @@
   
     <AppDrawer
      v-model="leftDrawerOpen"
+     @closeDrawer="closeDrawer"
     />
 
     <q-page-container>
@@ -30,6 +31,10 @@ const leftDrawerOpen = ref(false)
 
 function toggleDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+function closeDrawer() {
+  leftDrawerOpen.value = false
 }
 
 </script>
