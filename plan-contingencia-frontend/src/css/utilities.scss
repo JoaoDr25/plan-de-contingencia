@@ -1,0 +1,138 @@
+@use './variables.scss' as *;
+@use './typography.scss' as *;
+
+// LAYOUT
+.page-container {
+  max-width: $content-max-width;
+  margin: 0 auto;
+  padding: $spacing-lg;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+
+// DISPLAY
+.d-flex {
+  display: flex;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-inline {
+  display: inline;
+}
+
+.d-none {
+  display: none;
+}
+
+
+// FLEXBOX
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+
+// ESPACIADOS
+.mt-md {
+    margin-top: $spacing-md;
+}
+
+.mb-md {
+    margin-bottom: $spacing-md;
+}
+
+.ml-md {
+    margin-left: $spacing-md;
+}
+
+.mr-md {
+    margin-right: $spacing-md;
+}
+
+
+
+// TEXTO
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-muted {
+  color: $color-text-secondary;
+}
+
+.text-primary {
+  color: $color-primary;
+}
+
+.text-bold {
+  font-weight: $font-weight-bold;
+}
+
+
+// CURSOR
+.cursor-pointer {
+  cursor: pointer;
+}
+
+
+//SOMBRAS
+.shadow-sm {
+    box-shadow: $shadow-sm;
+}
+
+.shadow-md {
+    box-shadow: $shadow-md;
+}
+
+
+// BORDES
+.rounded-sm {
+    border-radius: $radius-sm;
+}
+
+.rounded-md {
+    border-radius: $radius-md;
+}
+
+.rounded-lg {
+    border-radius: $radius-lg;
+}
+
+
+// HOVER
+.card-hover {
+    transition: $transition-normal;
+
+    &:hover {
+        box-shadow: $shadow-md;
+    }
+}

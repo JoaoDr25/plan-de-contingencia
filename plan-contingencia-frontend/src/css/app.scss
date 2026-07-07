@@ -1,1 +1,20 @@
-// app global css
+@use './variables.scss';
+@use './typography.scss';
+@use './mixins.scss';
+@use './utilities.scss';
+
+html,
+body {
+    font-family: typography.$font-family-base;
+    background-color: variables.$color-background;
+    color: variables.$color-text-primary;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+*
+*::before,
+*::after {
+    box-sizing: border-box;
+}

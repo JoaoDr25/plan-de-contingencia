@@ -1,0 +1,56 @@
+// Colores principales
+$color-primary: #39A900;
+$color-primary-dark: #2E7D32;
+$color-primary-light: #E8F5E9;
+
+// Colores secundarios
+$color-secondary: #004A8F;
+$color-accent: #26A69A;
+
+// Fondos
+$color-background: #F5F7FA;
+$color-surface: #FFFFFF;
+
+//Texto
+$color-text-primary: #2C3E50;
+$color-text-secondary: #6C757D;
+$color-text-disabled: #9E9E9E;
+
+//Bordes
+$color-border: #DDE2E6;
+
+// Estados 
+$color-success: #2E7D32;
+$color-warning: #F9A825;
+$color-error: #D32F2F;
+$color-info: #0288D1;
+
+// ESPACIADOS
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+
+// BORDES
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-round: 9999px;
+
+//ELEVACIONES
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+//LAYOUT
+$header-height: 64px;
+$drawer-width: 280px;
+$content-max-width: 1440px;
+
+//TRANSICIONES
+$transition-fast: 0.2s ease-in-out;
+$transition-normal: 0.3s ease-in-out;
+$transition-slow: 0.5s ease-in-out;
