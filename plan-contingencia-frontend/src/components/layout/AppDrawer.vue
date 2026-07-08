@@ -1,11 +1,96 @@
 <template>
 
+    <q-drawer v-model="drawerOpen" show-if-above bordered class="app-dawer">
+
+        <div class="app-drawer__header">
+
+            <AppLogo :size="90" />
+
+        </div>
+
+        <div class="app-drawer__user">
+
+            <h2 class="app-drawer__role">
+                ADMINISTRADOR
+            </h2>
+
+            <P class="app-drawer__name">
+                Nombre Completo Administrador
+            </P>
+
+            <p class="app-drawer__email">
+                correoinstitucional@soy.sena.edu.co
+            </p>
+
+        </div>
+
+        <q-separator />
+
+        <div class="app-dawer__content">
+
+            <DrawerMenuItem title="Crear Plan" icon="add" to="/planes/crear" />
+
+        </div>
+
+    </q-drawer>
+
 </template>
 
 <script setup>
 
+import AppLogo from './AppLogo.vue';
+
+const drawerOpen = defineModel()
+
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use 'src/css/variables.scss' as *;
+@use 'src/css/mixins.scss' as *;
+@use 'src/css/typography.scss' as *;
 
+.app-drawer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: $color-surface;
+}
+
+.app-drawer__header {
+    @include flex-center;
+    padding: 1.5rem 1rem 1rem;
+}
+
+.app-drawer__user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem 1.5rem;
+    text-align: center;
+}
+
+.app-drawer__role {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.app-drawer__name {
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.80rem;
+    font-weight: 600;
+}
+
+.app-drawer__email {
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+.app-drawer__content {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+}
 </style>

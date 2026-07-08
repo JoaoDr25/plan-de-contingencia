@@ -3,9 +3,7 @@
 
         <q-toolbar>
 
-            <q-btn flat dense round icon="menu">
-                @click="handleToggleDrawer"
-            </q-btn>
+            <q-btn flat dense round icon="menu" @click="handleToggleDrawer" />
 
             <q-toolbar-title>
                 {{ APP_TITLE }}

@@ -1,11 +1,13 @@
 <template>
-
+  <footer>
+    Footer
+  </footer>
 </template>
 
 <script setup>
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
 </style>
