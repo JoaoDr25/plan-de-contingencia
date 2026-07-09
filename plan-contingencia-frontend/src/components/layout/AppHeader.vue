@@ -32,9 +32,7 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 </script>
 
 <style scoped lang="scss">
-@use 'src/css/variables.scss' as *;
-@use 'src/css/typography.scss' as *;
-@use 'src/css/mixins.scss' as *;
+
 
 
 </style>

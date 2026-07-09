@@ -3,7 +3,7 @@
 
         <q-item-section avatar class="drawer-menu-item__icon">
 
-            <q-icon :name="icon" size="18px"/>
+            <q-icon :name="icon" size="20px"/>
 
         </q-item-section>
 
@@ -45,12 +45,13 @@ defineProps({
 
 .drawer-menu-item {
     background-color: $color-primary;
-    color: $color-white;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
+    color: $color-background;
+    border-radius: 8px;
+    margin-bottom: 0.7rem;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    min-height: 40px;
+    min-height: 42px;
+    width: 100%;
 }
 
 .drawer-menu-item:hover {
@@ -58,9 +59,14 @@ defineProps({
 }
 
 .drawer-menu-item__icon {
-    
+    color: inherit;
+    min-width: 0%;
 }
 
-.drawer-menu-item__label {}
+.drawer-menu-item__label {
+    font-size: 0.95rem;
+    font-weight: 400;
+    padding-right: 0;
+}
 
 </style>

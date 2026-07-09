@@ -4,7 +4,7 @@
 
         <div class="app-drawer__header">
 
-            <AppLogo :size="90" />
+            <AppLogo :size="80" />
 
         </div>
 
@@ -26,10 +26,10 @@
 
         <q-separator />
 
-        <div class="app-dawer__content">
+        <div class="app-drawer__content">
 
-            <DrawerMenuItem title="Crear Plan" icon="add" to="/planes/crear" />
-
+            <DrawerMenuItem v-for="item in navigation[ROLES.ADMINISTRADOR]" :key="item.title" :title="item.title"
+                :icon="item.icon" />
         </div>
 
     </q-drawer>
@@ -39,6 +39,9 @@
 <script setup>
 
 import AppLogo from './AppLogo.vue';
+import DrawerMenuItem from '../navigation/DrawerMenuItem.vue';
+import { navigation } from 'src/constants/navigation.constants.js';
+import { ROLES } from 'src/constants/roles.constants.js';
 
 const drawerOpen = defineModel()
 
@@ -58,7 +61,7 @@ const drawerOpen = defineModel()
 
 .app-drawer__header {
     @include flex-center;
-    padding: 1.5rem 1rem 1rem;
+    padding: 3rem 1rem 1rem;
 }
 
 .app-drawer__user {
@@ -90,7 +93,7 @@ const drawerOpen = defineModel()
 
 .app-drawer__content {
     flex: 1;
-    padding: 1rem;
+    padding: 1.5rem;
     overflow-y: auto;
 }
 </style>
