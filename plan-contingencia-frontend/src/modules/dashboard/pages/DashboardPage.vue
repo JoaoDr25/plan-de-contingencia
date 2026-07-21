@@ -1,8 +1,15 @@
 <template>
-  <q-page class="flex flex-center">
-    Dashboard en construcción
-  </q-page>
+
+<DashboardHeader />
+
+    <DashboardSummary />
+
+    <DashboardModules />
+
+    <FloatingActions />
+
 </template>
 
 <script setup>
+
 </script>
