@@ -1,5 +1,5 @@
 <template>
-  <q-footer class="app-footer">
+  <footer class="app-footer">
 
     <div class="app-footer__content">
 
@@ -7,7 +7,7 @@
 
     </div>
 
-  </q-footer>
+  </footer>
 </template>
 
 <script setup>
@@ -40,6 +40,7 @@ const currentYear = new Date().getFullYear()
   font-size: 1rem;
   font-weight: 600;
   text-align: center;
+  font-family: $font-family-base;
 }
 
 </style>

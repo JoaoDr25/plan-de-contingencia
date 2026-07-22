@@ -77,7 +77,9 @@ const {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 270px;
+    height: 220px;
+    width: 300px;
+    flex: 0 0 300px;
     border-radius: $radius-lg;
     box-shadow: $shadow-sm;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -92,13 +94,13 @@ const {
     background-color: $color-primary;
     border-radius: $radius-lg;
     text-align: center;
-    padding: 1rem;
+    padding: 0.55rem 0.75rem;
 }
 
 .dashboard-module-card__title {
     margin: 0;
-    font-size: 0.96rem;
-    font-weight: 500;
+    font-size: 0.90rem;
+    font-weight: 400;
     color: $color-background;
 }
 
@@ -107,26 +109,27 @@ const {
     justify-content: center;
     align-items: center;
     flex: 1;
-    padding: 1.5rem 1rem;
+    padding: 1rem;
 }
 
 .dashboard-module-card__image {
     width: 100%;
-    max-width: 110%;
-    height: auto;
+    max-width: 105px;
+    height: 80%;
     object-fit: contain;
 }
 
 .dashboard-module-card__footer {
-    padding: 0.75rem 1rem 1rem;
+    padding: 0.85rem;
 }
 
 .dashboard-module-card__button {
-    width: 110px;
-    height: 32px;
-    border-radius: 4px;
+    width: 170px;
+    min-height: 28px;
+    height: 28px;
+    border-radius: 8px;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.5px;
     background-color: $color-primary;
     color: $color-background;

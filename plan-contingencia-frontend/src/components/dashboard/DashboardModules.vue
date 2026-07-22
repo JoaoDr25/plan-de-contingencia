@@ -37,16 +37,20 @@ import DashboardModuleCard from './DashboardModuleCard.vue';
 }
 
 .dashboard-modules__title {
-    margin-bottom: 2rem;
+    margin: 1.8rem;
     text-align: center;
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     color: $color-text-primary;
+    font-family: $font-family-base;
 }
 
 .dashboard-modules__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 1.5rem;
 }
 

@@ -1,20 +1,17 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-      
-    <AppHeader
-    @toggleDrawer="toggleDrawer"
-    />
-  
-    <AppDrawer
-     v-model="leftDrawerOpen"
-     @closeDrawer="closeDrawer"
-    />
+
+    <AppHeader @toggleDrawer="toggleDrawer" />
+
+    <AppDrawer v-model="leftDrawerOpen" @closeDrawer="closeDrawer" />
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
-    <AppFooter />
+    <q-page-container>
+      <AppFooter />
+    </q-page-container>
 
   </q-layout>
 </template>

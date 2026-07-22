@@ -5,7 +5,7 @@
 
             <q-btn flat dense round icon="menu" @click="handleToggleDrawer" />
 
-            <q-toolbar-title>
+            <q-toolbar-title class="app-header__title">
                 {{ APP_TITLE }}
             </q-toolbar-title>
 
@@ -33,5 +33,19 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 
 <style scoped lang="scss">
 
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
+.app-header {
+    background-color: $color-primary;
+}
+
+.app-header__title {
+    font-family: $font-family-base;
+    font-size: 0.96rem;
+    font-weight: 500;
+    padding-top: 0.1rem;
+    letter-spacing: 2px;
+}
 
 </style>
