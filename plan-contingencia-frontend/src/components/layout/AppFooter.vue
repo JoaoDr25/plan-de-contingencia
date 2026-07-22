@@ -35,12 +35,13 @@ const currentYear = new Date().getFullYear()
 .app-footer__content {
   @include flex-center;
   color: black;
-  min-height: 50px;
+  min-height: 44px;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: 0.93rem;
   font-weight: 600;
   text-align: center;
   font-family: $font-family-base;
+  letter-spacing: 0.3px;
 }
 
 </style>

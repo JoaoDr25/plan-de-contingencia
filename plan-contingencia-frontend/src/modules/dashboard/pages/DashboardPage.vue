@@ -8,8 +8,6 @@
 
     <DashboardModules />
 
-    <FloatingActions />
-
 </BasePage>
 
 </template>
