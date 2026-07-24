@@ -23,7 +23,7 @@
 
 <script setup>
 
-import { dashboardSummary } from 'src/constants/dashboard.constants';
+import { dashboardSummary } from 'src/constants/modules/dashboard.constants.js';
 import DashboardStatCard from './DashboardStatCard.vue';
 
 </script>
