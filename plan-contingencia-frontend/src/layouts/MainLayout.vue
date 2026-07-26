@@ -1,20 +1,22 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-      
-    <AppHeader
-    @toggleDrawer="toggleDrawer"
-    />
-  
-    <AppDrawer
-     v-model="leftDrawerOpen"
-     @closeDrawer="closeDrawer"
-    />
+
+    <AppHeader @toggleDrawer="toggleDrawer" />
+
+    <AppDrawer v-model="leftDrawerOpen" @closeDrawer="closeDrawer" />
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
-    <AppFooter />
+    <q-page-container>
+      <FloatingScrollButtons />
+    </q-page-container>
+
+
+    <q-page-container>
+      <AppFooter />
+    </q-page-container>
 
   </q-layout>
 </template>
@@ -26,6 +28,7 @@ import { ref } from 'vue';
 import AppHeader from 'src/components/layout/AppHeader.vue';
 import AppDrawer from 'src/components/layout/AppDrawer.vue';
 import AppFooter from 'src/components/layout/AppFooter.vue';
+import FloatingScrollButtons from 'src/components/base/FloatingScrollButtons.vue';
 
 const leftDrawerOpen = ref(false)
 

@@ -56,6 +56,7 @@ function handleClick() {
     color: $color-background;
     border-radius: 8px;
     margin-bottom: 0.7rem;
+    padding: 0 0.5rem;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     min-height: 42px;
@@ -68,6 +69,7 @@ function handleClick() {
 
 .drawer-menu-item__icon {
     color: inherit;
+    flex: 0 0 auto;
     min-width: 0%;
 }
 
@@ -75,5 +77,9 @@ function handleClick() {
     font-size: 0.95rem;
     font-weight: 400;
     padding-right: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex: 1;
 }
 </style>
