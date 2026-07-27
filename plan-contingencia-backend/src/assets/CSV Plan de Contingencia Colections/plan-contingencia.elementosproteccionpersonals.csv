@@ -1,0 +1,13 @@
+_id,nombreEPP,categoria,nivelProteccion,descripcion,estado,createdAt,updatedAt,numero,__v
+6a394d3b661ea623edc9577a,Casco de seguridad,Protección de cabeza,MEDIO,Protege contra impactos y golpes en la cabeza.,true,2026-06-22T14:56:59.863Z,2026-06-24T19:12:54.974Z,1,0
+6a394d6e661ea623edc9577b,Gafas de seguridad,Protección visual,MEDIO,Protege los ojos contra partículas y salpicaduras.,true,2026-06-22T14:57:50.128Z,2026-06-22T14:57:50.128Z,2,0
+6a394d7a661ea623edc9577c,Protector auditivo tipo copa,Protección auditiva,ALTO,Reduce la exposición a niveles elevados de ruido.,true,2026-06-22T14:58:02.943Z,2026-06-22T14:58:02.943Z,3,0
+6a394d86661ea623edc9577d,Tapones auditivos,Protección auditiva,MEDIO,Disminuye el impacto del ruido sobre el oído.,true,2026-06-22T14:58:14.564Z,2026-06-22T14:58:14.564Z,4,0
+6a394d8e661ea623edc9577e,Guantes de nitrilo,Protección de manos,MEDIO,Protegen contra sustancias químicas y contaminantes.,true,2026-06-22T14:58:22.421Z,2026-06-22T14:58:22.421Z,5,0
+6a394d9b661ea623edc9577f,Guantes anticorte,Protección de manos,ALTO,Protegen frente a cortes y abrasiones.,true,2026-06-22T14:58:35.058Z,2026-06-22T14:58:35.058Z,6,0
+6a394dae661ea623edc95780,Mascarilla desechable,Protección respiratoria,BAJO,Reduce la inhalación de partículas suspendidas.,true,2026-06-22T14:58:54.364Z,2026-06-22T14:58:54.364Z,7,0
+6a394db8661ea623edc95781,Respirador con filtro,Protección respiratoria,ALTO,Protege contra partículas y contaminantes del aire.,true,2026-06-22T14:59:04.223Z,2026-06-22T14:59:04.223Z,8,0
+6a394dc1661ea623edc95782,Chaleco reflectivo,Protección corporal,MEDIO,Mejora la visibilidad del usuario.,true,2026-06-22T14:59:13.195Z,2026-06-22T14:59:13.195Z,9,0
+6a394dd8661ea623edc95783,Botas de seguridad,Protección de pies,ALTO,Protegen frente a impactos y objetos punzantes.,true,2026-06-22T14:59:36.161Z,2026-06-22T14:59:36.161Z,10,0
+6a394de2661ea623edc95784,Arnés de cuerpo completo,Trabajo en alturas,ALTO,Previene caídas durante trabajos en altura.,true,2026-06-22T14:59:46.544Z,2026-06-22T14:59:46.544Z,11,0
+6a394dea661ea623edc95785,Impermeable industrial,Protección corporal,BAJO,Protege contra lluvia y humedad.,true,2026-06-22T14:59:54.360Z,2026-06-22T15:05:58.846Z,12,0

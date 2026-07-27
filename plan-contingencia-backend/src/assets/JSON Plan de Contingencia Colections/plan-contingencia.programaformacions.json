@@ -1,0 +1,90 @@
+[{
+  "_id": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "nombre": "Análisis y Desarrollo de Software",
+  "ficha": "2670590",
+  "nivelFormacion": "Tecnólogo",
+  "centroFormacion": "Centro Agroturístico",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-16T13:51:10.819Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-16T15:43:19.060Z"
+  },
+  "numero": 1,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a315eb4ef202113d1a2a266"
+  },
+  "nombre": "Contabilización de Operaciones Comerciales y Financieras",
+  "ficha": "2670591",
+  "nivelFormacion": "Técnico",
+  "centroFormacion": "Centro Agroturístico",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-16T14:33:24.461Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-16T14:33:24.461Z"
+  },
+  "numero": 2,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a315edcef202113d1a2a267"
+  },
+  "nombre": "Producción Agropecuaria",
+  "ficha": "2670592",
+  "nivelFormacion": "Técnico",
+  "centroFormacion": "Centro Agroturístico",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-16T14:34:04.449Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-16T14:34:04.449Z"
+  },
+  "numero": 3,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a315f87ef202113d1a2a268"
+  },
+  "nombre": "Gestión Empresarial",
+  "ficha": "2670593",
+  "nivelFormacion": "Tecnólogo",
+  "centroFormacion": "Centro Agroturístico",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-16T14:36:55.604Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-16T14:36:55.604Z"
+  },
+  "numero": 4,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31719ff24bc064d9a9a0a4"
+  },
+  "nombre": "Desarrollo de Medios Gráficos Audiovisuales",
+  "ficha": "2670594",
+  "nivelFormacion": "Tecnólogo",
+  "centroFormacion": "Centro Agroturístico",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-16T15:54:07.355Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-16T15:54:07.355Z"
+  },
+  "numero": 6,
+  "__v": 0
+}]

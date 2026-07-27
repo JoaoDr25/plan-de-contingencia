@@ -1,0 +1,550 @@
+[{
+  "_id": {
+    "$oid": "6a317f64549e99d526034d5b"
+  },
+  "nombre": "Resbalón en superficies húmedas",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Posibilidad de pérdida de estabilidad al transitar por superficies húmedas o resbaladizas.",
+  "consecuencia": "Contusiones, esguinces o fracturas.",
+  "medidasPrevencion": "Mantener superficies secas y utilizar calzado adecuado.",
+  "peligroId": {
+    "$oid": "6a31761468345435c1d4d590"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5d1f9be4a443a7621fa"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T16:52:52.942Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:15:37.276Z"
+  },
+  "numero": 1,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3192a9549e99d526034d5d"
+  },
+  "nombre": "Tropiezo por obstáculos",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Presencia de objetos o desniveles que dificultan el tránsito seguro.",
+  "consecuencia": "Caídas y lesiones musculares.",
+  "medidasPrevencion": "Mantener rutas despejadas y señalizadas.",
+  "peligroId": {
+    "$oid": "6a31761468345435c1d4d590"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5d1f9be4a443a7621fa"
+    },
+    {
+      "$oid": "6a31cb03f9be4a443a762201"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:15:05.578Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:16:18.597Z"
+  },
+  "numero": 3,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31964d549e99d526034d5e"
+  },
+  "nombre": "Fatiga auditiva",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Exposición continua a niveles elevados de ruido.",
+  "consecuencia": "Disminución temporal de la capacidad auditiva.",
+  "medidasPrevencion": "Uso de protección auditiva.",
+  "peligroId": {
+    "$oid": "6a31762368345435c1d4d591"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:30:37.192Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:16:36.963Z"
+  },
+  "numero": 4,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31968b549e99d526034d5f"
+  },
+  "nombre": "Pérdida auditiva progresiva",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Exposición prolongada a ruido intenso.",
+  "consecuencia": "Daño permanente de la audición.",
+  "medidasPrevencion": "Control de exposición y protección auditiva.",
+  "peligroId": {
+    "$oid": "6a31762368345435c1d4d591"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:31:39.493Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:16:54.857Z"
+  },
+  "numero": 5,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3196e3549e99d526034d60"
+  },
+  "nombre": "Intoxicación por inhalación",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Inhalación accidental de sustancias químicas.",
+  "consecuencia": "Mareo, náuseas o afectaciones respiratorias.",
+  "medidasPrevencion": "Uso de mascarillas y ventilación adecuada.",
+  "peligroId": {
+    "$oid": "6a31762d68345435c1d4d592"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c652f9be4a443a7621fe"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:33:07.201Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:17:17.873Z"
+  },
+  "numero": 6,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3196f7549e99d526034d61"
+  },
+  "nombre": "Quemaduras químicas",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Contacto directo con sustancias corrosivas.",
+  "consecuencia": "Lesiones en piel y tejidos.",
+  "medidasPrevencion": "Uso de guantes y elementos de protección personal.",
+  "peligroId": {
+    "$oid": "6a31762d68345435c1d4d592"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c652f9be4a443a7621fe"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:33:27.246Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:17:38.988Z"
+  },
+  "numero": 7,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a319716549e99d526034d62"
+  },
+  "nombre": "Contagio por microorganismos",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Contacto con agentes biológicos presentes en el entorno.",
+  "consecuencia": "Infecciones y enfermedades.",
+  "medidasPrevencion": "Lavado de manos y uso de protección adecuada.",
+  "peligroId": {
+    "$oid": "6a31763a68345435c1d4d593"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cae5f9be4a443a7621ff"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:33:58.052Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:17:56.091Z"
+  },
+  "numero": 8,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a319727549e99d526034d63"
+  },
+  "nombre": "Exposición a fluidos biológicos",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Contacto accidental con fluidos contaminados.",
+  "consecuencia": "Transmisión de enfermedades.",
+  "medidasPrevencion": "Uso de guantes y protocolos de bioseguridad.",
+  "peligroId": {
+    "$oid": "6a31763a68345435c1d4d593"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cae5f9be4a443a7621ff"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:34:15.186Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:18:16.828Z"
+  },
+  "numero": 9,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31973f549e99d526034d64"
+  },
+  "nombre": "Cortes por herramientas manuales",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Uso inadecuado de herramientas cortantes.",
+  "consecuencia": "Heridas y laceraciones.",
+  "medidasPrevencion": "Capacitación y uso correcto de herramientas.",
+  "peligroId": {
+    "$oid": "6a31764768345435c1d4d594"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:34:39.602Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:18:36.237Z"
+  },
+  "numero": 10,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31975f549e99d526034d65"
+  },
+  "nombre": "Golpes por herramientas",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Manipulación incorrecta o caída de herramientas.",
+  "consecuencia": "Contusiones y lesiones físicas.",
+  "medidasPrevencion": "Inspección y almacenamiento seguro.",
+  "peligroId": {
+    "$oid": "6a31764768345435c1d4d594"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:35:11.802Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:18:54.438Z"
+  },
+  "numero": 11,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a319778549e99d526034d66"
+  },
+  "nombre": "Estrés laboral",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Sobrecarga de actividades o presión durante el desarrollo de la actividad.",
+  "consecuencia": "Fatiga mental, disminución del rendimiento y afectaciones emocionales.",
+  "medidasPrevencion": "Planificación adecuada de actividades y pausas activas.",
+  "peligroId": {
+    "$oid": "6a31769068345435c1d4d597"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cc91f9be4a443a762204"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:35:36.856Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:19:13.510Z"
+  },
+  "numero": 12,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31978c549e99d526034d67"
+  },
+  "nombre": "Fatiga emocional",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Exposición prolongada a situaciones de presión o tensión psicológica.",
+  "consecuencia": "Agotamiento emocional y disminución de la concentración.",
+  "medidasPrevencion": "Promover espacios de bienestar y acompañamiento.",
+  "peligroId": {
+    "$oid": "6a31769068345435c1d4d597"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cc91f9be4a443a762204"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:35:56.336Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:19:34.837Z"
+  },
+  "numero": 13,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a319891549e99d526034d68"
+  },
+  "nombre": "Dolor lumbar",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Permanencia prolongada en posiciones estáticas.",
+  "consecuencia": "Molestias musculares y lesiones de espalda.",
+  "medidasPrevencion": "Realizar pausas activas y cambios de postura frecuentes.",
+  "peligroId": {
+    "$oid": "6a31772c68345435c1d4d59a"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cb49f9be4a443a762202"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:40:17.372Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:19:52.441Z"
+  },
+  "numero": 14,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3198aa549e99d526034d69"
+  },
+  "nombre": "Fatiga muscular",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Sobrecarga física por permanencia en una misma posición.",
+  "consecuencia": "Disminución de movilidad y molestias musculares.",
+  "medidasPrevencion": "Adecuación ergonómica del puesto o actividad.",
+  "peligroId": {
+    "$oid": "6a31772c68345435c1d4d59a"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cb49f9be4a443a762202"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:40:42.370Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:20:09.429Z"
+  },
+  "numero": 15,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3198c8549e99d526034d6a"
+  },
+  "nombre": "Lesión osteomuscular",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Levantamiento incorrecto de cargas pesadas.",
+  "consecuencia": "Lesiones en espalda, hombros o extremidades.",
+  "medidasPrevencion": "Aplicar técnicas adecuadas de levantamiento.",
+  "peligroId": {
+    "$oid": "6a31775368345435c1d4d59b"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cb49f9be4a443a762202"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:41:12.086Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:20:33.103Z"
+  },
+  "numero": 16,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a319910549e99d526034d6b"
+  },
+  "nombre": "Sobreesfuerzo físico",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Manipulación repetitiva de cargas.",
+  "consecuencia": "Fatiga física y trastornos musculoesqueléticos.",
+  "medidasPrevencion": "Uso de ayudas mecánicas y trabajo en equipo.",
+  "peligroId": {
+    "$oid": "6a31775368345435c1d4d59b"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31cb49f9be4a443a762202"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:42:24.485Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:20:50.359Z"
+  },
+  "numero": 17,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31992c549e99d526034d6c"
+  },
+  "nombre": "Caída por desniveles",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Desplazamiento sobre superficies con desniveles o irregularidades.",
+  "consecuencia": "Esguinces, contusiones o fracturas.",
+  "medidasPrevencion": "Inspección previa y señalización de áreas.",
+  "peligroId": {
+    "$oid": "6a31775c68345435c1d4d59c"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5d1f9be4a443a7621fa"
+    },
+    {
+      "$oid": "6a31cb03f9be4a443a762201"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:42:52.622Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:21:08.138Z"
+  },
+  "numero": 18,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a319948549e99d526034d6d"
+  },
+  "nombre": "Tropiezo en terreno irregular",
+  "nivelRiesgo": "MEDIO",
+  "descripcion": "Presencia de obstáculos o superficies deterioradas.",
+  "consecuencia": "Caídas y lesiones físicas.",
+  "medidasPrevencion": "Mantener rutas seguras y despejadas.",
+  "peligroId": {
+    "$oid": "6a31775c68345435c1d4d59c"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c5d1f9be4a443a7621fa"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:43:20.820Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:21:26.363Z"
+  },
+  "numero": 19,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a319962549e99d526034d6e"
+  },
+  "nombre": "Descarga eléctrica",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Contacto accidental con instalaciones o equipos energizados.",
+  "consecuencia": "Quemaduras, lesiones graves o muerte.",
+  "medidasPrevencion": "Verificar aislamiento y aplicar procedimientos seguros.",
+  "peligroId": {
+    "$oid": "6a31be54f9be4a443a7621f9"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c625f9be4a443a7621fd"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:43:46.558Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:21:44.001Z"
+  },
+  "numero": 20,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a31997a549e99d526034d6f"
+  },
+  "nombre": "Quemaduras por arco eléctrico",
+  "nivelRiesgo": "ALTO",
+  "descripcion": "Exposición a chispas o arcos eléctricos durante operaciones técnicas.",
+  "consecuencia": "Lesiones térmicas severas.",
+  "medidasPrevencion": "Uso de EPP dieléctrico y mantenimiento preventivo.",
+  "peligroId": {
+    "$oid": "6a31be54f9be4a443a7621f9"
+  },
+  "protocolos": [
+    {
+      "$oid": "6a31c625f9be4a443a7621fd"
+    },
+    {
+      "$oid": "6a31c5fef9be4a443a7621fb"
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-06-16T18:44:10.748Z"
+  },
+  "updatedAt": {
+    "$date": "2026-07-01T16:22:01.113Z"
+  },
+  "numero": 21,
+  "__v": 0
+}]

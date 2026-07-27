@@ -1,0 +1,6 @@
+_id,nombre,documento,correoInstitucional,centroFormacion,rolAsignado,firma,firmaActualizada,createdAt,updatedAt,__v,estado
+6a39ab2e1570df9dc2084257,Carlos Alberto Rodriguez,1101001001,carlos.rodriguez@sena.edu.co,Centro Agroturístico,SST,,,2026-06-22T21:37:50.657Z,2026-06-22T21:45:05.185Z,0,true
+6a39ab351570df9dc2084258,María Fernanda Gómez,1000000002,maria.gomez@sena.edu.co,Centro Agroturístico,INSTRUCTOR,,,2026-06-22T21:37:57.997Z,2026-06-23T15:16:55.239Z,0,true
+6a39ab401570df9dc2084259,Diana Carolina Pérez,1000000003,diana.perez@sena.edu.co,Centro Agroturístico,PEDAGOGIA,,,2026-06-22T21:38:08.716Z,2026-06-22T21:44:10.226Z,0,true
+6a39ab491570df9dc208425a,Jorge Andrés Martínez,1000000004,jorge.martinez@sena.edu.co,Centro Agroturístico,SST,,,2026-06-22T21:38:17.878Z,2026-06-22T21:44:25.648Z,0,true
+6a39ab5c1570df9dc208425b,Sandra Milena Rojas,1000000005,sandra.rojas@sena.edu.co,Centro Agroturístico,COORDINACION,,,2026-06-22T21:38:36.702Z,2026-06-22T21:44:41.196Z,0,true

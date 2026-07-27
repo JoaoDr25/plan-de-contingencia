@@ -1,0 +1,11 @@
+_id,tipoEmergencia,accionInmediata,responsable,medioComunicacion,estado,createdAt,updatedAt,numero,__v
+6a31c5d1f9be4a443a7621fa,Accidente por caída,Brindar primeros auxilios y evaluar lesiones.,Instructor responsable,Llamada telefónica,true,2026-06-16T21:53:21.918Z,2026-06-16T21:53:21.918Z,1,0
+6a31c5fef9be4a443a7621fb,Emergencia médica,Contactar servicios médicos y estabilizar al afectado.,Instructor responsable,Llamada telefónica,true,2026-06-16T21:54:06.723Z,2026-06-16T21:54:06.723Z,2,0
+6a31c60cf9be4a443a7621fc,Incendio,Activar evacuación y utilizar extintores si es seguro hacerlo.,Brigada de emergencia,Alarma institucional,true,2026-06-16T21:54:20.725Z,2026-06-16T21:54:20.725Z,3,0
+6a31c625f9be4a443a7621fd,Accidente eléctrico,Suspender la energía y alejar a las personas del área.,Personal SST,Llamada telefónica,true,2026-06-16T21:54:45.470Z,2026-06-16T21:54:45.470Z,4,0
+6a31c652f9be4a443a7621fe,Exposición química,Retirar a la persona del área contaminada y aplicar medidas de descontaminación.,Personal SST,Radio o teléfono,true,2026-06-16T21:55:30.752Z,2026-06-16T21:55:30.752Z,5,0
+6a31cae5f9be4a443a7621ff,Riesgo biológico,Aplicar protocolos de bioseguridad y aislamiento.,Instructor responsable,Llamada telefónica,true,2026-06-16T22:15:01.294Z,2026-06-16T22:15:01.294Z,6,0
+6a31cafcf9be4a443a762200,Accidente de tránsito,Asegurar el área y contactar organismos de emergencia.,Instructor responsable,Línea de emergencia,true,2026-06-16T22:15:24.436Z,2026-06-16T22:15:24.436Z,7,0
+6a31cb03f9be4a443a762201,Evacuación preventiva,Dirigir a los participantes hacia el punto de encuentro.,Brigada de emergencia,Alarma institucional,true,2026-06-16T22:15:31.999Z,2026-06-16T22:15:31.999Z,8,0
+6a31cb49f9be4a443a762202,Lesión musculoesquelética,Suspender actividad y brindar atención inicial.,Instructor responsable,Llamada telefónica,true,2026-06-16T22:16:41.363Z,2026-06-16T22:16:41.363Z,9,0
+6a31cc91f9be4a443a762204,Emergencia psicosocial,Brindar acompañamiento inicial y activar apoyo institucional.,Bienestar al Aprendiz,Llamada telefónica,true,2026-06-16T22:22:09.376Z,2026-06-16T22:22:09.376Z,11,0
