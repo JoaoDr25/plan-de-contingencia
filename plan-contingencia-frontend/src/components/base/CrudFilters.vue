@@ -2,10 +2,7 @@
 
     <div class="crud-filters">
 
-        <q-option-group 
-            v-model="selectedFilter" :options="options"
-            type="radio" inline color="primary"
-        />
+        <q-option-group v-model="selectedFilter" :options="options" type="radio" inline color="primary" />
 
     </div>
 
@@ -17,7 +14,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
 
-    filters: {
+    options: {
         type: Array,
         required: true
     },
@@ -41,10 +38,8 @@ const selectedFilter = computed({
 </script>
 
 <style scoped lang="scss">
-
 .crud-filters {
     display: flex;
     align-items: center;
 }
-
 </style>
