@@ -1,9 +1,0 @@
-_id,nombreEntidad,tipoContacto,telefonoPrincipal,ciudad,estado,createdAt,updatedAt,numero,__v
-6a393b94661ea623edc95770,Hospital Regional de San Gil,Hospital,607724780,San Gil,true,2026-06-22T13:41:40.153Z,2026-06-22T14:41:54.100Z,1,0
-6a393bc8661ea623edc95771,Cuerpo de Bomberos Voluntarios de San Gil,Bomberos,119,San Gil,true,2026-06-22T13:42:32.481Z,2026-06-22T13:42:32.481Z,2,0
-6a393bd3661ea623edc95772,Policía Nacional,Policía,123,San Gil,true,2026-06-22T13:42:43.225Z,2026-06-22T13:42:43.225Z,3,0
-6a393be0661ea623edc95773,Defensa Civil Colombiana,Defensa Civil,144,San Gil,true,2026-06-22T13:42:56.064Z,2026-06-22T13:42:56.064Z,4,0
-6a393bf5661ea623edc95774,Cruz Roja Colombiana,Emergencias Médicas,132,San Gil,true,2026-06-22T13:43:17.677Z,2026-06-22T13:43:17.677Z,5,0
-6a393c00661ea623edc95775,Dirección de Tránsito Municipal,Tránsito,6077245678,San Gil,true,2026-06-22T13:43:28.843Z,2026-06-22T13:43:28.843Z,6,0
-6a393c0b661ea623edc95776,Servicio de Ambulancias Vital,Ambulancia,6077246789,San Gil,true,2026-06-22T13:43:39.246Z,2026-06-22T13:43:39.246Z,7,0
-6a394128661ea623edc95777,Oficina Municipal de Gestión del Riesgo,Gestión del Riesgo,6077247890,San Gil,true,2026-06-22T14:05:28.788Z,2026-06-22T14:05:28.788Z,8,0
