@@ -14,7 +14,7 @@
 
       <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="programasFilters" />
+        <CrudFilters v-model="selectedFilter" :options="PROGRAMAS_FILTERS" />
 
       </template>
 
@@ -28,15 +28,24 @@
 
     <BaseTable :rows="paginatedRows" :columns="PROGRAMAS_COLUMNS" :loading="loading" :current-page="currentPage"
       :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event" >
+      :total="filteredRows.length" @change-page="currentPage = $event">
 
-     <template #body-cell-estado="props">
+      <template #body-cell-estado="props">
 
         <q-td :props="props">
-            <StatusChip :status="props.value"/>
+          <StatusChip :status="props.value" />
         </q-td>
 
-    </template>
+      </template>
+
+      <template #body-cell-opciones="props">
+
+        <q-td :props="props">
+          <CrudActions :actions="getCrudActions()" @view="viewItem(props.row)" @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)" />
+        </q-td>
+
+      </template>
 
     </BaseTable>
 
@@ -47,8 +56,10 @@
 <script setup>
 
 import { ref, computed } from 'vue'
-import { programasFilters } from "src/constants/filters/programas.constants";
+
+import { PROGRAMAS_FILTERS } from "src/constants/filters/programas.constants";
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns';
+import { PROGRAMAS_MOCK } from 'src/mocks/programas.mock';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/base/CrudHeader.vue';
@@ -58,6 +69,7 @@ import CrudToolbar from 'src/components/base/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
 import BaseTable from 'src/components/base/BaseTable.vue';
 import StatusChip from 'src/components/base/StatusChip.vue';
+import CrudActions from 'src/components/base/CrudActions.vue';
 
 const openDialog = () => {
   console.log('Abrir diálogo de creación')
@@ -71,89 +83,7 @@ const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = ref([
-  {
-    id: 1,
-    ficha: '2876541',
-    nombre: 'Análisis y Desarrollo de Software',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 2,
-    ficha: '2876542',
-    nombre: 'Gestión Administrativa',
-    nivel: 'Técnico',
-    centro: 'Centro de Servicios',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 3,
-    ficha: '2876543',
-    nombre: 'Producción Agropecuaria',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Agropecuario',
-    fecha: "00/00/0000",
-    estado: 'Inactivo'
-  },
-  {
-    id: 4,
-    ficha: '2876541',
-    nombre: 'Análisis y Desarrollo de Software',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 5,
-    ficha: '2876542',
-    nombre: 'Gestión Administrativa',
-    nivel: 'Técnico',
-    centro: 'Centro de Servicios',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 6,
-    ficha: '2876543',
-    nombre: 'Producción Agropecuaria',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Agropecuario',
-    fecha: "00/00/0000",
-    estado: 'Inactivo'
-  },
-  {
-    id: 7,
-    ficha: '2876541',
-    nombre: 'Análisis y Desarrollo de Software',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 8,
-    ficha: '2876542',
-    nombre: 'Gestión Administrativa',
-    nivel: 'Técnico',
-    centro: 'Centro de Servicios',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 9,
-    ficha: '2876543',
-    nombre: 'Producción Agropecuaria',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Agropecuario',
-    fecha: "00/00/0000",
-    estado: 'Inactivo'
-  }
-])
+const rows = ref(PROGRAMAS_MOCK)
 
 function normalizeText(text) {
 
@@ -206,11 +136,30 @@ const startRow = computed(() => {
 
 
 const endRow = computed(() => {
-
   return Math.min(
     currentPage.value * rowsPerPage.value,
     filteredRows.value.length
   )
 })
+
+function viewItem(row) {
+  console.log('Ver', row)
+}
+
+function editItem(row) {
+  console.log('Editar', row)
+}
+
+function deleteItem(row) {
+  console.log('Eliminar', row)
+}
+
+function getCrudActions() {
+  return [
+    'view',
+    'edit',
+    'delete'
+  ]
+}
 
 </script>

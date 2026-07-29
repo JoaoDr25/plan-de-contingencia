@@ -1,0 +1,49 @@
+<template>
+
+<div class="crud-actions">
+
+<BaseIconButton
+        v-for="action in actions"
+        :key="action"
+        :action="action"
+        @click="emit(action.action)"
+    />
+
+</div>
+
+</template>
+
+<script setup>
+
+import BaseIconButton from './BaseIconButton.vue'
+
+const {
+    actions
+} = defineProps({
+
+    actions: {
+        type: Array,
+        default: () => []
+    }
+})
+
+const emit = defineEmits([
+    'view',
+    'edit',
+    'delete'
+])
+
+
+</script>
+
+
+<style scoped lang="scss">
+
+.crud-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+</style>

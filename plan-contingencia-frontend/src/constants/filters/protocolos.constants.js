@@ -1,4 +1,4 @@
-export const protocolosFilters = [
+export const PROTOCOLOS_FILTERS = [
 
     {
         label: 'Tipo',

@@ -1,4 +1,4 @@
-export const contactosFilters = [
+export const CONTACTOS_FILTERS = [
 
     {
         label: 'Tipo Contacto',
@@ -16,5 +16,4 @@ export const contactosFilters = [
         label: 'Estado',
         value: 'estado'
     }
-
 ]

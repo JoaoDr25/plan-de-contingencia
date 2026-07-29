@@ -1211,3 +1211,16 @@ Esta arquitectura constituye actualmente la base sobre la cual se desarrollan to
 
 ---
 
+# Mock Data
+
+Esta carpeta contiene datos simulados utilizados durante el desarrollo del frontend.
+
+Su propósito es:
+
+- Desarrollo sin backend.
+- Demostraciones del sistema.
+- Pruebas de componentes.
+- Testing.
+
+Estos archivos no deben utilizarse en producción una vez integrados los servicios API.
+

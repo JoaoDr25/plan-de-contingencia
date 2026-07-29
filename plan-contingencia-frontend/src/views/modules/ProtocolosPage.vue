@@ -14,7 +14,7 @@
 
       <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="protocolosFilters" />
+        <CrudFilters v-model="selectedFilter" :options="PROTOCOLOS_FILTERS" />
 
       </template>
 
@@ -38,6 +38,15 @@
 
     </template>
 
+    <template #body-cell-opciones="props">
+
+        <q-td :props="props">
+          <CrudActions :actions="getCrudActions()" @view="viewItem(props.row)" @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)" />
+        </q-td>
+
+      </template>
+
      </BaseTable>
 
   </BasePage>
@@ -47,8 +56,9 @@
 <script setup>
 
 import { ref, computed } from 'vue';
-import { protocolosFilters } from 'src/constants/filters/protocolos.constants';
+import { PROTOCOLOS_FILTERS } from 'src/constants/filters/protocolos.constants';
 import { PROTOCOLOS_COLUMNS } from 'src/constants/tables/protocolos.columns';
+import { PROTOCOLOS_MOCK } from 'src/mocks/protocolos.mock';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/base/CrudHeader.vue';
@@ -58,6 +68,7 @@ import CrudToolbar from 'src/components/base/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
 import BaseTable from 'src/components/base/BaseTable.vue';
 import StatusChip from 'src/components/base/StatusChip.vue';
+import CrudActions from 'src/components/base/CrudActions.vue';
 
 const openDialog = () => {
   console.log('Abrir diálogo de creación')
@@ -71,80 +82,7 @@ const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = ref([
-    {
-        id: 1,
-        tipo: 'Accidente por Caída',
-        accion: 'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
-        responsable: 'Instructor Responsable',
-        medio: 'Llamada telefónica',
-        estado: 'Activo'
-    },
-    {
-        id: 2,
-        tipo: 'Incendio',
-        accion: 'Evacuar el área de forma inmediata y notificar al Cuerpo de Bomberos.',
-        responsable: 'Brigadista de Emergencias',
-        medio: 'Llamada telefónica',
-        estado: 'Activo'
-    },
-    {
-        id: 3,
-        tipo: 'Emergencia Médica',
-        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
-        responsable: 'Instructor Responsable',
-        medio: 'Línea de Emergencias',
-        estado: 'Activo'
-    },
-    {
-        id: 4,
-        tipo: 'Derrame de Sustancias Químicas',
-        accion: 'Aislar la zona, utilizar EPP y aplicar el procedimiento de contención.',
-        responsable: 'Responsable de Seguridad',
-        medio: 'Radio de Comunicación',
-        estado: 'Activo'
-    },
-    {
-        id: 5,
-        tipo: 'Picadura o Mordedura de Animal',
-        accion: 'Prestar atención inicial y trasladar al aprendiz al centro asistencial más cercano.',
-        responsable: 'Instructor Responsable',
-        medio: 'Llamada telefónica',
-        estado: 'Activo'
-    },
-    {
-        id: 6,
-        tipo: 'Condiciones Climáticas Extremas',
-        accion: 'Suspender la actividad y trasladar al grupo a un lugar seguro.',
-        responsable: 'Coordinador de la Actividad',
-        medio: 'Comunicación Verbal',
-        estado: 'Activo'
-    },
-    {
-        id: 7,
-        tipo: 'Accidente de Tránsito',
-        accion: 'Asegurar la escena, contactar a los organismos de emergencia y reportar el incidente.',
-        responsable: 'Conductor Responsable',
-        medio: 'Línea de Emergencias',
-        estado: 'Activo'
-    },
-    {
-        id: 8,
-        tipo: 'Persona Extraviada',
-        accion: 'Realizar conteo del grupo, activar la búsqueda y notificar a las autoridades si es necesario.',
-        responsable: 'Instructor Responsable',
-        medio: 'Teléfono Celular',
-        estado: 'Activo'
-    },
-    {
-        id: 9,
-        tipo: 'Evacuación Preventiva',
-        accion: 'Guiar al grupo hacia el punto de encuentro siguiendo la ruta de evacuación establecida.',
-        responsable: 'Brigadista de Emergencias',
-        medio: 'Alarma y Comunicación Verbal',
-        estado: 'Activo'
-    }
-]);
+const rows = ref(PROTOCOLOS_MOCK);
 
 function normalizeText(text) {
 
@@ -152,7 +90,6 @@ function normalizeText(text) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
-
 }
 
 const filteredRows = computed(() => {
@@ -160,9 +97,7 @@ const filteredRows = computed(() => {
   const search = normalizeText(searchText.value.trim())
 
   if (!search) {
-
     return rows.value
-
   }
 
   return rows.value.filter((row) => {
@@ -172,11 +107,8 @@ const filteredRows = computed(() => {
     if (selectedFilter.value === 'estado') {
       return value === search
     }
-
     return value.includes(search)
-
   })
-
 })
 
 const totalPages = computed(() => {
@@ -185,7 +117,6 @@ const totalPages = computed(() => {
     1,
     Math.ceil(filteredRows.value.length / rowsPerPage.value)
   )
-
 })
 
 const paginatedRows = computed(() => {
@@ -201,9 +132,7 @@ const startRow = computed(() => {
   if (filteredRows.value.length === 0) {
     return 0
   }
-
   return (currentPage.value - 1) * rowsPerPage.value + 1
-
 })
 
 
@@ -213,7 +142,26 @@ const endRow = computed(() => {
     currentPage.value * rowsPerPage.value,
     filteredRows.value.length
   )
-
 })
+
+function viewItem(row) {
+  console.log('Ver', row)
+}
+
+function editItem(row) {
+  console.log('Editar', row)
+}
+
+function deleteItem(row) {
+  console.log('Eliminar', row)
+}
+
+function getCrudActions() {
+  return [
+    'view',
+    'edit',
+    'delete'
+  ]
+}
 
 </script>

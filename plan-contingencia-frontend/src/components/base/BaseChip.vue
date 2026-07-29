@@ -1,6 +1,10 @@
 <template>
 
-    <q-chip dense :outline="outlined" class="base-chip" :style="{
+    <q-chip dense :outline="outlined" class="base-chip" 
+    :class="{
+        'base-chip--compact': compact
+    }" 
+    :style="{
         backgroundColor: color,
         color: textColor
     }">
@@ -16,7 +20,8 @@ const {
     label,
     color,
     textColor,
-    outlined
+    outlined,
+    compact
 } = defineProps({
 
     label: {
@@ -35,6 +40,10 @@ const {
     },
 
     outlined: {
+        type: Boolean,
+        default: false
+    },
+    compact: {
         type: Boolean,
         default: false
     }
@@ -66,5 +75,9 @@ const {
     width: 100%;
     padding: 0;
     color: inherit !important;
+}
+
+.base-chip--compact{
+    min-width:46px;
 }
 </style>

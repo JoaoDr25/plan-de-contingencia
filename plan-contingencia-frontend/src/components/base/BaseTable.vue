@@ -25,22 +25,29 @@
             </template>
 
             <template v-for="col in columns" :key="col.name" v-slot:[`body-cell-${col.name}`]="props">
-               
+
                 <template v-if="$slots[`body-cell-${col.name}`]">
-                  
+
                     <slot :name="`body-cell-${col.name}`" v-bind="props" />
-              
+
                 </template>
-               
+
                 <template v-else>
-                  
+
                     <q-td :props="props" :style="getCellStyle(props.col)" :class="getCellClass(props.col)">
-                     
+
                         {{ props.value }}
-                   
+
                     </q-td>
-              
+
                 </template>
+
+            </template>
+
+            <template v-for="(_, slotName) in $slots" #[slotName]="slotProps" :key="slotName">
+
+                <slot :name="slotName" v-bind="slotProps" />
+
             </template>
 
         </q-table>

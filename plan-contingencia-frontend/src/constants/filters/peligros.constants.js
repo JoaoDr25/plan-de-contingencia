@@ -1,4 +1,4 @@
-export const peligrosFilters = [
+export const PELIGROS_FILTERS = [
 
     {
         label: 'Nombre',
@@ -8,5 +8,4 @@ export const peligrosFilters = [
         label: 'Categoría',
         value: 'categoria'
     }
-
 ]

@@ -60,7 +60,7 @@ const selectedFilter = computed({
 }
 
 .crud-filters :deep(.q-radio__label) {
-    padding-left: 2px;
+    padding-left: 0;
 }
 
 @media (max-width: 600px) {

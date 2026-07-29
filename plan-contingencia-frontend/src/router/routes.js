@@ -155,7 +155,7 @@ const routes = [
     meta: {
           title: 'Página no encontrada'
         },
-    component: () => import('src/components/errorNotFound/ErrorNotFound.vue'),
+    component: () => import('src/components/error/ErrorNotFound.vue'),
   },
 ]
 

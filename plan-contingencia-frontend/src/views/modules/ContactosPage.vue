@@ -14,7 +14,7 @@
 
       <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="contactosFilters" />
+        <CrudFilters v-model="selectedFilter" :options="CONTACTOS_FILTERS" />
 
       </template>
 
@@ -37,6 +37,15 @@
 
     </template>
 
+    <template #body-cell-opciones="props">
+
+        <q-td :props="props">
+          <CrudActions :actions="getCrudActions()" @view="viewItem(props.row)" @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)" />
+        </q-td>
+
+      </template>
+
      </BaseTable>
 
   </BasePage>
@@ -46,8 +55,10 @@
 <script setup>
 
 import { ref, computed } from 'vue'
-import { contactosFilters } from 'src/constants/filters/contactos.constants';
+
+import { CONTACTOS_FILTERS } from 'src/constants/filters/contactos.constants';
 import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns';
+import { CONTACTOS_MOCK } from 'src/mocks/contactos.mock';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/base/CrudHeader.vue';
@@ -57,6 +68,7 @@ import CrudToolbar from 'src/components/base/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
 import BaseTable from 'src/components/base/BaseTable.vue';
 import StatusChip from 'src/components/base/StatusChip.vue';
+import CrudActions from 'src/components/base/CrudActions.vue';
 
 const openDialog = () => {
   console.log('Abrir diálogo de creación')
@@ -70,89 +82,7 @@ const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = ref([
-    {
-        id: 1,
-        tipo: 'Hospital',
-        nombre: 'Hospital Universitario Erasmo Meoz',
-        telefono: '(607) 5827777',
-        direccion: 'Av. 11E #5AN-71',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 2,
-        tipo: 'Bomberos',
-        nombre: 'Cuerpo de Bomberos Voluntarios',
-        telefono: '(607) 5724200',
-        direccion: 'Av. 7 #6-15',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 3,
-        tipo: 'Policía',
-        nombre: 'Policía Metropolitana de Cúcuta',
-        telefono: '123',
-        direccion: 'Av. Libertadores #15-25',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 4,
-        tipo: 'Cruz Roja',
-        nombre: 'Cruz Roja Colombiana - Seccional Norte de Santander',
-        telefono: '(607) 5715909',
-        direccion: 'Calle 15 #4-28',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 5,
-        tipo: 'Defensa Civil',
-        nombre: 'Defensa Civil Colombiana - Junta Cúcuta',
-        telefono: '(607) 5830030',
-        direccion: 'Calle 2N #8-40',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 6,
-        tipo: 'Tránsito',
-        nombre: 'Secretaría de Tránsito Municipal',
-        telefono: '(607) 5784949',
-        direccion: 'Av. Gran Colombia #8-35',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 7,
-        tipo: 'Ambulancia',
-        nombre: 'Servicio de Ambulancias Vital',
-        telefono: '125',
-        direccion: 'Calle 10 #12-45',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 8,
-        tipo: 'Gestión del Riesgo',
-        nombre: 'Oficina Municipal para la Gestión del Riesgo',
-        telefono: '(607) 5955555',
-        direccion: 'Calle 11 #5-49 - Alcaldía de Cúcuta',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 9,
-        tipo: 'EPS',
-        nombre: 'Nueva EPS',
-        telefono: '(601) 3077022',
-        direccion: 'Av. 0 #10-50',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    }
-]);
+const rows = ref(CONTACTOS_MOCK);
 
 function normalizeText(text) {
 
@@ -168,9 +98,7 @@ const filteredRows = computed(() => {
   const search = normalizeText(searchText.value.trim())
 
   if (!search) {
-
     return rows.value
-
   }
 
   return rows.value.filter((row) => {
@@ -180,9 +108,7 @@ const filteredRows = computed(() => {
     if (selectedFilter.value === 'estado') {
       return value === search
     }
-
     return value.includes(search)
-
   })
 
 })
@@ -193,14 +119,12 @@ const totalPages = computed(() => {
     1,
     Math.ceil(filteredRows.value.length / rowsPerPage.value)
   )
-
 })
 
 const paginatedRows = computed(() => {
 
   const start = (currentPage.value - 1) * rowsPerPage.value
   const end = start + rowsPerPage.value
-
   return filteredRows.value.slice(start, end)
 })
 
@@ -209,9 +133,7 @@ const startRow = computed(() => {
   if (filteredRows.value.length === 0) {
     return 0
   }
-
   return (currentPage.value - 1) * rowsPerPage.value + 1
-
 })
 
 
@@ -221,7 +143,26 @@ const endRow = computed(() => {
     currentPage.value * rowsPerPage.value,
     filteredRows.value.length
   )
-
 })
+
+function viewItem(row) {
+  console.log('Ver', row)
+}
+
+function editItem(row) {
+  console.log('Editar', row)
+}
+
+function deleteItem(row) {
+  console.log('Eliminar', row)
+}
+
+function getCrudActions() {
+  return [
+    'view',
+    'edit',
+    'delete'
+  ]
+}
 
 </script>

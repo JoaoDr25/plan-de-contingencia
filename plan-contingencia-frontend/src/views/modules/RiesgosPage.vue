@@ -8,13 +8,13 @@
 
       <template #right>
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
 
       </template>
 
       <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="riesgosFilters" />
+        <CrudFilters v-model="selectedFilter" :options="RIESGOS_FILTERS" />
 
       </template>
 
@@ -27,7 +27,27 @@
     </CrudToolbar>
 
     <BaseTable :rows="paginatedRows" :columns="RIESGOS_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event"/>
+      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+      :total="filteredRows.length" @change-page="currentPage = $event">
+
+      <template #body-cell-nivel="props">
+
+        <q-td :props="props">
+          <LevelChip :level="props.value" />
+        </q-td>
+
+      </template>
+
+      <template #body-cell-opciones="props">
+
+        <q-td :props="props">
+          <CrudActions :actions="getCrudActions()" @view="viewItem(props.row)" @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)" />
+        </q-td>
+
+      </template>
+
+    </BaseTable>
 
   </BasePage>
 
@@ -36,8 +56,10 @@
 <script setup>
 
 import { ref, computed } from 'vue';
-import { riesgosFilters } from 'src/constants/filters/riesgos.constants';
+
+import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants';
 import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns';
+import { RIESGOS_MOCK } from 'src/mocks/riesgos.mock';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/base/CrudHeader.vue';
@@ -46,6 +68,8 @@ import BaseSearch from 'src/components/base/BaseSearch.vue';
 import CrudToolbar from 'src/components/base/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
 import BaseTable from 'src/components/base/BaseTable.vue';
+import LevelChip from 'src/components/base/LevelChip.vue';
+import CrudActions from 'src/components/base/CrudActions.vue';
 
 const openDialog = () => {
   console.log('Abrir diálogo de creación')
@@ -59,80 +83,7 @@ const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = ref([
-    {
-        id: 1,
-        riesgo: 'Fracturas y Esguinces',
-        nivel: 'Alto',
-        consecuencia: 'Lesiones físicas',
-        descripcion: 'Posibles lesiones ocasionadas por caídas, tropiezos o pérdida del equilibrio.',
-        protocolos: 2
-    },
-    {
-        id: 2,
-        riesgo: 'Intoxicación por Sustancias Químicas',
-        nivel: 'Alto',
-        consecuencia: 'Afectación respiratoria',
-        descripcion: 'Exposición o contacto accidental con sustancias químicas peligrosas.',
-        protocolos: 1
-    },
-    {
-        id: 3,
-        riesgo: 'Quemaduras Solares',
-        nivel: 'Medio',
-        consecuencia: 'Lesiones en la piel',
-        descripcion: 'Exposición prolongada a la radiación solar durante actividades al aire libre.',
-        protocolos: 1
-    },
-    {
-        id: 4,
-        riesgo: 'Cortes y Laceraciones',
-        nivel: 'Medio',
-        consecuencia: 'Heridas superficiales o profundas',
-        descripcion: 'Uso inadecuado de herramientas o elementos cortopunzantes.',
-        protocolos: 2
-    },
-    {
-        id: 5,
-        riesgo: 'Picaduras y Mordeduras',
-        nivel: 'Medio',
-        consecuencia: 'Reacciones alérgicas o infecciones',
-        descripcion: 'Contacto con insectos o animales durante actividades de campo.',
-        protocolos: 1
-    },
-    {
-        id: 6,
-        riesgo: 'Lesión Muscular',
-        nivel: 'Bajo',
-        consecuencia: 'Dolor o limitación del movimiento',
-        descripcion: 'Manipulación inadecuada de cargas o posturas forzadas.',
-        protocolos: 1
-    },
-    {
-        id: 7,
-        riesgo: 'Accidente de Tránsito',
-        nivel: 'Alto',
-        consecuencia: 'Traumatismos múltiples',
-        descripcion: 'Incidentes durante el desplazamiento hacia o desde la actividad.',
-        protocolos: 2
-    },
-    {
-        id: 8,
-        riesgo: 'Hipotermia o Golpe de Calor',
-        nivel: 'Alto',
-        consecuencia: 'Compromiso del estado de salud',
-        descripcion: 'Exposición a condiciones climáticas extremas durante la actividad.',
-        protocolos: 1
-    },
-    {
-        id: 9,
-        riesgo: 'Pérdida Auditiva Temporal',
-        nivel: 'Medio',
-        consecuencia: 'Disminución de la capacidad auditiva',
-        descripcion: 'Exposición prolongada a altos niveles de ruido.',
-        protocolos: 1
-    }
-]);
+const rows = ref(RIESGOS_MOCK);
 
 function normalizeText(text) {
 
@@ -140,7 +91,6 @@ function normalizeText(text) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
-
 }
 
 const filteredRows = computed(() => {
@@ -148,9 +98,7 @@ const filteredRows = computed(() => {
   const search = normalizeText(searchText.value.trim())
 
   if (!search) {
-
     return rows.value
-
   }
 
   return rows.value.filter((row) => {
@@ -160,11 +108,8 @@ const filteredRows = computed(() => {
     if (selectedFilter.value === 'estado') {
       return value === search
     }
-
     return value.includes(search)
-
   })
-
 })
 
 const totalPages = computed(() => {
@@ -173,7 +118,6 @@ const totalPages = computed(() => {
     1,
     Math.ceil(filteredRows.value.length / rowsPerPage.value)
   )
-
 })
 
 const paginatedRows = computed(() => {
@@ -189,9 +133,7 @@ const startRow = computed(() => {
   if (filteredRows.value.length === 0) {
     return 0
   }
-
   return (currentPage.value - 1) * rowsPerPage.value + 1
-
 })
 
 
@@ -201,7 +143,26 @@ const endRow = computed(() => {
     currentPage.value * rowsPerPage.value,
     filteredRows.value.length
   )
-
 })
+
+function viewItem(row) {
+  console.log('Ver', row)
+}
+
+function editItem(row) {
+  console.log('Editar', row)
+}
+
+function deleteItem(row) {
+  console.log('Eliminar', row)
+}
+
+function getCrudActions() {
+  return [
+    'view',
+    'edit',
+    'delete'
+  ]
+}
 
 </script>

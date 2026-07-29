@@ -14,7 +14,7 @@
 
       <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="elementosFilters" />
+        <CrudFilters v-model="selectedFilter" :options="EPP_FILTERS" />
 
       </template>
 
@@ -38,6 +38,24 @@
 
     </template>
 
+    <template #body-cell-nivel="props">
+
+        <q-td :props="props">
+          <LevelChip :level="props.value" />
+        </q-td>
+
+      </template>
+
+       <template #body-cell-opciones="props">
+
+        <q-td :props="props">
+
+          <CrudActions :actions="getCrudActions()" @view="viewItem(props.row)" @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)" />
+        </q-td>
+
+      </template>
+
      </BaseTable>
 
   </BasePage>
@@ -47,8 +65,10 @@
 <script setup>
 
 import { ref, computed } from 'vue';
-import { elementosFilters } from 'src/constants/filters/epp.constantas';
+
+import { EPP_FILTERS } from 'src/constants/filters/epp.constantas';
 import { EPP_COLUMNS } from 'src/constants/tables/epp.columns';
+import { EPP_MOCK } from 'src/mocks/epp.mock';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/base/CrudHeader.vue';
@@ -58,6 +78,8 @@ import CrudToolbar from 'src/components/base/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
 import BaseTable from 'src/components/base/BaseTable.vue';
 import StatusChip from 'src/components/base/StatusChip.vue';
+import LevelChip from 'src/components/base/LevelChip.vue';
+import CrudActions from 'src/components/base/CrudActions.vue';
 
 const openDialog = () => {
   console.log('Abrir diálogo de creación')
@@ -71,80 +93,7 @@ const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = ref([
-  {
-    id: 1,
-    nombre: 'Casco de Seguridad',
-    categoria: 'Protección de Cabeza',
-    nivel: 'Alto',
-    descripcion: 'Protege la cabeza contra impactos y caída de objetos.',
-    estado: 'Activo'
-  },
-  {
-    id: 2,
-    nombre: 'Gafas de Seguridad',
-    categoria: 'Protección Ocular',
-    nivel: 'Medio',
-    descripcion: 'Previenen lesiones por partículas, polvo y salpicaduras.',
-    estado: 'Activo'
-  },
-  {
-    id: 3,
-    nombre: 'Guantes de Nitrilo',
-    categoria: 'Protección de Manos',
-    nivel: 'Medio',
-    descripcion: 'Protegen las manos del contacto con sustancias químicas y biológicas.',
-    estado: 'Activo'
-  },
-  {
-    id: 4,
-    nombre: 'Botas de Seguridad',
-    categoria: 'Protección de Pies',
-    nivel: 'Alto',
-    descripcion: 'Brindan protección contra impactos, perforaciones y superficies resbalosas.',
-    estado: 'Activo'
-  },
-  {
-    id: 5,
-    nombre: 'Chaleco Reflectivo',
-    categoria: 'Protección Corporal',
-    nivel: 'Bajo',
-    descripcion: 'Mejora la visibilidad del usuario en zonas de circulación.',
-    estado: 'Activo'
-  },
-  {
-    id: 6,
-    nombre: 'Respirador N95',
-    categoria: 'Protección Respiratoria',
-    nivel: 'Alto',
-    descripcion: 'Filtra partículas suspendidas en el aire y reduce la inhalación de contaminantes.',
-    estado: 'Activo'
-  },
-  {
-    id: 7,
-    nombre: 'Protector Auditivo Tipo Copa',
-    categoria: 'Protección Auditiva',
-    nivel: 'Alto',
-    descripcion: 'Disminuye la exposición a niveles elevados de ruido.',
-    estado: 'Activo'
-  },
-  {
-    id: 8,
-    nombre: 'Arnés de Seguridad',
-    categoria: 'Protección contra Caídas',
-    nivel: 'Alto',
-    descripcion: 'Sistema de protección personal para trabajos en alturas.',
-    estado: 'Activo'
-  },
-  {
-    id: 9,
-    nombre: 'Bata de Laboratorio',
-    categoria: 'Protección Corporal',
-    nivel: 'Medio',
-    descripcion: 'Protege la ropa y el cuerpo durante prácticas de laboratorio.',
-    estado: 'Activo'
-  }
-]);
+const rows = ref(EPP_MOCK);
 
 function normalizeText(text) {
 
@@ -160,9 +109,7 @@ const filteredRows = computed(() => {
   const search = normalizeText(searchText.value.trim())
 
   if (!search) {
-
     return rows.value
-
   }
 
   return rows.value.filter((row) => {
@@ -172,9 +119,7 @@ const filteredRows = computed(() => {
     if (selectedFilter.value === 'estado') {
       return value === search
     }
-
     return value.includes(search)
-
   })
 
 })
@@ -201,7 +146,6 @@ const startRow = computed(() => {
     return 0
   }
   return (currentPage.value - 1) * rowsPerPage.value + 1
-
 })
 
 
@@ -211,7 +155,26 @@ const endRow = computed(() => {
     currentPage.value * rowsPerPage.value,
     filteredRows.value.length
   )
-
 })
+
+function viewItem(row) {
+  console.log('Ver', row)
+}
+
+function editItem(row) {
+  console.log('Editar', row)
+}
+
+function deleteItem(row) {
+  console.log('Eliminar', row)
+}
+
+function getCrudActions() {
+  return [
+    'view',
+    'edit',
+    'delete'
+  ]
+}
 
 </script>

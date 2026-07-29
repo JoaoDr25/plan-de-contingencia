@@ -1,4 +1,4 @@
-export const usuariosFilters = [
+export const USUARIOS_FILTERS = [
 
     {
         label: 'Documento',

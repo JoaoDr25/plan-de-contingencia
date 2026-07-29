@@ -1,4 +1,4 @@
-export const elementosFilters = [
+export const EPP_FILTERS = [
 
     {
         label: 'Nombre',
@@ -16,5 +16,4 @@ export const elementosFilters = [
         label: 'Estado',
         value: 'estado'
     }
-
 ]

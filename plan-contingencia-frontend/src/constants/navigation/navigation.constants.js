@@ -1,4 +1,4 @@
-import { ROLES } from './roles.constants.js'
+import { ROLES } from '../system/roles.constants.js'
 
 export const navigation = {
     

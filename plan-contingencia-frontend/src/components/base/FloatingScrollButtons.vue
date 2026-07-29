@@ -80,7 +80,7 @@ onUnmounted(() => {
 .floating-scroll-buttons {
     position: fixed;
     right: 38px;
-    bottom: 65px;
+    bottom: 25px;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

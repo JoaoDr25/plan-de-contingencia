@@ -1,4 +1,4 @@
-export const riesgosFilters = [
+export const RIESGOS_FILTERS = [
 
     {
         label: 'Riesgo',
@@ -8,5 +8,4 @@ export const riesgosFilters = [
         label: 'Nivel',
         value: 'nivel'
     }
-
 ]

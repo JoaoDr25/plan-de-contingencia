@@ -49,7 +49,7 @@ const search = computed({
 <style scoped lang="scss">
 
 .base-search {
-    width: 280px;
+    width: 300px;
     flex-shrink:0;
 }
 
@@ -59,7 +59,7 @@ const search = computed({
 
 .base-search :deep(.q-field__control) {
     height: 36px;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 .base-search :deep(.q-field__native) {
@@ -74,7 +74,7 @@ const search = computed({
 .base-search :deep(.q-icon) {
     font-size: 18px;
     color: #6b7280;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
 }
 
 .base-search :deep(input::placeholder) {
