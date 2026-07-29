@@ -3,7 +3,7 @@ export const PROGRAMAS_COLUMNS = [
         name: 'id',
         label: 'N°',
         field: 'id',
-        align: 'id',
+        align: 'left',
         sortable: true
     },
     {
@@ -22,9 +22,10 @@ export const PROGRAMAS_COLUMNS = [
     },
     {
         name: 'nivel',
-        label: 'Nivel',
+        label: 'Nivel de Formación',
         field: 'nivel',
-        align: 'left'
+        align: 'left',
+        sortable: true
     },
     {
         name: 'centro',
@@ -36,7 +37,8 @@ export const PROGRAMAS_COLUMNS = [
         name: 'fecha',
         label: 'Fecha de Creación',
         field: 'fecha',
-        align: 'fecha'
+        align: 'center',
+        sortable: false
     },
     {
         name: 'estado',
@@ -47,7 +49,7 @@ export const PROGRAMAS_COLUMNS = [
     {
         name: 'opciones',
         label: 'Opciones',
-        field: 'opciones',
+        field: 'Opciones',
         align: 'center'
     }
 ]

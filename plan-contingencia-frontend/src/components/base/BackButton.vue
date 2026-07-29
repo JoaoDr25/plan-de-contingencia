@@ -3,6 +3,7 @@
     <q-btn 
     round 
     unelevated 
+    size="10.9px"
     icon="arrow_back" 
     class="back-button"
     @click="goBack" 
@@ -36,8 +37,6 @@ function goBack() {
 @use 'src/css/variables.scss' as *;
 
 .back-button {
-    width: 42px;
-    height: 42px;
     border-radius: 50%;
     background-color: $color-primary;
     color: $color-background;

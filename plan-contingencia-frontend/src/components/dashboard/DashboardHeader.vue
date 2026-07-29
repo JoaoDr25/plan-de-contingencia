@@ -2,12 +2,6 @@
 
   <section class="dashboard-header">
 
-    <div class="dashboard-header__navigation">
-
-        <backButton route-name="dashboard"/>
-
-    </div>
-
     <div class="dashboard-header__actions">
 
         <PrimaryActionButton 
@@ -22,7 +16,6 @@
 
 <script setup>
 
-import BackButton from '../base/BackButton.vue';
 import PrimaryActionButton from '../base/PrimaryActionButton.vue';
 
 import { useRouter } from 'vue-router';
@@ -40,20 +33,13 @@ function goToCreatePlan(){
 
 .dashboard-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding-bottom: 23px;
 }
 
-.dashboard-header__navigation {
-    display: flex;
-    align-items: center;
-}
-
 .dashboard-header__actions {
-    display: flex;
-    align-items: center;
+   margin-left: auto;
 }
 
 </style>

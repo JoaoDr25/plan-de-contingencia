@@ -62,7 +62,7 @@ const rows = [
         nombre: 'Análisis y Desarrollo de Software',
         nivel: 'Tecnólogo',
         centro: 'Centro Industrial',
-        fecha: "00/00/00",
+        fecha: "00/00/0000",
         estado: 'Activo'
     },
     {
@@ -71,7 +71,7 @@ const rows = [
         nombre: 'Gestión Administrativa',
         nivel: 'Técnico',
         centro: 'Centro de Servicios',
-        fecha: "00/00/00",
+        fecha: "00/00/0000",
         estado: 'Activo'
     },
     {
@@ -80,7 +80,61 @@ const rows = [
         nombre: 'Producción Agropecuaria',
         nivel: 'Tecnólogo',
         centro: 'Centro Agropecuario',
-        fecha: "00/00/00",
+        fecha: "00/00/0000",
+        estado: 'Inactivo'
+    },
+      {
+        id: 4,
+        ficha: '2876541',
+        nombre: 'Análisis y Desarrollo de Software',
+        nivel: 'Tecnólogo',
+        centro: 'Centro Industrial',
+        fecha: "00/00/0000",
+        estado: 'Activo'
+    },
+    {
+        id: 5,
+        ficha: '2876542',
+        nombre: 'Gestión Administrativa',
+        nivel: 'Técnico',
+        centro: 'Centro de Servicios',
+        fecha: "00/00/0000",
+        estado: 'Activo'
+    },
+    {
+        id: 6,
+        ficha: '2876543',
+        nombre: 'Producción Agropecuaria',
+        nivel: 'Tecnólogo',
+        centro: 'Centro Agropecuario',
+        fecha: "00/00/0000",
+        estado: 'Inactivo'
+    },
+      {
+        id: 7,
+        ficha: '2876541',
+        nombre: 'Análisis y Desarrollo de Software',
+        nivel: 'Tecnólogo',
+        centro: 'Centro Industrial',
+        fecha: "00/00/0000",
+        estado: 'Activo'
+    },
+    {
+        id: 8,
+        ficha: '2876542',
+        nombre: 'Gestión Administrativa',
+        nivel: 'Técnico',
+        centro: 'Centro de Servicios',
+        fecha: "00/00/0000",
+        estado: 'Activo'
+    },
+    {
+        id: 9,
+        ficha: '2876543',
+        nombre: 'Producción Agropecuaria',
+        nivel: 'Tecnólogo',
+        centro: 'Centro Agropecuario',
+        fecha: "00/00/0000",
         estado: 'Inactivo'
     }
 ]

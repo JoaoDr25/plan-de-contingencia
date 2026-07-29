@@ -42,15 +42,14 @@
 .crud-toolbar {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 24px;
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
 }
 
 .crud-toolbar__top {
     display: flex;
     justify-content: left;
-    padding-left: 74px;
 }
 
 .crud-toolbar__bottom {

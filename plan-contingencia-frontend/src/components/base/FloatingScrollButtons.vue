@@ -79,7 +79,7 @@ onUnmounted(() => {
 
 .floating-scroll-buttons {
     position: fixed;
-    right: 45px;
+    right: 50px;
     bottom: 65px;
     display: flex;
     flex-direction: column;
@@ -88,8 +88,8 @@ onUnmounted(() => {
 }
 
 .floating-scroll-buttons__button {
-    width: 42px;
-    height: 42px;
+    width: 35px;
+    height: 35px;
     transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
 }
 

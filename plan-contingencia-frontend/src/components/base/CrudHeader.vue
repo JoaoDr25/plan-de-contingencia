@@ -2,12 +2,6 @@
 
     <section class="crud-header">
 
-        <div class="crud-header__navigation">
-
-            <BackButton :route-name="backRoute" />
-
-        </div>
-
         <div class="crud-header__content">
 
             <h1 class="crud-header__title">
@@ -26,17 +20,10 @@
 
 <script setup>
 
-import BackButton from './BackButton.vue';
-
 const {
     title,
-    backRoute
 } = defineProps({
     title: {
-        type: String,
-        required: true
-    },
-    backRoute: {
         type: String,
         required: true
     }
@@ -47,34 +34,34 @@ const {
 <style scoped lang="scss">
 
 @use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
 
 .crud-header {
     display: flex;
-    align-items: flex-start;
     gap: 2rem;
     width: 100%;
 }
 
-.crud-header__navigation {
-    flex-shrink: 0;
-}
-
 .crud-header__content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .crud-header__title {
     margin: 0;
     text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: 0.5px;
     color: $color-text-primary;
+    font-size: $font-family-base;
 }
 
 .crud-header__divider {
-    width: 100%;
+    width: 90%;
     height: 2px;
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
     background: $color-primary;
     border-radius: 999px;
 }

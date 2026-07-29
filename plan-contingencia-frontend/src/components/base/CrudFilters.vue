@@ -38,8 +38,15 @@ const selectedFilter = computed({
 </script>
 
 <style scoped lang="scss">
+
+@use 'src/css/typography.scss' as *;
+
 .crud-filters {
     display: flex;
     align-items: center;
+    padding-top: 0.5rem;
+    font-family: $font-family-base;
+    font-size: 0.7rem;
+    gap: 0.5px;
 }
 </style>
