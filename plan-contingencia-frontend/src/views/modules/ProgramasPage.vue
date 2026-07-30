@@ -26,7 +26,7 @@
 
     </CrudToolbar>
 
-    <BaseTable  :rows="rows" :columns="PROGRAMAS_COLUMNS" row-key="id" :loading="loading"/>
+    <BaseTable  :rows="paginatedRows" :columns="PROGRAMAS_COLUMNS" row-key="id" :loading="loading"/>
 
   </BasePage>
 
@@ -34,7 +34,7 @@
 
 <script setup>
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { programasFilters } from "src/constants/filters/programas.constants";
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns';
 
@@ -50,12 +50,15 @@ const openDialog = () => {
   console.log('Abrir diálogo de creación')
 }
 
-const selectedFilter = ref('estado')
+const selectedFilter = ref('nombre')
 const searchText = ref('')
+
+const currentPage = ref(1)
+const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = [
+const rows = ref([
     {
         id: 1,
         ficha: '2876541',
@@ -137,6 +140,56 @@ const rows = [
         fecha: "00/00/0000",
         estado: 'Inactivo'
     }
-]
+])
+
+function normalizeText(text) {
+
+  return String(text)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+
+}
+
+const filteredRows = computed(() => {
+
+    const search = normalizeText(searchText.value.trim())
+
+    if (!search) {
+
+        return rows.value
+
+    }
+
+    return rows.value.filter((row) => {
+
+        const value = normalizeText(row[selectedFilter.value] ?? '')
+
+        if (selectedFilter.value === 'estado') {
+        return value === search
+    }
+
+        return value.includes(search)
+
+    })
+
+})
+
+const totalPages = computed(() => {
+
+  return Math.max(
+    1,
+    Math.ceil(filteredRows.value.length / rowsPerPage.value)
+  )
+
+})
+
+const paginatedRows = computed(() => {
+
+  const start = (currentPage.value - 1) * rowsPerPage.value
+  const end = start + rowsPerPage.value
+
+  return filteredRows.value.slice(start, end)
+})
 
 </script>
