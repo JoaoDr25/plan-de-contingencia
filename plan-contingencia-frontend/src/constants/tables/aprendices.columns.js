@@ -15,7 +15,7 @@ export const APRENDICES_COLUMNS = [
     },
     {
         name: 'nombre',
-        label: 'Nombre del Programa',
+        label: 'Nombre Completo',
         field: 'nombre',
         align: 'left',
         sortable: true
@@ -38,14 +38,14 @@ export const APRENDICES_COLUMNS = [
         name: 'eps',
         label: 'Nombre EPS',
         field: 'eps',
-        align: 'center',
-        sortable: false
+        align: 'left',
+        sortable: true
     },
      {
         name: 'contacto',
         label: 'Contacto de Emergencia',
         field: 'contacto',
-        align: 'center',
+        align: 'left',
         sortable: false
     },
     {

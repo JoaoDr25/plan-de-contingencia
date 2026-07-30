@@ -24,14 +24,19 @@ export const CONTACTOS_COLUMNS = [
         name: 'telefono',
         label: 'Teléfono Principal',
         field: 'telefono',
-        align: 'left',
-        sortable: true
+        align: 'left'
+    },
+    {
+        name: 'direccion',
+        label: 'Dirección',
+        field: 'direccion',
+        align: 'left'
     },
     {
         name: 'ciudad',
         label: 'Ciudad',
         field: 'ciudad',
-        align: 'center',
+        align: 'left',
         sortable: false
     },
     {

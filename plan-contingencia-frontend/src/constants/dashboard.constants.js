@@ -75,7 +75,7 @@ export const dashboardModules = [
         id: "usuarios",
         title: 'Usuarios',
         image: usuariosImage,
-        routeName: 'usuario.list'
+        routeName: 'usuarios.list'
     },
     {
         id: "aprendices",

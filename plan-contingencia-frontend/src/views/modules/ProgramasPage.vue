@@ -35,7 +35,7 @@
 <script setup>
 
 import { ref } from 'vue'
-import { programasFilters } from "src/constants/modules/programas.constants";
+import { programasFilters } from "src/constants/filters/programas.constants";
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns';
 
 import BasePage from 'src/components/base/BasePage.vue';
@@ -50,7 +50,7 @@ const openDialog = () => {
   console.log('Abrir diálogo de creación')
 }
 
-const selectedFilter = ref('nombre')
+const selectedFilter = ref('estado')
 const searchText = ref('')
 
 const loading = ref(false);

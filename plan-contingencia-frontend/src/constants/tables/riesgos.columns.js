@@ -17,8 +17,7 @@ export const RIESGOS_COLUMNS = [
         name: 'nivel',
         label: 'Nivel Riesgo',
         field: 'nivel',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'consecuencia',
@@ -31,8 +30,7 @@ export const RIESGOS_COLUMNS = [
         name: 'descripcion',
         label: 'Descripción',
         field: 'descripcion',
-        align: 'center',
-        sortable: false
+        align: 'left'
     },
     {
         name: 'protocolos',

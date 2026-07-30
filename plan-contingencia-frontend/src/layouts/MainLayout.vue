@@ -52,7 +52,7 @@ function closeDrawer() {
 .layout-back-button{
     position:absolute;
     top: 68px;
-    left: 15px;
+    left: 16px;
     z-index: 1000;
 }
 

@@ -36,7 +36,7 @@ export const USUARIOS_COLUMNS = [
         name: 'rol',
         label: 'Rol Asignado',
         field: 'rol',
-        align: 'center'
+        align: 'left'
     },
     {
         name: 'acceso',

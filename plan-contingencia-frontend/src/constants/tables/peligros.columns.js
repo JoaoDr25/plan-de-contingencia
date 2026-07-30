@@ -24,7 +24,7 @@ export const PELIGROS_COLUMNS = [
         name: 'descripcion',
         label: 'Descripción',
         field: 'descripcion',
-        align: 'center',
+        align: 'left',
     },
     {
         name: 'riesgos',

@@ -16,23 +16,21 @@ export const EPP_COLUMNS = [
     {
         name: 'categoria',
         label: 'Categoría',
-        field: 'categoría',
+        field: 'categoria',
         align: 'left',
         sortable: true
     },
     {
         name: 'nivel',
-        label: 'Nivel de Protección',
+        label: 'Nivel',
         field: 'nivel',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'descripcion',
         label: 'Descripción',
         field: 'descripcion',
-        align: 'center',
-        sortable: false
+        align: 'left'
     },
     {
         name: 'estado',

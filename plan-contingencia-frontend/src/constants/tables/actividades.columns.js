@@ -24,7 +24,7 @@ export const ACTIVIDADES_COLUMNS = [
         name: 'descripcion',
         label: 'Descripción',
         field: 'descripcion',
-        align: 'center',
+        align: 'left',
         sortable: false
     },
     {
