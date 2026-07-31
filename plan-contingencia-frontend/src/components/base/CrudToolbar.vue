@@ -54,8 +54,10 @@
 
 .crud-toolbar__bottom {
     display: flex;
-    justify-content: right;
-    gap: 40px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
 }
 
 .crud-toolbar__right {
@@ -67,11 +69,13 @@
 .crud-toolbar__center {
     flex: 1;
     display: flex;
-    justify-content: right;
+    justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 .crud-toolbar__left {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 </style>

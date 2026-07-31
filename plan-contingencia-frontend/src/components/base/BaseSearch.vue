@@ -2,7 +2,7 @@
 
     <div class="base-search">
 
-        <q-input v-model="search"  v-bind="$attrs" outline dense :debounce="debounce" :placeholder="placeholder">
+        <q-input v-model="search"  v-bind="$attrs" outlined dense :debounce="debounce" :placeholder="placeholder">
 
             <template #prepend>
                 <q-icon name="search" />
@@ -35,9 +35,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-
-    'update:modelvalue'
-
+    'update:modelValue'
 ])
 
 const search = computed({
@@ -54,4 +52,42 @@ const search = computed({
     width: 280px;
     flex-shrink:0;
 }
+
+.base-search :deep(.q-field) {
+    font-size: 0.72rem;
+}
+
+.base-search :deep(.q-field__control) {
+    height: 34px;
+    border-radius: 4px;
+}
+
+.base-search :deep(.q-field__native) {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.base-search :deep(.q-field__prepend) {
+    padding-right: 6px;
+}
+
+.base-search :deep(.q-icon) {
+    font-size: 18px;
+    color: #6b7280;
+    padding-bottom: 5px;
+}
+
+.base-search :deep(input::placeholder) {
+    font-size: 0.72rem;
+}
+
+@media (max-width:600px){
+
+    .base-search{
+        min-width: 240px;
+        width:100%;
+    }
+
+}
+
 </style>

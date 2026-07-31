@@ -14,18 +14,26 @@
                 </div>
             </template>
 
+            <template #body-cell="props">
+
+                <q-td :props="props" :style="getCellStyle(props.col)" :class="getCellClass(props.col)">
+
+                    {{ props.value }}
+
+                </q-td>
+
+            </template>
+
         </q-table>
 
         <div class="base-table__footer">
 
-            <BaseTableInfo :start="1" :end="Math.min(8, rows.length)" :total="rows.length" />
+            <BaseTableInfo :start="start" :end="end" :total="total" />
 
         </div>
 
-        <BasePagination
-    :current-page="1"
-    :total-pages="1"
-/>
+        <BasePagination :current-page="currentPage" :total-pages="totalPages" :rows-per-page="rowsPerPage"
+            @change="emit('change-page', $event)" />
 
     </div>
 
@@ -40,7 +48,12 @@ const {
     rows,
     columns,
     rowKey,
-    loading
+    loading,
+    currentPage,
+    totalPages,
+    start,
+    end,
+    total
 } = defineProps({
 
     rows: {
@@ -58,8 +71,52 @@ const {
     loading: {
         type: Boolean,
         required: false
+    },
+    currentPage: {
+        type: Number,
+        default: 1
+    },
+    totalPages: {
+        type: Number,
+        default: 1
+    },
+    start: {
+        type: Number,
+        default: 0
+    },
+    end: {
+        type: Number,
+        default: 0
+    },
+    total: {
+        type: Number,
+        default: 0
+    },
+    rowsPerPage: {
+        type: Number,
+        default: 8
     }
 })
+
+const emit = defineEmits([
+    'change-page'
+])
+
+function getCellStyle(column) {
+
+    return {
+        width: column.width,
+        minWidth: column.minWidth,
+        maxWidth: column.maxWidth
+    }
+}
+
+function getCellClass(column) {
+
+    return {
+        'base-table__ellipsis': column.ellipsis
+    }
+}
 
 </script>
 
@@ -88,26 +145,22 @@ const {
 
 .base-table__table :deep(tbody td) {
     height: 40px;
-    padding: 0 16px;
     text-transform: uppercase;
     border-bottom: none;
 }
 
 .base-table__table :deep(th) {
     font-weight: 600;
+    height: 40.5px;
     color: $color-text-primary;
     font-size: $font-size-sm;
-    padding: 0 16px;
+    padding-left: 20px;
 }
 
 .base-table__table :deep(td) {
     font-size: $font-size-xs;
     vertical-align: middle;
 
-}
-
-.base-table__table :deep(tbody tr:hover) {
-    background: rgba($color-primary, 0.04);
 }
 
 .base-table__table :deep(.q-table__middle) {
@@ -128,8 +181,10 @@ const {
     padding-top: 1px !important;
 }
 
-.base-table__table :deep(.q-table) {
-    padding-left: 20px;
+.base-table__table :deep(.column-index) {
+    width: 55px;
+    min-width: 55px;
+    max-width: 55px;
 }
 
 .base-table__footer {
@@ -150,5 +205,11 @@ const {
     font-size: 0.67rem;
     color: $color-text-primary;
     letter-spacing: 1px;
+}
+
+.base-table__ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>

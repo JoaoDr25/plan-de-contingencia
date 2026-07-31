@@ -1,10 +1,9 @@
 export const PROGRAMAS_COLUMNS = [
-     {
-        name: 'id',
+    {
+        name: 'index',
         label: 'N°',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'ficha',
@@ -18,7 +17,9 @@ export const PROGRAMAS_COLUMNS = [
         label: 'Nombre del Programa',
         field: 'nombre',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '320px',
+        ellipsis: true
     },
     {
         name: 'nivel',

@@ -8,7 +8,7 @@
 
       <template #right>
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
 
       </template>
 
@@ -26,7 +26,8 @@
 
     </CrudToolbar>
 
-    <BaseTable  :rows="paginatedRows" :columns="PROGRAMAS_COLUMNS" row-key="id" :loading="loading"/>
+    <BaseTable :rows="paginatedRows" :columns="PROGRAMAS_COLUMNS" :loading="loading" :current-page="currentPage"
+      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event"/>
 
   </BasePage>
 
@@ -59,87 +60,87 @@ const rowsPerPage = ref(8)
 const loading = ref(false);
 
 const rows = ref([
-    {
-        id: 1,
-        ficha: '2876541',
-        nombre: 'Análisis y Desarrollo de Software',
-        nivel: 'Tecnólogo',
-        centro: 'Centro Industrial',
-        fecha: "00/00/0000",
-        estado: 'Activo'
-    },
-    {
-        id: 2,
-        ficha: '2876542',
-        nombre: 'Gestión Administrativa',
-        nivel: 'Técnico',
-        centro: 'Centro de Servicios',
-        fecha: "00/00/0000",
-        estado: 'Activo'
-    },
-    {
-        id: 3,
-        ficha: '2876543',
-        nombre: 'Producción Agropecuaria',
-        nivel: 'Tecnólogo',
-        centro: 'Centro Agropecuario',
-        fecha: "00/00/0000",
-        estado: 'Inactivo'
-    },
-      {
-        id: 4,
-        ficha: '2876541',
-        nombre: 'Análisis y Desarrollo de Software',
-        nivel: 'Tecnólogo',
-        centro: 'Centro Industrial',
-        fecha: "00/00/0000",
-        estado: 'Activo'
-    },
-    {
-        id: 5,
-        ficha: '2876542',
-        nombre: 'Gestión Administrativa',
-        nivel: 'Técnico',
-        centro: 'Centro de Servicios',
-        fecha: "00/00/0000",
-        estado: 'Activo'
-    },
-    {
-        id: 6,
-        ficha: '2876543',
-        nombre: 'Producción Agropecuaria',
-        nivel: 'Tecnólogo',
-        centro: 'Centro Agropecuario',
-        fecha: "00/00/0000",
-        estado: 'Inactivo'
-    },
-      {
-        id: 7,
-        ficha: '2876541',
-        nombre: 'Análisis y Desarrollo de Software',
-        nivel: 'Tecnólogo',
-        centro: 'Centro Industrial',
-        fecha: "00/00/0000",
-        estado: 'Activo'
-    },
-    {
-        id: 8,
-        ficha: '2876542',
-        nombre: 'Gestión Administrativa',
-        nivel: 'Técnico',
-        centro: 'Centro de Servicios',
-        fecha: "00/00/0000",
-        estado: 'Activo'
-    },
-    {
-        id: 9,
-        ficha: '2876543',
-        nombre: 'Producción Agropecuaria',
-        nivel: 'Tecnólogo',
-        centro: 'Centro Agropecuario',
-        fecha: "00/00/0000",
-        estado: 'Inactivo'
-    }
+  {
+    id: 1,
+    ficha: '2876541',
+    nombre: 'Análisis y Desarrollo de Software',
+    nivel: 'Tecnólogo',
+    centro: 'Centro Industrial',
+    fecha: "00/00/0000",
+    estado: 'Activo'
+  },
+  {
+    id: 2,
+    ficha: '2876542',
+    nombre: 'Gestión Administrativa',
+    nivel: 'Técnico',
+    centro: 'Centro de Servicios',
+    fecha: "00/00/0000",
+    estado: 'Activo'
+  },
+  {
+    id: 3,
+    ficha: '2876543',
+    nombre: 'Producción Agropecuaria',
+    nivel: 'Tecnólogo',
+    centro: 'Centro Agropecuario',
+    fecha: "00/00/0000",
+    estado: 'Inactivo'
+  },
+  {
+    id: 4,
+    ficha: '2876541',
+    nombre: 'Análisis y Desarrollo de Software',
+    nivel: 'Tecnólogo',
+    centro: 'Centro Industrial',
+    fecha: "00/00/0000",
+    estado: 'Activo'
+  },
+  {
+    id: 5,
+    ficha: '2876542',
+    nombre: 'Gestión Administrativa',
+    nivel: 'Técnico',
+    centro: 'Centro de Servicios',
+    fecha: "00/00/0000",
+    estado: 'Activo'
+  },
+  {
+    id: 6,
+    ficha: '2876543',
+    nombre: 'Producción Agropecuaria',
+    nivel: 'Tecnólogo',
+    centro: 'Centro Agropecuario',
+    fecha: "00/00/0000",
+    estado: 'Inactivo'
+  },
+  {
+    id: 7,
+    ficha: '2876541',
+    nombre: 'Análisis y Desarrollo de Software',
+    nivel: 'Tecnólogo',
+    centro: 'Centro Industrial',
+    fecha: "00/00/0000",
+    estado: 'Activo'
+  },
+  {
+    id: 8,
+    ficha: '2876542',
+    nombre: 'Gestión Administrativa',
+    nivel: 'Técnico',
+    centro: 'Centro de Servicios',
+    fecha: "00/00/0000",
+    estado: 'Activo'
+  },
+  {
+    id: 9,
+    ficha: '2876543',
+    nombre: 'Producción Agropecuaria',
+    nivel: 'Tecnólogo',
+    centro: 'Centro Agropecuario',
+    fecha: "00/00/0000",
+    estado: 'Inactivo'
+  }
 ])
 
 function normalizeText(text) {
@@ -153,25 +154,25 @@ function normalizeText(text) {
 
 const filteredRows = computed(() => {
 
-    const search = normalizeText(searchText.value.trim())
+  const search = normalizeText(searchText.value.trim())
 
-    if (!search) {
+  if (!search) {
 
-        return rows.value
+    return rows.value
 
+  }
+
+  return rows.value.filter((row) => {
+
+    const value = normalizeText(row[selectedFilter.value] ?? '')
+
+    if (selectedFilter.value === 'estado') {
+      return value === search
     }
 
-    return rows.value.filter((row) => {
+    return value.includes(search)
 
-        const value = normalizeText(row[selectedFilter.value] ?? '')
-
-        if (selectedFilter.value === 'estado') {
-        return value === search
-    }
-
-        return value.includes(search)
-
-    })
+  })
 
 })
 
@@ -191,5 +192,26 @@ const paginatedRows = computed(() => {
 
   return filteredRows.value.slice(start, end)
 })
+
+const startRow = computed(() => {
+
+  if (filteredRows.value.length === 0) {
+    return 0
+  }
+
+  return (currentPage.value - 1) * rowsPerPage.value + 1
+
+})
+
+
+const endRow = computed(() => {
+
+  return Math.min(
+    currentPage.value * rowsPerPage.value,
+    filteredRows.value.length
+  )
+
+})
+
 
 </script>

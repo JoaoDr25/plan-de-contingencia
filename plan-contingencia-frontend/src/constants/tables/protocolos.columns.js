@@ -1,5 +1,5 @@
 export const PROTOCOLOS_COLUMNS = [
-     {
+    {
         name: 'id',
         label: 'N°',
         field: 'id',
@@ -17,7 +17,10 @@ export const PROTOCOLOS_COLUMNS = [
         name: 'accion',
         label: 'Acción inmediata',
         field: 'accion',
-        align: 'left'
+        align: 'left',
+        width: '240px',
+        maxWidth: '240px',
+        ellipsis: true
     },
     {
         name: 'responsable',
