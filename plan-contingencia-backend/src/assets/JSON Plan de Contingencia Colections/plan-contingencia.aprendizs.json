@@ -1,0 +1,360 @@
+[{
+  "_id": {
+    "$oid": "6a3951a8661ea623edc95787"
+  },
+  "nombre": "Carlos Andrés",
+  "apellido": "Ramírez",
+  "documento": "1001001001",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sura",
+  "contactoEmergencia": "3109999999",
+  "condicionesMedicas": "Ninguna",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:15:52.299Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:23:13.987Z"
+  },
+  "numero": 1,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3951c3661ea623edc95788"
+  },
+  "nombre": "Laura",
+  "apellido": "Gómez",
+  "documento": "1001001002",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sanitas",
+  "contactoEmergencia": "3101111002",
+  "condicionesMedicas": "Asma",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:16:19.899Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T16:07:10.182Z"
+  },
+  "numero": 2,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3951ea661ea623edc95789"
+  },
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "documento": "1001001003",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sura",
+  "contactoEmergencia": "3101111003",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:16:58.118Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:16:58.118Z"
+  },
+  "numero": 3,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a3951fc661ea623edc9578a"
+  },
+  "nombre": "Mariana",
+  "apellido": "Torres",
+  "documento": "1001001004",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Compensar",
+  "contactoEmergencia": "3101111004",
+  "condicionesMedicas": "Alergia a medicamentos",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:17:16.724Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:17:16.724Z"
+  },
+  "numero": 4,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395207661ea623edc9578b"
+  },
+  "nombre": "Andrés",
+  "apellido": "Martínez",
+  "documento": "1001001005",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Nueva EPS",
+  "contactoEmergencia": "3101111005",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:17:27.006Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:17:27.006Z"
+  },
+  "numero": 5,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a39521a661ea623edc9578c"
+  },
+  "nombre": "Valentina",
+  "apellido": "Rojas",
+  "documento": "1001001006",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sanitas",
+  "contactoEmergencia": "3101111006",
+  "condicionesMedicas": "Migraña",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:17:46.563Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:17:46.563Z"
+  },
+  "numero": 6,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395222661ea623edc9578d"
+  },
+  "nombre": "Santiago",
+  "apellido": "Castro",
+  "documento": "1001001007",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sura",
+  "contactoEmergencia": "3101111007",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:17:54.268Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:17:54.268Z"
+  },
+  "numero": 7,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a39522b661ea623edc9578e"
+  },
+  "nombre": "Daniela",
+  "apellido": "Moreno",
+  "documento": "1001001008",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Compensar",
+  "contactoEmergencia": "3101111008",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:18:03.366Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:18:03.366Z"
+  },
+  "numero": 8,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a39523b661ea623edc9578f"
+  },
+  "nombre": "Felipe",
+  "apellido": "Herrera",
+  "documento": "1001001009",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Nueva EPS",
+  "contactoEmergencia": "3101111009",
+  "condicionesMedicas": "Hipertensión controlada",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:18:19.736Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:18:19.736Z"
+  },
+  "numero": 9,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395248661ea623edc95790"
+  },
+  "nombre": "Camila",
+  "apellido": "Suárez",
+  "documento": "1001001010",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sanitas",
+  "contactoEmergencia": "3101111010",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:18:32.373Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:18:32.373Z"
+  },
+  "numero": 10,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395257661ea623edc95791"
+  },
+  "nombre": "Nicolás",
+  "apellido": "Vargas",
+  "documento": "1001001011",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sura",
+  "contactoEmergencia": "3101111011",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:18:47.032Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:18:47.032Z"
+  },
+  "numero": 11,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395260661ea623edc95792"
+  },
+  "nombre": "Paula",
+  "apellido": "Ortiz",
+  "documento": "1001001012",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Compensar",
+  "contactoEmergencia": "3101111012",
+  "condicionesMedicas": "Diabetes tipo 1",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:18:56.431Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:18:56.431Z"
+  },
+  "numero": 12,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395267661ea623edc95793"
+  },
+  "nombre": "David",
+  "apellido": "Reyes",
+  "documento": "1001001013",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Nueva EPS",
+  "contactoEmergencia": "3101111013",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:19:03.745Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:19:03.745Z"
+  },
+  "numero": 13,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395270661ea623edc95794"
+  },
+  "nombre": "Tatiana",
+  "apellido": "Mendoza",
+  "documento": "1001001014",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sanitas",
+  "contactoEmergencia": "3101111014",
+  "condicionesMedicas": "",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:19:12.567Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:19:12.567Z"
+  },
+  "numero": 14,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a395278661ea623edc95795"
+  },
+  "nombre": "Miguel",
+  "apellido": "Cárdenas",
+  "documento": "1001001015",
+  "programaFormacion": "Análisis y Desarrollo de Software",
+  "ficha": {
+    "$oid": "6a3154ceef202113d1a2a265"
+  },
+  "eps": "Sura",
+  "contactoEmergencia": "3101111015",
+  "condicionesMedicas": "Alergia al polvo",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T15:19:20.736Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:19:20.736Z"
+  },
+  "numero": 15,
+  "__v": 0
+}]

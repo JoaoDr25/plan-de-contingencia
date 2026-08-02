@@ -45,7 +45,7 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
     font-size: 0.96rem;
     font-weight: 500;
     padding-top: 0.1rem;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 </style>

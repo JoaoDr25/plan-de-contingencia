@@ -2,16 +2,10 @@
 
   <section class="dashboard-header">
 
-    <div class="dashboard-header__navigation">
-
-        <backButton route-name="dashboard"/>
-
-    </div>
-
     <div class="dashboard-header__actions">
 
         <PrimaryActionButton 
-        label="Crear Plan de Contingencia" icon="add" route-name="planes.create"
+        label="Crear Plan de Contingencia" icon="add" size="lg" @click="goToCreatePlan"
         />
 
     </div>
@@ -22,8 +16,16 @@
 
 <script setup>
 
-import BackButton from '../base/BackButton.vue';
 import PrimaryActionButton from '../base/PrimaryActionButton.vue';
+
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
+function goToCreatePlan(){
+    router.push({
+        name: 'planes.create'
+    })
+}
 
 </script>
 
@@ -31,19 +33,13 @@ import PrimaryActionButton from '../base/PrimaryActionButton.vue';
 
 .dashboard-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
-}
-
-.dashboard-header__navigation {
-    display: flex;
-    align-items: center;
+    padding-bottom: 23px;
 }
 
 .dashboard-header__actions {
-    display: flex;
-    align-items: center;
+   margin-left: auto;
 }
 
 </style>

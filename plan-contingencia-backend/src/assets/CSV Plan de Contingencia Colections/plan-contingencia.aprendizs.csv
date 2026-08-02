@@ -1,0 +1,16 @@
+_id,nombre,apellido,documento,programaFormacion,ficha,eps,contactoEmergencia,condicionesMedicas,estado,createdAt,updatedAt,numero,__v
+6a3951a8661ea623edc95787,Carlos Andrés,Ramírez,1001001001,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sura,3109999999,Ninguna,true,2026-06-22T15:15:52.299Z,2026-06-22T15:23:13.987Z,1,0
+6a3951c3661ea623edc95788,Laura,Gómez,1001001002,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sanitas,3101111002,Asma,true,2026-06-22T15:16:19.899Z,2026-06-22T16:07:10.182Z,2,0
+6a3951ea661ea623edc95789,Juan,Pérez,1001001003,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sura,3101111003,,true,2026-06-22T15:16:58.118Z,2026-06-22T15:16:58.118Z,3,0
+6a3951fc661ea623edc9578a,Mariana,Torres,1001001004,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Compensar,3101111004,Alergia a medicamentos,true,2026-06-22T15:17:16.724Z,2026-06-22T15:17:16.724Z,4,0
+6a395207661ea623edc9578b,Andrés,Martínez,1001001005,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Nueva EPS,3101111005,,true,2026-06-22T15:17:27.006Z,2026-06-22T15:17:27.006Z,5,0
+6a39521a661ea623edc9578c,Valentina,Rojas,1001001006,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sanitas,3101111006,Migraña,true,2026-06-22T15:17:46.563Z,2026-06-22T15:17:46.563Z,6,0
+6a395222661ea623edc9578d,Santiago,Castro,1001001007,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sura,3101111007,,true,2026-06-22T15:17:54.268Z,2026-06-22T15:17:54.268Z,7,0
+6a39522b661ea623edc9578e,Daniela,Moreno,1001001008,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Compensar,3101111008,,true,2026-06-22T15:18:03.366Z,2026-06-22T15:18:03.366Z,8,0
+6a39523b661ea623edc9578f,Felipe,Herrera,1001001009,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Nueva EPS,3101111009,Hipertensión controlada,true,2026-06-22T15:18:19.736Z,2026-06-22T15:18:19.736Z,9,0
+6a395248661ea623edc95790,Camila,Suárez,1001001010,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sanitas,3101111010,,true,2026-06-22T15:18:32.373Z,2026-06-22T15:18:32.373Z,10,0
+6a395257661ea623edc95791,Nicolás,Vargas,1001001011,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sura,3101111011,,true,2026-06-22T15:18:47.032Z,2026-06-22T15:18:47.032Z,11,0
+6a395260661ea623edc95792,Paula,Ortiz,1001001012,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Compensar,3101111012,Diabetes tipo 1,true,2026-06-22T15:18:56.431Z,2026-06-22T15:18:56.431Z,12,0
+6a395267661ea623edc95793,David,Reyes,1001001013,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Nueva EPS,3101111013,,true,2026-06-22T15:19:03.745Z,2026-06-22T15:19:03.745Z,13,0
+6a395270661ea623edc95794,Tatiana,Mendoza,1001001014,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sanitas,3101111014,,true,2026-06-22T15:19:12.567Z,2026-06-22T15:19:12.567Z,14,0
+6a395278661ea623edc95795,Miguel,Cárdenas,1001001015,Análisis y Desarrollo de Software,6a3154ceef202113d1a2a265,Sura,3101111015,Alergia al polvo,true,2026-06-22T15:19:20.736Z,2026-06-22T15:19:20.736Z,15,0

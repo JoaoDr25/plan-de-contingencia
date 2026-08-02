@@ -12,7 +12,7 @@ const routes = [
           icon: 'dashboard'
         },
         component: () =>
-          import('src/modules/dashboard/pages/DashboardPage.vue')
+          import('src/views/dashboard/DashboardPage.vue')
       },
       {
         path: 'planes',
@@ -22,7 +22,7 @@ const routes = [
           icon: 'description'
         },
         component: () =>
-          import('src/modules/planes/pages/PlanListPage.vue')
+          import('src/views/planes/PlanListPage.vue')
       },
       {
         path: 'planes/crear',
@@ -32,7 +32,7 @@ const routes = [
           icon: 'description'
         },
         component: () =>
-          import('src/modules/planes/pages/PlanCreatePage.vue')
+          import('src/views/planes/PlanCreatePage.vue')
       },
       {
         path: 'planes/:id',
@@ -42,7 +42,7 @@ const routes = [
           icon: 'description'
         },
         component: () =>
-          import('src/modules/planes/pages/PlanDetailPage.vue')
+          import('src/views/planes/PlanDetailPage.vue')
       },
       {
         path: 'programas',
@@ -52,7 +52,7 @@ const routes = [
           icon: 'school'
         },
         component: () =>
-          import('src/modules/programas/pages/ProgramasPage.vue')
+          import('src/views/modules/ProgramasPage.vue')
       },
       {
         path: 'actividades',
@@ -62,7 +62,7 @@ const routes = [
           icon: 'event'
         },
         component: () =>
-          import('src/modules/actividades/pages/ActividadesPage.vue')
+          import('src/views/modules/ActividadesPage.vue')
       },
       {
         path: 'peligros',
@@ -72,7 +72,7 @@ const routes = [
           icon: 'warning'
         },
         component: () =>
-          import('src/modules/peligros/pages/PeligrosPage.vue')
+          import('src/views/modules/PeligrosPage.vue')
       },
       {
         path: 'riesgos',
@@ -82,7 +82,7 @@ const routes = [
           icon: 'report_problem'
         },
         component: () =>
-          import('src/modules/riesgos/pages/RiesgosPage.vue')
+          import('src/views/modules/RiesgosPage.vue')
       },
       {
         path: 'protocolos',
@@ -92,7 +92,7 @@ const routes = [
           icon: 'assignment'
         },
         component: () =>
-          import('src/modules/protocolos/pages/ProtocolosPage.vue')
+          import('src/views/modules/ProtocolosPage.vue')
       },
       {
         path: 'usuarios',
@@ -102,7 +102,7 @@ const routes = [
           icon: 'group'
         },
         component: () =>
-          import('src/modules/usuarios/pages/UsuariosPage.vue')
+          import('src/views/modules/UsuariosPage.vue')
       },
       {
         path: 'aprendices',
@@ -112,7 +112,7 @@ const routes = [
           icon: 'badge'
         },
         component: () =>
-          import('src/modules/aprendices/pages/AprendicesPage.vue')
+          import('src/views/modules/AprendicesPage.vue')
       },
       {
         path: 'contactos',
@@ -122,7 +122,7 @@ const routes = [
           icon: 'call'
         },
         component: () =>
-          import('src/modules/contactos/pages/ContactosPage.vue')
+          import('src/views/modules/ContactosPage.vue')
       },
       {
         path: 'epp',
@@ -132,7 +132,7 @@ const routes = [
           icon: 'healt_and_safety'
         },
         component: () =>
-          import('src/modules/epp/pages/EppPage.vue')
+          import('src/views/modules/EppPage.vue')
       },
       {
         path: 'parametros',
@@ -142,7 +142,7 @@ const routes = [
           icon: 'settings'
         },
         component: () =>
-          import('src/modules/parametros/pages/ParametrosPage.vue')
+          import('src/views/modules/ParametrosPage.vue')
       }
     ]
   },
@@ -155,7 +155,7 @@ const routes = [
     meta: {
           title: 'Página no encontrada'
         },
-    component: () => import('src/modules/ErrorNotFound.vue'),
+    component: () => import('src/components/errorNotFound/ErrorNotFound.vue'),
   },
 ]
 

@@ -1,0 +1,216 @@
+[{
+  "_id": {
+    "$oid": "6a394d3b661ea623edc9577a"
+  },
+  "nombreEPP": "Casco de seguridad",
+  "categoria": "Protección de cabeza",
+  "nivelProteccion": "MEDIO",
+  "descripcion": "Protege contra impactos y golpes en la cabeza.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:56:59.863Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-24T19:12:54.974Z"
+  },
+  "numero": 1,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394d6e661ea623edc9577b"
+  },
+  "nombreEPP": "Gafas de seguridad",
+  "categoria": "Protección visual",
+  "nivelProteccion": "MEDIO",
+  "descripcion": "Protege los ojos contra partículas y salpicaduras.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:57:50.128Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:57:50.128Z"
+  },
+  "numero": 2,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394d7a661ea623edc9577c"
+  },
+  "nombreEPP": "Protector auditivo tipo copa",
+  "categoria": "Protección auditiva",
+  "nivelProteccion": "ALTO",
+  "descripcion": "Reduce la exposición a niveles elevados de ruido.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:58:02.943Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:58:02.943Z"
+  },
+  "numero": 3,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394d86661ea623edc9577d"
+  },
+  "nombreEPP": "Tapones auditivos",
+  "categoria": "Protección auditiva",
+  "nivelProteccion": "MEDIO",
+  "descripcion": "Disminuye el impacto del ruido sobre el oído.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:58:14.564Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:58:14.564Z"
+  },
+  "numero": 4,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394d8e661ea623edc9577e"
+  },
+  "nombreEPP": "Guantes de nitrilo",
+  "categoria": "Protección de manos",
+  "nivelProteccion": "MEDIO",
+  "descripcion": "Protegen contra sustancias químicas y contaminantes.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:58:22.421Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:58:22.421Z"
+  },
+  "numero": 5,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394d9b661ea623edc9577f"
+  },
+  "nombreEPP": "Guantes anticorte",
+  "categoria": "Protección de manos",
+  "nivelProteccion": "ALTO",
+  "descripcion": "Protegen frente a cortes y abrasiones.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:58:35.058Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:58:35.058Z"
+  },
+  "numero": 6,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394dae661ea623edc95780"
+  },
+  "nombreEPP": "Mascarilla desechable",
+  "categoria": "Protección respiratoria",
+  "nivelProteccion": "BAJO",
+  "descripcion": "Reduce la inhalación de partículas suspendidas.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:58:54.364Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:58:54.364Z"
+  },
+  "numero": 7,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394db8661ea623edc95781"
+  },
+  "nombreEPP": "Respirador con filtro",
+  "categoria": "Protección respiratoria",
+  "nivelProteccion": "ALTO",
+  "descripcion": "Protege contra partículas y contaminantes del aire.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:59:04.223Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:59:04.223Z"
+  },
+  "numero": 8,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394dc1661ea623edc95782"
+  },
+  "nombreEPP": "Chaleco reflectivo",
+  "categoria": "Protección corporal",
+  "nivelProteccion": "MEDIO",
+  "descripcion": "Mejora la visibilidad del usuario.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:59:13.195Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:59:13.195Z"
+  },
+  "numero": 9,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394dd8661ea623edc95783"
+  },
+  "nombreEPP": "Botas de seguridad",
+  "categoria": "Protección de pies",
+  "nivelProteccion": "ALTO",
+  "descripcion": "Protegen frente a impactos y objetos punzantes.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:59:36.161Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:59:36.161Z"
+  },
+  "numero": 10,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394de2661ea623edc95784"
+  },
+  "nombreEPP": "Arnés de cuerpo completo",
+  "categoria": "Trabajo en alturas",
+  "nivelProteccion": "ALTO",
+  "descripcion": "Previene caídas durante trabajos en altura.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:59:46.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T14:59:46.544Z"
+  },
+  "numero": 11,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a394dea661ea623edc95785"
+  },
+  "nombreEPP": "Impermeable industrial",
+  "categoria": "Protección corporal",
+  "nivelProteccion": "BAJO",
+  "descripcion": "Protege contra lluvia y humedad.",
+  "estado": true,
+  "createdAt": {
+    "$date": "2026-06-22T14:59:54.360Z"
+  },
+  "updatedAt": {
+    "$date": "2026-06-22T15:05:58.846Z"
+  },
+  "numero": 12,
+  "__v": 0
+}]
