@@ -1,10 +1,9 @@
 export const USUARIOS_COLUMNS = [
      {
-        name: 'id',
-        label: 'N°',
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'documento',
@@ -18,19 +17,25 @@ export const USUARIOS_COLUMNS = [
         label: 'Nombre Completo',
         field: 'nombre',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '200px',
+        ellipsis: true
     },
     {
         name: 'correo',
         label: 'Correo Institucional',
         field: 'correo',
-        align: 'left'
+        align: 'left',
+        maxWidth: '200px',
+        ellipsis: true
     },
     {
         name: 'centro',
         label: 'Centro de Formación',
         field: 'centro',
-        align: 'left'
+        align: 'left',
+        maxWidth: '200px',
+        ellipsis: true
     },
     {
         name: 'rol',

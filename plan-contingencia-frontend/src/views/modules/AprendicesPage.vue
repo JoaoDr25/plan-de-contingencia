@@ -26,7 +26,18 @@
 
     </CrudToolbar>
 
-    <BaseTable  :rows="rows" :columns="APRENDICES_COLUMNS" row-key="id" :loading="loading"/>
+    <BaseTable :rows="paginatedRows" :columns="APRENDICES_COLUMNS" :loading="loading" :current-page="currentPage"
+      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event">
+
+      <template #body-cell-estado="props">
+
+      <q-td :props="props">
+        <StatusChip :status="props.value" />
+      </q-td>
+
+    </template>
+
+     </BaseTable>
 
   </BasePage>
 
@@ -34,7 +45,7 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { aprendicesFilters } from 'src/constants/filters/aprendices.constants';
 import { APRENDICES_COLUMNS } from 'src/constants/tables/aprendices.columns';
 
@@ -45,17 +56,21 @@ import BaseSearch from 'src/components/base/BaseSearch.vue';
 import CrudToolbar from 'src/components/base/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
 import BaseTable from 'src/components/base/BaseTable.vue';
+import StatusChip from 'src/components/base/StatusChip.vue';
 
 const openDialog = () => {
   console.log('Abrir diálogo de creación')
 }
 
-const selectedFilter = ref('estado')
+const selectedFilter = ref('documento')
 const searchText = ref('')
+
+const currentPage = ref(1)
+const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = [
+const rows = ref([
     {
         id: 1,
         documento: '1098765432',
@@ -146,6 +161,76 @@ const rows = [
         contacto: 'Patricia Ramírez - 3212345678',
         estado: 'Retirado'
     }
-];
+]);
+
+function normalizeText(text) {
+
+  return String(text)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+
+}
+
+const filteredRows = computed(() => {
+
+  const search = normalizeText(searchText.value.trim())
+
+  if (!search) {
+
+    return rows.value
+
+  }
+
+  return rows.value.filter((row) => {
+
+    const value = normalizeText(row[selectedFilter.value] ?? '')
+
+    if (selectedFilter.value === 'estado') {
+      return value === search
+    }
+
+    return value.includes(search)
+
+  })
+
+})
+
+const totalPages = computed(() => {
+
+  return Math.max(
+    1,
+    Math.ceil(filteredRows.value.length / rowsPerPage.value)
+  )
+
+})
+
+const paginatedRows = computed(() => {
+
+  const start = (currentPage.value - 1) * rowsPerPage.value
+  const end = start + rowsPerPage.value
+
+  return filteredRows.value.slice(start, end)
+})
+
+const startRow = computed(() => {
+
+  if (filteredRows.value.length === 0) {
+    return 0
+  }
+
+  return (currentPage.value - 1) * rowsPerPage.value + 1
+
+})
+
+
+const endRow = computed(() => {
+
+  return Math.min(
+    currentPage.value * rowsPerPage.value,
+    filteredRows.value.length
+  )
+
+})
 
 </script>

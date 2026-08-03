@@ -40,8 +40,8 @@
 
 import AppLogo from './AppLogo.vue';
 import DrawerMenuItem from '../navigation/DrawerMenuItem.vue';
-import { navigation } from 'src/constants/navigation.constants.js';
-import { ROLES } from 'src/constants/roles.constants.js';
+import { navigation } from 'src/constants/system/navigation.constants.js';
+import { ROLES } from 'src/constants/system/roles.constants.js';
 
 const emit = defineEmits([
   'closeDrawer'

@@ -26,7 +26,8 @@
 
     </CrudToolbar>
 
-    <BaseTable  :rows="rows" :columns="ACTIVIDADES_COLUMNS" row-key="id" :loading="loading"/>
+     <BaseTable :rows="paginatedRows" :columns="ACTIVIDADES_COLUMNS" :loading="loading" :current-page="currentPage"
+      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event"/>
 
   </BasePage>
 
@@ -34,7 +35,7 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { actividadesFilters } from 'src/constants/filters/actividades.constants';
 import { ACTIVIDADES_COLUMNS } from 'src/constants/tables/actividades.columns';
 
@@ -50,12 +51,15 @@ const openDialog = () => {
   console.log('Abrir diálogo de creación')
 }
 
-const selectedFilter = ref('tipo')
+const selectedFilter = ref('nombre')
 const searchText = ref('')
+
+const currentPage = ref(1)
+const rowsPerPage = ref(8)
 
 const loading = ref(false);
 
-const rows = [
+const rows = ref([
     {
         id: 1,
         nombre: 'Práctica de Campo en Cultivos',
@@ -119,6 +123,76 @@ const rows = [
         descripcion: 'Inspección y mantenimiento preventivo de maquinaria.',
         peligros: 8
     }
-];
+]);
+
+function normalizeText(text) {
+
+  return String(text)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+
+}
+
+const filteredRows = computed(() => {
+
+  const search = normalizeText(searchText.value.trim())
+
+  if (!search) {
+
+    return rows.value
+
+  }
+
+  return rows.value.filter((row) => {
+
+    const value = normalizeText(row[selectedFilter.value] ?? '')
+
+    if (selectedFilter.value === 'estado') {
+      return value === search
+    }
+
+    return value.includes(search)
+
+  })
+
+})
+
+const totalPages = computed(() => {
+
+  return Math.max(
+    1,
+    Math.ceil(filteredRows.value.length / rowsPerPage.value)
+  )
+
+})
+
+const paginatedRows = computed(() => {
+
+  const start = (currentPage.value - 1) * rowsPerPage.value
+  const end = start + rowsPerPage.value
+
+  return filteredRows.value.slice(start, end)
+})
+
+const startRow = computed(() => {
+
+  if (filteredRows.value.length === 0) {
+    return 0
+  }
+
+  return (currentPage.value - 1) * rowsPerPage.value + 1
+
+})
+
+
+const endRow = computed(() => {
+
+  return Math.min(
+    currentPage.value * rowsPerPage.value,
+    filteredRows.value.length
+  )
+
+})
 
 </script>

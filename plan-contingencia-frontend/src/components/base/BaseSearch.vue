@@ -54,11 +54,11 @@ const search = computed({
 }
 
 .base-search :deep(.q-field) {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
 }
 
 .base-search :deep(.q-field__control) {
-    height: 34px;
+    height: 36px;
     border-radius: 4px;
 }
 

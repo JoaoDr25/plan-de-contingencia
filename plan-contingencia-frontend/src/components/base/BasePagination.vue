@@ -123,7 +123,7 @@ function lastPage() {
 .base-pagination__rows-value {
     min-width: 22px;
     text-align: center;
-    color: $color-text-primary;
+    color: $color-text-secondary;
 }
 
 .base-pagination__button {

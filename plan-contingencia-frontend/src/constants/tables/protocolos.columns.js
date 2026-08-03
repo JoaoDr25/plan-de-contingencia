@@ -1,25 +1,25 @@
 export const PROTOCOLOS_COLUMNS = [
     {
-        name: 'id',
-        label: 'N°',
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'tipo',
         label: 'Tipo de Emergencia',
         field: 'tipo',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '220px',
+        ellipsis: true
     },
     {
         name: 'accion',
         label: 'Acción inmediata',
         field: 'accion',
         align: 'left',
-        width: '240px',
-        maxWidth: '240px',
+        maxWidth: '360px',
         ellipsis: true
     },
     {
@@ -32,7 +32,7 @@ export const PROTOCOLOS_COLUMNS = [
         name: 'medio',
         label: 'Medio de Comunicación',
         field: 'medio',
-        align: 'medio'
+        align: 'left'
     },
     {
         name: 'estado',

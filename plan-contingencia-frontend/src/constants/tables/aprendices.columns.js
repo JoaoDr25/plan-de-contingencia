@@ -1,10 +1,9 @@
 export const APRENDICES_COLUMNS = [
-     {
-        name: 'id',
-        label: 'N°',
+    {
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'documento',
@@ -18,14 +17,18 @@ export const APRENDICES_COLUMNS = [
         label: 'Nombre Completo',
         field: 'nombre',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '260px',
+        ellipsis: true
     },
     {
         name: 'programa',
         label: 'Programa de Formación',
         field: 'programa',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '260px',
+        ellipsis: true
     },
     {
         name: 'ficha',
@@ -41,12 +44,14 @@ export const APRENDICES_COLUMNS = [
         align: 'left',
         sortable: true
     },
-     {
+    {
         name: 'contacto',
         label: 'Contacto de Emergencia',
         field: 'contacto',
         align: 'left',
-        sortable: false
+        sortable: false,
+        maxWidth: '200px',
+        ellipsis: true
     },
     {
         name: 'estado',

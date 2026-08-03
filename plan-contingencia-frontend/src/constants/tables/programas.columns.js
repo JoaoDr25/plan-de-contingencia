@@ -1,7 +1,7 @@
 export const PROGRAMAS_COLUMNS = [
     {
         name: 'index',
-        label: 'N°',
+        label: 'N',
         field: 'id',
         align: 'center'
     },
@@ -32,7 +32,9 @@ export const PROGRAMAS_COLUMNS = [
         name: 'centro',
         label: 'Centro de Formación',
         field: 'centro',
-        align: 'left'
+        align: 'left',
+        width: '200px',
+        ellipsis: true
     },
     {
         name: 'fecha',

@@ -15,7 +15,7 @@
 import {
   SYSTEM_NAME,
   ORGANIZATION
-} from 'src/constants/app.constants'
+} from 'src/constants/system/app.constants'
 
 const currentYear = new Date().getFullYear()
 

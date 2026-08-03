@@ -22,7 +22,7 @@
 
 <script setup>
 
-import { dashboardModules } from 'src/constants/dashboard.constants.js';
+import { dashboardModules } from 'src/constants/system/dashboard.constants.js';
 import DashboardModuleCard from './DashboardModuleCard.vue';
 
 </script>
