@@ -1,17 +1,18 @@
 export const ACTIVIDADES_COLUMNS = [
      {
-        name: 'id',
-        label: 'N°',
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'nombre',
         label: 'Nombre de la Actividad',
         field: 'nombre',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '250px',
+        ellipsis: true
     },
     {
         name: 'tipo',
@@ -25,7 +26,9 @@ export const ACTIVIDADES_COLUMNS = [
         label: 'Descripción',
         field: 'descripcion',
         align: 'left',
-        sortable: false
+        sortable: false,
+        maxWidth: '320px',
+        ellipsis: true
     },
     {
         name: 'peligros',

@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
 }
 

@@ -1027,4 +1027,187 @@ La misma estrategia será aplicada durante la construcción de los módulos CRUD
 
 ---
 
+---
+
+# Arquitectura de Componentes CRUD
+
+Los módulos administrativos del Sistema de Gestión de Planes de Contingencia siguen una arquitectura uniforme basada en componentes reutilizables.
+
+Esta arquitectura busca estandarizar la construcción de todas las vistas CRUD del sistema, garantizando consistencia visual, reutilización de código y facilidad de mantenimiento.
+
+Cada módulo reutiliza exactamente la misma estructura de componentes, variando únicamente la configuración de columnas, filtros, datos y acciones propias del dominio funcional.
+
+La composición general de un módulo CRUD es la siguiente:
+
+```
+BasePage
+
+↓
+
+CrudHeader
+
+↓
+
+CrudToolbar
+
+↓
+
+BaseTable
+
+↓
+
+BaseTableInfo
+
+↓
+
+BasePagination
+```
+
+Cada componente posee una responsabilidad claramente definida y se comunica mediante Props, Slots y Emits, evitando el acoplamiento entre la infraestructura visual y la lógica del negocio.
+
+Actualmente esta arquitectura es utilizada por los siguientes módulos del sistema:
+
+- Programas de Formación
+- Actividades
+- Peligros
+- Riesgos
+- Protocolos
+- Usuarios
+- Aprendices
+- Contactos de Emergencia
+- Elementos de Protección Personal (EPP)
+
+Gracias a esta estructura, la incorporación de un nuevo módulo administrativo requiere únicamente definir:
+
+- Las columnas de la tabla.
+- Los filtros disponibles.
+- Los datos del módulo.
+- Las acciones específicas.
+
+La infraestructura visual permanece completamente reutilizable.
+
+---
+
+## Responsabilidades de los Componentes CRUD
+
+### BasePage
+
+Representa el contenedor principal de todas las vistas administrativas.
+
+Su responsabilidad consiste en proporcionar una estructura uniforme para todas las páginas del sistema, centralizando el ancho máximo, el espaciado y la alineación del contenido.
+
+No contiene lógica de negocio.
+
+---
+
+### CrudHeader
+
+Representa la cabecera funcional del módulo.
+
+Incluye:
+
+- Título del módulo.
+- Botón de navegación.
+- Separador institucional.
+
+Cada vista define únicamente el título y la ruta de retorno correspondiente.
+
+---
+
+### CrudToolbar
+
+Agrupa las herramientas de interacción del listado.
+
+Su diseño se basa en Slots, permitiendo construir diferentes distribuciones sin modificar el componente.
+
+Actualmente soporta tres regiones independientes:
+
+- Left
+- Center
+- Right
+
+Esta arquitectura facilita incorporar nuevos controles sin afectar la estructura existente.
+
+---
+
+### CrudFilters
+
+Componente responsable de representar los filtros disponibles para cada módulo.
+
+Las opciones se reciben mediante Props y el estado seleccionado se sincroniza utilizando `v-model`.
+
+Cada módulo define sus propios filtros mediante archivos de constantes.
+
+---
+
+### BaseSearch
+
+Componente reutilizable encargado de realizar búsquedas sobre los registros del módulo.
+
+No implementa lógica de filtrado.
+
+Su responsabilidad consiste únicamente en capturar el texto ingresado por el usuario y sincronizarlo mediante `v-model`.
+
+El filtrado de datos permanece completamente desacoplado dentro de cada página.
+
+---
+
+### BaseTable
+
+Componente responsable de representar los registros del módulo.
+
+La tabla no conoce ninguna entidad del sistema.
+
+Toda la información necesaria se recibe mediante Props.
+
+Entre sus responsabilidades se encuentran:
+
+- Mostrar columnas dinámicas.
+- Mostrar registros.
+- Gestionar estados de carga.
+- Mostrar mensajes cuando no existen registros.
+- Integrarse con la paginación externa.
+- Aplicar estilos comunes a todas las tablas.
+
+---
+
+### BaseTableInfo
+
+Representa el resumen de registros visibles.
+
+Ejemplo:
+
+```
+1-8 de 124
+```
+
+La información es completamente calculada desde el componente padre.
+
+---
+
+### BasePagination
+
+Gestiona la navegación entre páginas del listado.
+
+El componente no administra el estado interno de la paginación.
+
+Todas las acciones son comunicadas al componente padre mediante eventos (`emit`), manteniendo una arquitectura unidireccional.
+
+---
+
+## Beneficios de esta Arquitectura
+
+La implementación de esta infraestructura proporciona múltiples ventajas para el proyecto:
+
+- Consistencia visual entre todos los módulos.
+- Reducción significativa de código duplicado.
+- Separación clara de responsabilidades.
+- Mayor facilidad para realizar mantenimiento.
+- Escalabilidad para incorporar nuevos módulos.
+- Desacoplamiento entre la lógica del negocio y la infraestructura visual.
+- Reutilización completa de componentes.
+
+Esta arquitectura constituye actualmente la base sobre la cual se desarrollan todos los módulos administrativos del Sistema de Gestión de Planes de Contingencia.
+
+---
 

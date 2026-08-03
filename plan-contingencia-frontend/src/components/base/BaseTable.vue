@@ -24,6 +24,25 @@
 
             </template>
 
+            <template v-for="col in columns" :key="col.name" v-slot:[`body-cell-${col.name}`]="props">
+               
+                <template v-if="$slots[`body-cell-${col.name}`]">
+                  
+                    <slot :name="`body-cell-${col.name}`" v-bind="props" />
+              
+                </template>
+               
+                <template v-else>
+                  
+                    <q-td :props="props" :style="getCellStyle(props.col)" :class="getCellClass(props.col)">
+                     
+                        {{ props.value }}
+                   
+                    </q-td>
+              
+                </template>
+            </template>
+
         </q-table>
 
         <div class="base-table__footer">
@@ -154,17 +173,16 @@ function getCellClass(column) {
     height: 40.5px;
     color: $color-text-primary;
     font-size: $font-size-sm;
-    padding-left: 20px;
 }
 
 .base-table__table :deep(td) {
     font-size: $font-size-xs;
     vertical-align: middle;
-
 }
 
 .base-table__table :deep(.q-table__middle) {
     min-height: 375px;
+    // min-height: auto;
     background-image: linear-gradient(to bottom,
             transparent 39px,
             $color-border-table 39px,

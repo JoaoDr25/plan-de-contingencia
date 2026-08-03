@@ -1,10 +1,9 @@
 export const CONTACTOS_COLUMNS = [
      {
-        name: 'id',
-        label: 'N°',
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'tipo',
@@ -18,7 +17,9 @@ export const CONTACTOS_COLUMNS = [
         label: 'Nombre de la Entidad',
         field: 'nombre',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '320px',
+        ellipsis: true
     },
     {
         name: 'telefono',

@@ -1,24 +1,27 @@
 export const EPP_COLUMNS = [
      {
-        name: 'id',
-        label: 'N°',
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'nombre',
         label: 'Nombre de EPP',
         field: 'nombre',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '160px',
+        ellipsis: true
     },
     {
         name: 'categoria',
         label: 'Categoría',
         field: 'categoria',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '160px',
+        ellipsis: true
     },
     {
         name: 'nivel',
@@ -30,7 +33,9 @@ export const EPP_COLUMNS = [
         name: 'descripcion',
         label: 'Descripción',
         field: 'descripcion',
-        align: 'left'
+        align: 'left',
+        maxWidth: '320px',
+        ellipsis: true
     },
     {
         name: 'estado',

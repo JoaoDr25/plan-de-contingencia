@@ -1,17 +1,18 @@
 export const PELIGROS_COLUMNS = [
      {
-        name: 'id',
-        label: 'N°',
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'nombre',
         label: 'Nombre del Peligro',
         field: 'nombre',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '220px',
+        ellipsis: true
     },
     {
         name: 'categoria',
@@ -25,6 +26,8 @@ export const PELIGROS_COLUMNS = [
         label: 'Descripción',
         field: 'descripcion',
         align: 'left',
+        maxWidth: '320px',
+        ellipsis: true
     },
     {
         name: 'riesgos',

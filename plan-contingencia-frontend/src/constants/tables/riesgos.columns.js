@@ -1,17 +1,18 @@
 export const RIESGOS_COLUMNS = [
      {
-        name: 'id',
-        label: 'N°',
+        name: 'index',
+        label: 'N',
         field: 'id',
-        align: 'left',
-        sortable: true
+        align: 'center'
     },
     {
         name: 'riesgo',
         label: 'Riesgo',
         field: 'riesgo',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '220px',
+        ellipsis: true
     },
     {
         name: 'nivel',
@@ -24,13 +25,17 @@ export const RIESGOS_COLUMNS = [
         label: 'Consecuencia',
         field: 'consecuencia',
         align: 'left',
-        sortable: true
+        sortable: true,
+        maxWidth: '220px',
+        ellipsis: true
     },
     {
         name: 'descripcion',
         label: 'Descripción',
         field: 'descripcion',
-        align: 'left'
+        align: 'left',
+        maxWidth: '360px',
+        ellipsis: true
     },
     {
         name: 'protocolos',
