@@ -72,9 +72,9 @@ const search = computed({
 }
 
 .base-search :deep(.q-icon) {
-    font-size: 18px;
+    font-size: 17px;
     color: #6b7280;
-    padding-bottom: 4px;
+    padding-bottom: 3px;
 }
 
 .base-search :deep(input::placeholder) {
@@ -87,7 +87,6 @@ const search = computed({
         min-width: 240px;
         width:100%;
     }
-
 }
 
 </style>

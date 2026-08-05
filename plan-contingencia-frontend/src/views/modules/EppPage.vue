@@ -2,15 +2,17 @@
 
   <BasePage>
 
-    <CrudHeader title="Elementos de Protección Personal" back-route="dashboard" />
+    <CrudHeader title="Elementos de Protección Personal">
 
-    <CrudToolbar>
-
-      <template #right>
+      <template #actions>
 
         <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
 
       </template>
+
+    </CrudHeader>
+
+    <CrudToolbar>
 
       <template #center>
 
@@ -30,15 +32,15 @@
       :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
       :total="filteredRows.length" @change-page="currentPage = $event">
 
-    <template #body-cell-estado="props">
+      <template #body-cell-estado="props">
 
-      <q-td :props="props">
-        <StatusChip :status="props.value" />
-      </q-td>
+        <q-td :props="props">
+          <StatusChip :status="props.value" />
+        </q-td>
 
-    </template>
+      </template>
 
-    <template #body-cell-nivel="props">
+      <template #body-cell-nivel="props">
 
         <q-td :props="props">
           <LevelChip :level="props.value" />
@@ -46,17 +48,17 @@
 
       </template>
 
-       <template #body-cell-opciones="props">
+      <template #body-cell-opciones="props">
 
         <q-td :props="props">
 
-          <CrudActions :actions="getCrudActions()" @view="viewItem(props.row)" @edit="editItem(props.row)"
+          <CrudActions :actions="getCrudActions(props.row)" @view="viewItem(props.row)" @edit="editItem(props.row)"
             @delete="deleteItem(props.row)" />
         </q-td>
 
       </template>
 
-     </BaseTable>
+    </BaseTable>
 
   </BasePage>
 
@@ -64,11 +66,14 @@
 
 <script setup>
 
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 import { EPP_FILTERS } from 'src/constants/filters/epp.constantas';
 import { EPP_COLUMNS } from 'src/constants/tables/epp.columns';
 import { EPP_MOCK } from 'src/mocks/epp.mock';
+
+import { getCrudActions } from 'src/helpers/crud.helper';
+import { useCrudTable } from 'src/composables/useCrudTable';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/base/CrudHeader.vue';
@@ -81,81 +86,30 @@ import StatusChip from 'src/components/base/StatusChip.vue';
 import LevelChip from 'src/components/base/LevelChip.vue';
 import CrudActions from 'src/components/base/CrudActions.vue';
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
-}
+const sourceRows = ref(EPP_MOCK);
 
-const selectedFilter = ref('nombre')
-const searchText = ref('')
-
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
+const {
+  selectedFilter,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow
+} = useCrudTable({
+  sourceRows,
+  defaultFilter: 'nombre',
+  exactSearchField: ['estado'],
+  defaultRowsPerPage: 8
+})
 
 const loading = ref(false);
 
-const rows = ref(EPP_MOCK);
-
-function normalizeText(text) {
-
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
+const openDialog = () => {
+  console.log('Abrir diálogo de creación')
 }
-
-const filteredRows = computed(() => {
-
-  const search = normalizeText(searchText.value.trim())
-
-  if (!search) {
-    return rows.value
-  }
-
-  return rows.value.filter((row) => {
-
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
-    }
-    return value.includes(search)
-  })
-
-})
-
-const totalPages = computed(() => {
-
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
-})
-
-const paginatedRows = computed(() => {
-
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-})
-
-
-const endRow = computed(() => {
-
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
-})
 
 function viewItem(row) {
   console.log('Ver', row)
@@ -167,14 +121,6 @@ function editItem(row) {
 
 function deleteItem(row) {
   console.log('Eliminar', row)
-}
-
-function getCrudActions() {
-  return [
-    'view',
-    'edit',
-    'delete'
-  ]
 }
 
 </script>

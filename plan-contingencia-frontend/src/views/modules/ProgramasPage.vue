@@ -2,15 +2,17 @@
 
   <BasePage>
 
-    <CrudHeader title="Programas de Formación" back-route="dashboard" />
+    <CrudHeader title="Programas de Formación">
+
+    <template #actions>
+
+      <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
+
+    </template>
+
+    </CrudHeader>
 
     <CrudToolbar>
-
-      <template #right>
-
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
-
-      </template>
 
       <template #center>
 
@@ -41,7 +43,7 @@
       <template #body-cell-opciones="props">
 
         <q-td :props="props">
-          <CrudActions :actions="getCrudActions()" @view="viewItem(props.row)" @edit="editItem(props.row)"
+          <CrudActions :actions="getCrudActions(props.row)" @view="viewItem(props.row)" @edit="editItem(props.row)"
             @delete="deleteItem(props.row)" />
         </q-td>
 
@@ -55,11 +57,14 @@
 
 <script setup>
 
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 import { PROGRAMAS_FILTERS } from "src/constants/filters/programas.constants";
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns';
 import { PROGRAMAS_MOCK } from 'src/mocks/programas.mock';
+
+import { getCrudActions } from 'src/helpers/crud.helper';
+import { useCrudTable } from 'src/composables/useCrudTable';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/base/CrudHeader.vue';
@@ -71,76 +76,30 @@ import BaseTable from 'src/components/base/BaseTable.vue';
 import StatusChip from 'src/components/base/StatusChip.vue';
 import CrudActions from 'src/components/base/CrudActions.vue';
 
+const sourceRows = ref(PROGRAMAS_MOCK)
+
+const {
+  selectedFilter,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow
+} = useCrudTable({
+  sourceRows,
+  defaultFilter: 'ficha',
+  exactSearchField: ['estado'],
+  defaultRowsPerPage: 8
+})
+
+const loading = ref(false)
+
 const openDialog = () => {
   console.log('Abrir diálogo de creación')
 }
-
-const selectedFilter = ref('ficha')
-const searchText = ref('')
-
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
-
-const loading = ref(false);
-
-const rows = ref(PROGRAMAS_MOCK)
-
-function normalizeText(text) {
-
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
-}
-
-const filteredRows = computed(() => {
-
-  const search = normalizeText(searchText.value.trim())
-
-  if (!search) {
-    return rows.value
-  }
-
-  return rows.value.filter((row) => {
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
-    }
-    return value.includes(search)
-  })
-})
-
-const totalPages = computed(() => {
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
-
-})
-
-const paginatedRows = computed(() => {
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-})
-
-
-const endRow = computed(() => {
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
-})
 
 function viewItem(row) {
   console.log('Ver', row)
@@ -152,14 +111,6 @@ function editItem(row) {
 
 function deleteItem(row) {
   console.log('Eliminar', row)
-}
-
-function getCrudActions() {
-  return [
-    'view',
-    'edit',
-    'delete'
-  ]
 }
 
 </script>

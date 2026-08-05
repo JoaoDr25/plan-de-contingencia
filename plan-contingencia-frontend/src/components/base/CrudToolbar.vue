@@ -2,17 +2,6 @@
 
     <div class="crud-toolbar">
 
-        <div class="crud-toolbar__top">
-
-            <div class="crud-toolbar__right">
-
-                <slot name="right" />
-
-            </div>
-
-        </div>
-
-
         <div class="crud-toolbar__bottom">
 
             <div class="crud-toolbar__center">
@@ -39,31 +28,22 @@
 </script>
 
 <style scoped lang="scss">
+
 .crud-toolbar {
     display: flex;
     flex-direction: column;
-    gap: 24px;
     width: 100%;
     margin: 0 auto;
 }
 
-.crud-toolbar__top {
-    display: flex;
-    justify-content: left;
-}
 
 .crud-toolbar__bottom {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 24px;
+    gap: 8px;
     flex-wrap: wrap;
-}
-
-.crud-toolbar__right {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    padding-top: 10px;
 }
 
 .crud-toolbar__center {

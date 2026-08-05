@@ -52,7 +52,7 @@ function handleClick() {
 
 .primary-action-button--sm {
     border-radius: 3px;
-    min-width: 100px;
+    min-width: 90px;
     height: 30px;
     font-size: 0.81rem;
     font-weight: 400;

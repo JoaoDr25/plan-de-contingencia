@@ -10,7 +10,13 @@
 
             </h1>
 
-                <div class="crud-header__divider"></div>
+            <div class="crud-header__divider"></div>
+
+            <div v-if="$slots.actions" class="crud-header__actions">
+
+                <slot name="actions" />
+
+            </div>
 
         </div>
 
@@ -32,7 +38,6 @@ const {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -66,4 +71,10 @@ const {
     border-radius: 999px;
 }
 
+.crud-header__actions {
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 8px;
+}
 </style>
