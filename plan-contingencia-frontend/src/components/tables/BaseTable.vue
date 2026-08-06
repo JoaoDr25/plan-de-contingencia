@@ -68,7 +68,7 @@
 <script setup>
 
 import BaseTableInfo from './BaseTableInfo.vue';
-import BasePagination from 'src/components/base/BasePagination.vue';
+import BasePagination from 'src/components/tables/BasePagination.vue';
 
 const {
     rows,
@@ -158,7 +158,7 @@ function getCellClass(column) {
 }
 
 .base-table__table {
-    border-radius: 5px;
+    border-radius: 5px 5px 0 0;
     font-family: $font-family-base;
     background-color: $color-surface;
 }
@@ -203,7 +203,7 @@ function getCellClass(column) {
 }
 
 .base-table__table :deep(.q-table td) {
-    padding-top: 1px !important;
+    padding-top: 10px !important;
 }
 
 .base-table__table :deep(.column-index) {

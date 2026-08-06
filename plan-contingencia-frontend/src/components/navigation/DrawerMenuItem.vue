@@ -59,7 +59,7 @@ function handleClick() {
     padding: 0 0.5rem;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    min-height: 42px;
+    min-height: 41px;
     width: 100%;
 }
 
@@ -71,10 +71,11 @@ function handleClick() {
     color: inherit;
     flex: 0 0 auto;
     min-width: 0%;
+    padding-left: 10px;
 }
 
 .drawer-menu-item__label {
-    font-size: 0.95rem;
+    font-size: 0.90rem;
     font-weight: 400;
     padding-right: 0;
     overflow: hidden;

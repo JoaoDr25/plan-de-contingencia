@@ -13,7 +13,7 @@
 
 import { computed } from 'vue'
 
-import BaseChip from './BaseChip.vue'
+import BaseChip from '../states/BaseChip.vue'
 import { LEVEL_MAP } from 'src/constants/states/level.constants.js'
 
 const props = defineProps({

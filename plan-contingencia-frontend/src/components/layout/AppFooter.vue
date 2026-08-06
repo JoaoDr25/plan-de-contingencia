@@ -30,13 +30,15 @@ const currentYear = new Date().getFullYear()
 .app-footer {
   background: $color-background-secondary;
   border-top: 1px solid $color-border;
+  position: relative;
+  top: 4px;
 }
 
 .app-footer__content {
   @include flex-center;
   color: black;
-  min-height: 44px;
-  padding: 0.5rem 1rem;
+  height: 45px;
+  max-height: 45px;
   font-size: 0.93rem;
   font-weight: 600;
   text-align: center;

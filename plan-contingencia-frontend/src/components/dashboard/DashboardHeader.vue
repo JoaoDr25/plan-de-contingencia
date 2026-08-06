@@ -16,7 +16,7 @@
 
 <script setup>
 
-import PrimaryActionButton from '../base/PrimaryActionButton.vue';
+import PrimaryActionButton from '../actions/PrimaryActionButton.vue';
 
 import { useRouter } from 'vue-router';
 const router = useRouter()

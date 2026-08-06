@@ -15,7 +15,7 @@
 
 <script setup>
 
-import BaseIconButton from './BaseIconButton.vue'
+import BaseIconButton from 'src/components/base/BaseIconButton.vue';
 
 const {
     actions

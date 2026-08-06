@@ -37,9 +37,10 @@ import DashboardModuleCard from './DashboardModuleCard.vue';
 }
 
 .dashboard-modules__title {
+    padding-top: 22px;
     margin: 1.8rem;
     text-align: center;
-    font-size: 1.30rem;
+    font-size: 1.25rem;
     font-weight: 600;
     letter-spacing: 0.5px;
     color: $color-text-primary;

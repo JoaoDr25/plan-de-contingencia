@@ -4,7 +4,7 @@
 
         <div class="app-drawer__header">
 
-            <AppLogo :size="80" />
+            <AppLogo :size="78" />
 
         </div>
 
@@ -69,7 +69,7 @@ const drawerOpen = defineModel()
 
 .app-drawer__header {
     @include flex-center;
-    padding: 3rem 1rem 1rem;
+    padding: 1.8rem 1rem 0.4rem;
 }
 
 .app-drawer__user {
@@ -81,7 +81,7 @@ const drawerOpen = defineModel()
 }
 
 .app-drawer__role {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
     text-transform: uppercase;
     margin: 0;
@@ -89,8 +89,7 @@ const drawerOpen = defineModel()
 
 .app-drawer__name {
     margin-top: 0.5rem;
-    margin-bottom: 0.25rem;
-    font-size: 0.80rem;
+    font-size: 0.77rem;
     font-weight: 600;
 }
 
@@ -101,7 +100,7 @@ const drawerOpen = defineModel()
 
 .app-drawer__content {
     flex: 1;
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem 0;
     overflow-y: auto;
 }
 </style>

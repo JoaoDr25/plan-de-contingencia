@@ -75,6 +75,8 @@ const {
     width: 100%;
     padding: 0;
     color: inherit !important;
+    text-transform: capitalize;
+    padding-top: 3px;
 }
 
 .base-chip--compact{

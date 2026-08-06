@@ -43,7 +43,7 @@
       <template #body-cell-opciones="props">
 
         <q-td :props="props">
-          <CrudActions :actions="getCrudActions(props.row)" @view="viewItem(props.row)" @edit="editItem(props.row)"
+          <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
             @delete="deleteItem(props.row)" />
         </q-td>
 
@@ -59,22 +59,21 @@
 
 import { ref } from 'vue';
 
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants';
 import { APRENDICES_FILTERS } from 'src/constants/filters/aprendices.constants';
 import { APRENDICES_COLUMNS } from 'src/constants/tables/aprendices.columns';
 import { APRENDICES_MOCK } from 'src/mocks/aprendices.mock';
-
-import { getCrudActions } from 'src/helpers/crud.helper';
 import { useCrudTable } from 'src/composables/useCrudTable';
 
 import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
+import CrudHeader from 'src/components/cruds/CrudHeader.vue';
+import CrudFilters from 'src/components/cruds/CrudFilters.vue';
 import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
-import StatusChip from 'src/components/base/StatusChip.vue';
-import CrudActions from 'src/components/base/CrudActions.vue';
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
+import BaseTable from 'src/components/tables/BaseTable.vue';
+import StatusChip from 'src/components/states/StatusChip.vue';
+import CrudActions from 'src/components/actions/CrudActions.vue';
 
 const sourceRows = ref(APRENDICES_MOCK);
 

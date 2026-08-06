@@ -3,7 +3,6 @@
     <q-btn 
     round 
     unelevated 
-    size="10.9px"
     icon="arrow_back" 
     class="back-button"
     @click="goBack" 
@@ -41,6 +40,7 @@ function goBack() {
     background-color: $color-primary;
     color: $color-background;
     transition: background-color 0.2s ease;
+    font-size: 0.70rem;
 }
 
 .back-button:hover {

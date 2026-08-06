@@ -84,7 +84,7 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    z-index: 900;
+    z-index: 1100;
 }
 
 .floating-scroll-buttons__button {

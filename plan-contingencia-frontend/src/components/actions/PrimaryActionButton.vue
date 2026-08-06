@@ -1,6 +1,9 @@
 <template>
 
-    <q-btn unelevated :class="['primary-action-button', `primary-action-button--${size}`]" :icon="icon" :label="label" @click="handleClick" />
+    <q-btn unelevated :class="['primary-action-button', `primary-action-button--${size}`]" :icon="icon" :label="label"
+        :loading="loading" :disable="disable" class="{
+        'primary-action-button--full': fullWidth }" 
+        @click="emit('click')" />
 
 </template>
 
@@ -9,6 +12,9 @@
 const {
     label,
     icon,
+    size,
+    loading,
+    disable
 } = defineProps({
 
     label: {
@@ -17,25 +23,35 @@ const {
     },
     icon: {
         type: String,
-        required: true
+        default: ''
     },
     size: {
         type: String,
         default: 'md',
-        validator: value => ['sm','md','lg'].includes(value)
+        validator: value => ['sm', 'md', 'lg'].includes(value)
+    },
+    loading: {
+        type: Boolean,
+        default: false
+    },
+    disable: {
+        type: Boolean,
+        default: false
+    },
+    fullWidth: {
+        type: Boolean,
+        default: false
     }
 })
 
-const emit = defineEmits(['click'])
+const emit = defineEmits([
+    'click'
+])
 
-function handleClick() {
-    emit('click')
-}
 
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -46,7 +62,7 @@ function handleClick() {
     font-family: $font-family-base;
 }
 
-.primary-action-button :deep(.q-icon){
+.primary-action-button :deep(.q-icon) {
     font-size: 17px;
 }
 
@@ -78,9 +94,4 @@ function handleClick() {
 .primary-action-button:hover {
     background-color: $color-primary-dark;
 }
-
-.primary-action-button .q-icon {
-    font-size: 18px;
-}
-
 </style>
