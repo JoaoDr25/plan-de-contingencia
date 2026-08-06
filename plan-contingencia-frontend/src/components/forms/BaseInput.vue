@@ -33,7 +33,7 @@
 
 import { computed } from 'vue'
 
-import { INPUT_ICONS } from 'src/constants/actions/icon_inputs.constants';
+import { INPUT_ICONS } from 'src/constants/actions/inputs_icons.constants';
 
 const {
     modelValue,
