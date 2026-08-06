@@ -1,24 +1,17 @@
 <template>
 
-    <BaseDialog
-        v-model="dialog"
-        :title="dialogTitle"
-        width="700px"
-    >
+    <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
 
         <BaseFormGrid>
 
-            <!-- Aquí construiremos el formulario -->
+            <BaseFormField v-for="field in PROGRAM_FORM_FIELDS" :key="field.model" :field="field"
+                v-model="form[field.model]" />
 
         </BaseFormGrid>
 
         <template #actions>
 
-            <BaseDialogActions
-                :save-label="saveLabel"
-                @save="handleSave"
-                @cancel="closeDialog"
-            />
+            <BaseDialogActions :save-label="saveLabel" @save="handleSave" @cancel="closeDialog" />
 
         </template>
 
@@ -28,7 +21,9 @@
 
 <script setup>
 
-import { computed } from 'vue';
+import { reactive, computed } from 'vue';
+
+import { PROGRAM_FORM_FIELDS } from 'src/constants/forms/programas_form.constants';
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue';
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue';
@@ -36,23 +31,18 @@ import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue';
 
 const {
     modelValue,
-    mode,
-    program
-} = defineProps ({
-    
+    mode
+} = defineProps({
+
     modelValue: {
         type: String,
-        required: True
+        required: true
     },
     mode: {
         type: String,
         default: 'create',
         validator: value =>
             ['create', 'edit'].includes(value)
-    },
-    program: {
-        type: Object,
-        default: () => ({})
     }
 })
 
@@ -84,10 +74,14 @@ function handleSave() {
     emit('save')
 }
 
+const form = reactive({
+    ficha: '',
+    nombre: '',
+    nivel: null,
+    centro: '',
+    estado: 'Activo'
+})
+
 </script>
 
-<style scoped lang="scss">
-
-
-
-</style>
+<style scoped lang="scss"></style>
