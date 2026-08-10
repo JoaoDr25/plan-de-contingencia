@@ -65,7 +65,7 @@ import { useCrudTable } from 'src/composables/useCrudTable';
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/cruds/CrudHeader.vue';
 import CrudFilters from 'src/components/cruds/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
+import BaseSearch from 'src/components/forms/BaseSearch.vue';
 import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
 import BaseTable from 'src/components/tables/BaseTable.vue';

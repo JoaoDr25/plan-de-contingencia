@@ -21,21 +21,23 @@
 
 <script setup>
 
-import { reactive, computed } from 'vue';
+import { reactive, computed, watch } from 'vue';
 
 import { PROGRAM_FORM_FIELDS } from 'src/constants/forms/programas_form.constants';
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue';
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue';
+import BaseFormField from 'src/components/forms/BaseFormField.vue';
 import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue';
 
 const {
     modelValue,
-    mode
+    mode,
+    program
 } = defineProps({
 
     modelValue: {
-        type: String,
+        type: Boolean,
         required: true
     },
     mode: {
@@ -43,6 +45,10 @@ const {
         default: 'create',
         validator: value =>
             ['create', 'edit'].includes(value)
+    },
+      program: {
+        type: Object,
+        default: null
     }
 })
 
@@ -60,20 +66,6 @@ const dialog = computed({
     }
 })
 
-const dialogTitle = computed(() => {
-    return mode === 'create'
-        ? 'Crear Programa de Formación'
-        : 'Actualizar Programa de Formación'
-})
-
-function closeDialog() {
-    dialog.value = false
-}
-
-function handleSave() {
-    emit('save')
-}
-
 const form = reactive({
     ficha: '',
     nombre: '',
@@ -81,6 +73,71 @@ const form = reactive({
     centro: '',
     estado: 'Activo'
 })
+
+const dialogTitle = computed(() => {
+    return mode === 'create'
+        ? 'Crear Programa de Formación'
+        : 'Actualizar Programa de Formación'
+})
+
+const saveLabel = computed(() => {
+    return mode === 'edit'
+        ? 'Actualizar'
+        : 'Guardar'
+})
+
+function validateForm() {
+    for (const field of PROGRAM_FORM_FIELDS) {
+        const rules = field.rules ?? []
+        const value = form[field.model]
+
+        for (const rule of rules) {
+            const result = rule(value)
+            if (result !== true) {
+                return false
+            }
+        }
+    }
+    return true
+}
+
+function handleSave() {
+    if (!validateForm()) {
+        return
+    }
+    console.log('Datos del formulario:', form)
+    emit('save', {...form})
+}
+
+function resetForm(data = {}) {
+    form.ficha = data.ficha ?? ''
+    form.nombre = data.nombre ?? ''
+    form.nivel = data.nivel ?? ''
+    form.centro = data.centro ?? ''
+    form.estado = data.estado ?? 'Activo'
+}
+
+function initializeForm() {
+    if (mode === 'edit' && program) {
+        resetForm(program)
+        return
+    }
+    resetForm()
+}
+
+watch(
+    () => modelValue,
+    (isOpen) => {
+        if (isOpen) {
+            initializeForm()
+        }
+    }
+)
+
+function closeDialog() {
+    resetForm()
+    dialog.value = false
+}
 
 </script>
 

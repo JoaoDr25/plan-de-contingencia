@@ -6,7 +6,7 @@
         v-for="action in actions"
         :key="action"
         :action="action"
-        @click="emit(action.action)"
+        @click="emit(action)"
     />
 
 </div>

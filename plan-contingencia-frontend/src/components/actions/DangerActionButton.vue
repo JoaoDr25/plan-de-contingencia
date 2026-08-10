@@ -3,10 +3,10 @@
     <q-btn
         unelevated
         :class="[
-            'primary-action-button',
-            `primary-action-button--${size}`,
+            'danger-action-button',
+            `danger-action-button--${size}`,
             {
-                'primary-action-button--full': fullWidth
+                'danger-action-button--full': fullWidth
             }
         ]"
         :icon="icon"
@@ -28,7 +28,6 @@ const {
     disable,
     fullWidth
 } = defineProps({
-
     label: {
         type: String,
         required: true
@@ -64,25 +63,27 @@ function handleClick() {
     emit('click')
 }
 
-
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
-.primary-action-button {
-    background-color: $color-primary;
+.danger-action-button {
+    background-color: $color-error;
     color: $color-background;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
     font-family: $font-family-base;
 }
 
-.primary-action-button :deep(.q-icon) {
+.danger-action-button :deep(.q-icon) {
     font-size: 17px;
 }
 
-.primary-action-button--sm {
+.danger-action-button--sm {
     border-radius: 3px;
     min-width: 90px;
     height: 30px;
@@ -91,7 +92,7 @@ function handleClick() {
     text-transform: none;
 }
 
-.primary-action-button--md {
+.danger-action-button--md {
     border-radius: 4px;
     min-width: 180px;
     height: 40px;
@@ -99,7 +100,7 @@ function handleClick() {
     text-transform: none;
 }
 
-.primary-action-button--lg {
+.danger-action-button--lg {
     border-radius: 6px;
     min-width: 19.7rem;
     height: 42px;
@@ -107,7 +108,12 @@ function handleClick() {
     text-transform: uppercase;
 }
 
-.primary-action-button:hover {
-    background-color: $color-primary-dark;
+.danger-action-button--full {
+    width: 100%;
 }
+
+// .danger-action-button:hover {
+//     background-color: $color-error-dark;
+// }
+
 </style>

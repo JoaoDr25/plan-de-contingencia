@@ -48,6 +48,12 @@ function closeDrawer() {
 
 <style scoped lang="scss">
 
+@use 'src/css/variables.scss' as *;
+
+.q-page-container {
+  background-color: $color-surface;
+}
+
 .layout-back-button {
   position: absolute;
   top: 68px;
