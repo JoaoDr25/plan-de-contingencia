@@ -12,7 +12,9 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+@use 'src/css/variables.scss' as *;
 
 .base-page {
     width: 100%;
@@ -23,6 +25,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    background-color: $color-surface;
 }
 
 </style>

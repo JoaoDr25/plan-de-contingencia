@@ -22,11 +22,9 @@ const {
         type: Object,
         required: true
     },
-
     modelValue: {
         required: true
     }
-
 })
 
 const emit = defineEmits([
@@ -49,8 +47,4 @@ const componentProps = computed(() => {
 
 </script>
 
-<style scoped lang="scss">
-
-
-
-</style>
+<style scoped lang="scss"> </style>

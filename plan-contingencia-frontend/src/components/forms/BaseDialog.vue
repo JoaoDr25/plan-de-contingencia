@@ -23,7 +23,7 @@
             v-if="showFooter"
             class="base-dialog__footer"
         >
-            <slot name="footer" />
+            <slot name="actions" />
         </div>
 
     </q-card>
@@ -65,6 +65,8 @@ defineEmits([
 </script>
 
 <style scoped lang="scss">
+
+@use 'src/css/variables.scss' as *;
 
 .base-dialog {
     border-radius: 4px;

@@ -1,5 +1,7 @@
 import BaseInput from 'src/components/base/BaseInput.vue'
-import BaseSelect from 'src/components/base/BaseSelect.vue'
+import BaseSelect from 'src/components/forms/BaseSelect.vue'
+
+import { required } from 'src/validators/form.validator'
 
 export const PROGRAM_FORM_FIELDS = [
 
@@ -9,7 +11,11 @@ export const PROGRAM_FORM_FIELDS = [
         label: 'Ficha',
         placeholder: 'Ingrese la ficha',
         icon: 'badge',
-        maxlength: 10
+        maxlength: 10,
+        required: true,
+        rules: [
+            required
+        ]
     },
     {
         component: BaseInput,
@@ -17,7 +23,11 @@ export const PROGRAM_FORM_FIELDS = [
         label: 'Nombre del Programa',
         placeholder: 'Ingrese el nombre del programa',
         icon: 'school',
-        maxlength: 120
+        maxlength: 120,
+        required: true,
+        rules: [
+            required
+        ]
     },
     {
         component: BaseSelect,
@@ -25,7 +35,20 @@ export const PROGRAM_FORM_FIELDS = [
         label: 'Nivel de Formación',
         placeholder: 'Seleccione el nivel',
         icon: 'workspace_premium',
-        options: []
+        options: [
+            {
+                label: 'Técnico',
+                value: 'Técnico'
+            },
+            {
+                label: 'Tecnólogo',
+                value: 'Tecnólogo'
+            }
+        ],
+        required: true,
+        rules: [
+            required
+        ]
     },
     {
         component: BaseInput,
@@ -33,7 +56,11 @@ export const PROGRAM_FORM_FIELDS = [
         label: 'Centro de Formación',
         placeholder: 'Ingrese el centro de formación',
         icon: 'business',
-        maxlength: 120
+        maxlength: 120,
+        required: true,
+        rules: [
+            required
+        ]
     },
     {
         component: BaseSelect,
@@ -41,6 +68,19 @@ export const PROGRAM_FORM_FIELDS = [
         label: 'Estado',
         placeholder: 'Seleccione el estado',
         icon: 'toggle_on',
-        options: []
+        options: [
+            {
+                label: 'Activo',
+                value: 'Activo'
+            },
+            {
+                label: 'Inactivo',
+                value: 'Inactivo'
+            }
+        ],
+        required: true,
+        rules: [
+            required
+        ]
     }
 ]

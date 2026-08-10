@@ -1,8 +1,9 @@
 <template>
 
     <q-select class="base-select" :model-value="modelValue" :label="label" :options="options"
-        :option-label="optionLabel" :option-value="optionValue" :disable="disable" :readonly="readonly" outlined dense
-        emit-value map-options hide-bottom-space @update:model-value="emit('update:modelValue', $event)">
+        :option-label="optionLabel" :option-value="optionValue" :disable="disable" :readonly="readonly" :rules="rules"
+        :required="required" outlined dense emit-value map-options hide-bottom-space
+        @update:model-value="emit('update:modelValue', $event)">
 
         <template v-if="resolvedIcon" #prepend>
 
@@ -29,7 +30,9 @@ const {
     optionValue,
     disable,
     readonly,
-    icon
+    icon,
+    rules,
+    required
 } = defineProps({
 
     modelValue: {
@@ -63,6 +66,14 @@ const {
     icon: {
         type: String,
         default: ''
+    },
+    rules: {
+        type: Array,
+        default: () => []
+    },
+    required: {
+        type: Boolean,
+        default: false
     }
 })
 

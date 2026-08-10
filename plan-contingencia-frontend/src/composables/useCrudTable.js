@@ -1,10 +1,9 @@
 import { ref, computed } from "vue"
 
 export function useCrudTable({
-
     sourceRows,
     defaultFilter = 'id',
-    exactSearchField = [],
+    exactSearchField = null,
     defaultRowsPerPage
 }) {
 
@@ -32,7 +31,7 @@ export function useCrudTable({
         return sourceRows.value.filter((row) => {
             const value = normalizeText(row[selectedFilter.value] ?? '')
 
-            if (exactSearchField.includes(selectedFilter.value)) {
+            if (exactSearchField === selectedFilter.value) {
                 return value === search
             }
             return value.includes(search)

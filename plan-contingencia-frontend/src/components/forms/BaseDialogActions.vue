@@ -2,16 +2,16 @@
 
     <div class="base-dialog-actions">
 
-        <SecondaryActionButton
-            v-if="showCancel"
-            :label="cancelLabel"
-            @click="emit('cancel')"
-        />
-
         <PrimaryActionButton
             :label="saveLabel"
             :loading="loading"
             @click="emit('save')"
+        /> 
+
+        <SecondaryActionButton
+            v-if="showCancel"
+            :label="cancelLabel"
+            @click="emit('cancel')"
         />
 
     </div>
@@ -20,8 +20,8 @@
 
 <script setup>
 
-import PrimaryActionButton from './PrimaryActionButton.vue'
-import SecondaryActionButton from './SecondaryActionButton.vue'
+import PrimaryActionButton from '../actions/PrimaryActionButton.vue'
+import SecondaryActionButton from '../actions/SecondaryActionButton.vue'
 
 const {
     saveLabel,

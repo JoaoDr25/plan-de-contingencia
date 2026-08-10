@@ -1,25 +1,11 @@
 <template>
 
-    <q-input
-        class="base-input"
-        :model-value="modelValue"
-        :label="label"
-        :placeholder="placeholder"
-        :type="type"
-        :readonly="readonly"
-        :disable="disable"
-        :maxlength="maxlength"
-        :autofocus="autofocus"
-        outlined
-        dense
-        hide-bottom-space
-        @update:model-value="emit('update:modelValue', $event)"
-    >
+    <q-input class="base-textarea" :model-value="modelValue" :label="label" :placeholder="placeholder"
+        :readonly="readonly" :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules"
+        :required="required" outlined dense autogrow type="textarea" hide-bottom-space
+        @update:model-value="emit('update:modelValue', $event)">
 
-        <template
-            v-if="resolvedIcon"
-            #prepend
-        >
+        <template v-if="resolvedIcon" #prepend>
 
             <q-icon :name="resolvedIcon" />
 
@@ -33,56 +19,69 @@
 
 import { computed } from 'vue'
 
-import { INPUT_ICONS } from 'src/constants/actions/inputs_icons.constants';
+import { INPUT_ICONS } from 'src/constants/actions/inputs_icons.constants'
 
 const {
     modelValue,
     label,
     placeholder,
-    type,
     readonly,
     disable,
     maxlength,
     autofocus,
-    icon
+    icon,
+    rules,
+    required
 } = defineProps({
 
     modelValue: {
-        type: [String, Number],
+        type: String,
         default: ''
     },
+
     label: {
         type: String,
         required: true
     },
+
     placeholder: {
         type: String,
         default: ''
     },
-    type: {
-        type: String,
-        default: 'text'
-    },
+
     readonly: {
         type: Boolean,
         default: false
     },
+
     disable: {
         type: Boolean,
         default: false
     },
+
     maxlength: {
         type: Number,
         default: undefined
     },
+
     autofocus: {
         type: Boolean,
         default: false
     },
+
     icon: {
         type: String,
         default: ''
+    },
+    rules: {
+        type: Array,
+        default: () => []
+    },
+    required: {
+        type: Boolean,
+        default: false
     }
+
 })
 
 const emit = defineEmits([
@@ -93,39 +92,39 @@ const resolvedIcon = computed(() => {
 
     return (
         icon ||
-        INPUT_ICONS[type] ||
+        INPUT_ICONS.textarea ||
         ''
     )
+
 })
 
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
-.base-input {
+.base-textarea {
     width: 100%;
 }
 
-.base-input :deep(.q-field__control) {
-    min-height: 42px;
+.base-textarea :deep(.q-field__control) {
     border-radius: 5px;
 }
 
-.base-input :deep(.q-field__label) {
+.base-textarea :deep(.q-field__native) {
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    min-height: 90px;
+    resize: none;
+}
+
+.base-textarea :deep(.q-field__label) {
     font-size: $font-size-xs;
     color: $color-text-secondary;
 }
 
-.base-input :deep(.q-field__native) {
-    font-size: $font-size-sm;
-    color: $color-text-primary;
-}
-
-.base-input :deep(.q-field__prepend) {
+.base-textarea :deep(.q-field__prepend) {
     color: $color-text-secondary;
 }
-
 </style>

@@ -4,11 +4,11 @@
 
     <CrudHeader title="Programas de Formación">
 
-    <template #actions>
+      <template #actions>
 
-      <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
+        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-    </template>
+      </template>
 
     </CrudHeader>
 
@@ -51,13 +51,17 @@
 
     </BaseTable>
 
+    <ProgramasDialog v-model="dialog" :mode="dialogMode" :program="selectedProgram" @save="saveProgram" />
+
+    <ProgramasDetails v-model="detailsProgram" :program="selectedProgram" />
+
   </BasePage>
 
 </template>
 
 <script setup>
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants';
 import { PROGRAMAS_FILTERS } from "src/constants/filters/programas.constants";
@@ -68,12 +72,15 @@ import { useCrudTable } from 'src/composables/useCrudTable';
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/cruds/CrudHeader.vue';
 import CrudFilters from 'src/components/cruds/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
+import BaseSearch from 'src/components/forms/BaseSearch.vue';
 import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
 import BaseTable from 'src/components/tables/BaseTable.vue';
 import StatusChip from 'src/components/states/StatusChip.vue';
 import CrudActions from 'src/components/actions/CrudActions.vue';
+
+import ProgramasDialog from '../dialogs/ProgramasDialog.vue';
+import ProgramasDetails from '../details/ProgramasDetails.vue';
 
 const sourceRows = ref(PROGRAMAS_MOCK)
 
@@ -90,22 +97,70 @@ const {
 } = useCrudTable({
   sourceRows,
   defaultFilter: 'ficha',
-  exactSearchField: ['estado'],
+  exactSearchField: 'estado',
   defaultRowsPerPage: 8
 })
 
 const loading = ref(false)
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
+const dialog = ref(false)
+const detailsProgram = ref(true)
+
+const dialogMode = ref('create')
+const selectedProgram = ref(null)
+
+function openCreateDialog() {
+  dialogMode.value = 'create'
+  selectedProgram.value = null
+  dialog.value = true
+}
+
+function openEditDialog(row) {
+  dialogMode.value = 'edit'
+  selectedProgram.value = row
+  dialog.value = true
+}
+
+function saveProgram(formData) {
+  if (dialogMode.value === 'create') {
+    createProgram(formData)
+    return
+  }
+  updateProgram(formData)
+}
+
+function createProgram(formData) {
+  sourceRows.value.push({
+    ...formData,
+    fechaCreacion: new Date().toLocaleDateString('es-CO') //fecha temporal
+  })
+  dialog.value = false
+}
+
+function updateProgram(formData) {
+  const index = sourceRows.value.findIndex(
+    row => row === selectedProgram.value
+  )
+  if (index === -1) {
+    return
+  }
+  sourceRows.value[index] = {
+    ...sourceRows.value[index],
+    ...formData
+  }
+  dialog.value = false
 }
 
 function viewItem(row) {
-  console.log('Ver', row)
+  console.log('Ver Programa:', row)
+
+  selectedProgram.value = row
+  detailsProgram.value = true
 }
 
 function editItem(row) {
-  console.log('Editar', row)
+  console.log('Editar Programa', row)
+  openEditDialog(row)
 }
 
 function deleteItem(row) {
