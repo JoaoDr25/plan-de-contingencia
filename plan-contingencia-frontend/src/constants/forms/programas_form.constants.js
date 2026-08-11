@@ -29,6 +29,31 @@ export const PROGRAM_FORM_FIELDS = [
             required
         ]
     },
+      {
+        component: BaseSelect,
+        model: 'jornada',
+        label: 'Jornada',
+        placeholder: 'Seleccione la jornada',
+        icon: 'workspace_premium',
+        options: [
+            {
+                label: 'Mañana',
+                value: 'Mañana'
+            },
+            {
+                label: 'Tarde',
+                value: 'Tarde'
+            },
+            {
+                label: 'Noche',
+                value: 'Noche'
+            }
+        ],
+        required: true,
+        rules: [
+            required
+        ]
+    },
     {
         component: BaseSelect,
         model: 'nivel',

@@ -18,31 +18,40 @@
             <div class="program-details__content">
 
                 <div class="detail-item">
-
                     <span class="detail-item__label">
-                        Ficha
+                        Código
                     </span>
 
                     <span class="detail-item__value">
-                        {{ program.ficha }}
+                        {{ program.codigo }}
                     </span>
-
                 </div>
 
                 <div class="detail-item">
+                    <StatusChip :status="program.estado" />
+                </div>
 
+                <div class="detail-item">
                     <span class="detail-item__label">
                         Nombre del Programa
                     </span>
-
                     <span class="detail-item__value">
                         {{ program.nombre }}
                     </span>
-
                 </div>
 
                 <div class="detail-item">
+                    <span class="detail-item__label">
+                        Jornada
+                    </span>
 
+                    <span class="detail-item__value">
+                        {{ program.jornada }}
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
                     <span class="detail-item__label">
                         Nivel de Formación
                     </span>
@@ -50,23 +59,29 @@
                     <span class="detail-item__value">
                         {{ program.nivel }}
                     </span>
+                </div>
 
+                   <div class="detail-item">
+                    <span class="detail-item__label">
+                        Ficha
+                    </span>
+
+                    <span class="detail-item__value">
+                        {{ program.ficha }}
+                    </span>
                 </div>
 
                 <div class="detail-item">
-
                     <span class="detail-item__label">
-                        Centro de Formación
+                        Centro
                     </span>
 
                     <span class="detail-item__value">
                         {{ program.centro }}
                     </span>
-
                 </div>
 
                 <div class="detail-item">
-
                     <span class="detail-item__label">
                         Fecha de Creación
                     </span>
@@ -74,17 +89,6 @@
                     <span class="detail-item__value">
                         {{ program.fecha }}
                     </span>
-
-                </div>
-
-                <div class="detail-item">
-
-                    <span class="detail-item__label">
-                        Estado
-                    </span>
-
-                    <StatusChip :status="program.estado" />
-
                 </div>
 
             </div>

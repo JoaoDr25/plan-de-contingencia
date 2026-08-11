@@ -1,115 +1,282 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Contactos de Emergencia">
+        <CrudHeader title="Contactos de Emergencia">
 
-      <template #actions>
+            <template #actions>
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
+                <PrimaryActionButton
+                    label="Crear"
+                    icon="add_circle_outline"
+                    size="sm"
+                    @click="openCreateDialog"
+                />
 
-      </template>
+            </template>
 
-    </CrudHeader>
+        </CrudHeader>
 
-    <CrudToolbar>
+        <CrudToolbar>
 
-      <template #center>
+            <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="CONTACTOS_FILTERS" />
+                <CrudFilters
+                    v-model="selectedFilter"
+                    :options="CONTACTOS_FILTERS"
+                />
 
-      </template>
+            </template>
 
-      <template #left>
+            <template #left>
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por tipo de contacto, nombre, ciudad, estado..." />
+                <BaseSearch
+                    v-model="searchText"
+                    placeholder="Buscar por tipo de contacto, nombre, estado..."
+                />
 
-      </template>
+            </template>
 
-    </CrudToolbar>
+        </CrudToolbar>
 
-    <BaseTable :rows="paginatedRows" :columns="CONTACTOS_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event">
+        <BaseTable
+            :rows="paginatedRows"
+            :columns="CONTACTOS_COLUMNS"
+            :loading="loading"
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            :rows-per-page="rowsPerPage"
+            :start="startRow"
+            :end="endRow"
+            :total="filteredRows.length"
+            @change-page="currentPage = $event"
+        >
 
-      <template #body-cell-estado="props">
+            <template #body-cell-estado="props">
 
-        <q-td :props="props">
-          <StatusChip :status="props.value" />
-        </q-td>
+                <q-td :props="props">
 
-      </template>
+                    <StatusChip :status="props.value" />
 
-      <template #body-cell-opciones="props">
+                </q-td>
 
-        <q-td :props="props">
-          <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
-            @delete="deleteItem(props.row)" />
-        </q-td>
+            </template>
 
-      </template>
+            <template #body-cell-opciones="props">
 
-    </BaseTable>
+                <q-td :props="props">
 
-  </BasePage>
+                    <CrudActions
+                        :actions="DEFAULT_CRUD_ACTIONS"
+                        @view="viewItem(props.row)"
+                        @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)"
+                    />
+
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <ContactosDialog
+            v-model="dialog"
+            :mode="dialogMode"
+            :contact="selectedContact"
+            @save="handleContactSave"
+        />
+
+        <BaseConfirmationDialog
+            v-model="confirmationDialog"
+            :title="confirmationTitle"
+            :message="confirmationMessage"
+            :confirm-label="confirmationLabel"
+            :variant="confirmationVariant"
+            @confirm="confirmAction"
+            @cancel="cancelConfirmation"
+        />
+
+        <ContactosDetails
+            v-model="detailsContact"
+            :contact="selectedContact"
+        />
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants';
-import { CONTACTOS_FILTERS } from 'src/constants/filters/contactos.constants';
-import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns';
-import { CONTACTOS_MOCK } from 'src/mocks/contactos.mock';
-import { useCrudTable } from 'src/composables/useCrudTable';
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { CONTACTOS_FILTERS } from 'src/constants/filters/contactos.constants'
+import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns'
+import { CONTACTOS_MOCK } from 'src/mocks/contactos.mock'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { getCurrentDate } from 'src/utils/date.utils'
 
-import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/cruds/CrudHeader.vue';
-import CrudFilters from 'src/components/cruds/CrudFilters.vue';
-import BaseSearch from 'src/components/forms/BaseSearch.vue';
-import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
-import BaseTable from 'src/components/tables/BaseTable.vue';
-import StatusChip from 'src/components/states/StatusChip.vue';
-import CrudActions from 'src/components/actions/CrudActions.vue';
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import StatusChip from 'src/components/states/StatusChip.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
 
-const sourceRows = ref(CONTACTOS_MOCK);
+import ContactosDialog from '../dialogs/ContactosDialog.vue'
+import ContactosDetails from '../details/ContactosDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
+const sourceRows = ref(CONTACTOS_MOCK)
 
 const {
-  selectedFilter,
-  searchText,
-  currentPage,
-  rowsPerPage,
-  filteredRows,
-  paginatedRows,
-  totalPages,
-  startRow,
-  endRow
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
 } = useCrudTable({
-  sourceRows,
-  defaultFilter: 'tipo-contacto',
-  exactSearchField: ['estado'],
-  defaultRowsPerPage: 8
+    sourceRows,
+    defaultFilter: 'tipoContacto',
+    exactSearchField: 'estado',
+    defaultRowsPerPage: 8
 })
 
-const loading = ref(false);
+const loading = ref(false)
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
+const dialog = ref(false)
+const detailsContact = ref(false)
+
+const dialogMode = ref('create')
+const selectedContact = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
+    }
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear este contacto de emergencia?',
+        edit: '¿Está seguro de actualizar este contacto de emergencia?',
+        delete: '¿Está seguro de eliminar este contacto de emergencia?'
+    }
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedContact.value = null
+    dialog.value = true
+}
+
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedContact.value = row
+    dialog.value = true
+}
+
+function handleContactSave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
+
+function createContact(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
+    dialog.value = false
+}
+
+function updateContact(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedContact.value
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
+    dialog.value = false
+}
+
+function deleteContact(row) {
+    const index = sourceRows.value.findIndex(
+        contact => contact.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
+
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createContact(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateContact(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteContact(selectedContact.value)
+    }
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
+
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
 }
 
 function viewItem(row) {
-  console.log('Ver', row)
+    console.log('Ver Contacto de Emergencia:', row)
+    selectedContact.value = row
+    detailsContact.value = true
 }
 
 function editItem(row) {
-  console.log('Editar', row)
+    console.log('Editar Contacto de Emergencia:', row)
+    openEditDialog(row)
 }
 
 function deleteItem(row) {
-  console.log('Eliminar', row)
+    dialogMode.value = 'delete'
+    selectedContact.value = row
+    confirmationDialog.value = true
 }
 
 </script>

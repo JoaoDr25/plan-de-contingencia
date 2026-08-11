@@ -1,6 +1,6 @@
 export const APRENDICES_MOCK = [
   {
-    id: 1,
+    codigo: 1,
     documento: '1098765432',
     nombre: 'Juan Camilo Rojas',
     programa: 'Análisis y Desarrollo de Software',
@@ -10,7 +10,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
-    id: 2,
+    codigo: 2,
     documento: '1032456789',
     nombre: 'Laura González',
     programa: 'Gestión Administrativa',
@@ -20,7 +20,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
-    id: 3,
+    codigo: 3,
     documento: '1012345678',
     nombre: 'Andrés Martínez',
     programa: 'Producción Agropecuaria',
@@ -30,7 +30,7 @@ export const APRENDICES_MOCK = [
     estado: 'Inactivo'
   },
   {
-    id: 4,
+    codigo: 4,
     documento: '1009876543',
     nombre: 'Valentina Pérez',
     programa: 'Construcción de Edificaciones',
@@ -40,7 +40,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
-    id: 5,
+    codigo: 5,
     documento: '1122334455',
     nombre: 'Santiago Herrera',
     programa: 'Electricidad Industrial',
@@ -50,7 +50,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
-    id: 6,
+    codigo: 6,
     documento: '1099887766',
     nombre: 'Camila Torres',
     programa: 'Gestión Logística',
@@ -60,7 +60,7 @@ export const APRENDICES_MOCK = [
     estado: 'Suspendido'
   },
   {
-    id: 7,
+    codigo: 7,
     documento: '1001122334',
     nombre: 'Miguel Rodríguez',
     programa: 'Mantenimiento de Equipos de Cómputo',
@@ -70,7 +70,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
-    id: 8,
+    codigo: 8,
     documento: '1023456781',
     nombre: 'Daniela Castro',
     programa: 'Control de Calidad de Alimentos',
@@ -80,7 +80,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
-    id: 9,
+    codigo: 9,
     documento: '1011223344',
     nombre: 'Felipe Ramírez',
     programa: 'Mecánica Automotriz',

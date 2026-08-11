@@ -2,7 +2,7 @@ export const USUARIOS_COLUMNS = [
      {
         name: 'index',
         label: 'N',
-        field: 'id',
+        field: 'codigo',
         align: 'center'
     },
     {

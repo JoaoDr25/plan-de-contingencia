@@ -69,6 +69,7 @@ const dialog = computed({
 const form = reactive({
     ficha: '',
     nombre: '',
+    jornada: null,
     nivel: null,
     centro: '',
     estado: 'Activo'
@@ -112,6 +113,7 @@ function handleSave() {
 function resetForm(data = {}) {
     form.ficha = data.ficha ?? ''
     form.nombre = data.nombre ?? ''
+    form.jornada = data.jornada ?? ''
     form.nivel = data.nivel ?? ''
     form.centro = data.centro ?? ''
     form.estado = data.estado ?? 'Activo'
@@ -140,5 +142,3 @@ function closeDialog() {
 }
 
 </script>
-
-<style scoped lang="scss"></style>

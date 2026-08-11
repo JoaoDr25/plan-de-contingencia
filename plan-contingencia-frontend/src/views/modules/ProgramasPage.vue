@@ -51,7 +51,10 @@
 
     </BaseTable>
 
-    <ProgramasDialog v-model="dialog" :mode="dialogMode" :program="selectedProgram" @save="saveProgram" />
+    <ProgramasDialog v-model="dialog" :mode="dialogMode" :program="selectedProgram" @save="handleProgramSave" />
+
+    <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+      :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction" @cancel="cancelConfirmation" />
 
     <ProgramasDetails v-model="detailsProgram" :program="selectedProgram" />
 
@@ -68,6 +71,7 @@ import { PROGRAMAS_FILTERS } from "src/constants/filters/programas.constants";
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns';
 import { PROGRAMAS_MOCK } from 'src/mocks/programas.mock';
 import { useCrudTable } from 'src/composables/useCrudTable';
+import { getCurrentDate } from 'src/utils/date.utils.js';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/cruds/CrudHeader.vue';
@@ -81,6 +85,7 @@ import CrudActions from 'src/components/actions/CrudActions.vue';
 
 import ProgramasDialog from '../dialogs/ProgramasDialog.vue';
 import ProgramasDetails from '../details/ProgramasDetails.vue';
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue';
 
 const sourceRows = ref(PROGRAMAS_MOCK)
 
@@ -104,10 +109,48 @@ const {
 const loading = ref(false)
 
 const dialog = ref(false)
-const detailsProgram = ref(true)
+const detailsProgram = ref(false)
 
 const dialogMode = ref('create')
 const selectedProgram = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+
+const confirmationTitle = computed(() => {
+     const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
+    }
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+      const messages = {
+        create: '¿Está seguro de crear este programa?',
+        edit: '¿Está seguro de actualizar este programa?',
+        delete: '¿Está seguro de eliminar este programa?'
+    }
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+  const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
 
 function openCreateDialog() {
   dialogMode.value = 'create'
@@ -121,18 +164,16 @@ function openEditDialog(row) {
   dialog.value = true
 }
 
-function saveProgram(formData) {
-  if (dialogMode.value === 'create') {
-    createProgram(formData)
-    return
-  }
-  updateProgram(formData)
+function handleProgramSave(formData) {
+  pendingActionData.value = formData
+  dialog.value = false
+  confirmationDialog.value = true
 }
 
 function createProgram(formData) {
   sourceRows.value.push({
     ...formData,
-    fechaCreacion: new Date().toLocaleDateString('es-CO') //fecha temporal
+    fecha: getCurrentDate() //fecha temporal
   })
   dialog.value = false
 }
@@ -151,9 +192,37 @@ function updateProgram(formData) {
   dialog.value = false
 }
 
+function deleteProgram(row) {
+    const index = sourceRows.value.findIndex(
+        program => program.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
+
+function confirmAction() {
+     if (dialogMode.value === 'create') {
+        createProgram(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateProgram(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteProgram(selectedProgram.value)
+    }
+  pendingActionData.value = null
+  confirmationDialog.value = false
+}
+
+function cancelConfirmation() {
+  pendingActionData.value = null
+  confirmationDialog.value = false
+}
+
 function viewItem(row) {
   console.log('Ver Programa:', row)
-
   selectedProgram.value = row
   detailsProgram.value = true
 }
@@ -164,7 +233,9 @@ function editItem(row) {
 }
 
 function deleteItem(row) {
-  console.log('Eliminar', row)
+  dialogMode.value = 'delete'
+  selectedProgram.value = row
+  confirmationDialog.value = true
 }
 
 </script>

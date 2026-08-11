@@ -1,115 +1,243 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Riesgos">
+        <CrudHeader title="Riesgos">
 
-      <template #actions>
+            <template #actions>
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-      </template>
+            </template>
 
-    </CrudHeader>
+        </CrudHeader>
 
-    <CrudToolbar>
+        <CrudToolbar>
 
-      <template #center>
+            <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="RIESGOS_FILTERS" />
+                <CrudFilters v-model="selectedFilter" :options="RIESGOS_FILTERS" />
 
-      </template>
+            </template>
 
-      <template #left>
+            <template #left>
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por riesgo o nivel..." />
+                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o nivel..." />
 
-      </template>
+            </template>
 
-    </CrudToolbar>
+        </CrudToolbar>
 
-    <BaseTable :rows="paginatedRows" :columns="RIESGOS_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event">
+        <BaseTable :rows="paginatedRows" :columns="RIESGOS_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event">
 
-      <template #body-cell-nivel="props">
+            <template #body-cell-nivel="props">
 
-        <q-td :props="props">
-          <LevelChip :level="props.value" />
-        </q-td>
+                <q-td :props="props">
+                    <LevelChip :level="props.value" />
+                </q-td>
 
-      </template>
+            </template>
 
-      <template #body-cell-opciones="props">
+            <template #body-cell-opciones="props">
 
-        <q-td :props="props">
-          <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
-            @delete="deleteItem(props.row)" />
-        </q-td>
+                <q-td :props="props">
 
-      </template>
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
 
-    </BaseTable>
+                </q-td>
 
-  </BasePage>
+            </template>
+
+        </BaseTable>
+
+        <RiesgosDialog v-model="dialog" :mode="dialogMode" :risk="selectedRisk" @save="handleRiskSave" />
+
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
+
+        <RiesgosDetails v-model="detailsRisk" :risk="selectedRisk" />
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants';
-import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants';
-import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns';
-import { RIESGOS_MOCK } from 'src/mocks/riesgos.mock';
-import { useCrudTable } from 'src/composables/useCrudTable';
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants'
+import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns'
+import { RIESGOS_MOCK } from 'src/mocks/riesgos.mock'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { getCurrentDate } from 'src/utils/date.utils'
 
-import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/cruds/CrudHeader.vue';
-import CrudFilters from 'src/components/cruds/CrudFilters.vue';
-import BaseSearch from 'src/components/forms/BaseSearch.vue';
-import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
-import BaseTable from 'src/components/tables/BaseTable.vue';
-import LevelChip from 'src/components/states/LevelChip.vue';
-import CrudActions from 'src/components/actions/CrudActions.vue';
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import LevelChip from 'src/components/states/LevelChip.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
 
-const sourceRows = ref(RIESGOS_MOCK);
+import RiesgosDialog from '../dialogs/RiesgosDialog.vue'
+import RiesgosDetails from '../details/RiesgosDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
+const sourceRows = ref(RIESGOS_MOCK)
 
 const {
-  selectedFilter,
-  searchText,
-  currentPage,
-  rowsPerPage,
-  filteredRows,
-  paginatedRows,
-  totalPages,
-  startRow,
-  endRow
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
 } = useCrudTable({
-  sourceRows,
-  defaultFilter: 'riesgo',
-  exactSearchField: [],
-  defaultRowsPerPage: 8
+    sourceRows,
+    defaultFilter: 'nombre',
+    exactSearchField: [],
+    defaultRowsPerPage: 8
 })
 
-const loading = ref(false);
+const loading = ref(false)
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
+const dialog = ref(false)
+const detailsRisk = ref(false)
+
+const dialogMode = ref('create')
+const selectedRisk = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
+    }
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear este riesgo?',
+        edit: '¿Está seguro de actualizar este riesgo?',
+        delete: '¿Está seguro de eliminar este riesgo?'
+    }
+
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedRisk.value = null
+    dialog.value = true
+}
+
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedRisk.value = row
+    dialog.value = true
+}
+
+function handleRiskSave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
+
+function createRisk(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
+    dialog.value = false
+}
+
+function updateRisk(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedRisk.value
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
+    dialog.value = false
+}
+
+function deleteRisk(row) {
+    const index = sourceRows.value.findIndex(
+        risk => risk.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
+
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createRisk(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateRisk(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteRisk(selectedRisk.value)
+    }
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
+
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
 }
 
 function viewItem(row) {
-  console.log('Ver', row)
+    console.log('Ver Riesgo:', row)
+    selectedRisk.value = row
+    detailsRisk.value = true
 }
 
 function editItem(row) {
-  console.log('Editar', row)
+    console.log('Editar Riesgo:', row)
+    openEditDialog(row)
 }
 
 function deleteItem(row) {
-  console.log('Eliminar', row)
+    dialogMode.value = 'delete'
+    selectedRisk.value = row
+    confirmationDialog.value = true
 }
 
 </script>

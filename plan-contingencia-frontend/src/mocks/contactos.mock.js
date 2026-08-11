@@ -1,6 +1,6 @@
 export const CONTACTOS_MOCK = [
     {
-        id: 1,
+        codigo: 1,
         tipo: 'Hospital',
         nombre: 'Hospital Universitario Erasmo Meoz',
         telefono: '(607) 5827777',
@@ -9,7 +9,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 2,
+        codigo: 2,
         tipo: 'Bomberos',
         nombre: 'Cuerpo de Bomberos Voluntarios',
         telefono: '(607) 5724200',
@@ -18,7 +18,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 3,
+        codigo: 3,
         tipo: 'Policía',
         nombre: 'Policía Metropolitana de Cúcuta',
         telefono: '123',
@@ -27,7 +27,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 4,
+        codigo: 4,
         tipo: 'Cruz Roja',
         nombre: 'Cruz Roja Colombiana - Seccional Norte de Santander',
         telefono: '(607) 5715909',
@@ -36,7 +36,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 5,
+        codigo: 5,
         tipo: 'Defensa Civil',
         nombre: 'Defensa Civil Colombiana - Junta Cúcuta',
         telefono: '(607) 5830030',
@@ -45,7 +45,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 6,
+        codigo: 6,
         tipo: 'Tránsito',
         nombre: 'Secretaría de Tránsito Municipal',
         telefono: '(607) 5784949',
@@ -54,7 +54,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 7,
+        codigo: 7,
         tipo: 'Ambulancia',
         nombre: 'Servicio de Ambulancias Vital',
         telefono: '125',
@@ -63,7 +63,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 8,
+        codigo: 8,
         tipo: 'Gestión del Riesgo',
         nombre: 'Oficina Municipal para la Gestión del Riesgo',
         telefono: '(607) 5955555',
@@ -72,7 +72,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
-        id: 9,
+        codigo: 9,
         tipo: 'EPS',
         nombre: 'Nueva EPS',
         telefono: '(601) 3077022',

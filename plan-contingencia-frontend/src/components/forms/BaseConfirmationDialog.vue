@@ -17,17 +17,17 @@
 
             <div class="base-confirmation-dialog__actions">
 
-                <SecondaryActionButton
-                    :label="cancelLabel"
-                    :disable="loading"
-                    @click="handleCancel"
-                />
-
-                <component
+                  <component
                     :is="confirmButtonComponent"
                     :label="confirmLabel"
                     :loading="loading"
                     @click="handleConfirm"
+                />
+                
+                <SecondaryActionButton
+                    :label="cancelLabel"
+                    :disable="loading"
+                    @click="handleCancel"
                 />
 
             </div>
