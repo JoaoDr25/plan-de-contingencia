@@ -1,17 +1,9 @@
 <template>
 
-    <q-btn
-        round
-        flat
-        class="base-icon-button"
-        :icon="config.icon"
-        :disable="disabled"
-        :style="{
-            '--button-color': button.color,
-            '--button-size': size
-        }"
-        @click="emit('click')"
-    />
+    <q-btn round flat class="base-icon-button" :icon="config.icon" :disable="disabled" :style="{
+        '--button-color': button.color,
+        '--button-size': size
+    }" @click="emit('click')" />
 
 </template>
 
@@ -34,7 +26,7 @@ const {
     },
     size: {
         type: String,
-        default: '20px'
+        default: '22.4px'
     },
     disabled: {
         type: Boolean,
@@ -68,7 +60,6 @@ const button = computed(() => {
 </script>
 
 <style scoped lang="scss">
-
 .base-icon-button {
     width: var(--button-size);
     height: var(--button-size);
@@ -78,7 +69,6 @@ const button = computed(() => {
     background: var(--button-color);
     color: #FFFFFF;
     border: none;
-    transition: .18s ease;
 }
 
 .base-icon-button:hover {
@@ -87,7 +77,6 @@ const button = computed(() => {
 }
 
 .base-icon-button :deep(.q-icon) {
-    font-size:14px;
+    font-size: 15.5px;
 }
-
 </style>

@@ -1,9 +1,6 @@
 <template>
 
-    <div
-        class="base-form-grid"
-        :style="gridStyle"
-    >
+    <div class="base-form-grid" :style="gridStyle">
 
         <slot />
 
@@ -39,7 +36,6 @@ const gridStyle = computed(() => ({
 </script>
 
 <style scoped>
-
 .base-form-grid {
     display: grid;
     grid-template-columns: repeat(var(--grid-columns), 1fr);
@@ -52,5 +48,4 @@ const gridStyle = computed(() => ({
         grid-template-columns: 1fr;
     }
 }
-
 </style>

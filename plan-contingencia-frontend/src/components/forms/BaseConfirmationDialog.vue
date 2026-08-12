@@ -1,15 +1,8 @@
 <template>
 
-    <BaseDialog
-        v-model="dialog"
-        :title="title"
-        width="500px"
-    >
+    <BaseDialog v-model="dialog" :title="title" width="500px">
 
-        <div
-            v-if="message"
-            class="base-confirmation-dialog__message"
-        >
+        <div v-if="message" class="base-confirmation-dialog__message">
             {{ message }}
         </div>
 
@@ -17,18 +10,10 @@
 
             <div class="base-confirmation-dialog__actions">
 
-                  <component
-                    :is="confirmButtonComponent"
-                    :label="confirmLabel"
-                    :loading="loading"
-                    @click="handleConfirm"
-                />
-                
-                <SecondaryActionButton
-                    :label="cancelLabel"
-                    :disable="loading"
-                    @click="handleCancel"
-                />
+                <component :is="confirmButtonComponent" :label="confirmLabel" :loading="loading"
+                    @click="handleConfirm" />
+
+                <SecondaryActionButton :label="cancelLabel" :disable="loading" @click="handleCancel" />
 
             </div>
 
@@ -121,7 +106,6 @@ function handleCancel() {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -139,5 +123,4 @@ function handleCancel() {
     align-items: center;
     gap: 12px;
 }
-
 </style>

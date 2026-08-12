@@ -1,12 +1,6 @@
 <template>
 
-    <q-btn 
-    round 
-    unelevated 
-    icon="arrow_back" 
-    class="back-button"
-    @click="goBack" 
-     />
+    <q-btn round unelevated icon="arrow_back" class="back-button" @click="goBack" />
 
 </template>
 
@@ -32,7 +26,6 @@ function goBack() {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 
 .back-button {
@@ -40,12 +33,11 @@ function goBack() {
     background-color: $color-primary;
     color: $color-background;
     transition: background-color 0.2s ease;
-    font-size: 0.70rem;
+    font-size: 0.76rem;
 }
 
 .back-button:hover {
     background-color: $color-primary-dark;
     cursor: pointer;
 }
-
 </style>

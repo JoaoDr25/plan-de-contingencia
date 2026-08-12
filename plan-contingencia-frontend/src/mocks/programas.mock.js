@@ -88,5 +88,35 @@ export const PROGRAMAS_MOCK = [
     centro: 'Centro de Recursos Naturales',
     fecha: '25/04/2026',
     estado: 'Activo'
+  },
+  {
+    codigo: 10,
+    ficha: '2879779',
+    nombre: 'Gestión Documental',
+    jornada: 'Noche',
+    nivel: 'Tecnólogo',
+    centro: 'Centro Administrativo',
+    fecha: '28/01/2026',
+    estado: 'Activo'
+  },
+  {
+    codigo: 11,
+    ficha: '2123549',
+    nombre: 'Producción Agropecuaria',
+    jornada: 'Tarde',
+    nivel: 'Técnico',
+    centro: 'Centro Agropecuario',
+    fecha: '05/04/2026',
+    estado: 'Activo'
+  },
+  {
+    codigo: 12,
+    ficha: '287369',
+    nombre: 'Recursos Humanos',
+    jornada: 'Mañana',
+    nivel: 'Técnico',
+    centro: 'Centro de Recursos Naturales',
+    fecha: '15/06/2026',
+    estado: 'Activo'
   }
 ]

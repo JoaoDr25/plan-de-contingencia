@@ -44,17 +44,17 @@ const selectedFilter = computed({
     display: flex;
     align-items: center;
     font-family: $font-family-base;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     padding-bottom: 2.9px;
 }
 
 .crud-filters :deep(.q-radio__inner) {
-    font-size: 1.15rem;
+    font-size: 1.4rem;
     color: $color-primary;
 }
 
 .crud-filters :deep(.q-radio__label) {
-    font-size: 0.79rem;
+    font-size: 0.8rem;
     font-family: $font-family-base;
     color: $color-text-secondary;
 }

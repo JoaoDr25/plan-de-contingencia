@@ -41,9 +41,10 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     flex-wrap: wrap;
     padding-top: 10px;
+    padding-bottom: 8px;
 }
 
 .crud-toolbar__center {
@@ -51,6 +52,7 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
+    gap: 12px;
 }
 
 .crud-toolbar__left {

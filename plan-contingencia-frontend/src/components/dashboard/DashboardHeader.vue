@@ -35,11 +35,12 @@ function goToCreatePlan(){
     display: flex;
     align-items: center;
     width: 100%;
-    padding-bottom: 23px;
+    padding-bottom: 30px;
 }
 
 .dashboard-header__actions {
    margin-left: auto;
+   padding-top: 0.5rem;
 }
 
 </style>

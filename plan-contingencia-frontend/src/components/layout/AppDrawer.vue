@@ -69,7 +69,7 @@ const drawerOpen = defineModel()
 
 .app-drawer__header {
     @include flex-center;
-    padding: 1.8rem 1rem 0.4rem;
+    padding: 3rem 1rem 0.4rem;
 }
 
 .app-drawer__user {

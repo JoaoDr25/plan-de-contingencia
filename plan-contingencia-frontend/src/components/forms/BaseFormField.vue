@@ -1,11 +1,7 @@
 <template>
 
-    <component
-        :is="field.component"
-        :model-value="modelValue"
-        v-bind="componentProps"
-        @update:model-value="emit('update:modelValue', $event)"
-    />
+    <component :is="field.component" :model-value="modelValue" v-bind="componentProps"
+        @update:model-value="emit('update:modelValue', $event)" />
 
 </template>
 
@@ -37,7 +33,7 @@ const EXCLUDED_KEYS = [
 ]
 
 const componentProps = computed(() => {
-    
+
     return Object.fromEntries(
         Object.entries(field).filter(([key]) => {
             return !EXCLUDED_KEYS.includes(key)
@@ -47,4 +43,4 @@ const componentProps = computed(() => {
 
 </script>
 
-<style scoped lang="scss"> </style>
+<style scoped lang="scss"></style>

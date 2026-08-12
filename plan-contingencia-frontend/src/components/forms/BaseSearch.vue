@@ -2,13 +2,13 @@
 
     <div class="base-search">
 
-        <q-input v-model="search"  v-bind="$attrs" outlined dense :debounce="debounce" :placeholder="placeholder">
+        <q-input v-model="search" v-bind="$attrs" outlined dense :debounce="debounce" :placeholder="placeholder">
 
             <template #prepend>
                 <q-icon name="search" />
             </template>
 
-            </q-input>
+        </q-input>
 
     </div>
 
@@ -47,10 +47,9 @@ const search = computed({
 
 
 <style scoped lang="scss">
-
 .base-search {
-    width: 300px;
-    flex-shrink:0;
+    width: 340px;
+    flex-shrink: 0;
 }
 
 .base-search :deep(.q-field) {
@@ -58,7 +57,7 @@ const search = computed({
 }
 
 .base-search :deep(.q-field__control) {
-    height: 36px;
+    height: 38px;
     border-radius: 6px;
 }
 
@@ -81,12 +80,11 @@ const search = computed({
     font-size: 0.72rem;
 }
 
-@media (max-width:600px){
+@media (max-width:600px) {
 
-    .base-search{
+    .base-search {
         min-width: 240px;
-        width:100%;
+        width: 100%;
     }
 }
-
 </style>

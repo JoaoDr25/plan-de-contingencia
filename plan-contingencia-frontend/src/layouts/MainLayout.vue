@@ -9,16 +9,15 @@
       <BackButton route-name="dashboard" />
     </div>
 
-    <q-page-container>
-      <router-view />
-    </q-page-container>
+    <q-page-container class="page-root">
+      <div class="page-content">
+        <router-view />
+        <FloatingScrollButtons />
+      </div>
 
-   <q-page-container>
-       <FloatingScrollButtons />
-   </q-page-container>
-
-    <q-page-container>
-      <AppFooter />
+      <div class="page-footer">
+        <AppFooter />
+      </div>
     </q-page-container>
 
   </q-layout>
@@ -54,10 +53,24 @@ function closeDrawer() {
   background-color: $color-surface;
 }
 
+.page-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1 1 auto;
+}
+
+.page-footer {
+  flex: 0 0 auto;
+}
+
 .layout-back-button {
   position: absolute;
-  top: 68px;
-  left: 16px;
+  top: 75px;
+  left: 20px;
   z-index: 1000;
 }
 </style>

@@ -6,12 +6,7 @@
 
             <template #actions>
 
-                <PrimaryActionButton
-                    label="Crear"
-                    icon="add_circle_outline"
-                    size="sm"
-                    @click="openCreateDialog"
-                />
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
             </template>
 
@@ -21,47 +16,28 @@
 
             <template #center>
 
-                <CrudFilters
-                    v-model="selectedFilter"
-                    :options="PELIGROS_FILTERS"
-                />
+                <CrudFilters v-model="selectedFilter" :options="PELIGROS_FILTERS" />
 
             </template>
 
             <template #left>
 
-                <BaseSearch
-                    v-model="searchText"
-                    placeholder="Buscar por nombre o categoría..."
-                />
+                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o categoría..." />
 
             </template>
 
         </CrudToolbar>
 
-        <BaseTable
-            :rows="paginatedRows"
-            :columns="PELIGROS_COLUMNS"
-            :loading="loading"
-            :current-page="currentPage"
-            :total-pages="totalPages"
-            :rows-per-page="rowsPerPage"
-            :start="startRow"
-            :end="endRow"
-            :total="filteredRows.length"
-            @change-page="currentPage = $event"
-        >
+        <BaseTable :rows="paginatedRows" :columns="PELIGROS_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
             <template #body-cell-opciones="props">
 
                 <q-td :props="props">
 
-                    <CrudActions
-                        :actions="DEFAULT_CRUD_ACTIONS"
-                        @view="viewItem(props.row)"
-                        @edit="editItem(props.row)"
-                        @delete="deleteItem(props.row)"
-                    />
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
 
                 </q-td>
 
@@ -69,27 +45,13 @@
 
         </BaseTable>
 
-        <PeligrosDialog
-            v-model="dialog"
-            :mode="dialogMode"
-            :danger="selectedDanger"
-            @save="handleDangerSave"
-        />
+        <PeligrosDialog v-model="dialog" :mode="dialogMode" :danger="selectedDanger" @save="handleDangerSave" />
 
-        <BaseConfirmationDialog
-            v-model="confirmationDialog"
-            :title="confirmationTitle"
-            :message="confirmationMessage"
-            :confirm-label="confirmationLabel"
-            :variant="confirmationVariant"
-            @confirm="confirmAction"
-            @cancel="cancelConfirmation"
-        />
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
 
-        <PeligrosDetails
-            v-model="detailsDanger"
-            :danger="selectedDanger"
-        />
+        <PeligrosDetails v-model="detailsDanger" :danger="selectedDanger" />
 
     </BasePage>
 
@@ -126,6 +88,7 @@ const {
     searchText,
     currentPage,
     rowsPerPage,
+    setRowsPerPage,
     filteredRows,
     paginatedRows,
     totalPages,

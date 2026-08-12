@@ -30,7 +30,7 @@
 
     <BaseTable :rows="paginatedRows" :columns="PROGRAMAS_COLUMNS" :loading="loading" :current-page="currentPage"
       :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event">
+      :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
       <template #body-cell-estado="props">
 
@@ -94,6 +94,7 @@ const {
   searchText,
   currentPage,
   rowsPerPage,
+  setRowsPerPage,
   filteredRows,
   paginatedRows,
   totalPages,

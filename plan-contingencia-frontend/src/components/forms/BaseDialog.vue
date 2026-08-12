@@ -1,34 +1,25 @@
 <template>
 
-    <q-dialog
-    :model-value="modelValue"
-    :persistent="persistent"
-    @update:model-value="$emit('update:modelValue', $event)"
->
+    <q-dialog :model-value="modelValue" :persistent="persistent"
+        @update:model-value="$emit('update:modelValue', $event)">
 
-    <q-card
-        class="base-dialog"
-        :style="{ width }"
-    >
+        <q-card class="base-dialog" :style="{ width }">
 
-        <div class="base-dialog__header">
-            {{ title }}
-        </div>
+            <div class="base-dialog__header">
+                {{ title }}
+            </div>
 
-        <div class="base-dialog__body">
-            <slot />
-        </div>
+            <div class="base-dialog__body">
+                <slot />
+            </div>
 
-        <div
-            v-if="showFooter"
-            class="base-dialog__footer"
-        >
-            <slot name="actions" />
-        </div>
+            <div v-if="showFooter" class="base-dialog__footer">
+                <slot name="actions" />
+            </div>
 
-    </q-card>
+        </q-card>
 
-</q-dialog>
+    </q-dialog>
 
 </template>
 
@@ -53,9 +44,9 @@ defineProps({
         default: false
     },
     showFooter: {
-    type: Boolean,
-    default: true
-}
+        type: Boolean,
+        default: true
+    }
 })
 
 defineEmits([
@@ -65,7 +56,6 @@ defineEmits([
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 
 .base-dialog {
@@ -92,5 +82,4 @@ defineEmits([
     justify-content: center;
     gap: 12px;
 }
-
 </style>

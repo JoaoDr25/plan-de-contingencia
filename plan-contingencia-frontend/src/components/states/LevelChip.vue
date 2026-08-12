@@ -1,11 +1,6 @@
 <template>
 
-    <BaseChip
-        :label="formattedLabel"
-        :color="chip.color"
-        :text-color="chip.textColor"
-        compact
-    />
+    <BaseChip :label="formattedLabel" :color="chip.color" :text-color="chip.textColor" compact />
 
 </template>
 

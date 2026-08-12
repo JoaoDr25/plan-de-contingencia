@@ -3,7 +3,7 @@
     <div class="base-table">
 
         <q-table flat bordered class="base-table__table" :rows="rows" :columns="columns" :row-key="rowKey"
-            :loading="loading" hide-bottom :rows-per-page-options="[8]" no-data-label="No existen registros">
+            :loading="loading" hide-bottom :pagination="{ rowsPerPage: 0 }" :rows-per-page-options="[0]" no-data-label="No existen registros">
 
             <template #no-data>
 
@@ -59,7 +59,7 @@
         </div>
 
         <BasePagination :current-page="currentPage" :total-pages="totalPages" :rows-per-page="rowsPerPage"
-            @change="emit('change-page', $event)" />
+            @change="emit('change-page', $event)"   @change-rows-per-page="emit('change-rows-per-page', $event)" />
 
     </div>
 
@@ -125,7 +125,8 @@ const {
 })
 
 const emit = defineEmits([
-    'change-page'
+    'change-page',
+    'change-rows-per-page'
 ])
 
 function getCellStyle(column) {
@@ -167,17 +168,17 @@ function getCellClass(column) {
 .base-table__table :deep(thead th) {
     text-transform: uppercase;
     border-top: none;
+    height: 45px;
 }
 
 .base-table__table :deep(tbody td) {
-    height: 40px;
+    height: 45px;
     text-transform: uppercase;
-    border-bottom: none;
+    border-bottom: 1px solid $color-border-table;
 }
 
 .base-table__table :deep(th) {
     font-weight: 600;
-    height: 40.5px;
     color: $color-text-primary;
     font-size: $font-size-sm;
 }
@@ -188,35 +189,37 @@ function getCellClass(column) {
 }
 
 .base-table__table :deep(.q-table__middle) {
-    min-height: 375px;
-    // min-height: auto;
-    background-image: linear-gradient(to bottom,
-            transparent 39px,
-            $color-border-table 39px,
-            $color-border-table 40px,
-            transparent 40px);
-    background-size: 100% 40.2px;
+    min-height: auto;
 }
 
 .base-table__table :deep(.q-table thead tr) {
-    height: 40px !important;
+    height: 45px !important;
+}
+
+.base-table__table :deep(.q-table tbody tr) {
+    height: 45px;
 }
 
 .base-table__table :deep(.q-table td) {
-    padding-top: 10px !important;
+    padding: 0 8px !important;
+    vertical-align: middle;
+}
+
+.base-table__table :deep(tbody tr:last-child td) {
+    border-bottom: none;
 }
 
 .base-table__table :deep(.column-index) {
-    width: 55px;
-    min-width: 55px;
-    max-width: 55px;
+    width: 45px;
+    min-width: 45px;
+    max-width: 45px;
 }
 
 .base-table__footer {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    height: 40px;
+    height: 45px;
     padding: 0 16px 5px;
     border-right: 1px solid $color-border-table;
     border-bottom: 1px solid $color-border-table;

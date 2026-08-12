@@ -77,9 +77,8 @@ const {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 220px;
-    width: 300px;
-    flex: 0 0 300px;
+    height: 250px;
+    flex: 0 0 350px;
     border-radius: $radius-lg;
     box-shadow: $shadow-sm;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -94,12 +93,12 @@ const {
     background-color: $color-primary;
     border-radius: $radius-lg;
     text-align: center;
-    padding: 0.55rem 0.75rem;
+    padding: 0.68rem;
 }
 
 .dashboard-module-card__title {
     margin: 0;
-    font-size: 0.90rem;
+    font-size: 0.97rem;
     font-weight: 400;
     color: $color-background;
 }
@@ -120,16 +119,16 @@ const {
 }
 
 .dashboard-module-card__footer {
-    padding: 0.85rem;
+    padding: 0.95rem;
 }
 
 .dashboard-module-card__button {
     width: 170px;
     min-height: 28px;
-    height: 28px;
+    height: 30px;
     border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 0.89rem;
+    font-weight: 400;
     letter-spacing: 0.5px;
     background-color: $color-primary;
     color: $color-background;

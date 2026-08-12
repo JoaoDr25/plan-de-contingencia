@@ -1,4 +1,4 @@
-import { ref, computed } from "vue"
+import { ref, computed, watch } from "vue"
 
 export function useCrudTable({
     sourceRows,
@@ -43,8 +43,13 @@ export function useCrudTable({
             1,
             Math.ceil(filteredRows.value.length / rowsPerPage.value)
         )
-
     })
+
+    watch(totalPages, (newTotalPages) => {
+    if (currentPage.value > newTotalPages) {
+        currentPage.value = newTotalPages
+    }
+})
 
     const paginatedRows = computed(() => {
         const start = (currentPage.value - 1) * rowsPerPage.value
@@ -67,6 +72,11 @@ export function useCrudTable({
         )
     })
 
+     function setRowsPerPage(value) {
+        rowsPerPage.value = Number(value)
+        currentPage.value = 1
+    }
+
     return {
         selectedFilter,
         searchText,
@@ -76,7 +86,8 @@ export function useCrudTable({
         paginatedRows,
         totalPages,
         startRow,
-        endRow
+        endRow,
+        setRowsPerPage
     }
 }
 

@@ -4,16 +4,8 @@
 
         <div class="dashboard-summary__grid">
 
-            <DashboardStatCard 
-            
-            v-for="item in dashboardSummary"
-
-            :key="item.id"
-            :icon="item.icon"
-            :value="item.value"
-            :title="item.title"
-            :description="item.description"
-            />
+            <DashboardStatCard v-for="item in dashboardSummary" :key="item.id" :icon="item.icon" :value="item.value"
+                :title="item.title" :description="item.description" />
 
         </div>
 
@@ -29,7 +21,6 @@ import DashboardStatCard from './DashboardStatCard.vue';
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/mixins.scss' as *;
 @use 'src/css/typography.scss' as *;
@@ -43,5 +34,4 @@ import DashboardStatCard from './DashboardStatCard.vue';
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
 }
-
 </style>

@@ -1,10 +1,8 @@
 <template>
 
-    <q-chip dense :outline="outlined" class="base-chip" 
-    :class="{
+    <q-chip dense :outline="outlined" class="base-chip" :class="{
         'base-chip--compact': compact
-    }" 
-    :style="{
+    }" :style="{
         backgroundColor: color,
         color: textColor
     }">
@@ -57,8 +55,8 @@ const {
 @use 'src/css/typography.scss' as *;
 
 .base-chip {
-    min-width: 90px;
-    height: 18px;
+    min-width: 100px;
+    height: 23px;
     padding: 0 8px;
     margin: 0;
     border-radius: 6px;
@@ -73,13 +71,12 @@ const {
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 0;
     color: inherit !important;
     text-transform: capitalize;
-    padding-top: 3px;
+    padding-top: 2px;
 }
 
-.base-chip--compact{
-    min-width:46px;
+.base-chip--compact {
+    min-width: 60px;
 }
 </style>

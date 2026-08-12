@@ -1,20 +1,12 @@
 <template>
 
-    <q-btn
-        unelevated
-        :class="[
-            'danger-action-button',
-            `danger-action-button--${size}`,
-            {
-                'danger-action-button--full': fullWidth
-            }
-        ]"
-        :icon="icon"
-        :label="label"
-        :loading="loading"
-        :disable="disable"
-        @click="handleClick"
-    />
+    <q-btn unelevated :class="[
+        'danger-action-button',
+        `danger-action-button--${size}`,
+        {
+            'danger-action-button--full': fullWidth
+        }
+    ]" :icon="icon" :label="label" :loading="loading" :disable="disable" @click="handleClick" />
 
 </template>
 
@@ -66,7 +58,6 @@ function handleClick() {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -115,5 +106,4 @@ function handleClick() {
 // .danger-action-button:hover {
 //     background-color: $color-error-dark;
 // }
-
 </style>

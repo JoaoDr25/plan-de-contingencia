@@ -3,22 +3,18 @@
     <div class="base-pagination">
 
         <div class="base-pagination__rows">
-
             <span>Filas por página:</span>
 
-            <span class="base-pagination__rows-value">
-
-                {{ props.rowsPerPage }}
-
-            </span>
-
+            <q-select :model-value="props.rowsPerPage" :options="[8, 10, 12]" dense outlined emit-value map-options
+                popup-content-class="base-pagination__select-menu" class="base-pagination__select"
+                @update:model-value="changeRowsPerPage" />
         </div>
 
-        <q-btn flat dense icon-size="14px" icon="first_page" class="base-pagination__button" :disable="props.currentPage === 1"
-            @click="firstPage" />
+        <q-btn flat dense icon-size="14px" icon="first_page" class="base-pagination__button"
+            :disable="props.currentPage === 1" @click="firstPage" />
 
-        <q-btn flat dense icon-size="14px" icon="chevron_left" class="base-pagination__button" :disable="props.currentPage === 1"
-            @click="previousPage" />
+        <q-btn flat dense icon-size="14px" icon="chevron_left" class="base-pagination__button"
+            :disable="props.currentPage === 1" @click="previousPage" />
 
         <div v-for="page in pages" :key="page" :class="[
             'base-pagination__page',
@@ -61,7 +57,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits([
-    'change'
+    'change',
+    'change-rows-per-page'
 ])
 
 const pages = computed(() => {
@@ -97,6 +94,10 @@ function lastPage() {
     emit('change', props.totalPages)
 }
 
+function changeRowsPerPage(value) {
+    emit('change-rows-per-page', Number(value))
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -107,6 +108,7 @@ function lastPage() {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 4px;
     padding: 10px 5px 0 0;
 }
 
@@ -116,31 +118,29 @@ function lastPage() {
     gap: 4px;
     margin-right: 12px;
     font-size: $font-size-xs;
-    color: $color-text-secondary;
+    color: $color-text-primary;
     user-select: none;
 }
 
-.base-pagination__rows-value {
-    min-width: 22px;
-    text-align: center;
-    color: $color-text-secondary;
-}
-
 .base-pagination__button {
+    width: 22px;
+    height: 22px;
+    min-width: 20px;
+    padding: 0;
+    border-radius: 4px;
     color: $color-text-secondary;
-    min-width: 18px;
-    padding:0;
+    background-color: #f3f4f6;
 }
 
 .base-pagination__page {
-    width: 21px;
-    height: 21px;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
     cursor: pointer;
-    background: transparent;
+    background: #f3f4f6;
     color: $color-text-primary;
     font-size: $font-size-xs;
     font-weight: 500;
@@ -153,6 +153,56 @@ function lastPage() {
 }
 
 .base-pagination__button :deep(.q-icon) {
-    font-size: 16px;
+    font-size: 14px;
+}
+
+.base-pagination__select {
+    width: 35px;
+    min-width: 35px;
+    font-size: $font-size-xs;
+}
+
+.base-pagination__select :deep(.q-field__control) {
+    min-height: 25px;
+    height: 26px;
+    padding: 0 2px 0 5px;
+    border-radius: 4px;
+}
+
+.base-pagination__select :deep(.q-field__native) {
+    padding: 0;
+    min-height: 10px;
+    font-size: $font-size-xs;
+    line-height: 10px;
+}
+
+.base-pagination__select :deep(.q-field__append) {
+    padding-left: 0;
+    height: 22px;
+    margin-left: 1px;
+}
+
+.base-pagination__select :deep(.q-icon) {
+    font-size: 15px;
+    width: 20px;
+    height: 15px;
+}
+
+:global(.base-pagination__select-menu) {
+    min-width: 42px !important;
+    padding: 2px 0;
+    height: auto;
+}
+
+:global(.base-pagination__select-menu .q-item) {
+    min-height: 25px;
+    height: 25px;
+    padding: 0 5px;
+    font-size: $font-size-xs;
+}
+
+:global(.base-pagination__select-menu .q-item__section) {
+    min-height: 30px;
+    font-size: $font-size-xs;
 }
 </style>

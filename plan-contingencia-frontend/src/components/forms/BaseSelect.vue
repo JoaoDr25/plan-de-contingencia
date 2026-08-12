@@ -3,7 +3,7 @@
     <q-select class="base-select" :model-value="modelValue" :label="label" :options="options"
         :option-label="optionLabel" :option-value="optionValue" :disable="disable" :readonly="readonly" :rules="rules"
         :required="required" outlined dense emit-value map-options hide-bottom-space
-        @update:model-value="emit('update:modelValue', $event)">
+        popup-content-class="base-select__popup" @update:model-value="emit('update:modelValue', $event)">
 
         <template v-if="resolvedIcon" #prepend>
 
@@ -117,5 +117,10 @@ const resolvedIcon = computed(() => {
 
 .base-select :deep(.q-field__prepend) {
     color: $color-text-secondary;
+}
+
+.base-select__popup {
+    max-height: 250px !important;
+    overflow-y: auto;
 }
 </style>

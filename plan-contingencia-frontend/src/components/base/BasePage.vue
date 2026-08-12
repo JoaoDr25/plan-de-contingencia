@@ -19,9 +19,10 @@
 .base-page {
     width: 100%;
     min-height: 100%;
-    max-width: 1400px;
+    max-width: 85%;
     margin: 0 auto;
     padding: 2rem;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

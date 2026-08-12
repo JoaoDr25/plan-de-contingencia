@@ -40,9 +40,9 @@ import DashboardModuleCard from './DashboardModuleCard.vue';
     padding-top: 22px;
     margin: 1.8rem;
     text-align: center;
-    font-size: 1.25rem;
+    font-size: 1.36rem;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     color: $color-text-primary;
     font-family: $font-family-base;
 }

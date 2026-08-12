@@ -6,12 +6,7 @@
 
             <template #actions>
 
-                <PrimaryActionButton
-                    label="Crear"
-                    icon="add_circle_outline"
-                    size="sm"
-                    @click="openCreateDialog"
-                />
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
             </template>
 
@@ -21,36 +16,21 @@
 
             <template #center>
 
-                <CrudFilters
-                    v-model="selectedFilter"
-                    :options="USUARIOS_FILTERS"
-                />
+                <CrudFilters v-model="selectedFilter" :options="USUARIOS_FILTERS" />
 
             </template>
 
             <template #left>
 
-                <BaseSearch
-                    v-model="searchText"
-                    placeholder="Buscar por documento, nombre, correo, rol..."
-                />
+                <BaseSearch v-model="searchText" placeholder="Buscar por documento, nombre, correo, rol..." />
 
             </template>
 
         </CrudToolbar>
 
-        <BaseTable
-            :rows="paginatedRows"
-            :columns="USUARIOS_COLUMNS"
-            :loading="loading"
-            :current-page="currentPage"
-            :total-pages="totalPages"
-            :rows-per-page="rowsPerPage"
-            :start="startRow"
-            :end="endRow"
-            :total="filteredRows.length"
-            @change-page="currentPage = $event"
-        >
+        <BaseTable :rows="paginatedRows" :columns="USUARIOS_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
             <template #body-cell-estado="props">
 
@@ -66,12 +46,8 @@
 
                 <q-td :props="props">
 
-                    <CrudActions
-                        :actions="DEFAULT_CRUD_ACTIONS"
-                        @view="viewItem(props.row)"
-                        @edit="editItem(props.row)"
-                        @delete="deleteItem(props.row)"
-                    />
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
 
                 </q-td>
 
@@ -79,27 +55,13 @@
 
         </BaseTable>
 
-        <UsuariosDialog
-            v-model="dialog"
-            :mode="dialogMode"
-            :user="selectedUser"
-            @save="handleUserSave"
-        />
+        <UsuariosDialog v-model="dialog" :mode="dialogMode" :user="selectedUser" @save="handleUserSave" />
 
-        <BaseConfirmationDialog
-            v-model="confirmationDialog"
-            :title="confirmationTitle"
-            :message="confirmationMessage"
-            :confirm-label="confirmationLabel"
-            :variant="confirmationVariant"
-            @confirm="confirmAction"
-            @cancel="cancelConfirmation"
-        />
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
 
-        <UsuariosDetails
-            v-model="detailsUser"
-            :user="selectedUser"
-        />
+        <UsuariosDetails v-model="detailsUser" :user="selectedUser" />
 
     </BasePage>
 
@@ -137,6 +99,7 @@ const {
     searchText,
     currentPage,
     rowsPerPage,
+    setRowsPerPage,
     filteredRows,
     paginatedRows,
     totalPages,

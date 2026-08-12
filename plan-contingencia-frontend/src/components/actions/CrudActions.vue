@@ -1,15 +1,10 @@
 <template>
 
-<div class="crud-actions">
+    <div class="crud-actions">
 
-<BaseIconButton
-        v-for="action in actions"
-        :key="action"
-        :action="action"
-        @click="emit(action)"
-    />
+        <BaseIconButton v-for="action in actions" :key="action" :action="action" @click="emit(action)" />
 
-</div>
+    </div>
 
 </template>
 
@@ -38,12 +33,10 @@ const emit = defineEmits([
 
 
 <style scoped lang="scss">
-
 .crud-actions {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
-
 </style>

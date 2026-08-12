@@ -48,6 +48,7 @@ const {
     font-size: $font-size-xs;
     color: $color-text-primary;
     user-select: none;
+    letter-spacing: 0.8px;
 }
 
 

@@ -43,8 +43,8 @@ const {
 
 .crud-header {
     display: flex;
-    gap: 2rem;
     width: 100%;
+    padding-top: 6px;
 }
 
 .crud-header__content {
@@ -57,7 +57,7 @@ const {
 .crud-header__title {
     margin: 0;
     text-align: center;
-    font-size: 1.7rem;
+    font-size: 1.8rem;
     letter-spacing: 0.5px;
     color: $color-text-primary;
     font-size: $font-family-base;
@@ -65,7 +65,7 @@ const {
 
 .crud-header__divider {
     width: 90%;
-    height: 2px;
+    height: 2.8px;
     margin-top: 0.5rem;
     background: $color-primary;
     border-radius: 999px;

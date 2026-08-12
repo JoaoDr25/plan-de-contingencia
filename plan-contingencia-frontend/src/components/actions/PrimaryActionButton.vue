@@ -1,20 +1,12 @@
 <template>
 
-    <q-btn
-        unelevated
-        :class="[
-            'primary-action-button',
-            `primary-action-button--${size}`,
-            {
-                'primary-action-button--full': fullWidth
-            }
-        ]"
-        :icon="icon"
-        :label="label"
-        :loading="loading"
-        :disable="disable"
-        @click="handleClick"
-    />
+    <q-btn unelevated :class="[
+        'primary-action-button',
+        `primary-action-button--${size}`,
+        {
+            'primary-action-button--full': fullWidth
+        }
+    ]" :icon="icon" :label="label" :loading="loading" :disable="disable" @click="handleClick" />
 
 </template>
 
@@ -79,14 +71,14 @@ function handleClick() {
 }
 
 .primary-action-button :deep(.q-icon) {
-    font-size: 17px;
+    font-size: 21px;
 }
 
 .primary-action-button--sm {
     border-radius: 3px;
-    min-width: 90px;
-    height: 30px;
-    font-size: 0.81rem;
+    min-width: 100px;
+    height: 35px;
+    font-size: 0.9rem;
     font-weight: 400;
     text-transform: none;
 }
@@ -101,10 +93,40 @@ function handleClick() {
 
 .primary-action-button--lg {
     border-radius: 6px;
-    min-width: 19.7rem;
-    height: 42px;
-    font-size: 0.80rem;
+    width: 350px;
+    height: 43px;
+    font-size: 0.85rem;
     text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 800px) {
+    .primary-action-button--lg,
+    .primary-action-button--md {
+        min-width: 0;
+        width: 100%;
+        max-width: 360px;
+    }
+}
+
+@media (max-width: 420px) {
+    .primary-action-button--sm,
+    .primary-action-button--md,
+    .primary-action-button--lg {
+        width: 100%;
+        max-width: 360px;
+        min-width: 0;
+        font-size: 0.8rem;
+        letter-spacing: 0.3px;
+        height: 38px;
+        padding: 0 8px;
+    }
+}
+
+@media (max-width: 420px) {
+    .primary-action-button--sm {
+        font-size: 0.9rem;
+    }
 }
 
 .primary-action-button:hover {

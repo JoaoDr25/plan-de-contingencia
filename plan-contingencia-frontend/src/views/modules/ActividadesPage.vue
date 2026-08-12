@@ -1,75 +1,62 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Actividades">
+        <CrudHeader title="Actividades">
 
-      <template #actions>
+            <template #actions>
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-      </template>
-
-
-    </CrudHeader>
-
-    <CrudToolbar>
-
-      <template #center>
-
-        <CrudFilters v-model="selectedFilter" :options="ACTIVIDADES_FILTERS" />
-
-      </template>
-
-      <template #left>
-
-        <BaseSearch v-model="searchText" placeholder="Buscar por nombre o tipo de salida..." />
-
-      </template>
-
-    </CrudToolbar>
-
-    <BaseTable :rows="paginatedRows" :columns="ACTIVIDADES_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event">
-
-      <template #body-cell-opciones="props">
-
-        <q-td :props="props">
-          <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
-            @delete="deleteItem(props.row)" />
-        </q-td>
-
-      </template>
-
-    </BaseTable>
-
-    <ActividadesDialog
-            v-model="dialog"
-            :mode="dialogMode"
-            :activity="selectedActivity"
-            @save="handleActivitySave"
-        />
+            </template>
 
 
-        <BaseConfirmationDialog
-            v-model="confirmationDialog"
-            :title="confirmationTitle"
-            :message="confirmationMessage"
-            :confirm-label="confirmationLabel"
-            :variant="confirmationVariant"
-            @confirm="confirmAction"
-            @cancel="cancelConfirmation"
-        />
+        </CrudHeader>
+
+        <CrudToolbar>
+
+            <template #center>
+
+                <CrudFilters v-model="selectedFilter" :options="ACTIVIDADES_FILTERS" />
+
+            </template>
+
+            <template #left>
+
+                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o tipo de salida..." />
+
+            </template>
+
+        </CrudToolbar>
+
+        <BaseTable :rows="paginatedRows" :columns="ACTIVIDADES_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
+
+            <template #body-cell-opciones="props">
+
+                <q-td :props="props">
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <ActividadesDialog v-model="dialog" :mode="dialogMode" :activity="selectedActivity"
+            @save="handleActivitySave" />
 
 
-        <ActividadesDetails
-            v-model="detailsActivity"
-            :activity="selectedActivity"
-        />
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
 
 
-  </BasePage>
+        <ActividadesDetails v-model="detailsActivity" :activity="selectedActivity" />
+
+
+    </BasePage>
 
 </template>
 
@@ -100,20 +87,21 @@ import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.
 const sourceRows = ref(ACTIVIDADES_MOCK);
 
 const {
-  selectedFilter,
-  searchText,
-  currentPage,
-  rowsPerPage,
-  filteredRows,
-  paginatedRows,
-  totalPages,
-  startRow,
-  endRow
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    setRowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
 } = useCrudTable({
-  sourceRows,
-  defaultFilter: 'nombre',
-  exactSearchField: [],
-  defaultRowsPerPage: 8
+    sourceRows,
+    defaultFilter: 'nombre',
+    exactSearchField: [],
+    defaultRowsPerPage: 8
 })
 
 const loading = ref(false);

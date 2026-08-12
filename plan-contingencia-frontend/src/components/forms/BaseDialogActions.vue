@@ -2,17 +2,9 @@
 
     <div class="base-dialog-actions">
 
-        <PrimaryActionButton
-            :label="saveLabel"
-            :loading="loading"
-            @click="emit('save')"
-        /> 
+        <PrimaryActionButton :label="saveLabel" :loading="loading" @click="emit('save')" />
 
-        <SecondaryActionButton
-            v-if="showCancel"
-            :label="cancelLabel"
-            @click="emit('cancel')"
-        />
+        <SecondaryActionButton v-if="showCancel" :label="cancelLabel" @click="emit('cancel')" />
 
     </div>
 
@@ -60,11 +52,9 @@ const emit = defineEmits([
 </script>
 
 <style scoped>
-
 .base-dialog-actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
 }
-
 </style>
