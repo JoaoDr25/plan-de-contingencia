@@ -2,7 +2,7 @@
 
     <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
 
-        <BaseFormGrid>
+        <BaseFormGrid :columns="2">
 
             <BaseFormField
                 v-for="field in USER_FORM_FIELDS"
@@ -80,8 +80,8 @@ const form = reactive({
     apellido: '',
     centro: '',
     tipo: '',
+    documento: '',
     rol: null,
-    numero: ''
 })
 
 const dialogTitle = computed(() => {
@@ -127,8 +127,8 @@ function resetForm(data = {}) {
     form.apellido = data.apellido ?? ''
     form.centro = data.centro ?? ''
     form.tipo = data.tipo ?? null
+    form.documento = data.documento ?? ''
     form.rol = data.rol ?? null
-    form.numero = data.numero ?? ''
 }
 
 function initializeForm() {

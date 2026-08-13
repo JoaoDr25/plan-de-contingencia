@@ -1,6 +1,6 @@
 <template>
 
-    <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
+    <BaseDialog v-model="dialog" :title="dialogTitle" width="400px">
 
         <BaseFormGrid>
 

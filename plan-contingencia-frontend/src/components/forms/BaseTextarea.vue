@@ -110,7 +110,22 @@ const resolvedIcon = computed(() => {
 
 .base-textarea :deep(.q-field__control) {
     border-radius: 5px;
+    min-height: 70px;
+    background-color: $color-background-field;
 }
+
+.base-textarea :deep(.q-field__control:before) {
+    border: none;
+}
+
+.base-textarea :deep(.q-field__control:hover:before) {
+    border: none;
+}
+
+.base-textarea :deep(.q-field__control:after) {
+    display: none;
+}
+
 
 .base-textarea :deep(.q-field__native) {
     font-size: $font-size-sm;
@@ -124,7 +139,16 @@ const resolvedIcon = computed(() => {
     color: $color-text-secondary;
 }
 
+.base-textarea :deep(.q-field__native::placeholder) {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    opacity: 1;
+}
+
 .base-textarea :deep(.q-field__prepend) {
     color: $color-text-secondary;
+    opacity: 0.65;
+    padding-right: 5px;
 }
+
 </style>

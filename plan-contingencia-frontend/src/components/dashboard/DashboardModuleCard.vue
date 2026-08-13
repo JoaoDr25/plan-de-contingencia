@@ -80,13 +80,12 @@ const {
     height: 250px;
     flex: 0 0 350px;
     border-radius: $radius-lg;
-    box-shadow: $shadow-sm;
+    box-shadow: $shadow-md;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .dashboard-module-card:hover {
-    transform: translateY(-4px);
-    box-shadow: $shadow-md;
+    transform: translateY(-3px);
 }
 
 .dashboard-module-card__header {

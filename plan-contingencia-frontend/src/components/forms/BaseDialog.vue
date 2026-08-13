@@ -3,7 +3,7 @@
     <q-dialog :model-value="modelValue" :persistent="persistent"
         @update:model-value="$emit('update:modelValue', $event)">
 
-        <q-card class="base-dialog" :style="{ width }">
+        <q-card class="base-dialog" :style="{ width, maxWidth: 'calc(100vw - 32px)' }">
 
             <div class="base-dialog__header">
                 {{ title }}
@@ -56,30 +56,36 @@ defineEmits([
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
 
 .base-dialog {
+    width: min(100%, 600px);
+    max-width: calc(100vw - 32px);
     border-radius: 4px;
     overflow: hidden;
 }
 
 .base-dialog__header {
-    padding: 18px 24px;
+    padding: 13px;
     background: $color-primary;
     color: white;
-    font-weight: 700;
+    font-weight: 500;
+    font-size: $font-size-md;
     text-transform: uppercase;
     text-align: center;
+    letter-spacing: 0.5px;
 }
 
 .base-dialog__body {
-    padding: 24px;
+    padding: 15px 22px 15px;
 }
 
 .base-dialog__footer {
-    padding: 0 24px 24px;
+    padding: 0 24px 20px;
     display: flex;
     justify-content: center;
-    gap: 12px;
 }
+
 </style>

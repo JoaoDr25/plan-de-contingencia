@@ -56,7 +56,7 @@
                     </span>
 
                     <span class="detail-item__value">
-                        {{ user.numero }}
+                        {{ user.documento }}
                     </span>
                 </div>
 

@@ -2,7 +2,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 1,
         tipo: 'Cédula de ciudadanía',
-        numero: '1098765432',
+        documento: '1098765432',
         nombre: 'Carlos Andrés',
         apellido: 'Gómez',
         correo: 'cgomez@sena.edu.co',
@@ -13,7 +13,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 2,
         tipo: 'Tarjeta de identidad',
-        numero: '1023456789',
+        documento: '1023456789',
         nombre: 'Laura Marcela',
         apellido: 'Rojas',
         correo: 'lrojas@sena.edu.co',
@@ -24,7 +24,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 3,
         tipo: 'Pasaporte',
-        numero: '1009876543',
+        documento: '1009876543',
         nombre: 'Jhon Alexander',
         apellido: 'Pérez',
         correo: 'jperez@sena.edu.co',
@@ -35,7 +35,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 4,
         tipo: 'Cédula de ciudadanía',
-        numero: '1011122233',
+        documento: '1011122233',
         nombre: 'Diana Carolina',
         apellido: 'Torres',
         correo: 'dtorres@sena.edu.co',
@@ -46,7 +46,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 5,
         tipo: 'Tarjeta de identidad',
-        numero: '1033344455',
+        documento: '1033344455',
         nombre: 'Luis Fernando',
         apellido: 'Ramírez',
         correo: 'lramirez@sena.edu.co',
@@ -57,7 +57,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 6,
         tipo: 'Pasaporte',
-        numero: '1044455566',
+        documento: '1044455566',
         nombre: 'Natalia',
         apellido: 'Rodríguez',
         correo: 'nrodriguez@sena.edu.co',
@@ -68,7 +68,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 7,
         tipo: 'Cédula de ciudadanía',
-        numero: '1055566677',
+        documento: '1055566677',
         nombre: 'Miguel Ángel',
         apellido: 'Hernández',
         correo: 'mhernandez@sena.edu.co',
@@ -79,7 +79,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 8,
         tipo: 'Tarjeta de identidad',
-        numero: '1066677788',
+        documento: '1066677788',
         nombre: 'Sandra Milena',
         apellido: 'Castro',
         correo: 'scastro@sena.edu.co',
@@ -90,7 +90,7 @@ export const USUARIOS_MOCK = [
     {
         codigo: 9,
         tipo: 'Pasaporte',
-        numero: '1077788899',
+        documento: '1077788899',
         nombre: 'Andrés Felipe',
         apellido: 'Moreno',
         correo: 'amoreno@sena.edu.co',

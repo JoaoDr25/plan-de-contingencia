@@ -2,9 +2,9 @@
 
     <div class="base-dialog-actions">
 
-        <PrimaryActionButton :label="saveLabel" :loading="loading" @click="emit('save')" />
+        <PrimaryActionButton :label="saveLabel" icon="save" size="sm" :loading="loading" @click="emit('save')" />
 
-        <SecondaryActionButton v-if="showCancel" :label="cancelLabel" @click="emit('cancel')" />
+        <SecondaryActionButton v-if="showCancel" :label="cancelLabel" icon="cancel" size="sm" @click="emit('cancel')" />
 
     </div>
 
@@ -29,7 +29,7 @@ const {
 
     cancelLabel: {
         type: String,
-        default: 'Cancelar'
+        default: 'Cerrar'
     },
 
     showCancel: {
@@ -51,10 +51,34 @@ const emit = defineEmits([
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 .base-dialog-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 13px;
 }
+
+.base-dialog-actions :deep(.q-btn) {
+    width: 116px;
+    min-width: 116px;
+    min-height: 0 !important;
+    height: 35px !important;
+    padding: 0 1px !important;
+}
+
+.base-dialog-actions :deep(.q-btn__content) {
+    font-size: 0.91rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+}
+
+.base-dialog-actions :deep(.q-btn.bg-white) {
+    border: none;
+}
+
 </style>

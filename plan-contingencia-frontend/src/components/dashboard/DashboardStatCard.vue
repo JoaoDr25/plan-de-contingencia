@@ -117,7 +117,7 @@ defineProps({
 
 .dashboard-stat-card__title {
     font-size: 0.96rem;
-    font-weight: 600;
+    font-weight: 500;
     margin-top: 0.15rem;
 }
 

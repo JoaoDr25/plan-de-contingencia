@@ -2,7 +2,7 @@
 
     <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
 
-        <BaseFormGrid>
+        <BaseFormGrid :columns="2">
 
             <BaseFormField v-for="field in PROGRAM_FORM_FIELDS" :key="field.model" :field="field"
                 v-model="form[field.model]" />

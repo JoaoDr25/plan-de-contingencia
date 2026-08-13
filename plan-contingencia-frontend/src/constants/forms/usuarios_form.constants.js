@@ -1,4 +1,4 @@
-import BaseInput from 'src/components/base/BaseInput.vue'
+import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
 import { required } from 'src/validators/form.validator'
@@ -79,6 +79,18 @@ export const USER_FORM_FIELDS = [
         ]
     },
     {
+        component: BaseInput,
+        model: 'documento',
+        label: 'N.º Documento',
+        placeholder: 'Ingrese el número de documento',
+        icon: 'badge',
+        maxlength: 20,
+        required: true,
+        rules: [
+            required
+        ]
+    },
+    {
         component: BaseSelect,
         model: 'rol',
         label: 'Rol',
@@ -94,18 +106,6 @@ export const USER_FORM_FIELDS = [
                 value: 'Administrador'
             }
         ],
-        required: true,
-        rules: [
-            required
-        ]
-    },
-    {
-        component: BaseInput,
-        model: 'numero',
-        label: 'N.º Documento',
-        placeholder: 'Ingrese el número de documento',
-        icon: '123',
-        maxlength: 20,
         required: true,
         rules: [
             required

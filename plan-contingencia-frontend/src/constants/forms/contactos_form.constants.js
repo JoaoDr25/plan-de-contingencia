@@ -1,4 +1,4 @@
-import BaseInput from 'src/components/base/BaseInput.vue'
+import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
 import { required } from 'src/validators/form.validator'

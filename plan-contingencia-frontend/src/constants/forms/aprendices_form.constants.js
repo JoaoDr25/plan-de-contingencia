@@ -1,4 +1,4 @@
-import BaseInput from 'src/components/base/BaseInput.vue'
+import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
 import { required } from 'src/validators/form.validator'
@@ -41,6 +41,18 @@ export const APPRENTICE_FORM_FIELDS = [
             required
         ]
     },
+        {
+        component: BaseInput,
+        model: 'apellido',
+        label: 'Apellido del Aprendiz',
+        placeholder: 'Ingrese el apellido del aprendiz',
+        icon: 'person',
+        maxlength: 60,
+        required: true,
+        rules: [
+            required
+        ]
+    },
     {
         component: BaseInput,
         model: 'eps',
@@ -55,19 +67,7 @@ export const APPRENTICE_FORM_FIELDS = [
     },
     {
         component: BaseInput,
-        model: 'apellido',
-        label: 'Apellido del Aprendiz',
-        placeholder: 'Ingrese el apellido del aprendiz',
-        icon: 'person',
-        maxlength: 60,
-        required: true,
-        rules: [
-            required
-        ]
-    },
-    {
-        component: BaseInput,
-        model: 'contactoEmergencia',
+        model: 'contacto',
         label: 'Contacto de Emergencia',
         placeholder: 'Ingrese el número de contacto',
         icon: 'contact_phone',
@@ -79,7 +79,7 @@ export const APPRENTICE_FORM_FIELDS = [
     },
     {
         component: BaseSelect,
-        model: 'tipoDocumento',
+        model: 'tipo',
         label: 'Tipo de Documento',
         placeholder: 'Seleccione el tipo de documento',
         icon: 'badge',
@@ -102,6 +102,18 @@ export const APPRENTICE_FORM_FIELDS = [
             required
         ]
     },
+       {
+        component: BaseInput,
+        model: 'documento',
+        label: 'N° Documento Aprendiz',
+        placeholder: 'Ingrese el número de documento',
+        icon: 'badge',
+        maxlength: 15,
+        required: true,
+        rules: [
+            required
+        ]
+    },
     {
         component: BaseSelect,
         model: 'estado',
@@ -118,18 +130,6 @@ export const APPRENTICE_FORM_FIELDS = [
                 value: 'Inactivo'
             }
         ],
-        required: true,
-        rules: [
-            required
-        ]
-    },
-    {
-        component: BaseInput,
-        model: 'numeroDocumento',
-        label: 'N° Documento Aprendiz',
-        placeholder: 'Ingrese el número de documento',
-        icon: 'badge',
-        maxlength: 15,
         required: true,
         rules: [
             required

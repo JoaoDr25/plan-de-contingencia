@@ -74,6 +74,14 @@ function handleClick() {
     font-size: 21px;
 }
 
+.primary-action-button :deep(.q-icon.on-left) {
+    margin-right: 8px;
+}
+
+.primary-action-button :deep(.q-btn__content) {
+    gap: 0;
+}
+
 .primary-action-button--sm {
     border-radius: 3px;
     min-width: 100px;

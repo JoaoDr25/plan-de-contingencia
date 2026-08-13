@@ -13,9 +13,9 @@ export const APRENDICES_COLUMNS = [
         sortable: true
     },
     {
-        name: 'nombre',
+        name: 'nombreCompleto',
         label: 'Nombre Completo',
-        field: 'nombre',
+        field: (row) => `${row.nombre} ${row.apellido}`,
         align: 'left',
         sortable: true,
         maxWidth: '260px',

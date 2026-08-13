@@ -200,11 +200,6 @@ function getCellClass(column) {
     height: 45px;
 }
 
-.base-table__table :deep(.q-table td) {
-    padding: 0 8px !important;
-    vertical-align: middle;
-}
-
 .base-table__table :deep(tbody tr:last-child td) {
     border-bottom: none;
 }

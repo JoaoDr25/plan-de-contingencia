@@ -111,7 +111,7 @@ export const PROGRAMAS_MOCK = [
   },
   {
     codigo: 12,
-    ficha: '287369',
+    ficha: '2873691',
     nombre: 'Recursos Humanos',
     jornada: 'Mañana',
     nivel: 'Técnico',

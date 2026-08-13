@@ -1,4 +1,4 @@
-import BaseInput from 'src/components/base/BaseInput.vue'
+import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
 import { required } from 'src/validators/form.validator'
@@ -68,8 +68,10 @@ export const DANGER_FORM_FIELDS = [
         label: 'Riesgos Asociados',
         placeholder: 'Seleccione los riesgos',
         icon: 'dangerous',
-        options: [ 2 ],
+        options: [2],
         required: true,
+        multiple: true,
+        hideSelectedValue: true,
         rules: [
             required
         ]

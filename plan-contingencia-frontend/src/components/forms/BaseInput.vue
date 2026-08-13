@@ -1,6 +1,6 @@
 <template>
 
-    <q-input class="base-input" :model-value="modelValue" :label="label" :placeholder="placeholder" :type="type"
+    <q-input class="base-input" :model-value="modelValue" :placeholder="placeholder || label" :type="type"
         :readonly="readonly" :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules"
         :required="required" outlined dense hide-bottom-space @update:model-value="emit('update:modelValue', $event)">
 
@@ -104,8 +104,22 @@ const resolvedIcon = computed(() => {
 }
 
 .base-input :deep(.q-field__control) {
-    min-height: 42px;
-    border-radius: 5px;
+    min-height: 44px;
+    height: 44px;
+    border-radius: 4px;
+    background-color: $color-background-field;
+}
+
+.base-input :deep(.q-field__control:before) {
+    border: none;
+}
+
+.base-input :deep(.q-field__control:hover:before) {
+    border: none;
+}
+
+.base-input :deep(.q-field__control:after) {
+    display: none;
 }
 
 .base-input :deep(.q-field__label) {
@@ -116,9 +130,25 @@ const resolvedIcon = computed(() => {
 .base-input :deep(.q-field__native) {
     font-size: $font-size-sm;
     color: $color-text-primary;
+    line-height: 30px;
+    padding-left: 7px;
+}
+
+.base-input :deep(.q-field__native::placeholder) {
+    font-size: $font-size-sm;
+    line-height: 30px;
+    color: $color-text-secondary;
+    opacity: 1;
 }
 
 .base-input :deep(.q-field__prepend) {
     color: $color-text-secondary;
+    opacity: 0.65;
+    padding-left: 2px;
+    padding-top: 2px;
+}
+
+.base-input :deep(.q-field__prepend .q-icon) {
+    font-size: 20px;
 }
 </style>

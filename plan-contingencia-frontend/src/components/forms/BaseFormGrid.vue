@@ -23,7 +23,7 @@ const {
     },
     gap: {
         type: String,
-        default: '16px'
+        default: '14px'
     }
 
 })
@@ -36,6 +36,7 @@ const gridStyle = computed(() => ({
 </script>
 
 <style scoped>
+
 .base-form-grid {
     display: grid;
     grid-template-columns: repeat(var(--grid-columns), 1fr);
