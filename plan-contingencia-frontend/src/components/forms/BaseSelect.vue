@@ -1,10 +1,10 @@
 <template>
 
     <q-select class="base-select" :class="{ 'base-select--placeholder': isEmpty }" :model-value="modelValue"
-        :display-value="displayValue" :options="options" :option-label="optionLabel" :option-value="optionValue"
-        :multiple="multiple" :disable="disable" :readonly="readonly" :rules="rules" :required="required" outlined dense
-        emit-value map-options hide-bottom-space popup-content-class="base-select__popup"
-        @update:model-value="emit('update:modelValue', $event)">
+        :label="label" :display-value="displayValue" :options="options" :option-label="optionLabel"
+        :option-value="optionValue" :multiple="multiple" :disable="disable" :readonly="readonly" :rules="rules"
+        :required="required" outlined dense emit-value map-options hide-bottom-space
+        popup-content-class="base-select__popup" @update:model-value="emit('update:modelValue', $event)">
 
         <template v-if="resolvedIcon" #prepend>
 
@@ -39,7 +39,7 @@ const {
 } = defineProps({
 
     modelValue: {
-        type: [String, Number],
+        type: [String, Number, Array],
         default: null
     },
     label: {
@@ -111,7 +111,7 @@ const displayValue = computed(() => {
         modelValue === undefined ||
         modelValue === ''
     ) {
-        return label
+        return ''
     }
 
     const selectedOption = options.find(option => {
@@ -148,8 +148,8 @@ const isEmpty = computed(() => {
 }
 
 .base-select :deep(.q-field__control) {
-    min-height: 44px;
-    height: 44px;
+    min-height: 50px;
+    height: 50px;
     border-radius: 4px;
     background-color: $color-background-field;
 }
@@ -167,14 +167,30 @@ const isEmpty = computed(() => {
 }
 
 .base-select :deep(.q-field__label) {
-    font-size: $font-size-xs;
+    font-size: $font-size-md;
     color: $color-text-secondary;
 }
 
+.base-select.q-field--focused :deep(.q-field__label),
+.base-select.q-field--float :deep(.q-field__label) {
+    color: $color-primary;
+    font-size: $font-size-md;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding-left: 2px;
+    padding-top: 2px;
+    padding: 2px 0 0 2px;
+}
+
+.base-select:not(.q-field--float) :deep(.q-field__label) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .base-select :deep(.q-field__native) {
-    padding-top: 5px;
-    line-height: 30px;
-    padding-left: 7px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 5px;
 }
 
 .base-select :deep(.q-field__native::placeholder) {
@@ -186,7 +202,7 @@ const isEmpty = computed(() => {
 
 .base-select :deep(.q-field__native),
 .base-select :deep(.q-field__input) {
-    font-size: $font-size-sm;
+    font-size: $font-size-md;
     color: $color-text-primary;
     line-height: 30px;
 }
@@ -195,11 +211,12 @@ const isEmpty = computed(() => {
     color: $color-text-secondary;
     opacity: 0.65;
     padding-left: 2px;
-    padding-top: 2px;
+    padding-top: 6px;
+    padding-right: 10px;
 }
 
 .base-select :deep(.q-field__prepend .q-icon) {
-    font-size: 20px;
+    font-size: 21px;
 }
 
 .base-select__popup {
@@ -212,7 +229,7 @@ const isEmpty = computed(() => {
 }
 
 .base-select :deep(.q-field__native) {
-    font-size: $font-size-sm;
+    font-size: $font-size-md;
     color: $color-text-primary;
 }
 </style>

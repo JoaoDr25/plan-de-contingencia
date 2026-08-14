@@ -157,8 +157,8 @@ function changeRowsPerPage(value) {
 }
 
 .base-pagination__select {
-    width: 35px;
-    min-width: 35px;
+    width: 43px;
+    min-width: 43px;
     font-size: $font-size-xs;
 }
 
@@ -178,7 +178,7 @@ function changeRowsPerPage(value) {
 
 .base-pagination__select :deep(.q-field__append) {
     padding-left: 0;
-    height: 22px;
+    height: 25px;
     margin-left: 1px;
 }
 

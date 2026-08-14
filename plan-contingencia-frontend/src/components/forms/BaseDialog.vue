@@ -68,11 +68,11 @@ defineEmits([
 }
 
 .base-dialog__header {
-    padding: 13px;
+    padding: 15px;
     background: $color-primary;
     color: white;
     font-weight: 500;
-    font-size: $font-size-md;
+    font-size: $font-size-lg;
     text-transform: uppercase;
     text-align: center;
     letter-spacing: 0.5px;

@@ -9,7 +9,7 @@ export const PROGRAM_FORM_FIELDS = [
         component: BaseInput,
         model: 'ficha',
         label: 'Ficha',
-        placeholder: 'Ingrese la ficha',
+        // placeholder: 'Ingrese la ficha',
         icon: 'badge',
         maxlength: 10,
         required: true,
@@ -21,7 +21,7 @@ export const PROGRAM_FORM_FIELDS = [
         component: BaseInput,
         model: 'nombre',
         label: 'Nombre del Programa',
-        placeholder: 'Ingrese el nombre del programa',
+        // placeholder: 'Ingrese el nombre del programa',
         icon: 'school',
         maxlength: 120,
         required: true,
@@ -33,7 +33,7 @@ export const PROGRAM_FORM_FIELDS = [
         component: BaseSelect,
         model: 'jornada',
         label: 'Jornada',
-        placeholder: 'Seleccione la jornada',
+        // placeholder: 'Seleccione la jornada',
         icon: 'workspace_premium',
         options: [
             {
@@ -58,7 +58,7 @@ export const PROGRAM_FORM_FIELDS = [
         component: BaseSelect,
         model: 'nivel',
         label: 'Nivel de Formación',
-        placeholder: 'Seleccione el nivel',
+        // placeholder: 'Seleccione el nivel',
         icon: 'workspace_premium',
         options: [
             {
@@ -79,7 +79,7 @@ export const PROGRAM_FORM_FIELDS = [
         component: BaseInput,
         model: 'centro',
         label: 'Centro de Formación',
-        placeholder: 'Ingrese el centro de formación',
+        // placeholder: 'Ingrese el centro de formación',
         icon: 'business',
         maxlength: 120,
         required: true,
@@ -91,7 +91,7 @@ export const PROGRAM_FORM_FIELDS = [
         component: BaseSelect,
         model: 'estado',
         label: 'Estado',
-        placeholder: 'Seleccione el estado',
+        // placeholder: 'Seleccione el estado',
         icon: 'toggle_on',
         options: [
             {

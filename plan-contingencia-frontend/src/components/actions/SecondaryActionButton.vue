@@ -1,11 +1,13 @@
 <template>
 
-    <q-btn :label="label" :icon="icon" :loading="loading" :disable="disable" :class="[
+    <q-btn :label="label" :icon="resolvedIcon" :loading="loading" :disable="disable" :class="[
         'secondary-action-button', `secondary-action-button--${size}`]" :unelevated="false" :outline="false" @click="emit('click')" />
 
 </template>
 
 <script setup>
+
+import { computed } from 'vue'
 
 const {
     label,
@@ -46,6 +48,11 @@ const emit = defineEmits([
     'click'
 ])
 
+// icons de cierre/cancelación usan el trazo sin relleno para mantener el estilo outline del botón
+const resolvedIcon = computed(() => {
+    return icon === 'cancel' || icon === 'close' ? 'highlight_off' : icon
+})
+
 </script>
 
 <style scoped lang="scss">
@@ -55,12 +62,13 @@ const emit = defineEmits([
 
 .secondary-action-button {
     background: $color-background;
-    color: $color-text-secondary;
+    color: $color-text-primary;
     border: none;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) !important;
     transition: background-color .2s ease,
         transform .2s ease;
     font-family: $font-family-base;
+    padding: 0 12px;
 }
 
 .secondary-action-button :deep(.q-icon) {
@@ -79,7 +87,7 @@ const emit = defineEmits([
     border-radius: 3px;
     min-width: 90px;
     height: 30px;
-    font-size: 0.81rem;
+    font-size: 0.9rem;
     font-weight: 400;
     text-transform: none;
 }

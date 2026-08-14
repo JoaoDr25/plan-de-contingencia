@@ -148,6 +148,7 @@ function getCellClass(column) {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 @use 'src/css/mixins.scss' as *;
@@ -168,11 +169,11 @@ function getCellClass(column) {
 .base-table__table :deep(thead th) {
     text-transform: uppercase;
     border-top: none;
-    height: 45px;
+    height: 50px;
 }
 
 .base-table__table :deep(tbody td) {
-    height: 45px;
+    height: 50px;
     text-transform: uppercase;
     border-bottom: 1px solid $color-border-table;
 }
@@ -184,7 +185,7 @@ function getCellClass(column) {
 }
 
 .base-table__table :deep(td) {
-    font-size: $font-size-xs;
+    font-size: $font-size-sm;
     vertical-align: middle;
 }
 
@@ -193,11 +194,11 @@ function getCellClass(column) {
 }
 
 .base-table__table :deep(.q-table thead tr) {
-    height: 45px !important;
+    height: 50px !important;
 }
 
 .base-table__table :deep(.q-table tbody tr) {
-    height: 45px;
+    height: 50px;
 }
 
 .base-table__table :deep(tbody tr:last-child td) {

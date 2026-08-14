@@ -1,6 +1,6 @@
 <template>
 
-    <BaseDialog v-model="dialog" title="Información del Programa de Formación" width="600px">
+    <BaseDialog v-model="dialog" title="Información del Programa de Formación" width="650px">
 
         <div v-if="program" class="program-details">
 
@@ -89,13 +89,13 @@
 
                 </div>
 
-                <div class="program-details__actions">
-
-                    <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
-
-                </div>
-
         </div>
+
+        <template #actions>
+            <div class="program-details__actions">
+                <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
+            </div>
+        </template>
 
     </BaseDialog>
 
@@ -144,9 +144,9 @@ function closeDialog() {
 
 .program-details {
     display: grid;
-    grid-template-columns: 105px minmax(210px, 1.5fr) minmax(150px, 1fr);
+    grid-template-columns: 120px minmax(210px, 1.5fr) minmax(150px, 1fr);
     column-gap: 22px;
-    padding: 5px 20px 0px;
+    padding: 1px 20px 0;
     align-items: start;
     height: fit-content;
 }
@@ -156,24 +156,28 @@ function closeDialog() {
     justify-content: center;
     align-items: center;
     height: 100%;
+    padding-top: 20px;
 }
 
 .program-details__logo img {
-    width: 105px;
+    width: 145px;
     height: auto;
 }
 
 .program-details__column {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 9px;
     min-width: 0;
-     transform: translateY(4px);
-     padding-bottom: 15px;
+    transform: translateY(4px);
 }
 
-.program-details__column:first-of-type {
-    margin-left: 8px;
+.program-details__logo + .program-details__column {
+    margin-left: 18px;
+}
+
+.program-details__column + .program-details__column {
+    margin-left: 15px;
 }
 
 .detail-item {
@@ -183,14 +187,15 @@ function closeDialog() {
 
 .detail-item__label {
     color: $color-primary;
-    font-size: 0.65rem;
+    font-size: $font-size-xs;
     font-weight: 700;
     text-transform: uppercase;
+    line-height: 1.4;
 }
 
 .detail-item__value {
     color: $color-text-primary;
-    font-size: $font-size-xs;
+    font-size: 0.84rem;
     line-height: 1.3;
 }
 
@@ -200,11 +205,23 @@ function closeDialog() {
 }
 
 .program-details__actions {
+    display: grid;
+    grid-template-columns: 105px minmax(210px, 1.5fr) minmax(150px, 1fr);
+    column-gap: 22px;
+    height: 35px;
+}
+
+.program-details__actions :deep(.secondary-action-button) {
     grid-column: 3;
-    display: flex;
-    justify-content: flex-start;
-    align-self: end;
-    margin-top: 1px;
+    justify-self: start;
+    margin-left: 26px;
+    min-height: 35px;
+    min-width: 116px;
+}
+
+.program-details__actions :deep(.secondary-action-button .q-btn__wrapper) {
+    padding: 0 8px;
+    min-height: unset;
 }
 
 </style>

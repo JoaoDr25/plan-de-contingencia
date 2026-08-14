@@ -68,6 +68,7 @@ function handleClick() {
     color: $color-background;
     transition: background-color 0.2s ease, transform 0.2s ease;
     font-family: $font-family-base;
+    padding: 0 12px;
 }
 
 .primary-action-button :deep(.q-icon) {
@@ -106,6 +107,7 @@ function handleClick() {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    display: flex;
 }
 
 @media (max-width: 800px) {

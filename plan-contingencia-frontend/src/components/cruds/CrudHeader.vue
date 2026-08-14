@@ -57,15 +57,15 @@ const {
 .crud-header__title {
     margin: 0;
     text-align: center;
-    font-size: 1.8rem;
-    letter-spacing: 0.5px;
+    font-size: $font-size-4xl;
+    letter-spacing: 0.05px;
     color: $color-text-primary;
     font-size: $font-family-base;
 }
 
 .crud-header__divider {
     width: 90%;
-    height: 2.8px;
+    height: 3px;
     margin-top: 0.5rem;
     background: $color-primary;
     border-radius: 999px;

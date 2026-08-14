@@ -1,6 +1,6 @@
 <template>
 
-    <q-input class="base-input" :model-value="modelValue" :placeholder="placeholder || label" :type="type"
+    <q-input class="base-input" :model-value="modelValue" :label="label" :placeholder="placeholder" :type="type"
         :readonly="readonly" :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules"
         :required="required" outlined dense hide-bottom-space @update:model-value="emit('update:modelValue', $event)">
 
@@ -104,8 +104,8 @@ const resolvedIcon = computed(() => {
 }
 
 .base-input :deep(.q-field__control) {
-    min-height: 44px;
-    height: 44px;
+    min-height: 50px;
+    height: 50px;
     border-radius: 4px;
     background-color: $color-background-field;
 }
@@ -123,32 +123,55 @@ const resolvedIcon = computed(() => {
 }
 
 .base-input :deep(.q-field__label) {
-    font-size: $font-size-xs;
+    font-size: $font-size-md;
     color: $color-text-secondary;
 }
 
+.base-input.q-field--focused :deep(.q-field__label),
+.base-input.q-field--float :deep(.q-field__label) {
+    color: $color-primary;
+    font-size: $font-size-md;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding-left: 5px;
+}
+
+.base-input:not(.q-field--float) :deep(.q-field__label) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .base-input :deep(.q-field__native) {
-    font-size: $font-size-sm;
-    color: $color-text-primary;
-    line-height: 30px;
-    padding-left: 7px;
+    padding-top: 8px;
+    padding-bottom: 0;
+    padding-left: 5px;
+
 }
 
 .base-input :deep(.q-field__native::placeholder) {
-    font-size: $font-size-sm;
+    font-size: $font-size-md;
     line-height: 30px;
     color: $color-text-secondary;
     opacity: 1;
 }
 
+.base-input :deep(.q-field__native),
+.base-input :deep(.q-field__input) {
+    font-size: $font-size-md;
+    color: $color-text-primary;
+    line-height: 30px;
+}
+
+
 .base-input :deep(.q-field__prepend) {
-    color: $color-text-secondary;
+color: $color-text-secondary;
     opacity: 0.65;
     padding-left: 2px;
-    padding-top: 2px;
+    padding-top: 6px;
+    padding-right: 10px;
 }
 
 .base-input :deep(.q-field__prepend .q-icon) {
-    font-size: 20px;
+    font-size: 21px;
 }
 </style>
