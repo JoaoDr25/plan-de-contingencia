@@ -9,7 +9,7 @@ export const CONTACTS_FORM_FIELDS = [
         component: BaseSelect,
         model: 'tipo',
         label: 'Tipo de Contacto',
-        placeholder: 'Seleccione el tipo de contacto',
+        // placeholder: 'Seleccione el tipo de contacto',
         icon: 'contact_phone',
         options: [
             {
@@ -50,7 +50,7 @@ export const CONTACTS_FORM_FIELDS = [
         component: BaseInput,
         model: 'nombre',
         label: 'Nombre de la Entidad',
-        placeholder: 'Ingrese el nombre de la entidad',
+        // placeholder: 'Ingrese el nombre de la entidad',
         icon: 'business',
         maxlength: 120,
         required: true,
@@ -62,7 +62,7 @@ export const CONTACTS_FORM_FIELDS = [
         component: BaseInput,
         model: 'telefono',
         label: 'Teléfono Principal',
-        placeholder: 'Ingrese el teléfono principal',
+        // placeholder: 'Ingrese el teléfono principal',
         icon: 'phone',
         maxlength: 20,
         required: true,
@@ -74,7 +74,7 @@ export const CONTACTS_FORM_FIELDS = [
         component: BaseInput,
         model: 'ciudad',
         label: 'Ciudad',
-        placeholder: 'Ingrese la ciudad',
+        // placeholder: 'Ingrese la ciudad',
         icon: 'location_city',
         maxlength: 100,
         required: true,
@@ -86,7 +86,7 @@ export const CONTACTS_FORM_FIELDS = [
         component: BaseInput,
         model: 'direccion',
         label: 'Dirección',
-        placeholder: 'Ingrese la dirección',
+        // placeholder: 'Ingrese la dirección',
         icon: 'location_on',
         maxlength: 100,
         required: true,
@@ -98,7 +98,7 @@ export const CONTACTS_FORM_FIELDS = [
         component: BaseSelect,
         model: 'estado',
         label: 'Estado',
-        placeholder: 'Seleccione el estado',
+        // placeholder: 'Seleccione el estado',
         icon: 'toggle_on',
         options: [
             {

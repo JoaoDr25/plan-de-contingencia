@@ -1,6 +1,6 @@
 <template>
 
-    <BaseDialog v-model="dialog" title="Información del Programa de Formación" width="650px">
+    <BaseDetailDialog v-model="dialog" title="Información del Programa de Formación" width="650px">
 
         <div v-if="program" class="program-details">
 
@@ -8,96 +8,39 @@
                 <img src="src/assets/logos/logo-sena.png" alt="Logo SENA">
             </div>
 
-            <div class="program-details__column">
+            <template #column-left>
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Código
-                    </span>
+                <BaseDetailItem label="Código" :value="program.codigo" />
 
-                    <span class="detail-item__value">
-                        {{ program.codigo }}
-                    </span>
-                </div>
+                <BaseDetailItem label="Nombre del Programa" :value="program.nombre" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Nombre del Programa
-                    </span>
-                    <span class="detail-item__value">
-                        {{ program.nombre }}
-                    </span>
-                </div>
+                <BaseDetailItem label="Nivel de Formación" :value="program.nivel" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Nivel de Formación
-                    </span>
+                <BaseDetailItem label="Centro" :value="program.centro" />
 
-                    <span class="detail-item__value">
-                        {{ program.nivel }}
-                    </span>
-                </div>
+            </template>
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Centro
-                    </span>
+            <template #column-right>
 
-                    <span class="detail-item__value">
-                        {{ program.centro }}
-                    </span>
-                </div>
+                <BaseDetailItem label="Estado">
+                    <StatusChip :status="program.estado" />
+                </BaseDetailItem>
 
-            </div>
+                <BaseDetailItem label="Jornada" :value="program.jornada" />
 
-            <div class="program-details__column">
+                <BaseDetailItem label="Ficha" :value="program.ficha" />
 
-                    <div class="detail-item detail-item--status">
-                        <StatusChip :status="program.estado" />
-                    </div>
+                <BaseDetailItem label="Fecha de Creación" :value="program.fecha" />
 
-                    <div class="detail-item">
-                        <span class="detail-item__label">
-                            Jornada
-                        </span>
-
-                        <span class="detail-item__value">
-                            {{ program.jornada }}
-                        </span>
-                    </div>
-
-                    <div class="detail-item">
-                        <span class="detail-item__label">
-                            Ficha
-                        </span>
-
-                        <span class="detail-item__value">
-                            {{ program.ficha }}
-                        </span>
-                    </div>
-
-                    <div class="detail-item">
-                        <span class="detail-item__label">
-                            Fecha de Creación
-                        </span>
-
-                        <span class="detail-item__value">
-                            {{ program.fecha }}
-                        </span>
-                    </div>
-
-                </div>
+            </template>
 
         </div>
 
-        <template #actions>
             <div class="program-details__actions">
                 <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
             </div>
-        </template>
 
-    </BaseDialog>
+    </BaseDetailDialog>
 
 </template>
 
@@ -105,9 +48,10 @@
 
 import { computed } from 'vue'
 
-import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
+import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
+import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
 
 const props = defineProps({
 
@@ -172,15 +116,15 @@ function closeDialog() {
     transform: translateY(4px);
 }
 
-.program-details__logo + .program-details__column {
+.program-details__logo+.program-details__column {
     margin-left: 18px;
 }
 
-.program-details__column + .program-details__column {
+.program-details__column+.program-details__column {
     margin-left: 15px;
 }
 
-.detail-item {
+/*.detail-item {
     display: flex;
     flex-direction: column;
 }
@@ -202,7 +146,7 @@ function closeDialog() {
 .detail-item--status {
     align-items: flex-start;
     padding-bottom: 8px;
-}
+}*/
 
 .program-details__actions {
     display: grid;
@@ -223,5 +167,4 @@ function closeDialog() {
     padding: 0 8px;
     min-height: unset;
 }
-
 </style>

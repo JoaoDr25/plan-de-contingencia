@@ -9,7 +9,7 @@ export const EPP_FORM_FIELDS = [
         component: BaseInput,
         model: 'nombre',
         label: 'Nombre de EPP',
-        placeholder: 'Ingrese el nombre del EPP',
+        // placeholder: 'Ingrese el nombre del EPP',
         icon: 'shield',
         maxlength: 120,
         required: true,
@@ -21,7 +21,7 @@ export const EPP_FORM_FIELDS = [
         component: BaseSelect,
         model: 'categoria',
         label: 'Categoría',
-        placeholder: 'Seleccione la categoría',
+        // placeholder: 'Seleccione la categoría',
         icon: 'category',
         options: [
             {
@@ -62,7 +62,7 @@ export const EPP_FORM_FIELDS = [
         component: BaseSelect,
         model: 'nivel',
         label: 'Nivel de Protección',
-        placeholder: 'Seleccione el nivel de protección',
+        // placeholder: 'Seleccione el nivel de protección',
         icon: 'security',
         options: [
             {
@@ -87,7 +87,7 @@ export const EPP_FORM_FIELDS = [
         component: BaseInput,
         model: 'descripcion',
         label: 'Descripción',
-        placeholder: 'Ingrese la descripción del EPP',
+        // placeholder: 'Ingrese la descripción del EPP',
         icon: 'description',
         maxlength: 250,
         required: true,
@@ -99,7 +99,7 @@ export const EPP_FORM_FIELDS = [
         component: BaseSelect,
         model: 'estado',
         label: 'Estado',
-        placeholder: 'Seleccione el estado',
+        // placeholder: 'Seleccione el estado',
         icon: 'toggle_on',
         options: [
             {
