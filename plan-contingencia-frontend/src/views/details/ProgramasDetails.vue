@@ -8,7 +8,7 @@
                 <img src="src/assets/logos/logo-sena.png" alt="Logo SENA">
             </div>
 
-            <template #column-left>
+            <template >
 
                 <BaseDetailItem label="Código" :value="program.codigo" />
 
@@ -20,7 +20,7 @@
 
             </template>
 
-            <template #column-right>
+            <template>
 
                 <BaseDetailItem label="Estado">
                     <StatusChip :status="program.estado" />

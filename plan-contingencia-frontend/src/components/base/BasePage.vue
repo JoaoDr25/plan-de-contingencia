@@ -19,7 +19,7 @@
 .base-page {
     width: 100%;
     min-height: 100%;
-    max-width: 85%;
+    max-width: 87%;
     margin: 0 auto;
     padding: 2rem;
     box-sizing: border-box;
