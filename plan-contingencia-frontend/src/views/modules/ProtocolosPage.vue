@@ -1,219 +1,245 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Protocolos" back-route="dashboard" />
+        <CrudHeader title="Protocolos">
 
-    <CrudToolbar>
+            <template #actions>
 
-      <template #right>
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+            </template>
 
-      </template>
+        </CrudHeader>
 
-      <template #center>
+        <CrudToolbar>
 
-        <CrudFilters v-model="selectedFilter" :options="protocolosFilters" />
+            <template #center>
 
-      </template>
+                <CrudFilters v-model="selectedFilter" :options="PROTOCOLOS_FILTERS" />
 
-      <template #left>
+            </template>
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por tipo, responsable o estado..." />
+            <template #left>
 
-      </template>
+                <BaseSearch v-model="searchText" placeholder="Buscar por tipo, responsable o estado..." />
 
-    </CrudToolbar>
+            </template>
 
-   <BaseTable :rows="paginatedRows" :columns="PROTOCOLOS_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event">
+        </CrudToolbar>
 
-      <template #body-cell-estado="props">
+        <BaseTable :rows="paginatedRows" :columns="PROTOCOLOS_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
-      <q-td :props="props">
-        <StatusChip :status="props.value" />
-      </q-td>
+            <template #body-cell-estado="props">
 
-    </template>
+                <q-td :props="props">
 
-     </BaseTable>
+                    <StatusChip :status="props.value" />
 
-  </BasePage>
+                </q-td>
+
+            </template>
+
+            <template #body-cell-opciones="props">
+
+                <q-td :props="props">
+
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
+
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <ProtocolosDialog v-model="dialog" :mode="dialogMode" :protocol="selectedProtocol" @save="handleProtocolSave" />
+
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
+
+        <ProtocolosDetails v-model="detailsProtocol" :protocol="selectedProtocol" />
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
-import { ref, computed } from 'vue';
-import { protocolosFilters } from 'src/constants/filters/protocolos.constants';
-import { PROTOCOLOS_COLUMNS } from 'src/constants/tables/protocolos.columns';
+import { ref, computed } from 'vue'
 
-import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
-import StatusChip from 'src/components/base/StatusChip.vue';
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { PROTOCOLOS_FILTERS } from 'src/constants/filters/protocolos.constants'
+import { PROTOCOLOS_COLUMNS } from 'src/constants/tables/protocolos.columns'
+import { PROTOCOLOS_MOCK } from 'src/mocks/protocolos.mock'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { getCurrentDate } from 'src/utils/date.utils'
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import StatusChip from 'src/components/states/StatusChip.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
+
+import ProtocolosDialog from '../dialogs/ProtocolosDialog.vue'
+import ProtocolosDetails from '../details/ProtocolosDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
+const sourceRows = ref(PROTOCOLOS_MOCK)
+
+const {
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    setRowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
+} = useCrudTable({
+    sourceRows,
+    defaultFilter: 'tipoEmergencia',
+    exactSearchField: 'estado',
+    defaultRowsPerPage: 8
+})
+
+const loading = ref(false)
+
+const dialog = ref(false)
+const detailsProtocol = ref(false)
+
+const dialogMode = ref('create')
+const selectedProtocol = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
+    }
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear este protocolo?',
+        edit: '¿Está seguro de actualizar este protocolo?',
+        delete: '¿Está seguro de eliminar este protocolo?'
+    }
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedProtocol.value = null
+    dialog.value = true
 }
 
-const selectedFilter = ref('tipo')
-const searchText = ref('')
-
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
-
-const loading = ref(false);
-
-const rows = ref([
-    {
-        id: 1,
-        tipo: 'Accidente por Caída',
-        accion: 'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
-        responsable: 'Instructor Responsable',
-        medio: 'Llamada telefónica',
-        estado: 'Activo'
-    },
-    {
-        id: 2,
-        tipo: 'Incendio',
-        accion: 'Evacuar el área de forma inmediata y notificar al Cuerpo de Bomberos.',
-        responsable: 'Brigadista de Emergencias',
-        medio: 'Llamada telefónica',
-        estado: 'Activo'
-    },
-    {
-        id: 3,
-        tipo: 'Emergencia Médica',
-        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
-        responsable: 'Instructor Responsable',
-        medio: 'Línea de Emergencias',
-        estado: 'Activo'
-    },
-    {
-        id: 4,
-        tipo: 'Derrame de Sustancias Químicas',
-        accion: 'Aislar la zona, utilizar EPP y aplicar el procedimiento de contención.',
-        responsable: 'Responsable de Seguridad',
-        medio: 'Radio de Comunicación',
-        estado: 'Activo'
-    },
-    {
-        id: 5,
-        tipo: 'Picadura o Mordedura de Animal',
-        accion: 'Prestar atención inicial y trasladar al aprendiz al centro asistencial más cercano.',
-        responsable: 'Instructor Responsable',
-        medio: 'Llamada telefónica',
-        estado: 'Activo'
-    },
-    {
-        id: 6,
-        tipo: 'Condiciones Climáticas Extremas',
-        accion: 'Suspender la actividad y trasladar al grupo a un lugar seguro.',
-        responsable: 'Coordinador de la Actividad',
-        medio: 'Comunicación Verbal',
-        estado: 'Activo'
-    },
-    {
-        id: 7,
-        tipo: 'Accidente de Tránsito',
-        accion: 'Asegurar la escena, contactar a los organismos de emergencia y reportar el incidente.',
-        responsable: 'Conductor Responsable',
-        medio: 'Línea de Emergencias',
-        estado: 'Activo'
-    },
-    {
-        id: 8,
-        tipo: 'Persona Extraviada',
-        accion: 'Realizar conteo del grupo, activar la búsqueda y notificar a las autoridades si es necesario.',
-        responsable: 'Instructor Responsable',
-        medio: 'Teléfono Celular',
-        estado: 'Activo'
-    },
-    {
-        id: 9,
-        tipo: 'Evacuación Preventiva',
-        accion: 'Guiar al grupo hacia el punto de encuentro siguiendo la ruta de evacuación establecida.',
-        responsable: 'Brigadista de Emergencias',
-        medio: 'Alarma y Comunicación Verbal',
-        estado: 'Activo'
-    }
-]);
-
-function normalizeText(text) {
-
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedProtocol.value = row
+    dialog.value = true
 }
 
-const filteredRows = computed(() => {
+function handleProtocolSave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
 
-  const search = normalizeText(searchText.value.trim())
+function createProtocol(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
+    dialog.value = false
+}
 
-  if (!search) {
-
-    return rows.value
-
-  }
-
-  return rows.value.filter((row) => {
-
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
+function updateProtocol(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedProtocol.value
+    )
+    if (index === -1) {
+        return
     }
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
+    dialog.value = false
+}
 
-    return value.includes(search)
+function deleteProtocol(row) {
+    const index = sourceRows.value.findIndex(
+        protocol => protocol.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
 
-  })
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createProtocol(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateProtocol(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteProtocol(selectedProtocol.value)
+    }
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-})
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-const totalPages = computed(() => {
+function viewItem(row) {
+    console.log('Ver Protocolo:', row)
+    selectedProtocol.value = row
+    detailsProtocol.value = true
+}
 
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
+function editItem(row) {
+    console.log('Editar Protocolo:', row)
+    openEditDialog(row)
+}
 
-})
-
-const paginatedRows = computed(() => {
-
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
-
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-
-})
-
-
-const endRow = computed(() => {
-
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
-
-})
+function deleteItem(row) {
+    dialogMode.value = 'delete'
+    selectedProtocol.value = row
+    confirmationDialog.value = true
+}
 
 </script>

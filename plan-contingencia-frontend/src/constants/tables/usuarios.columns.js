@@ -2,7 +2,7 @@ export const USUARIOS_COLUMNS = [
      {
         name: 'index',
         label: 'N',
-        field: 'id',
+        field: 'codigo',
         align: 'center'
     },
     {
@@ -13,9 +13,9 @@ export const USUARIOS_COLUMNS = [
         sortable: true
     },
     {
-        name: 'nombre',
+        name: 'nombreCompleto',
         label: 'Nombre Completo',
-        field: 'nombre',
+        field: (row) => `${row.nombre} ${row.apellido}`,
         align: 'left',
         sortable: true,
         maxWidth: '200px',

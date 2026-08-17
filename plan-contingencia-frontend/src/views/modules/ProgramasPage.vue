@@ -2,19 +2,21 @@
 
   <BasePage>
 
-    <CrudHeader title="Programas de Formación" back-route="dashboard" />
+    <CrudHeader title="Programas de Formación">
 
-    <CrudToolbar>
+      <template #actions>
 
-      <template #right>
-
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog" />
+        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
       </template>
 
+    </CrudHeader>
+
+    <CrudToolbar>
+
       <template #center>
 
-        <CrudFilters v-model="selectedFilter" :options="programasFilters" />
+        <CrudFilters v-model="selectedFilter" :options="PROGRAMAS_FILTERS" />
 
       </template>
 
@@ -28,17 +30,33 @@
 
     <BaseTable :rows="paginatedRows" :columns="PROGRAMAS_COLUMNS" :loading="loading" :current-page="currentPage"
       :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event" >
+      :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
-     <template #body-cell-estado="props">
+      <template #body-cell-estado="props">
 
         <q-td :props="props">
-            <StatusChip :status="props.value"/>
+          <StatusChip :status="props.value" />
         </q-td>
 
-    </template>
+      </template>
+
+      <template #body-cell-opciones="props">
+
+        <q-td :props="props">
+          <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)" />
+        </q-td>
+
+      </template>
 
     </BaseTable>
+
+    <ProgramasDialog v-model="dialog" :mode="dialogMode" :program="selectedProgram" @save="handleProgramSave" />
+
+    <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+      :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction" @cancel="cancelConfirmation" />
+
+    <ProgramasDetails v-model="detailsProgram" :program="selectedProgram" />
 
   </BasePage>
 
@@ -47,170 +65,178 @@
 <script setup>
 
 import { ref, computed } from 'vue'
-import { programasFilters } from "src/constants/filters/programas.constants";
+
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants';
+import { PROGRAMAS_FILTERS } from "src/constants/filters/programas.constants";
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns';
+import { PROGRAMAS_MOCK } from 'src/mocks/programas.mock';
+import { useCrudTable } from 'src/composables/useCrudTable';
+import { getCurrentDate } from 'src/utils/date.utils.js';
 
 import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
-import StatusChip from 'src/components/base/StatusChip.vue';
+import CrudHeader from 'src/components/cruds/CrudHeader.vue';
+import CrudFilters from 'src/components/cruds/CrudFilters.vue';
+import BaseSearch from 'src/components/forms/BaseSearch.vue';
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
+import BaseTable from 'src/components/tables/BaseTable.vue';
+import StatusChip from 'src/components/states/StatusChip.vue';
+import CrudActions from 'src/components/actions/CrudActions.vue';
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
-}
+import ProgramasDialog from '../dialogs/ProgramasDialog.vue';
+import ProgramasDetails from '../details/ProgramasDetails.vue';
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue';
 
-const selectedFilter = ref('ficha')
-const searchText = ref('')
+const sourceRows = ref(PROGRAMAS_MOCK)
 
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
+const {
+  selectedFilter,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  setRowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow
+} = useCrudTable({
+  sourceRows,
+  defaultFilter: 'ficha',
+  exactSearchField: 'estado',
+  defaultRowsPerPage: 8
+})
 
-const loading = ref(false);
+const loading = ref(false)
 
-const rows = ref([
-  {
-    id: 1,
-    ficha: '2876541',
-    nombre: 'Análisis y Desarrollo de Software',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 2,
-    ficha: '2876542',
-    nombre: 'Gestión Administrativa',
-    nivel: 'Técnico',
-    centro: 'Centro de Servicios',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 3,
-    ficha: '2876543',
-    nombre: 'Producción Agropecuaria',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Agropecuario',
-    fecha: "00/00/0000",
-    estado: 'Inactivo'
-  },
-  {
-    id: 4,
-    ficha: '2876541',
-    nombre: 'Análisis y Desarrollo de Software',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 5,
-    ficha: '2876542',
-    nombre: 'Gestión Administrativa',
-    nivel: 'Técnico',
-    centro: 'Centro de Servicios',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 6,
-    ficha: '2876543',
-    nombre: 'Producción Agropecuaria',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Agropecuario',
-    fecha: "00/00/0000",
-    estado: 'Inactivo'
-  },
-  {
-    id: 7,
-    ficha: '2876541',
-    nombre: 'Análisis y Desarrollo de Software',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 8,
-    ficha: '2876542',
-    nombre: 'Gestión Administrativa',
-    nivel: 'Técnico',
-    centro: 'Centro de Servicios',
-    fecha: "00/00/0000",
-    estado: 'Activo'
-  },
-  {
-    id: 9,
-    ficha: '2876543',
-    nombre: 'Producción Agropecuaria',
-    nivel: 'Tecnólogo',
-    centro: 'Centro Agropecuario',
-    fecha: "00/00/0000",
-    estado: 'Inactivo'
-  }
-])
+const dialog = ref(false)
+const detailsProgram = ref(false)
 
-function normalizeText(text) {
+const dialogMode = ref('create')
+const selectedProgram = ref(null)
 
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
 
-}
 
-const filteredRows = computed(() => {
-
-  const search = normalizeText(searchText.value.trim())
-
-  if (!search) {
-    return rows.value
-  }
-
-  return rows.value.filter((row) => {
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
+const confirmationTitle = computed(() => {
+     const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
     }
-    return value.includes(search)
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+      const messages = {
+        create: '¿Está seguro de crear este programa?',
+        edit: '¿Está seguro de actualizar este programa?',
+        delete: '¿Está seguro de eliminar este programa?'
+    }
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+  const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+
+function openCreateDialog() {
+  dialogMode.value = 'create'
+  selectedProgram.value = null
+  dialog.value = true
+}
+
+function openEditDialog(row) {
+  dialogMode.value = 'edit'
+  selectedProgram.value = row
+  dialog.value = true
+}
+
+function handleProgramSave(formData) {
+  pendingActionData.value = formData
+  dialog.value = false
+  confirmationDialog.value = true
+}
+
+function createProgram(formData) {
+  sourceRows.value.push({
+    ...formData,
+    fecha: getCurrentDate() //fecha temporal
   })
-})
+  dialog.value = false
+}
 
-const totalPages = computed(() => {
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
+function updateProgram(formData) {
+  const index = sourceRows.value.findIndex(
+    row => row === selectedProgram.value
   )
-
-})
-
-const paginatedRows = computed(() => {
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-  if (filteredRows.value.length === 0) {
-    return 0
+  if (index === -1) {
+    return
   }
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-})
+  sourceRows.value[index] = {
+    ...sourceRows.value[index],
+    ...formData
+  }
+  dialog.value = false
+}
 
+function deleteProgram(row) {
+    const index = sourceRows.value.findIndex(
+        program => program.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
 
-const endRow = computed(() => {
+function confirmAction() {
+     if (dialogMode.value === 'create') {
+        createProgram(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateProgram(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteProgram(selectedProgram.value)
+    }
+  pendingActionData.value = null
+  confirmationDialog.value = false
+}
 
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
-})
+function cancelConfirmation() {
+  pendingActionData.value = null
+  confirmationDialog.value = false
+}
+
+function viewItem(row) {
+  console.log('Ver Programa:', row)
+  selectedProgram.value = row
+  detailsProgram.value = true
+}
+
+function editItem(row) {
+  console.log('Editar Programa', row)
+  openEditDialog(row)
+}
+
+function deleteItem(row) {
+  dialogMode.value = 'delete'
+  selectedProgram.value = row
+  confirmationDialog.value = true
+}
 
 </script>

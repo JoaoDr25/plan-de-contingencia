@@ -1,10 +1,9 @@
 <template>
-    <q-item clickable :to="{ name: routeName }" @click="handleClick"
-    class="drawer-menu-item">
+    <q-item clickable :to="{ name: routeName }" @click="handleClick" class="drawer-menu-item">
 
         <q-item-section avatar class="drawer-menu-item__icon">
 
-            <q-icon :name="icon" size="20px" />
+            <q-icon :name="icon" size="24px" />
 
         </q-item-section>
 
@@ -37,7 +36,7 @@ defineProps({
 })
 
 const emit = defineEmits([
-  'closeDrawer'
+    'closeDrawer'
 ])
 
 function handleClick() {
@@ -55,11 +54,11 @@ function handleClick() {
     background-color: $color-primary;
     color: $color-background;
     border-radius: 8px;
-    margin-bottom: 0.7rem;
-    padding: 0 0.5rem;
+    margin-bottom: 0.75rem;
+    padding: 0 0.6rem;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-    min-height: 42px;
+    min-height: 46px;
     width: 100%;
 }
 
@@ -71,10 +70,11 @@ function handleClick() {
     color: inherit;
     flex: 0 0 auto;
     min-width: 0%;
+    padding-left: 10px;
 }
 
 .drawer-menu-item__label {
-    font-size: 0.95rem;
+    font-size: 0.96rem;
     font-weight: 400;
     padding-right: 0;
     overflow: hidden;

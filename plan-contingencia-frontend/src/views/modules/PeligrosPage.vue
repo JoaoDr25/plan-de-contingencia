@@ -1,198 +1,235 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Peligros" back-route="dashboard" />
+        <CrudHeader title="Peligros">
 
-    <CrudToolbar>
+            <template #actions>
 
-      <template #right>
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+            </template>
 
-      </template>
+        </CrudHeader>
 
-      <template #center>
+        <CrudToolbar>
 
-        <CrudFilters v-model="selectedFilter" :options="peligrosFilters" />
+            <template #center>
 
-      </template>
+                <CrudFilters v-model="selectedFilter" :options="PELIGROS_FILTERS" />
 
-      <template #left>
+            </template>
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por nombre o categoría..." />
+            <template #left>
 
-      </template>
+                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o categoría..." />
 
-    </CrudToolbar>
+            </template>
 
-    <BaseTable :rows="paginatedRows" :columns="PELIGROS_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event"/>
+        </CrudToolbar>
 
-  </BasePage>
+        <BaseTable :rows="paginatedRows" :columns="PELIGROS_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
+
+            <template #body-cell-opciones="props">
+
+                <q-td :props="props">
+
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
+
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <PeligrosDialog v-model="dialog" :mode="dialogMode" :danger="selectedDanger" @save="handleDangerSave" />
+
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
+
+        <PeligrosDetails v-model="detailsDanger" :danger="selectedDanger" />
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
-import { ref, computed } from 'vue';
-import { peligrosFilters } from 'src/constants/filters/peligros.constants';
-import { PELIGROS_COLUMNS } from 'src/constants/tables/peligros.columns';
+import { ref, computed } from 'vue'
 
-import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { PELIGROS_FILTERS } from 'src/constants/filters/peligros.constants'
+import { PELIGROS_COLUMNS } from 'src/constants/tables/peligros.columns'
+import { PELIGROS_MOCK } from 'src/mocks/peligros.mock'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { getCurrentDate } from 'src/utils/date.utils'
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
+
+import PeligrosDialog from '../dialogs/PeligrosDialog.vue'
+import PeligrosDetails from '../details/PeligrosDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
+const sourceRows = ref(PELIGROS_MOCK)
+
+const {
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    setRowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
+} = useCrudTable({
+    sourceRows,
+    defaultFilter: 'nombre',
+    exactSearchField: [],
+    defaultRowsPerPage: 8
+})
+
+
+const loading = ref(false)
+
+const dialog = ref(false)
+const detailsDanger = ref(false)
+
+const dialogMode = ref('create')
+const selectedDanger = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
+    }
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear este peligro?',
+        edit: '¿Está seguro de actualizar este peligro?',
+        delete: '¿Está seguro de eliminar este peligro?'
+    }
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedDanger.value = null
+    dialog.value = true
 }
 
-const selectedFilter = ref('nombre')
-const searchText = ref('')
-
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
-
-const loading = ref(false);
-
-const rows = ref([
-    {
-        id: 1,
-        nombre: 'Caída a Nivel',
-        categoria: 'Locativo',
-        descripcion: 'Superficies irregulares, húmedas o con obstáculos que pueden ocasionar caídas.',
-        riesgos: 4
-    },
-    {
-        id: 2,
-        nombre: 'Exposición a Sustancias Químicas',
-        categoria: 'Químico',
-        descripcion: 'Contacto o inhalación de productos químicos durante prácticas de laboratorio.',
-        riesgos: 6
-    },
-    {
-        id: 3,
-        nombre: 'Radiación Solar',
-        categoria: 'Físico',
-        descripcion: 'Exposición prolongada al sol durante actividades al aire libre.',
-        riesgos: 3
-    },
-    {
-        id: 4,
-        nombre: 'Herramientas Cortopunzantes',
-        categoria: 'Mecánico',
-        descripcion: 'Uso de herramientas con filo o punta que pueden causar lesiones.',
-        riesgos: 5
-    },
-    {
-        id: 5,
-        nombre: 'Contacto con Animales',
-        categoria: 'Biológico',
-        descripcion: 'Posibilidad de mordeduras, picaduras o transmisión de enfermedades.',
-        riesgos: 4
-    },
-    {
-        id: 6,
-        nombre: 'Manipulación Manual de Cargas',
-        categoria: 'Ergonómico',
-        descripcion: 'Levantamiento o transporte de cargas que puede generar lesiones musculares.',
-        riesgos: 3
-    },
-    {
-        id: 7,
-        nombre: 'Tránsito Vehicular',
-        categoria: 'Seguridad',
-        descripcion: 'Circulación de vehículos durante desplazamientos o visitas técnicas.',
-        riesgos: 5
-    },
-    {
-        id: 8,
-        nombre: 'Condiciones Climáticas Adversas',
-        categoria: 'Natural',
-        descripcion: 'Lluvias intensas, tormentas o vientos fuertes que afectan la actividad.',
-        riesgos: 4
-    },
-    {
-        id: 9,
-        nombre: 'Ruido Excesivo',
-        categoria: 'Físico',
-        descripcion: 'Exposición a altos niveles de ruido en ambientes industriales.',
-        riesgos: 2
-    }
-]);
-
-function normalizeText(text) {
-
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedDanger.value = row
+    dialog.value = true
 }
 
-const filteredRows = computed(() => {
+function handleDangerSave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
 
-  const search = normalizeText(searchText.value.trim())
+function createDanger(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
+    dialog.value = false
+}
 
-  if (!search) {
-
-    return rows.value
-
-  }
-
-  return rows.value.filter((row) => {
-
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
+function updateDanger(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedDanger.value
+    )
+    if (index === -1) {
+        return
     }
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
+    dialog.value = false
+}
 
-    return value.includes(search)
+function deleteDanger(row) {
+    const index = sourceRows.value.findIndex(
+        danger => danger.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
 
-  })
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createDanger(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateDanger(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteDanger(selectedDanger.value)
+    }
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-})
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-const totalPages = computed(() => {
+function viewItem(row) {
+    console.log('Ver Peligro:', row)
+    selectedDanger.value = row
+    detailsDanger.value = true
+}
 
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
+function editItem(row) {
+    console.log('Editar Peligro:', row)
+    openEditDialog(row)
+}
 
-})
-
-const paginatedRows = computed(() => {
-
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
-
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-
-})
-
-
-const endRow = computed(() => {
-
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
-
-})
+function deleteItem(row) {
+    dialogMode.value = 'delete'
+    selectedDanger.value = row
+    confirmationDialog.value = true
+}
 
 </script>

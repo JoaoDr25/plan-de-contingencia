@@ -2,197 +2,267 @@
 
     <BasePage>
 
-    <CrudHeader title="Actividades" back-route="dashboard" />
+        <CrudHeader title="Actividades">
 
-    <CrudToolbar>
+            <template #actions>
 
-      <template #right>
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+            </template>
 
-      </template>
 
-      <template #center>
+        </CrudHeader>
 
-        <CrudFilters v-model="selectedFilter" :options="actividadesFilters" />
+        <CrudToolbar>
 
-      </template>
+            <template #center>
 
-      <template #left>
+                <CrudFilters v-model="selectedFilter" :options="ACTIVIDADES_FILTERS" />
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por nombre o tipo de salida..." />
+            </template>
 
-      </template>
+            <template #left>
 
-    </CrudToolbar>
+                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o tipo de salida..." />
 
-     <BaseTable :rows="paginatedRows" :columns="ACTIVIDADES_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event"/>
+            </template>
 
-  </BasePage>
+        </CrudToolbar>
+
+        <BaseTable :rows="paginatedRows" :columns="ACTIVIDADES_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
+
+            <template #body-cell-opciones="props">
+
+                <q-td :props="props">
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <ActividadesDialog v-model="dialog" :mode="dialogMode" :activity="selectedActivity"
+            @save="handleActivitySave" />
+
+
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
+
+
+        <ActividadesDetails v-model="detailsActivity" :activity="selectedActivity" />
+
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
 import { ref, computed } from 'vue';
-import { actividadesFilters } from 'src/constants/filters/actividades.constants';
+
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants';
+import { ACTIVIDADES_FILTERS } from 'src/constants/filters/actividades.constants';
 import { ACTIVIDADES_COLUMNS } from 'src/constants/tables/actividades.columns';
+import { ACTIVIDADES_MOCK } from 'src/mocks/actividades.mock';
+import { useCrudTable } from 'src/composables/useCrudTable';
+import { getCurrentDate } from 'src/utils/date.utils';
 
 import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
+import CrudHeader from 'src/components/cruds/CrudHeader.vue';
+import CrudFilters from 'src/components/cruds/CrudFilters.vue';
+import BaseSearch from 'src/components/forms/BaseSearch.vue';
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
+import BaseTable from 'src/components/tables/BaseTable.vue';
+import CrudActions from 'src/components/actions/CrudActions.vue';
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
-}
+import ActividadesDialog from '../dialogs/ActividadesDialog.vue'
+import ActividadesDetails from '../details/ActividadesDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
-const selectedFilter = ref('nombre')
-const searchText = ref('')
+const sourceRows = ref(ACTIVIDADES_MOCK);
 
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
+const {
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    setRowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
+} = useCrudTable({
+    sourceRows,
+    defaultFilter: 'nombre',
+    exactSearchField: [],
+    defaultRowsPerPage: 8
+})
 
 const loading = ref(false);
 
-const rows = ref([
-    {
-        id: 1,
-        nombre: 'Práctica de Campo en Cultivos',
-        tipo: 'Práctica Académica',
-        descripcion: 'Reconocimiento de cultivos y aplicación de técnicas agrícolas.',
-        peligros: 5
-    },
-    {
-        id: 2,
-        nombre: 'Visita Técnica a Planta Industrial',
-        tipo: 'Visita Técnica',
-        descripcion: 'Observación de procesos industriales y normas de seguridad.',
-        peligros: 8
-    },
-    {
-        id: 3,
-        nombre: 'Recorrido Ecológico',
-        tipo: 'Salida Ambiental',
-        descripcion: 'Identificación de flora, fauna y factores ambientales.',
-        peligros: 6
-    },
-    {
-        id: 4,
-        nombre: 'Práctica de Laboratorio',
-        tipo: 'Práctica Académica',
-        descripcion: 'Ensayos y análisis en laboratorio especializado.',
-        peligros: 4
-    },
-    {
-        id: 5,
-        nombre: 'Inspección de Obras Civiles',
-        tipo: 'Visita Técnica',
-        descripcion: 'Evaluación de procesos constructivos y seguridad en obra.',
-        peligros: 9
-    },
-    {
-        id: 6,
-        nombre: 'Salida de Topografía',
-        tipo: 'Trabajo de Campo',
-        descripcion: 'Levantamiento de información mediante equipos topográficos.',
-        peligros: 7
-    },
-    {
-        id: 7,
-        nombre: 'Práctica Forestal',
-        tipo: 'Salida Ambiental',
-        descripcion: 'Reconocimiento de especies forestales y conservación.',
-        peligros: 6
-    },
-    {
-        id: 8,
-        nombre: 'Visita a Centro Logístico',
-        tipo: 'Visita Técnica',
-        descripcion: 'Análisis de operaciones de almacenamiento y distribución.',
-        peligros: 5
-    },
-    {
-        id: 9,
-        nombre: 'Práctica de Mantenimiento Industrial',
-        tipo: 'Práctica Académica',
-        descripcion: 'Inspección y mantenimiento preventivo de maquinaria.',
-        peligros: 8
+const dialog = ref(false)
+const detailsActivity = ref(false)
+
+
+const dialogMode = ref('create')
+const selectedActivity = ref(null)
+
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
     }
-]);
 
-function normalizeText(text) {
+    return titles[dialogMode.value]
+})
 
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
 
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear esta actividad?',
+        edit: '¿Está seguro de actualizar esta actividad?',
+        delete: '¿Está seguro de eliminar esta actividad?'
+    }
+
+    return messages[dialogMode.value]
+})
+
+
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+
+    return labels[dialogMode.value]
+})
+
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedActivity.value = null
+    dialog.value = true
 }
 
-const filteredRows = computed(() => {
 
-  const search = normalizeText(searchText.value.trim())
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedActivity.value = row
+    dialog.value = true
+}
 
-  if (!search) {
 
-    return rows.value
+function handleActivitySave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
 
-  }
 
-  return rows.value.filter((row) => {
+function createActivity(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
 
-    const value = normalizeText(row[selectedFilter.value] ?? '')
+    dialog.value = false
+}
 
-    if (selectedFilter.value === 'estado') {
-      return value === search
+
+function updateActivity(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedActivity.value
+    )
+
+    if (index === -1) {
+        return
     }
 
-    return value.includes(search)
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
 
-  })
-
-})
-
-const totalPages = computed(() => {
-
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
-
-})
-
-const paginatedRows = computed(() => {
-
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
-
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-
-})
+    dialog.value = false
+}
 
 
-const endRow = computed(() => {
+function deleteActivity(row) {
+    const index = sourceRows.value.findIndex(
+        activity => activity.id === row.id
+    )
 
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
+    if (index === -1) {
+        return
+    }
 
-})
+    sourceRows.value.splice(index, 1)
+}
+
+
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createActivity(pendingActionData.value)
+    }
+
+    if (dialogMode.value === 'edit') {
+        updateActivity(pendingActionData.value)
+    }
+
+    if (dialogMode.value === 'delete') {
+        deleteActivity(selectedActivity.value)
+    }
+
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
+
+
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
+
+
+function viewItem(row) {
+    console.log('Ver Actividad:', row)
+
+    selectedActivity.value = row
+    detailsActivity.value = true
+}
+
+
+function editItem(row) {
+    console.log('Editar Actividad:', row)
+
+    openEditDialog(row)
+}
+
+
+function deleteItem(row) {
+    dialogMode.value = 'delete'
+    selectedActivity.value = row
+    confirmationDialog.value = true
+}
 
 </script>

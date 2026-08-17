@@ -2,11 +2,7 @@
 
     <div class="app-logo">
 
-        <img 
-        :src="logoSena"
-        alt="Logo SENA"
-        :style="{ width: `${props.size}px`}"
-        />
+        <img :src="logoSena" alt="Logo SENA" :style="{ width: `${props.size}px` }" />
 
     </div>
 
@@ -17,17 +13,16 @@
 import logoSena from 'src/assets/logos/logo-sena.png'
 
 const props = defineProps({
-    
+
     size: {
         type: Number,
-        default: 80
+        default: 78
     }
 })
 
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/mixins.scss' as *;
 
 .app-logo {
@@ -38,5 +33,4 @@ const props = defineProps({
     display: block;
     height: auto;
 }
-
 </style>

@@ -1,4 +1,4 @@
-export const aprendicesFilters = [
+export const APRENDICES_FILTERS = [
 
     {
         label: 'Documento',

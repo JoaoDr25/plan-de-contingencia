@@ -1,227 +1,245 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Contactos de Emergencia" back-route="dashboard" />
+        <CrudHeader title="Contactos de Emergencia">
 
-    <CrudToolbar>
+            <template #actions>
 
-      <template #right>
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+            </template>
 
-      </template>
+        </CrudHeader>
 
-      <template #center>
+        <CrudToolbar>
 
-        <CrudFilters v-model="selectedFilter" :options="contactosFilters" />
+            <template #center>
 
-      </template>
+                <CrudFilters v-model="selectedFilter" :options="CONTACTOS_FILTERS" />
 
-      <template #left>
+            </template>
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por tipo de contacto, nombre, ciudad, estado..." />
+            <template #left>
 
-      </template>
+                <BaseSearch v-model="searchText" placeholder="Buscar por tipo de contacto, nombre, estado..." />
 
-    </CrudToolbar>
+            </template>
 
-    <BaseTable :rows="paginatedRows" :columns="CONTACTOS_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event">
+        </CrudToolbar>
 
-      <template #body-cell-estado="props">
+        <BaseTable :rows="paginatedRows" :columns="CONTACTOS_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-rows-per-page="setRowsPerPage" @change-page="currentPage = $event">
 
-      <q-td :props="props">
-        <StatusChip :status="props.value" />
-      </q-td>
+            <template #body-cell-estado="props">
 
-    </template>
+                <q-td :props="props">
 
-     </BaseTable>
+                    <StatusChip :status="props.value" />
 
-  </BasePage>
+                </q-td>
+
+            </template>
+
+            <template #body-cell-opciones="props">
+
+                <q-td :props="props">
+
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
+
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <ContactosDialog v-model="dialog" :mode="dialogMode" :contact="selectedContact" @save="handleContactSave" />
+
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
+
+        <ContactosDetails v-model="detailsContact" :contact="selectedContact" />
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
 import { ref, computed } from 'vue'
-import { contactosFilters } from 'src/constants/filters/contactos.constants';
-import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns';
 
-import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
-import StatusChip from 'src/components/base/StatusChip.vue';
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { CONTACTOS_FILTERS } from 'src/constants/filters/contactos.constants'
+import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns'
+import { CONTACTOS_MOCK } from 'src/mocks/contactos.mock'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { getCurrentDate } from 'src/utils/date.utils'
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import StatusChip from 'src/components/states/StatusChip.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
+
+import ContactosDialog from '../dialogs/ContactosDialog.vue'
+import ContactosDetails from '../details/ContactosDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
+const sourceRows = ref(CONTACTOS_MOCK)
+
+const {
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    setRowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
+} = useCrudTable({
+    sourceRows,
+    defaultFilter: 'tipoContacto',
+    exactSearchField: 'estado',
+    defaultRowsPerPage: 8
+})
+
+const loading = ref(false)
+
+const dialog = ref(false)
+const detailsContact = ref(false)
+
+const dialogMode = ref('create')
+const selectedContact = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
+    }
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear este contacto de emergencia?',
+        edit: '¿Está seguro de actualizar este contacto de emergencia?',
+        delete: '¿Está seguro de eliminar este contacto de emergencia?'
+    }
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedContact.value = null
+    dialog.value = true
 }
 
-const selectedFilter = ref('tipo-contacto')
-const searchText = ref('')
-
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
-
-const loading = ref(false);
-
-const rows = ref([
-    {
-        id: 1,
-        tipo: 'Hospital',
-        nombre: 'Hospital Universitario Erasmo Meoz',
-        telefono: '(607) 5827777',
-        direccion: 'Av. 11E #5AN-71',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 2,
-        tipo: 'Bomberos',
-        nombre: 'Cuerpo de Bomberos Voluntarios',
-        telefono: '(607) 5724200',
-        direccion: 'Av. 7 #6-15',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 3,
-        tipo: 'Policía',
-        nombre: 'Policía Metropolitana de Cúcuta',
-        telefono: '123',
-        direccion: 'Av. Libertadores #15-25',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 4,
-        tipo: 'Cruz Roja',
-        nombre: 'Cruz Roja Colombiana - Seccional Norte de Santander',
-        telefono: '(607) 5715909',
-        direccion: 'Calle 15 #4-28',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 5,
-        tipo: 'Defensa Civil',
-        nombre: 'Defensa Civil Colombiana - Junta Cúcuta',
-        telefono: '(607) 5830030',
-        direccion: 'Calle 2N #8-40',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 6,
-        tipo: 'Tránsito',
-        nombre: 'Secretaría de Tránsito Municipal',
-        telefono: '(607) 5784949',
-        direccion: 'Av. Gran Colombia #8-35',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 7,
-        tipo: 'Ambulancia',
-        nombre: 'Servicio de Ambulancias Vital',
-        telefono: '125',
-        direccion: 'Calle 10 #12-45',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 8,
-        tipo: 'Gestión del Riesgo',
-        nombre: 'Oficina Municipal para la Gestión del Riesgo',
-        telefono: '(607) 5955555',
-        direccion: 'Calle 11 #5-49 - Alcaldía de Cúcuta',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    },
-    {
-        id: 9,
-        tipo: 'EPS',
-        nombre: 'Nueva EPS',
-        telefono: '(601) 3077022',
-        direccion: 'Av. 0 #10-50',
-        ciudad: 'Cúcuta',
-        estado: 'Activo'
-    }
-]);
-
-function normalizeText(text) {
-
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedContact.value = row
+    dialog.value = true
 }
 
-const filteredRows = computed(() => {
+function handleContactSave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
 
-  const search = normalizeText(searchText.value.trim())
+function createContact(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
+    dialog.value = false
+}
 
-  if (!search) {
-
-    return rows.value
-
-  }
-
-  return rows.value.filter((row) => {
-
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
+function updateContact(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedContact.value
+    )
+    if (index === -1) {
+        return
     }
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
+    dialog.value = false
+}
 
-    return value.includes(search)
+function deleteContact(row) {
+    const index = sourceRows.value.findIndex(
+        contact => contact.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
 
-  })
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createContact(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateContact(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteContact(selectedContact.value)
+    }
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-})
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-const totalPages = computed(() => {
+function viewItem(row) {
+    console.log('Ver Contacto de Emergencia:', row)
+    selectedContact.value = row
+    detailsContact.value = true
+}
 
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
+function editItem(row) {
+    console.log('Editar Contacto de Emergencia:', row)
+    openEditDialog(row)
+}
 
-})
-
-const paginatedRows = computed(() => {
-
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
-
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-
-})
-
-
-const endRow = computed(() => {
-
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
-
-})
+function deleteItem(row) {
+    dialogMode.value = 'delete'
+    selectedContact.value = row
+    confirmationDialog.value = true
+}
 
 </script>

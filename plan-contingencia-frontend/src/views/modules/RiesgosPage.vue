@@ -1,207 +1,244 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Riesgos" back-route="dashboard" />
+        <CrudHeader title="Riesgos">
 
-    <CrudToolbar>
+            <template #actions>
 
-      <template #right>
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+            </template>
 
-      </template>
+        </CrudHeader>
 
-      <template #center>
+        <CrudToolbar>
 
-        <CrudFilters v-model="selectedFilter" :options="riesgosFilters" />
+            <template #center>
 
-      </template>
+                <CrudFilters v-model="selectedFilter" :options="RIESGOS_FILTERS" />
 
-      <template #left>
+            </template>
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por riesgo o nivel..." />
+            <template #left>
 
-      </template>
+                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o nivel..." />
 
-    </CrudToolbar>
+            </template>
 
-    <BaseTable :rows="paginatedRows" :columns="RIESGOS_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event"/>
+        </CrudToolbar>
 
-  </BasePage>
+        <BaseTable :rows="paginatedRows" :columns="RIESGOS_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
+
+            <template #body-cell-nivel="props">
+
+                <q-td :props="props">
+                    <LevelChip :level="props.value" />
+                </q-td>
+
+            </template>
+
+            <template #body-cell-opciones="props">
+
+                <q-td :props="props">
+
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
+
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <RiesgosDialog v-model="dialog" :mode="dialogMode" :risk="selectedRisk" @save="handleRiskSave" />
+
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
+
+        <RiesgosDetails v-model="detailsRisk" :risk="selectedRisk" />
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
-import { ref, computed } from 'vue';
-import { riesgosFilters } from 'src/constants/filters/riesgos.constants';
-import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns';
+import { ref, computed } from 'vue'
 
-import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants'
+import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns'
+import { RIESGOS_MOCK } from 'src/mocks/riesgos.mock'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { getCurrentDate } from 'src/utils/date.utils'
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
-}
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import LevelChip from 'src/components/states/LevelChip.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
 
-const selectedFilter = ref('riesgo')
-const searchText = ref('')
+import RiesgosDialog from '../dialogs/RiesgosDialog.vue'
+import RiesgosDetails from '../details/RiesgosDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
+const sourceRows = ref(RIESGOS_MOCK)
 
-const loading = ref(false);
+const {
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    setRowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
+} = useCrudTable({
+    sourceRows,
+    defaultFilter: 'nombre',
+    exactSearchField: [],
+    defaultRowsPerPage: 8
+})
 
-const rows = ref([
-    {
-        id: 1,
-        riesgo: 'Fracturas y Esguinces',
-        nivel: 'Alto',
-        consecuencia: 'Lesiones físicas',
-        descripcion: 'Posibles lesiones ocasionadas por caídas, tropiezos o pérdida del equilibrio.',
-        protocolos: 2
-    },
-    {
-        id: 2,
-        riesgo: 'Intoxicación por Sustancias Químicas',
-        nivel: 'Alto',
-        consecuencia: 'Afectación respiratoria',
-        descripcion: 'Exposición o contacto accidental con sustancias químicas peligrosas.',
-        protocolos: 1
-    },
-    {
-        id: 3,
-        riesgo: 'Quemaduras Solares',
-        nivel: 'Medio',
-        consecuencia: 'Lesiones en la piel',
-        descripcion: 'Exposición prolongada a la radiación solar durante actividades al aire libre.',
-        protocolos: 1
-    },
-    {
-        id: 4,
-        riesgo: 'Cortes y Laceraciones',
-        nivel: 'Medio',
-        consecuencia: 'Heridas superficiales o profundas',
-        descripcion: 'Uso inadecuado de herramientas o elementos cortopunzantes.',
-        protocolos: 2
-    },
-    {
-        id: 5,
-        riesgo: 'Picaduras y Mordeduras',
-        nivel: 'Medio',
-        consecuencia: 'Reacciones alérgicas o infecciones',
-        descripcion: 'Contacto con insectos o animales durante actividades de campo.',
-        protocolos: 1
-    },
-    {
-        id: 6,
-        riesgo: 'Lesión Muscular',
-        nivel: 'Bajo',
-        consecuencia: 'Dolor o limitación del movimiento',
-        descripcion: 'Manipulación inadecuada de cargas o posturas forzadas.',
-        protocolos: 1
-    },
-    {
-        id: 7,
-        riesgo: 'Accidente de Tránsito',
-        nivel: 'Alto',
-        consecuencia: 'Traumatismos múltiples',
-        descripcion: 'Incidentes durante el desplazamiento hacia o desde la actividad.',
-        protocolos: 2
-    },
-    {
-        id: 8,
-        riesgo: 'Hipotermia o Golpe de Calor',
-        nivel: 'Alto',
-        consecuencia: 'Compromiso del estado de salud',
-        descripcion: 'Exposición a condiciones climáticas extremas durante la actividad.',
-        protocolos: 1
-    },
-    {
-        id: 9,
-        riesgo: 'Pérdida Auditiva Temporal',
-        nivel: 'Medio',
-        consecuencia: 'Disminución de la capacidad auditiva',
-        descripcion: 'Exposición prolongada a altos niveles de ruido.',
-        protocolos: 1
+const loading = ref(false)
+
+const dialog = ref(false)
+const detailsRisk = ref(false)
+
+const dialogMode = ref('create')
+const selectedRisk = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
     }
-]);
+    return titles[dialogMode.value]
+})
 
-function normalizeText(text) {
-
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
-}
-
-const filteredRows = computed(() => {
-
-  const search = normalizeText(searchText.value.trim())
-
-  if (!search) {
-
-    return rows.value
-
-  }
-
-  return rows.value.filter((row) => {
-
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear este riesgo?',
+        edit: '¿Está seguro de actualizar este riesgo?',
+        delete: '¿Está seguro de eliminar este riesgo?'
     }
 
-    return value.includes(search)
-
-  })
-
+    return messages[dialogMode.value]
 })
 
-const totalPages = computed(() => {
-
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
-
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
 })
 
-const paginatedRows = computed(() => {
-
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
 })
 
-const startRow = computed(() => {
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedRisk.value = null
+    dialog.value = true
+}
 
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedRisk.value = row
+    dialog.value = true
+}
 
-  return (currentPage.value - 1) * rowsPerPage.value + 1
+function handleRiskSave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
 
-})
+function createRisk(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
+    dialog.value = false
+}
 
+function updateRisk(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedRisk.value
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
+    dialog.value = false
+}
 
-const endRow = computed(() => {
+function deleteRisk(row) {
+    const index = sourceRows.value.findIndex(
+        risk => risk.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
 
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createRisk(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateRisk(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteRisk(selectedRisk.value)
+    }
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-})
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
+
+function viewItem(row) {
+    console.log('Ver Riesgo:', row)
+    selectedRisk.value = row
+    detailsRisk.value = true
+}
+
+function editItem(row) {
+    console.log('Editar Riesgo:', row)
+    openEditDialog(row)
+}
+
+function deleteItem(row) {
+    dialogMode.value = 'delete'
+    selectedRisk.value = row
+    confirmationDialog.value = true
+}
 
 </script>

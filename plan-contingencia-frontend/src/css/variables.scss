@@ -10,6 +10,7 @@ $color-accent: #26A69A;
 // Fondos
 $color-background: #F5F7FA;
 $color-background-secondary: #d7dadd;
+$color-background-field: #eeeeee;
 $color-surface: #FFFFFF;
 
 //Texto
@@ -45,9 +46,9 @@ $radius-xl: 16px;
 $radius-round: 9999px;
 
 //ELEVACIONES
-$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
-$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.12);
+$shadow-md: 0 4px 8px rgba(0, 0, 0, 0.18);
+$shadow-lg: 0 8px 12px rgba(0, 0, 0, 0.25);
 
 //LAYOUT
 $header-height: 64px;

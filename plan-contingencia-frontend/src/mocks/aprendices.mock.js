@@ -1,0 +1,110 @@
+export const APRENDICES_MOCK = [
+  {
+    codigo: 1,
+    tipo: 'Cédula de Ciudadanía',
+    documento: '1098765432',
+    nombre: 'Juan Camilo',
+    apellido: 'Rojas',
+    programa: 'Análisis y Desarrollo de Software',
+    ficha: '2876541',
+    eps: 'Nueva EPS',
+    contacto: 'María Rojas - 3204567890',
+    estado: 'Activo'
+  },
+  {
+    codigo: 2,
+    tipo: 'Tarjeta de Identidad',
+    documento: '1032456789',
+    nombre: 'Laura',
+    apellido: 'González',
+    programa: 'Gestión Administrativa',
+    ficha: '2876542',
+    eps: 'Sanitas',
+    contacto: 'Carlos González - 3115678901',
+    estado: 'Activo'
+  },
+  {
+    codigo: 3,
+    tipo: 'Pasaporte',
+    documento: '1012345678',
+    nombre: 'Andrés',
+    apellido: 'Martínez',
+    programa: 'Producción Agropecuaria',
+    ficha: '2876543',
+    eps: 'SURA',
+    contacto: 'Ana Martínez - 3156789012',
+    estado: 'Inactivo'
+  },
+  {
+    codigo: 4,
+    tipo: 'Cédula de Ciudadanía',
+    documento: '1009876543',
+    nombre: 'Valentina',
+    apellido: 'Pérez',
+    programa: 'Construcción de Edificaciones',
+    ficha: '2876544',
+    eps: 'Compensar',
+    contacto: 'Luis Pérez - 3187890123',
+    estado: 'Activo'
+  },
+  {
+    codigo: 5,
+    tipo: 'Tarjeta de Identidad',
+    documento: '1122334455',
+    nombre: 'Santiago',
+    apellido: 'Herrera',
+    programa: 'Electricidad Industrial',
+    ficha: '2876545',
+    eps: 'Famisanar',
+    contacto: 'Mónica Herrera - 3178901234',
+    estado: 'Activo'
+  },
+  {
+    codigo: 6,
+    tipo: 'Pasaporte',
+    documento: '1099887766',
+    nombre: 'Camila',
+    apellido: 'Torres',
+    programa: 'Gestión Logística',
+    ficha: '2876546',
+    eps: 'Coosalud',
+    contacto: 'Pedro Torres - 3109012345',
+    estado: 'Suspendido'
+  },
+  {
+    codigo: 7,
+    tipo: 'Cédula de Ciudadanía',
+    documento: '1001122334',
+    nombre: 'Miguel',
+    apellido: 'Rodríguez',
+    programa: 'Mantenimiento de Equipos de Cómputo',
+    ficha: '2876547',
+    eps: 'Nueva EPS',
+    contacto: 'Sandra Rodríguez - 3190123456',
+    estado: 'Activo'
+  },
+  {
+    codigo: 8,
+    tipo: 'Tarjeta de Identidad',
+    documento: '1023456781',
+    nombre: 'Daniela',
+    apellido: 'Castro',
+    programa: 'Control de Calidad de Alimentos',
+    ficha: '2876548',
+    eps: 'Salud Total',
+    contacto: 'Jorge Castro - 3161234567',
+    estado: 'Activo'
+  },
+  {
+    codigo: 9,
+    tipo: 'Pasaporte',
+    documento: '1011223344',
+    nombre: 'Felipe',
+    apellido: 'Ramírez',
+    programa: 'Mecánica Automotriz',
+    ficha: '2876549',
+    eps: 'SURA',
+    contacto: 'Patricia Ramírez - 3212345678',
+    estado: 'Retirado'
+  }
+]

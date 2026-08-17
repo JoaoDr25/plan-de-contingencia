@@ -39,13 +39,21 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 .app-header {
     background-color: $color-primary;
 }
+.app-header :deep(.q-toolbar) {
+  min-height: 56px;
+}
 
 .app-header__title {
     font-family: $font-family-base;
-    font-size: 0.96rem;
+    font-size: 0.98rem;
     font-weight: 500;
     padding-top: 0.1rem;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
+}
+
+@media (max-width: 600px) {
+  .app-header { height: 56px; }
+  .app-header :deep(.q-toolbar) { min-height: 56px; }
 }
 
 </style>

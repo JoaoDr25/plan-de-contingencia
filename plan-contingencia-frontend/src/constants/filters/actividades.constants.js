@@ -1,4 +1,4 @@
-export const actividadesFilters = [
+export const ACTIVIDADES_FILTERS = [
 
     {
         label: 'Nombre',
@@ -8,5 +8,4 @@ export const actividadesFilters = [
         label: 'Tipo',
         value: 'tipo'
     }
-
 ]

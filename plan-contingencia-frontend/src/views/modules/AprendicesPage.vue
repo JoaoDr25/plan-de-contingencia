@@ -1,236 +1,246 @@
 <template>
 
-  <BasePage>
+    <BasePage>
 
-    <CrudHeader title="Aprendices" back-route="dashboard" />
+        <CrudHeader title="Aprendices">
 
-    <CrudToolbar>
+            <template #actions>
 
-      <template #right>
+                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
 
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openDialog"/>
+            </template>
 
-      </template>
+        </CrudHeader>
 
-      <template #center>
+        <CrudToolbar>
 
-        <CrudFilters v-model="selectedFilter" :options="aprendicesFilters" />
+            <template #center>
 
-      </template>
+                <CrudFilters v-model="selectedFilter" :options="APRENDICES_FILTERS" />
 
-      <template #left>
+            </template>
 
-        <BaseSearch v-model="searchText" placeholder="Buscar por documento, nombre, ficha o estado..." />
+            <template #left>
 
-      </template>
+                <BaseSearch v-model="searchText" placeholder="Buscar por documento, nombre, ficha o estado..." />
 
-    </CrudToolbar>
+            </template>
 
-    <BaseTable :rows="paginatedRows" :columns="APRENDICES_COLUMNS" :loading="loading" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow" :total="filteredRows.length"  @change-page="currentPage = $event">
+        </CrudToolbar>
 
-      <template #body-cell-estado="props">
+        <BaseTable :rows="paginatedRows" :columns="APRENDICES_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
-      <q-td :props="props">
-        <StatusChip :status="props.value" />
-      </q-td>
+            <template #body-cell-estado="props">
 
-    </template>
+                <q-td :props="props">
 
-     </BaseTable>
+                    <StatusChip :status="props.value" />
 
-  </BasePage>
+                </q-td>
+
+            </template>
+
+            <template #body-cell-opciones="props">
+
+                <q-td :props="props">
+
+                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+                        @delete="deleteItem(props.row)" />
+
+                </q-td>
+
+            </template>
+
+        </BaseTable>
+
+        <AprendicesDialog v-model="dialog" :mode="dialogMode" :apprentice="selectedApprentice"
+            @save="handleApprenticeSave" />
+
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
+            @cancel="cancelConfirmation" />
+
+        <AprendicesDetails v-model="detailsApprentice" :apprentice="selectedApprentice" />
+
+    </BasePage>
 
 </template>
 
 <script setup>
 
-import { ref, computed } from 'vue';
-import { aprendicesFilters } from 'src/constants/filters/aprendices.constants';
-import { APRENDICES_COLUMNS } from 'src/constants/tables/aprendices.columns';
+import { ref, computed } from 'vue'
 
-import BasePage from 'src/components/base/BasePage.vue';
-import CrudHeader from 'src/components/base/CrudHeader.vue';
-import CrudFilters from 'src/components/base/CrudFilters.vue';
-import BaseSearch from 'src/components/base/BaseSearch.vue';
-import CrudToolbar from 'src/components/base/CrudToolbar.vue';
-import PrimaryActionButton from 'src/components/base/PrimaryActionButton.vue';
-import BaseTable from 'src/components/base/BaseTable.vue';
-import StatusChip from 'src/components/base/StatusChip.vue';
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { APRENDICES_FILTERS } from 'src/constants/filters/aprendices.constants'
+import { APRENDICES_COLUMNS } from 'src/constants/tables/aprendices.columns'
+import { APRENDICES_MOCK } from 'src/mocks/aprendices.mock'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { getCurrentDate } from 'src/utils/date.utils'
 
-const openDialog = () => {
-  console.log('Abrir diálogo de creación')
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import StatusChip from 'src/components/states/StatusChip.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
+
+import AprendicesDialog from '../dialogs/AprendicesDialog.vue'
+// import AprendicesDetails from '../details/AprendicesDetails.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
+const sourceRows = ref(APRENDICES_MOCK)
+
+const {
+    selectedFilter,
+    searchText,
+    currentPage,
+    rowsPerPage,
+    setRowsPerPage,
+    filteredRows,
+    paginatedRows,
+    totalPages,
+    startRow,
+    endRow
+} = useCrudTable({
+    sourceRows,
+    defaultFilter: 'numeroDocumento',
+    exactSearchField: [],
+    defaultRowsPerPage: 8
+})
+
+const loading = ref(false)
+
+const dialog = ref(false)
+const detailsApprentice = ref(false)
+
+const dialogMode = ref('create')
+const selectedApprentice = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
+
+const confirmationTitle = computed(() => {
+    const titles = {
+        create: 'Confirmar creación',
+        edit: 'Confirmar actualización',
+        delete: 'Confirmar eliminación'
+    }
+    return titles[dialogMode.value]
+})
+
+const confirmationMessage = computed(() => {
+    const messages = {
+        create: '¿Está seguro de crear este aprendiz?',
+        edit: '¿Está seguro de actualizar este aprendiz?',
+        delete: '¿Está seguro de eliminar este aprendiz?'
+    }
+    return messages[dialogMode.value]
+})
+
+const confirmationLabel = computed(() => {
+    const labels = {
+        create: 'Crear',
+        edit: 'Actualizar',
+        delete: 'Eliminar'
+    }
+    return labels[dialogMode.value]
+})
+
+const confirmationVariant = computed(() => {
+    return dialogMode.value === 'delete'
+        ? 'danger'
+        : 'primary'
+})
+
+function openCreateDialog() {
+    dialogMode.value = 'create'
+    selectedApprentice.value = null
+    dialog.value = true
 }
 
-const selectedFilter = ref('documento')
-const searchText = ref('')
-
-const currentPage = ref(1)
-const rowsPerPage = ref(8)
-
-const loading = ref(false);
-
-const rows = ref([
-    {
-        id: 1,
-        documento: '1098765432',
-        nombre: 'Juan Camilo Rojas',
-        programa: 'Análisis y Desarrollo de Software',
-        ficha: '2876541',
-        eps: 'Nueva EPS',
-        contacto: 'María Rojas - 3204567890',
-        estado: 'Activo'
-    },
-    {
-        id: 2,
-        documento: '1032456789',
-        nombre: 'Laura González',
-        programa: 'Gestión Administrativa',
-        ficha: '2876542',
-        eps: 'Sanitas',
-        contacto: 'Carlos González - 3115678901',
-        estado: 'Activo'
-    },
-    {
-        id: 3,
-        documento: '1012345678',
-        nombre: 'Andrés Martínez',
-        programa: 'Producción Agropecuaria',
-        ficha: '2876543',
-        eps: 'SURA',
-        contacto: 'Ana Martínez - 3156789012',
-        estado: 'Inactivo'
-    },
-    {
-        id: 4,
-        documento: '1009876543',
-        nombre: 'Valentina Pérez',
-        programa: 'Construcción de Edificaciones',
-        ficha: '2876544',
-        eps: 'Compensar',
-        contacto: 'Luis Pérez - 3187890123',
-        estado: 'Activo'
-    },
-    {
-        id: 5,
-        documento: '1122334455',
-        nombre: 'Santiago Herrera',
-        programa: 'Electricidad Industrial',
-        ficha: '2876545',
-        eps: 'Famisanar',
-        contacto: 'Mónica Herrera - 3178901234',
-        estado: 'Activo'
-    },
-    {
-        id: 6,
-        documento: '1099887766',
-        nombre: 'Camila Torres',
-        programa: 'Gestión Logística',
-        ficha: '2876546',
-        eps: 'Coosalud',
-        contacto: 'Pedro Torres - 3109012345',
-        estado: 'Suspendido'
-    },
-    {
-        id: 7,
-        documento: '1001122334',
-        nombre: 'Miguel Rodríguez',
-        programa: 'Mantenimiento de Equipos de Cómputo',
-        ficha: '2876547',
-        eps: 'Nueva EPS',
-        contacto: 'Sandra Rodríguez - 3190123456',
-        estado: 'Activo'
-    },
-    {
-        id: 8,
-        documento: '1023456781',
-        nombre: 'Daniela Castro',
-        programa: 'Control de Calidad de Alimentos',
-        ficha: '2876548',
-        eps: 'Salud Total',
-        contacto: 'Jorge Castro - 3161234567',
-        estado: 'Activo'
-    },
-    {
-        id: 9,
-        documento: '1011223344',
-        nombre: 'Felipe Ramírez',
-        programa: 'Mecánica Automotriz',
-        ficha: '2876549',
-        eps: 'SURA',
-        contacto: 'Patricia Ramírez - 3212345678',
-        estado: 'Retirado'
-    }
-]);
-
-function normalizeText(text) {
-
-  return String(text)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-
+function openEditDialog(row) {
+    dialogMode.value = 'edit'
+    selectedApprentice.value = row
+    dialog.value = true
 }
 
-const filteredRows = computed(() => {
+function handleApprenticeSave(formData) {
+    pendingActionData.value = formData
+    dialog.value = false
+    confirmationDialog.value = true
+}
 
-  const search = normalizeText(searchText.value.trim())
+function createApprentice(formData) {
+    sourceRows.value.push({
+        ...formData,
+        fecha: getCurrentDate()
+    })
+    dialog.value = false
+}
 
-  if (!search) {
-
-    return rows.value
-
-  }
-
-  return rows.value.filter((row) => {
-
-    const value = normalizeText(row[selectedFilter.value] ?? '')
-
-    if (selectedFilter.value === 'estado') {
-      return value === search
+function updateApprentice(formData) {
+    const index = sourceRows.value.findIndex(
+        row => row === selectedApprentice.value
+    )
+    if (index === -1) {
+        return
     }
+    sourceRows.value[index] = {
+        ...sourceRows.value[index],
+        ...formData
+    }
+    dialog.value = false
+}
 
-    return value.includes(search)
+function deleteApprentice(row) {
+    const index = sourceRows.value.findIndex(
+        apprentice => apprentice.id === row.id
+    )
+    if (index === -1) {
+        return
+    }
+    sourceRows.value.splice(index, 1)
+}
 
-  })
+function confirmAction() {
+    if (dialogMode.value === 'create') {
+        createApprentice(pendingActionData.value)
+    }
+    if (dialogMode.value === 'edit') {
+        updateApprentice(pendingActionData.value)
+    }
+    if (dialogMode.value === 'delete') {
+        deleteApprentice(selectedApprentice.value)
+    }
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-})
+function cancelConfirmation() {
+    pendingActionData.value = null
+    confirmationDialog.value = false
+}
 
-const totalPages = computed(() => {
+function viewItem(row) {
+    console.log('Ver Aprendiz:', row)
+    selectedApprentice.value = row
+    detailsApprentice.value = true
+}
 
-  return Math.max(
-    1,
-    Math.ceil(filteredRows.value.length / rowsPerPage.value)
-  )
+function editItem(row) {
+    console.log('Editar Aprendiz:', row)
+    openEditDialog(row)
+}
 
-})
-
-const paginatedRows = computed(() => {
-
-  const start = (currentPage.value - 1) * rowsPerPage.value
-  const end = start + rowsPerPage.value
-
-  return filteredRows.value.slice(start, end)
-})
-
-const startRow = computed(() => {
-
-  if (filteredRows.value.length === 0) {
-    return 0
-  }
-
-  return (currentPage.value - 1) * rowsPerPage.value + 1
-
-})
-
-
-const endRow = computed(() => {
-
-  return Math.min(
-    currentPage.value * rowsPerPage.value,
-    filteredRows.value.length
-  )
-
-})
+function deleteItem(row) {
+    dialogMode.value = 'delete'
+    selectedApprentice.value = row
+    confirmationDialog.value = true
+}
 
 </script>

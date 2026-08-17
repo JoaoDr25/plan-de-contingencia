@@ -9,17 +9,15 @@
       <BackButton route-name="dashboard" />
     </div>
 
-    <q-page-container>
-      <router-view />
-    </q-page-container>
+    <q-page-container class="page-root">
+      <div class="page-content">
+        <router-view />
+        <FloatingScrollButtons />
+      </div>
 
-    <q-page-container>
-      <FloatingScrollButtons />
-    </q-page-container>
-
-
-    <q-page-container>
-      <AppFooter />
+      <div class="page-footer">
+        <AppFooter />
+      </div>
     </q-page-container>
 
   </q-layout>
@@ -33,7 +31,7 @@ import AppHeader from 'src/components/layout/AppHeader.vue';
 import AppDrawer from 'src/components/layout/AppDrawer.vue';
 import AppFooter from 'src/components/layout/AppFooter.vue';
 import FloatingScrollButtons from 'src/components/base/FloatingScrollButtons.vue';
-import BackButton from 'src/components/base/BackButton.vue';
+import BackButton from 'src/components/actions/BackButton.vue';
 
 const leftDrawerOpen = ref(false)
 
@@ -49,11 +47,30 @@ function closeDrawer() {
 
 <style scoped lang="scss">
 
-.layout-back-button{
-    position:absolute;
-    top: 68px;
-    left: 16px;
-    z-index: 1000;
+@use 'src/css/variables.scss' as *;
+
+.q-page-container {
+  background-color: $color-surface;
 }
 
+.page-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1 1 auto;
+}
+
+.page-footer {
+  flex: 0 0 auto;
+}
+
+.layout-back-button {
+  position: absolute;
+  top: 75px;
+  left: 20px;
+  z-index: 1000;
+}
 </style>

@@ -22,7 +22,7 @@
 
 <script setup>
 
-import { dashboardModules } from 'src/constants/system/dashboard.constants.js';
+import { dashboardModules } from 'src/constants/navigation/dashboard.constants.js';
 import DashboardModuleCard from './DashboardModuleCard.vue';
 
 </script>
@@ -37,11 +37,12 @@ import DashboardModuleCard from './DashboardModuleCard.vue';
 }
 
 .dashboard-modules__title {
+    padding-top: 22px;
     margin: 1.8rem;
     text-align: center;
-    font-size: 1.30rem;
+    font-size: 1.36rem;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     color: $color-text-primary;
     font-family: $font-family-base;
 }

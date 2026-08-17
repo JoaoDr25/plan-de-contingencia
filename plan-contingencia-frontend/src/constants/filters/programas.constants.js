@@ -1,5 +1,5 @@
-export const programasFilters = [
-
+export const PROGRAMAS_FILTERS = [
+    
     {
         label: 'Ficha',
         value: 'ficha'
@@ -20,5 +20,4 @@ export const programasFilters = [
         label: 'Estado',
         value: 'estado'
     }
-
 ]

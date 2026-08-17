@@ -68,7 +68,7 @@ defineProps({
 @use 'src/css/typography.scss' as *;
 
 .dashboard-stat-card {
-    min-height: 92px;
+    height: 100%;
     border-radius: 10px;
     border: 1px solid $color-border;
     box-shadow: $shadow-sm;
@@ -84,14 +84,14 @@ defineProps({
 .dashboard-stat-card__content {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 1.25rem;
+    padding: 1.25rem;
 }
 
 .dashboard-stat-card__icon {
-    width: 64px;
-    height: 64px;
-    flex: 0 0 64px;
+    width: 80px;
+    height: 80px;
+    flex: 0 0 80px;
     border-radius: 50%;
     background-color: $color-background;
     @include flex-center;
@@ -110,21 +110,20 @@ defineProps({
 
 .dashboard-stat-card__value {
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 800;
     color: $color-primary;
     line-height: 1;
 }
 
 .dashboard-stat-card__title {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 0.96rem;
+    font-weight: 500;
     margin-top: 0.15rem;
 }
 
 .dashboard-stat-card__description {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     color: $color-text-secondary;
-    margin-top: 0.2rem;
 }
 
 </style>
