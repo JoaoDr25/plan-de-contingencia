@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const usuarioSchema = new mongoose.Schema ({
+const usuarioSchema = new mongoose.Schema({
     nombre: {
         type: String,
         required: true,
@@ -34,12 +34,18 @@ const usuarioSchema = new mongoose.Schema ({
             "COORDINACION"
         ]
     },
-    firma:{     //Agregar al documento técnico
+    firma: {     //Agregar al documento técnico
         type: String,
         default: null
     },
+    firmaNombre: {
+        type: String,
+        default: null,
+        trim: true
+    },
     firmaActualizada: {     //Agregar al documento técnico
-        type: Date
+        type: Date,
+        default: null
     },
     estado: {
         type: Boolean,
