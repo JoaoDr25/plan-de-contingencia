@@ -49,6 +49,12 @@ export const USUARIOS_COLUMNS = [
         field: 'acceso',
         align: 'center'
     },
+        {
+        name: 'estado',
+        label: 'Estado',
+        field: 'estado',
+        align: 'center'
+    },
     {
         name: 'opciones',
         label: 'Opciones',

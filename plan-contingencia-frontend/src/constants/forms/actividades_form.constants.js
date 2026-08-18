@@ -69,6 +69,7 @@ export const ACTIVITY_FORM_FIELDS = [
         label: 'Descripción',
         // placeholder: 'Ingrese la descripción de la actividad',
         icon: 'description',
+        type: 'textarea',
         maxlength: 500,
         required: true,
         rules: [

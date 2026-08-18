@@ -99,16 +99,45 @@ export const USER_FORM_FIELDS = [
         options: [
             {
                 label: 'Usuario',
-                value: 'Usuario'
+                value: 'usuario'
             },
             {
-                label: 'Administrador',
-                value: 'Administrador'
+                label: 'Coordinación',
+                value: 'coordinacion'
+            },
+            {
+                label: 'SST',
+                value: 'sst'
+            },
+            {
+                label: 'Pedagogía',
+                value: 'pedagogia'
             }
         ],
         required: true,
         rules: [
             required
         ]
-    }
+    },
+    {
+            component: BaseSelect,
+            model: 'estado',
+            label: 'Estado',
+            // placeholder: 'Seleccione el estado',
+            icon: 'toggle_on',
+            options: [
+                {
+                    label: 'Activo',
+                    value: 'Activo'
+                },
+                {
+                    label: 'Inactivo',
+                    value: 'Inactivo'
+                }
+            ],
+            required: true,
+            rules: [
+                required
+            ]
+        }
 ]

@@ -1,104 +1,33 @@
 <template>
 
-    <BaseDialog
-        v-model="dialog"
-        title="Información del EPP"
-        width="650px"
-    >
+    <BaseDetailDialog v-model="dialog" title="Información del EPP" width="650px">
 
-        <div v-if="epp" class="epp-details">
+        <template #column-left>
 
-            <div class="epp-details__logo">
-                <img
-                    src="src/assets/logos/logo-sena.png"
-                    alt="Logo SENA"
-                >
-            </div>
+            <BaseDetailItem label="Código" :value="epp.codigo" />
 
-            <div class="epp-details__content">
+            <BaseDetailItem label="Nombre de EPP" :value="epp.nombre" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Código
-                    </span>
+            <BaseDetailItem label="Categoría" :value="epp.categoria" />
 
-                    <span class="detail-item__value">
-                        {{ epp.codigo }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <StatusChip :status="epp.estado" />
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Nombre de EPP
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ epp.nombre }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Nivel Protección
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ epp.nivel }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Categoría
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ epp.categoria }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Fecha de Creación
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ epp.fecha ?? 'No disponible' }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Descripción
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ epp.descripcion }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                </div>
-
-            </div>
-
-        </div>
-
-        <template #actions>
-
-            <SecondaryActionButton
-                label="Cerrar"
-                icon="close"
-                @click="closeDialog"
-            />
+            <BaseDetailItem label="Descripción" :value="epp.descripcion" />
 
         </template>
 
-    </BaseDialog>
+        <template #column-right>
+
+              <BaseDetailItem class="program-status">
+                <StatusChip :status="epp.estado" />
+            </BaseDetailItem>
+
+            <BaseDetailItem label="Nivel Protección" :value="epp.nivel" />
+
+            <BaseDetailItem label="Fecha de Creación" :value="epp.fecha ?? 'No disponible'" />
+
+
+        </template>
+
+    </BaseDetailDialog>
 
 </template>
 
@@ -106,8 +35,8 @@
 
 import { computed } from 'vue'
 
-import BaseDialog from 'src/components/forms/BaseDialog.vue'
-import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
+import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 
 const props = defineProps({
@@ -133,60 +62,11 @@ const dialog = computed({
     }
 })
 
-function closeDialog() {
-    dialog.value = false
-}
-
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 
-@use 'src/css/variables.scss' as *;
-@use 'src/css/typography.scss' as *;
-
-.epp-details {
-    display: flex;
-    align-items: center;
-    gap: 35px;
-    padding: 20px 10px;
+.program-status {
+    margin-bottom: 12px;
 }
-
-.epp-details__logo {
-    flex: 0 0 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.epp-details__logo img {
-    width: 130px;
-    height: auto;
-}
-
-.epp-details__content {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 35px;
-    row-gap: 18px;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.detail-item__label {
-    color: $color-primary;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.detail-item__value {
-    color: $color-text-primary;
-    font-size: 0.82rem;
-}
-
 </style>

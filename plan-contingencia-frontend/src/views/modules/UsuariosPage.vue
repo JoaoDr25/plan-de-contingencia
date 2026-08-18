@@ -6,7 +6,8 @@
 
             <template #actions>
 
-                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
+                <PrimaryActionButton label="Sincronizar" icon="sync" size="sm" :loading="syncing" :disable="syncing"
+                    @click="syncUsers" />
 
             </template>
 
@@ -46,8 +47,8 @@
 
                 <q-td :props="props">
 
-                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
-                        @delete="deleteItem(props.row)" />
+                    <CrudActions :actions="USUARIOS_ACTIONS" @view="viewItem(props.row)" @edit="openEditDialog(props.row)"
+                         />
 
                 </q-td>
 
@@ -55,7 +56,7 @@
 
         </BaseTable>
 
-        <UsuariosDialog v-model="dialog" :mode="dialogMode" :user="selectedUser" @save="handleUserSave" />
+        <UsuariosDialog v-model="dialog" :user="selectedUser" @save="handleUserSave" />
 
         <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
@@ -69,14 +70,13 @@
 
 <script setup>
 
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { USUARIOS_ACTIONS } from 'src/constants/actions/crud_actions.constants'
 import { USUARIOS_FILTERS } from 'src/constants/filters/usuarios.constants'
 import { USUARIOS_COLUMNS } from 'src/constants/tables/usuarios.columns'
 import { USUARIOS_MOCK } from 'src/mocks/usuarios.mock'
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -113,57 +113,33 @@ const {
 })
 
 const loading = ref(false)
+const syncing = ref(false)
 
 const dialog = ref(false)
 const detailsUser = ref(false)
 
-const dialogMode = ref('create')
 const selectedUser = ref(null)
 
 const confirmationDialog = ref(false)
 const pendingActionData = ref(null)
 
-const confirmationTitle = computed(() => {
-    const titles = {
-        create: 'Confirmar creación',
-        edit: 'Confirmar actualización',
-        delete: 'Confirmar eliminación'
+async function syncUsers() {
+
+    syncing.value = true
+
+    try {
+        // sincronización
+    } finally {
+        syncing.value = false
     }
-    return titles[dialogMode.value]
-})
-
-const confirmationMessage = computed(() => {
-    const messages = {
-        create: '¿Está seguro de crear este usuario?',
-        edit: '¿Está seguro de actualizar este usuario?',
-        delete: '¿Está seguro de eliminar este usuario?'
-    }
-    return messages[dialogMode.value]
-})
-
-const confirmationLabel = computed(() => {
-    const labels = {
-        create: 'Crear',
-        edit: 'Actualizar',
-        delete: 'Eliminar'
-    }
-    return labels[dialogMode.value]
-})
-
-const confirmationVariant = computed(() => {
-    return dialogMode.value === 'delete'
-        ? 'danger'
-        : 'primary'
-})
-
-function openCreateDialog() {
-    dialogMode.value = 'create'
-    selectedUser.value = null
-    dialog.value = true
 }
 
+const confirmationTitle = 'Confirmar actualización'
+const confirmationMessage = '¿Está seguro de actualizar este usuario?'
+const confirmationLabel = 'Actualizar'
+const confirmationVariant = 'primary'
+
 function openEditDialog(row) {
-    dialogMode.value = 'edit'
     selectedUser.value = row
     dialog.value = true
 }
@@ -174,15 +150,8 @@ function handleUserSave(formData) {
     confirmationDialog.value = true
 }
 
-function createUser(formData) {
-    sourceRows.value.push({
-        ...formData,
-        fecha: getCurrentDate()
-    })
-    dialog.value = false
-}
-
 function updateUser(formData) {
+
     const index = sourceRows.value.findIndex(
         row => row === selectedUser.value
     )
@@ -193,29 +162,12 @@ function updateUser(formData) {
         ...sourceRows.value[index],
         ...formData
     }
-    dialog.value = false
-}
-
-function deleteUser(row) {
-    const index = sourceRows.value.findIndex(
-        user => user.id === row.id
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value.splice(index, 1)
 }
 
 function confirmAction() {
-    if (dialogMode.value === 'create') {
-        createUser(pendingActionData.value)
-    }
-    if (dialogMode.value === 'edit') {
-        updateUser(pendingActionData.value)
-    }
-    if (dialogMode.value === 'delete') {
-        deleteUser(selectedUser.value)
-    }
+
+    updateUser(pendingActionData.value)
+
     pendingActionData.value = null
     confirmationDialog.value = false
 }
@@ -229,17 +181,6 @@ function viewItem(row) {
     console.log('Ver Usuario:', row)
     selectedUser.value = row
     detailsUser.value = true
-}
-
-function editItem(row) {
-    console.log('Editar Usuario:', row)
-    openEditDialog(row)
-}
-
-function deleteItem(row) {
-    dialogMode.value = 'delete'
-    selectedUser.value = row
-    confirmationDialog.value = true
 }
 
 </script>

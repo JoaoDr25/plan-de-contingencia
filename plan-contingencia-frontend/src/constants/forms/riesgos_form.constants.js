@@ -62,11 +62,12 @@ export const RISK_FORM_FIELDS = [
         label: 'Descripción',
         // placeholder: 'Ingrese la descripción del riesgo',
         icon: 'description',
+        type: 'textarea',
         maxlength: 250,
         required: true,
         rules: [
             required
-        ]
+        ],
     },
     {
         component: BaseInput,
@@ -74,10 +75,11 @@ export const RISK_FORM_FIELDS = [
         label: 'Consecuencias',
         // placeholder: 'Ingrese las consecuencias',
         icon: 'error_outline',
+        type: 'textarea',
         maxlength: 250,
         required: true,
         rules: [
             required
-        ]
+        ],
     }
 ]

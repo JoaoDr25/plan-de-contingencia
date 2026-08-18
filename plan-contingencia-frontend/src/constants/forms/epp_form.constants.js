@@ -89,6 +89,7 @@ export const EPP_FORM_FIELDS = [
         label: 'Descripción',
         // placeholder: 'Ingrese la descripción del EPP',
         icon: 'description',
+        type: 'textarea',
         maxlength: 250,
         required: true,
         rules: [

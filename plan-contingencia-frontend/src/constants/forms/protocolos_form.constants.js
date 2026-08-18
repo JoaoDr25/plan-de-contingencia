@@ -23,6 +23,7 @@ export const PROTOCOL_FORM_FIELDS = [
         label: 'Acción Inmediata',
         // placeholder: 'Ingrese la acción inmediata',
         icon: 'flash_on',
+        type: 'textarea',
         maxlength: 250,
         required: true,
         rules: [

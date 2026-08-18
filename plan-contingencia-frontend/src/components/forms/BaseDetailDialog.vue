@@ -116,7 +116,7 @@ function closeDialog() {
 }
 
 .base-details__logo img {
-    width: 112px;
+    width: 140px;
     height: auto;
 }
 

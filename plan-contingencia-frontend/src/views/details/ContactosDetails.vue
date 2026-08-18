@@ -1,102 +1,34 @@
 <template>
 
-    <BaseDialog
-        v-model="dialog"
-        title="Información del Contacto de Emergencia"
-        width="650px"
-    >
+    <BaseDetailDialog v-model="dialog" title="Información del Contacto de Emergencia" width="650px">
 
-        <div v-if="contact" class="contact-details">
+        <template #column-left>
 
-            <div class="contact-details__logo">
-                <img
-                    src="src/assets/logos/logo-sena.png"
-                    alt="Logo SENA"
-                >
-            </div>
+            <BaseDetailItem label="Código" :value="contact.codigo" />
 
-            <div class="contact-details__content">
+            <BaseDetailItem label="Tipo de Contacto" :value="contact.tipo" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Código
-                    </span>
+            <BaseDetailItem label="Nombre de la Entidad" :value="contact.nombre" />
 
-                    <span class="detail-item__value">
-                        {{ contact.codigo }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <StatusChip :status="contact.estado" />
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Tipo de Contacto
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ contact.tipo }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Teléfono
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ contact.telefono }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Nombre de la Entidad
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ contact.nombre }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Ciudad
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ contact.ciudad }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Dirección
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ contact.direccion ?? 'No disponible' }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                </div></div>
-
-        </div>
-
-        <template #actions>
-
-            <SecondaryActionButton
-                label="Cerrar"
-                icon="close"
-                @click="closeDialog"
-            />
+            <BaseDetailItem label="Dirección" :value="contact.direccion ?? 'No disponible'" />
 
         </template>
 
-    </BaseDialog>
+        <template #column-right>
+
+            <BaseDetailItem class="program-status">
+                <StatusChip :status="contact.estado" />
+            </BaseDetailItem>
+
+            <BaseDetailItem label="Teléfono" :value="contact.telefono" />
+
+            <BaseDetailItem label="Ciudad" :value="contact.ciudad" />
+
+
+
+        </template>
+
+    </BaseDetailDialog>
 
 </template>
 
@@ -104,8 +36,8 @@
 
 import { computed } from 'vue'
 
-import BaseDialog from 'src/components/forms/BaseDialog.vue'
-import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
+import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 
 const props = defineProps({
@@ -131,60 +63,11 @@ const dialog = computed({
     }
 })
 
-function closeDialog() {
-    dialog.value = false
-}
-
 </script>
 
-<style scoped lang="scss">
+<style>
 
-@use 'src/css/variables.scss' as *;
-@use 'src/css/typography.scss' as *;
-
-.contact-details {
-    display: flex;
-    align-items: center;
-    gap: 35px;
-    padding: 20px 10px;
+.program-status {
+    margin-bottom: 12px;
 }
-
-.contact-details__logo {
-    flex: 0 0 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.contact-details__logo img {
-    width: 130px;
-    height: auto;
-}
-
-.contact-details__content {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 35px;
-    row-gap: 18px;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.detail-item__label {
-    color: $color-primary;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.detail-item__value {
-    color: $color-text-primary;
-    font-size: 0.82rem;
-}
-
 </style>

@@ -1,101 +1,28 @@
 <template>
 
-    <BaseDialog
-        v-model="dialog"
-        title="Información del Peligro"
-        width="650px"
-    >
+    <BaseDetailDialog v-model="dialog" title="Información del Peligro" width="650px">
 
-        <div v-if="danger" class="danger-details">
+        <template #column-left>
 
-            <div class="danger-details__logo">
-                <img
-                    src="src/assets/logos/logo-sena.png"
-                    alt="Logo SENA"
-                >
-            </div>
+            <BaseDetailItem label="Código" :value="danger.codigo" />
 
-            <div class="danger-details__content">
+            <BaseDetailItem label="Nombre del Peligro" :value="danger.nombre" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Código
-                    </span>
+            <BaseDetailItem label="Categoría" :value="danger.categoria" />
+       
+            <BaseDetailItem label="Descripción" :value="danger.descripcion" />
+       
+        </template>
 
-                    <span class="detail-item__value">
-                        {{ danger.codigo }}
-                    </span>
-                </div>
+        <template #column-right>
 
-                <div class="detail-item">
-                </div>
+             <BaseDetailItem  class="activity-details__right-offset" label="Riesgos Asociados" :value="danger.riesgos" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Nombre del Peligro
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ danger.nombre }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Riesgos Asociados
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ danger.riesgos }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Categoría
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ danger.categoria }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Fecha de Creación
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ danger.fecha }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Descripción
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ danger.descripcion }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                </div></div>
-
-        </div>
-
-        <template #actions>
-
-            <SecondaryActionButton
-                label="Cerrar"
-                icon="close"
-                @click="closeDialog"
-            />
+            <BaseDetailItem label="Fecha de Creación" :value="danger.fecha" />
 
         </template>
 
-    </BaseDialog>
+    </BaseDetailDialog>
 
 </template>
 
@@ -103,8 +30,8 @@
 
 import { computed } from 'vue'
 
-import BaseDialog from 'src/components/forms/BaseDialog.vue'
-import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
+import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
 
 const props = defineProps({
 
@@ -129,60 +56,11 @@ const dialog = computed({
     }
 })
 
-function closeDialog() {
-    dialog.value = false
-}
-
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 
-@use 'src/css/variables.scss' as *;
-@use 'src/css/typography.scss' as *;
-
-.danger-details {
-    display: flex;
-    align-items: center;
-    gap: 35px;
-    padding: 20px 10px;
+.activity-details__right-offset {
+    margin-top: 46px;
 }
-
-.danger-details__logo {
-    flex: 0 0 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.danger-details__logo img {
-    width: 130px;
-    height: auto;
-}
-
-.danger-details__content {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 35px;
-    row-gap: 18px;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.detail-item__label {
-    color: $color-primary;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.detail-item__value {
-    color: $color-text-primary;
-    font-size: 0.82rem;
-}
-
 </style>

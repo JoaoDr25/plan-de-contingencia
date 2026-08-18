@@ -6,9 +6,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Carlos Andrés',
         apellido: 'Gómez',
         correo: 'cgomez@sena.edu.co',
-        centro: 'Centro Industrial',
+        centro: 'Centro Agroturístico',
         rol: 'Administrador',
         acceso: '30/07/2026 08:15',
+        estado: 'Activo'
     },
     {
         codigo: 2,
@@ -17,9 +18,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Laura Marcela',
         apellido: 'Rojas',
         correo: 'lrojas@sena.edu.co',
-        centro: 'Centro de Servicios',
+        centro: 'Centro Agroturístico',
         rol: 'Instructor',
         acceso: '30/07/2026 07:42',
+        estado: 'Activo'
     },
     {
         codigo: 3,
@@ -28,9 +30,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Jhon Alexander',
         apellido: 'Pérez',
         correo: 'jperez@sena.edu.co',
-        centro: 'Centro Agropecuario',
+        centro: 'Centro Agroturístico',
         rol: 'Coordinador',
         acceso: '29/07/2026 16:30',
+        estado: 'Activo'
     },
     {
         codigo: 4,
@@ -39,9 +42,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Diana Carolina',
         apellido: 'Torres',
         correo: 'dtorres@sena.edu.co',
-        centro: 'Centro Industrial',
+        centro: 'Centro Agroturístico',
         rol: 'Instructor',
         acceso: '30/07/2026 09:05',
+        estado: 'Inactivo'
     },
     {
         codigo: 5,
@@ -50,9 +54,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Luis Fernando',
         apellido: 'Ramírez',
         correo: 'lramirez@sena.edu.co',
-        centro: 'Centro de Comercio y Servicios',
+        centro: 'Centro Agroturístico',
         rol: 'Instructor',
         acceso: '28/07/2026 14:20',
+        estado: 'Activo'
     },
     {
         codigo: 6,
@@ -61,9 +66,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Natalia',
         apellido: 'Rodríguez',
         correo: 'nrodriguez@sena.edu.co',
-        centro: 'Centro Agroempresarial',
+        centro: 'Centro Agroturístico',
         rol: 'Líder de Bienestar',
         acceso: '30/07/2026 08:51',
+        estado: 'Activo'
     },
     {
         codigo: 7,
@@ -72,9 +78,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Miguel Ángel',
         apellido: 'Hernández',
         correo: 'mhernandez@sena.edu.co',
-        centro: 'Centro Industrial',
+        centro: 'Centro Agroturístico',
         rol: 'Instructor',
         acceso: '27/07/2026 10:12',
+        estado: 'Activo'
     },
     {
         codigo: 8,
@@ -83,9 +90,10 @@ export const USUARIOS_MOCK = [
         nombre: 'Sandra Milena',
         apellido: 'Castro',
         correo: 'scastro@sena.edu.co',
-        centro: 'Centro de Gestión Administrativa',
+        centro: 'Centro Agroturístico',
         rol: 'Coordinador',
         acceso: '29/07/2026 11:45',
+        estado: 'Activo'
     },
     {
         codigo: 9,
@@ -94,8 +102,9 @@ export const USUARIOS_MOCK = [
         nombre: 'Andrés Felipe',
         apellido: 'Moreno',
         correo: 'amoreno@sena.edu.co',
-        centro: 'Centro Industrial',
+        centro: 'Centro Agroturístico',
         rol: 'Administrador',
         acceso: '30/07/2026 09:18',
+        estado: 'Inactivo'
     }
 ]

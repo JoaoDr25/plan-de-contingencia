@@ -1,8 +1,10 @@
 <template>
 
-    <q-input class="base-input" :model-value="modelValue" :label="label" :placeholder="placeholder" :type="type"
-        :readonly="readonly" :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules"
-        :required="required" outlined dense hide-bottom-space @update:model-value="emit('update:modelValue', $event)">
+    <q-input class="base-input" :class="{
+        'base-input--textarea': type === 'textarea'
+    }" :model-value="modelValue" :label="label" :placeholder="placeholder" :type="type" :readonly="readonly"
+        :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules" :required="required" outlined
+        dense hide-bottom-space @update:model-value="emit('update:modelValue', $event)">
 
         <template v-if="resolvedIcon" #prepend>
 
@@ -77,6 +79,10 @@ const {
     required: {
         type: Boolean,
         default: false
+    },
+    inputClass: {
+        type: String,
+        default: ''
     }
 })
 
@@ -133,7 +139,7 @@ const resolvedIcon = computed(() => {
     font-size: $font-size-md;
     font-weight: 400;
     letter-spacing: 1px;
-    padding-left: 5px;
+    padding-left: 2px;
 }
 
 .base-input:not(.q-field--float) :deep(.q-field__label) {
@@ -145,7 +151,6 @@ const resolvedIcon = computed(() => {
     padding-top: 8px;
     padding-bottom: 0;
     padding-left: 5px;
-
 }
 
 .base-input :deep(.q-field__native::placeholder) {
@@ -162,9 +167,15 @@ const resolvedIcon = computed(() => {
     line-height: 30px;
 }
 
+.base-input.q-field--readonly :deep(.q-field__native),
+.base-input.q-field--readonly :deep(.q-field__input),
+.base-input.q-field--readonly :deep(input) {
+    color: $color-text-primary !important;
+    opacity: 0.65 !important;
+}
 
 .base-input :deep(.q-field__prepend) {
-color: $color-text-secondary;
+    color: $color-text-secondary;
     opacity: 0.65;
     padding-left: 2px;
     padding-top: 6px;
@@ -173,5 +184,21 @@ color: $color-text-secondary;
 
 .base-input :deep(.q-field__prepend .q-icon) {
     font-size: 21px;
+}
+
+.base-input--textarea :deep(.q-field__control) {
+    min-height: 90px;
+    height: 90px;
+}
+
+.base-input--textarea :deep(.q-field__native) {
+    min-height: 55px;
+    resize: none;
+}
+
+.base-input--textarea:not(.q-field--float) :deep(.q-field__label) {
+    top: 15px;
+    left: 3px;
+    transform: none;
 }
 </style>

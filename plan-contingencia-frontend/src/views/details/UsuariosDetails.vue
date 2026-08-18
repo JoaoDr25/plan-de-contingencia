@@ -1,106 +1,36 @@
 <template>
 
-    <BaseDialog v-model="dialog" title="Información del Usuario" width="650px">
+    <BaseDetailDialog v-model="dialog" title="Información del Usuario" width="650px">
 
-        <div v-if="user" class="user-details">
+        <template #column-left>
 
-            <div class="user-details__logo">
-                <img src="src/assets/logos/logo-sena.png" alt="Logo SENA">
-            </div>
+            <BaseDetailItem label="Código" :value="user.codigo" />
 
-            <div class="user-details__content">
+            <BaseDetailItem label="Nombre Completo" :value="user.nombre + ' ' + user.apellido" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Código
-                    </span>
+            <BaseDetailItem label="Correo Institucional" :value="user.correo" />
 
-                    <span class="detail-item__value">
-                        {{ user.codigo }}
-                    </span>
-                </div>
+            <BaseDetailItem label="Tipo de Documento" :value="user.tipo" />
 
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Rol Asignado
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ user.rol }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Nombre Completo
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ user.nombre + ' ' + user.apellido }}
-                    </span>
-                </div>
-
-                 <div class="detail-item">
-                    <span class="detail-item__label">
-                        Tipo de Documento
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ user.tipo }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        N° Documento
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ user.documento }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Correo Institucional
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ user.correo }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Centro de Formación
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ user.centro }}
-                    </span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-item__label">
-                        Último Acceso
-                    </span>
-
-                    <span class="detail-item__value">
-                        {{ user.acceso }}
-                    </span>
-                </div>
-
-            </div>
-
-        </div>
-
-        <template #actions>
-
-            <SecondaryActionButton label="Cerrar" icon="close" @click="closeDialog" />
+            <BaseDetailItem label="Último Acceso" :value="user.acceso" />
 
         </template>
 
-    </BaseDialog>
+        <template #column-right>
+
+            <BaseDetailItem class="user-status">
+                <StatusChip :status="user.estado" />
+            </BaseDetailItem>
+
+            <BaseDetailItem label="Rol Asignado" :value="user.rol" />
+
+            <BaseDetailItem label="Centro de Formación" :value="user.centro" />
+
+            <BaseDetailItem label="N° Documento" :value="user.documento" />
+
+        </template>
+
+    </BaseDetailDialog>
 
 </template>
 
@@ -108,8 +38,9 @@
 
 import { computed } from 'vue'
 
-import BaseDialog from 'src/components/forms/BaseDialog.vue'
-import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
+import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
+import StatusChip from 'src/components/states/StatusChip.vue'
 
 const props = defineProps({
 
@@ -134,58 +65,11 @@ const dialog = computed({
     }
 })
 
-function closeDialog() {
-    dialog.value = false
-}
-
 </script>
 
-<style scoped lang="scss">
-@use 'src/css/variables.scss' as *;
-@use 'src/css/typography.scss' as *;
+<style scoped>
 
-.user-details {
-    display: flex;
-    align-items: center;
-    gap: 35px;
-    padding: 20px 10px;
-}
-
-.user-details__logo {
-    flex: 0 0 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.user-details__logo img {
-    width: 130px;
-    height: auto;
-}
-
-.user-details__content {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 35px;
-    row-gap: 18px;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.detail-item__label {
-    color: $color-primary;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.detail-item__value {
-    color: $color-text-primary;
-    font-size: 0.82rem;
+.user-status {
+    margin-bottom: 12px;
 }
 </style>

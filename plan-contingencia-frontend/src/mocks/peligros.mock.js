@@ -4,7 +4,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Caída a Nivel',
         categoria: 'Locativo',
         descripcion: 'Superficies irregulares, húmedas o con obstáculos que pueden ocasionar caídas.',
-        riesgos: 4,
+        riesgos: 4 + "  Riesgos",
         fecha: '08/02/2025'
     },
     {
@@ -12,7 +12,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Exposición a Sustancias Químicas',
         categoria: 'Químico',
         descripcion: 'Contacto o inhalación de productos químicos durante prácticas de laboratorio.',
-        riesgos: 6,
+        riesgos: 6 + "  Riesgos",
         fecha: '21/06/2024'
     },
     {
@@ -20,7 +20,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Radiación Solar',
         categoria: 'Físico',
         descripcion: 'Exposición prolongada al sol durante actividades al aire libre.',
-        riesgos: 3,
+        riesgos: 3 + "  Riesgos",
         fecha: '15/09/2024'
     },
     {
@@ -28,7 +28,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Herramientas Cortopunzantes',
         categoria: 'Mecánico',
         descripcion: 'Uso de herramientas con filo o punta que pueden causar lesiones.',
-        riesgos: 5,
+        riesgos: 5 + "  Riesgos",
         fecha: '30/11/2024'
     },
     {
@@ -36,7 +36,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Contacto con Animales',
         categoria: 'Biológico',
         descripcion: 'Posibilidad de mordeduras, picaduras o transmisión de enfermedades.',
-        riesgos: 4,
+        riesgos: 4 + "  Riesgos",
         fecha: '04/04/2025'
     },
     {
@@ -44,7 +44,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Manipulación Manual de Cargas',
         categoria: 'Ergonómico',
         descripcion: 'Levantamiento o transporte de cargas que puede generar lesiones musculares.',
-        riesgos: 3,
+        riesgos: 3 + "  Riesgos",
         fecha: '19/12/2024'
     },
     {
@@ -52,7 +52,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Tránsito Vehicular',
         categoria: 'Seguridad',
         descripcion: 'Circulación de vehículos durante desplazamientos o visitas técnicas.',
-        riesgos: 5,
+        riesgos: 5 + "  Riesgos",
         fecha: '26/07/2025'
     },
     {
@@ -60,7 +60,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Condiciones Climáticas Adversas',
         categoria: 'Natural',
         descripcion: 'Lluvias intensas, tormentas o vientos fuertes que afectan la actividad.',
-        riesgos: 4,
+        riesgos: 4 + "  Riesgos",
         fecha: '12/03/2026'
     },
     {
@@ -68,7 +68,7 @@ export const PELIGROS_MOCK = [
         nombre: 'Ruido Excesivo',
         categoria: 'Físico',
         descripcion: 'Exposición a altos niveles de ruido en ambientes industriales.',
-        riesgos: 2,
+        riesgos: 2 + "  Riesgos",
         fecha: '09/01/2026'
     }
 ]

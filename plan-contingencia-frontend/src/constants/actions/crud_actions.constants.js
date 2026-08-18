@@ -3,3 +3,8 @@ export const DEFAULT_CRUD_ACTIONS = [
     'edit',
     'delete'
 ]
+
+export const USUARIOS_ACTIONS = [
+    'view',
+    'edit'
+]

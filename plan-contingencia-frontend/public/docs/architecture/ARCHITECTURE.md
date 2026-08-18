@@ -1224,3 +1224,405 @@ Su propósito es:
 
 Estos archivos no deben utilizarse en producción una vez integrados los servicios API.
 
+---
+
+# Arquitectura de Dialogs y Detalles Reutilizables
+
+El sistema centraliza la infraestructura visual de los diálogos para evitar duplicación de código y mantener consistencia entre módulos.
+
+BaseDialog
+
+BaseDialog.vue constituye la infraestructura común de los diálogos. Centraliza título, contenido, área de acciones, ancho configurable, v-model y slots.
+
+Los componentes específicos de cada módulo no deben duplicar esta estructura cuando pueda ser proporcionada por el componente base.
+
+BaseDetailDialog
+
+Para diálogos destinados exclusivamente a consultar información se establece BaseDetailDialog.vue.
+
+Su objetivo es centralizar la estructura visual común de los diálogos de detalles:
+
+BaseDetailDialog
+        |
+        +-- Logo institucional
+        |
+        +-- Columna izquierda
+        |      +-- BaseDetailItem
+        |      +-- BaseDetailItem
+        |
+        +-- Columna derecha
+               +-- BaseDetailItem
+               +-- BaseDetailItem
+
+Centraliza distribución, espaciado, logotipo, tipografía, colores, alineación y área de acciones.
+
+Los datos específicos permanecen en cada componente *Details.vue. Por ejemplo, ProgramasDetails.vue define qué información mostrar mediante BaseDetailItem, mientras BaseDetailDialog mantiene la infraestructura visual.
+
+BaseDetailItem
+
+BaseDetailItem.vue representa una unidad individual de información:
+
+Etiqueta
+Valor
+
+Es independiente de cualquier entidad concreta y solamente representa una pareja label / value.
+
+Los componentes especializados, como StatusChip, pueden utilizarse cuando un valor requiera una representación visual específica.
+
+Patrón de Details
+
+[Módulo]Details.vue
+        |
+        v
+BaseDetailDialog
+        |
+        +-- BaseDetailItem
+        +-- BaseDetailItem
+        +-- Componentes especializados
+
+Esta centralización permite realizar cambios globales de diseño una sola vez, en lugar de repetirlos en cada módulo.
+
+---
+
+# Arquitectura del módulo Usuarios
+
+El módulo de Usuarios posee una consideración especial: los registros no serán creados manualmente dentro del Sistema de Gestión de Planes de Contingencia.
+
+Los usuarios serán obtenidos y sincronizados desde la base de datos institucional de REPFORA.
+
+Usuarios
+   |
+   +-- Consulta
+   |
+   +-- Sincronización desde REPFORA
+   |
+   +-- Administración de rol y estado
+
+Datos provenientes de REPFORA
+
+Se consideran datos institucionales:
+
+Nombre.
+
+Apellido.
+
+Correo institucional.
+
+Centro de formación.
+
+Tipo de documento.
+
+Número de documento.
+
+Estos campos no deben modificarse manualmente desde el diálogo de actualización.
+
+---
+
+# Datos administrados por el sistema
+
+El sistema administrará específicamente:
+
+rol
+
+estado
+
+Estos atributos representan configuración propia del sistema y no deben ser sobrescritos por la sincronización con REPFORA.
+
+REPFORA
+   |
+   v
+Sincronización
+   |
+   +--> nombre
+   +--> apellido
+   +--> correo
+   +--> centro
+   +--> tipoDocumento
+   +--> documento
+
+Sistema
+   |
+   +--> rol
+   +--> estado
+
+Esta separación deberá conservarse durante la implementación del backend.
+
+---
+
+# Diálogo de actualización de Usuarios
+
+UsuariosDialog.vue utiliza los componentes de formularios reutilizables y aplica una regla específica en modo edit.
+
+Actualizar Usuario
+        |
+        +-- Información institucional
+        |      +-- Solo lectura
+        |
+        +-- Rol
+        |      +-- Editable según permisos
+        |
+        +-- Estado
+               +-- Editable según permisos
+
+Los campos institucionales permanecen visibles pero bloqueados. Los campos rol y estado pueden modificarse cuando el usuario actual posee la capacidad correspondiente.
+
+Actualmente esta capacidad se representa mediante la Prop:
+
+canEditUserConfiguration
+
+Esta configuración prepara el frontend para la futura integración con autenticación y autorización.
+
+La seguridad definitiva deberá implementarse también en backend; el frontend no constituye un mecanismo de seguridad.
+
+---
+
+# Roles del sistema y Usuarios
+
+La estructura funcional contemplada actualmente incluye:
+
+Usuario.
+
+Coordinación.
+
+SST.
+
+Pedagogía.
+
+Administrador.
+
+El rol Administrador corresponde al responsable de la configuración administrativa del sistema, incluyendo la gestión de usuarios, roles y estados.
+
+Los roles Coordinación, SST y Pedagogía participan en procesos de revisión y aprobación de Planes de Contingencia y podrán disponer de funcionalidades administrativas específicas según los permisos que se definan posteriormente.
+
+La autorización definitiva será responsabilidad del backend y se implementará durante la fase de autenticación y autorización.
+
+---
+
+# Sincronización de Usuarios con REPFORA
+
+La creación manual de usuarios no forma parte del flujo funcional definitivo.
+
+El botón actualmente denominado Crear deberá transformarse posteriormente en:
+
+Sincronizar
+
+El endpoint previsto conceptualmente es:
+
+POST /api/usuarios/sincronizar
+
+Su responsabilidad será determinar:
+
+Usuarios nuevos.
+
+Usuarios existentes.
+
+Datos institucionales que deben actualizarse.
+
+Usuarios que requieren cambios de estado según las reglas de sincronización.
+
+Configuración administrativa que debe conservarse.
+
+En principio, la sincronización:
+
+Actualiza datos institucionales
+        |
+        +-- NO sobrescribe rol
+        |
+        +-- NO sobrescribe configuración administrativa
+
+El comportamiento frente a usuarios que dejen de existir o cambien de estado en REPFORA queda pendiente de definición antes de implementar el endpoint definitivo.
+
+API de Usuarios: cambios pendientes en Backend
+
+Creación manual
+
+El endpoint:
+
+POST /api/usuarios
+
+no representa el flujo funcional definitivo porque los usuarios no serán creados manualmente.
+
+Durante la integración deberá eliminarse, deshabilitarse o sustituirse por el mecanismo de sincronización, dependiendo de las dependencias existentes.
+
+No se deben eliminar los atributos del modelo Usuario por esta razón.
+
+---
+
+# Actualización administrativa
+
+La actualización deberá restringirse a rol y estado.
+
+La operación prevista conceptualmente es:
+
+PATCH /api/usuarios/:id
+
+con:
+
+{
+    "rol": "sst",
+    "estado": "Activo"
+}
+
+Si se conserva el PUT existente, el servicio deberá aplicar la misma restricción.
+
+No deberán modificarse mediante esta operación:
+
+nombre
+apellido
+correo
+centro
+tipoDocumento
+documento
+
+Estos datos permanecerán bajo responsabilidad de la sincronización con REPFORA.
+
+La modificación de rol y estado deberá estar protegida mediante autenticación y autorización en backend.
+
+---
+
+# Protección del rol Administrador
+
+El rol Administrador tendrá tratamiento especial dentro de las reglas de autorización.
+
+La interfaz no debe permitir asignarlo mediante el selector normal si la política definitiva establece que no puede ser asignado desde esta interfaz.
+
+El backend deberá validar igualmente los valores permitidos y no depender de las restricciones visuales del frontend.
+
+Separación de responsabilidades en Usuarios
+
+                 REPFORA
+                    |
+                    v
+          Sincronización de usuarios
+                    |
+                    v
+             Datos institucionales
+                    |
+                    v
+              Base de datos
+                    |
+                    v
+              Módulo Usuarios
+                    |
+          +---------+---------+
+          |                   |
+          v                   v
+       Consulta          Configuración
+                              |
+                         Rol + Estado
+                              |
+                              v
+                        Administrador
+
+Esta separación deberá mantenerse tanto en frontend como en backend.
+
+Estado de implementación de Usuarios
+
+Actualmente se encuentra preparado:
+
+- Listado CRUD de usuarios.
+
+- Consulta mediante diálogo de detalles.
+
+- Diálogo de actualización.
+
+- Campos institucionales en solo lectura durante la actualización.
+
+- Campos rol y estado preparados para modificación.
+
+- Prop canEditUserConfiguration para controlar visualmente la edición.
+
+- Roles preliminares definidos en constantes.
+
+- Estructura visual preparada para futura autenticación y autorización.
+
+
+Queda pendiente:
+
+- Integración real con REPFORA.
+
+- Endpoint de sincronización.
+
+- Definición final del proceso de sincronización.
+
+- Autenticación.
+
+- Autorización basada en roles y permisos.
+
+- Protección de endpoints.
+
+- Restricción definitiva de modificación de atributos.
+
+- Revisión de los servicios actuales de Usuarios en backend.
+
+- Decisiones pendientes para Backend
+
+
+Durante la integración deberán revisarse:
+
+- Mecanismo de comunicación con REPFORA.
+
+- Estructura de datos recibida.
+
+- Identificador utilizado para determinar si un usuario ya existe.
+
+- Comportamiento frente a usuarios nuevos.
+
+- Comportamiento frente a usuarios que ya no estén disponibles en REPFORA.
+
+- Tratamiento del estado institucional frente al estado interno.
+
+- Implementación del endpoint de sincronización.
+
+- Restricción de actualización a rol y estado.
+
+- Autenticación.
+
+- Autorización por roles y permisos.
+
+- Protección de endpoints independientemente de las restricciones visuales.
+
+---
+
+# Estado de la Arquitectura de Dialogs
+
+La arquitectura de diálogos seguirá el principio:
+
+Componente Base
+       |
+       v
+Componente Reutilizable
+       |
+       v
+Componente del Módulo
+
+Para consulta:
+
+BaseDialog
+    |
+    v
+BaseDetailDialog
+    |
+    v
+[Módulo]Details.vue
+
+Para formularios:
+
+BaseDialog
+    |
+    +-- BaseFormGrid
+    +-- BaseFormField
+    +-- BaseInput / BaseSelect
+    +-- BaseDialogActions
+    |
+    v
+[Módulo]Dialog.vue
+
+Esta estructura permite implementar las decisiones visuales comunes una sola vez y reutilizarlas en todos los módulos administrativos.
+
+---
+
+
+
+
+

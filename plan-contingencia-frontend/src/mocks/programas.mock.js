@@ -5,7 +5,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Análisis y Desarrollo de Software',
     jornada: 'Mañana',
     nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
+    centro: 'Centro Agroturístico',
     fecha: '15/01/2026',
     estado: 'Activo'
   },
@@ -15,7 +15,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Gestión Administrativa',
     jornada: 'Tarde',
     nivel: 'Técnico',
-    centro: 'Centro de Servicios',
+    centro: 'Centro Agroturístico',
     fecha: '22/01/2026',
     estado: 'Activo'
   },
@@ -25,7 +25,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Producción Agropecuaria',
     jornada: 'Noche',
     nivel: 'Tecnólogo',
-    centro: 'Centro Agropecuario',
+    centro: 'Centro Agroturístico',
     fecha: '05/02/2026',
     estado: 'Inactivo'
   },
@@ -35,7 +35,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Gestión Logística',
     jornada: 'Mañana',
     nivel: 'Tecnólogo',
-    centro: 'Centro de Comercio y Servicios',
+    centro: 'Centro Agroturístico',
     fecha: '18/02/2026',
     estado: 'Activo'
   },
@@ -45,7 +45,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Mantenimiento Electromecánico Industrial',
     jornada: 'Tarde',
     nivel: 'Tecnólogo',
-    centro: 'Centro Industrial',
+    centro: 'Centro Agroturístico',
     fecha: '03/03/2026',
     estado: 'Activo'
   },
@@ -55,7 +55,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Construcción de Edificaciones',
     jornada: 'Noche',
     nivel: 'Técnico',
-    centro: 'Centro de la Construcción',
+    centro: 'Centro Agroturístico',
     fecha: '14/03/2026',
     estado: 'Activo'
   },
@@ -65,7 +65,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Procesamiento de Alimentos',
     jornada: 'Mañana',
     nivel: 'Tecnólogo',
-    centro: 'Centro Agroindustrial',
+    centro: 'Centro Agroturístico',
     fecha: '28/03/2026',
     estado: 'Activo'
   },
@@ -75,7 +75,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Electricidad Industrial',
     jornada: 'Tarde',
     nivel: 'Técnico',
-    centro: 'Centro Industrial',
+    centro: 'Centro Agroturístico',
     fecha: '10/04/2026',
     estado: 'Inactivo'
   },
@@ -85,7 +85,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Gestión Ambiental',
     jornada: 'Noche',
     nivel: 'Tecnólogo',
-    centro: 'Centro de Recursos Naturales',
+    centro: 'Centro Agroturístico',
     fecha: '25/04/2026',
     estado: 'Activo'
   },
@@ -95,7 +95,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Gestión Documental',
     jornada: 'Noche',
     nivel: 'Tecnólogo',
-    centro: 'Centro Administrativo',
+    centro: 'Centro Agroturístico',
     fecha: '28/01/2026',
     estado: 'Activo'
   },
@@ -105,7 +105,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Producción Agropecuaria',
     jornada: 'Tarde',
     nivel: 'Técnico',
-    centro: 'Centro Agropecuario',
+    centro: 'Centro Agroturístico',
     fecha: '05/04/2026',
     estado: 'Activo'
   },
@@ -115,7 +115,7 @@ export const PROGRAMAS_MOCK = [
     nombre: 'Recursos Humanos',
     jornada: 'Mañana',
     nivel: 'Técnico',
-    centro: 'Centro de Recursos Naturales',
+    centro: 'Centro Agroturístico',
     fecha: '15/06/2026',
     estado: 'Activo'
   }

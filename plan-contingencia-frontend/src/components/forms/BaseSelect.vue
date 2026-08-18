@@ -207,6 +207,13 @@ const isEmpty = computed(() => {
     line-height: 30px;
 }
 
+.base-select.q-field--readonly :deep(.q-field__native),
+.base-select.q-field--readonly :deep(.q-field__input),
+.base-select.q-field--readonly :deep(input) {
+    color: $color-text-primary !important;
+    opacity: 0.65 !important;
+}
+
 .base-select :deep(.q-field__prepend) {
     color: $color-text-secondary;
     opacity: 0.65;

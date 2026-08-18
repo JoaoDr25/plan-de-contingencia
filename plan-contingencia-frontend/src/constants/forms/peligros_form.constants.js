@@ -82,6 +82,7 @@ export const DANGER_FORM_FIELDS = [
         label: 'Descripción',
         // placeholder: 'Ingrese la descripción del peligro',
         icon: 'description',
+        type: 'textarea',
         maxlength: 250,
         required: true,
         rules: [

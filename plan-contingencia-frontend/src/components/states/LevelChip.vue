@@ -16,6 +16,14 @@ const props = defineProps({
     level: {
         type: String,
         required: true
+    },
+    context: {
+        type: String,
+        default: 'riesgo',
+        validator: value => [
+            'riesgo',
+            'epp'
+        ].includes(value)
     }
 })
 
@@ -28,7 +36,7 @@ const normalizedLevel = computed(() => {
 const chip = computed(() => {
 
     return (
-        LEVEL_MAP[normalizedLevel.value] ||
+        LEVEL_MAP[props.context]?.[normalizedLevel.value] ||
         {
             color: '#757575',
             textColor: '#FFFFFF'

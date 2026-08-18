@@ -71,7 +71,7 @@ const form = reactive({
     nombre: '',
     jornada: null,
     nivel: null,
-    centro: '',
+    centro: 'Centro Agroturístico',
     estado: 'Activo'
 })
 
@@ -115,7 +115,7 @@ function resetForm(data = {}) {
     form.nombre = data.nombre ?? ''
     form.jornada = data.jornada ?? ''
     form.nivel = data.nivel ?? ''
-    form.centro = data.centro ?? ''
+    form.centro = data.centro ?? 'Centro Agroturístico'
     form.estado = data.estado ?? 'Activo'
 }
 

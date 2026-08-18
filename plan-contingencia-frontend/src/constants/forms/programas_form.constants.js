@@ -85,7 +85,8 @@ export const PROGRAM_FORM_FIELDS = [
         required: true,
         rules: [
             required
-        ]
+        ],
+        readonly: true
     },
     {
         component: BaseSelect,

@@ -35,7 +35,7 @@
             <template #body-cell-nivel="props">
 
                 <q-td :props="props">
-                    <LevelChip :level="props.value" />
+                    <LevelChip :level="props.value" context="epp"/>
                 </q-td>
 
             </template>
