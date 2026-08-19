@@ -76,9 +76,9 @@ function handleClick() {
 
 .danger-action-button--sm {
     border-radius: 3px;
-    min-width: 90px;
-    height: 30px;
-    font-size: 0.81rem;
+    min-width: 100px;
+    height: 35px;
+    font-size: 0.9rem;
     font-weight: 400;
     text-transform: none;
 }
@@ -94,8 +94,8 @@ function handleClick() {
 .danger-action-button--lg {
     border-radius: 6px;
     min-width: 19.7rem;
-    height: 42px;
-    font-size: 0.80rem;
+    height: 43px;
+    font-size: 0.85rem;
     text-transform: uppercase;
 }
 

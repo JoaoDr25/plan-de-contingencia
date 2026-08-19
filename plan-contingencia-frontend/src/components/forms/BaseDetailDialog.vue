@@ -1,18 +1,11 @@
 <template>
 
-    <BaseDialog
-        v-model="dialog"
-        :title="title"
-        :width="width"
-    >
+    <BaseDialog v-model="dialog" :title="title" :width="width">
 
         <div class="base-details">
 
             <div class="base-details__logo">
-                <img
-                    :src="logo"
-                    :alt="logoAlt"
-                >
+                <img :src="logo" :alt="logoAlt">
             </div>
 
             <div class="base-details__column">
@@ -28,12 +21,7 @@
         <template #actions>
 
             <div class="base-details__actions">
-                <SecondaryActionButton
-                    label="Cerrar"
-                    icon="close"
-                    size="sm"
-                    @click="closeDialog"
-                />
+                <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
             </div>
 
         </template>
@@ -93,15 +81,12 @@ function closeDialog() {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 
 .base-details {
     display: grid;
     grid-template-columns:
-        115px
-        minmax(210px, 1.5fr)
-        minmax(150px, 1fr);
+        115px minmax(210px, 1.5fr) minmax(150px, 1fr);
     column-gap: 22px;
     padding: 0 22px;
     align-items: start;
@@ -128,20 +113,18 @@ function closeDialog() {
     transform: translateY(4px);
 }
 
-.base-details__logo + .base-details__column {
+.base-details__logo+.base-details__column {
     margin-left: 18px;
 }
 
-.base-details__column + .base-details__column {
+.base-details__column+.base-details__column {
     margin-left: 15px;
 }
 
 .base-details__actions {
     display: grid;
     grid-template-columns:
-        105px
-        minmax(210px, 1.5fr)
-        minmax(150px, 1fr);
+        105px minmax(210px, 1.5fr) minmax(150px, 1fr);
     column-gap: 22px;
     padding: 0 20px;
 }
@@ -152,4 +135,48 @@ function closeDialog() {
     margin-left: 24px;
 }
 
+@media (max-width: 600px) {
+
+    .base-details {
+        grid-template-columns: 1fr;
+        row-gap: 16px;
+        column-gap: 0;
+        padding: 0 16px;
+        width: 100%;
+    }
+
+    .base-details__logo {
+        height: auto;
+        margin: 0;
+        order: 0;
+    }
+
+    .base-details__column {
+        display: contents;
+    }
+
+    .base-details__column :deep(.base-detail-item) {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        order: 2;
+    }
+
+    .base-details__column :deep(.status-chip) {
+        order: 1;
+        margin-bottom: 0;
+    }
+
+    .base-details__actions {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+    }
+
+    .base-details__actions :deep(.secondary-action-button) {
+        grid-column: 1;
+        justify-self: center;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
 </style>

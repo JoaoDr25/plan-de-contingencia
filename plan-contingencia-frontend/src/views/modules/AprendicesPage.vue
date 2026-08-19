@@ -62,8 +62,6 @@
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
-        <AprendicesDetails v-model="detailsApprentice" :apprentice="selectedApprentice" />
-
     </BasePage>
 
 </template>
@@ -71,6 +69,7 @@
 <script setup>
 
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
 import { APRENDICES_FILTERS } from 'src/constants/filters/aprendices.constants'
@@ -90,10 +89,11 @@ import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
 
 import AprendicesDialog from '../dialogs/AprendicesDialog.vue'
-// import AprendicesDetails from '../details/AprendicesDetails.vue'
 import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 const sourceRows = ref(APRENDICES_MOCK)
+
+const router = useRouter()
 
 const {
     selectedFilter,
@@ -116,7 +116,6 @@ const {
 const loading = ref(false)
 
 const dialog = ref(false)
-const detailsApprentice = ref(false)
 
 const dialogMode = ref('create')
 const selectedApprentice = ref(null)
@@ -227,9 +226,12 @@ function cancelConfirmation() {
 }
 
 function viewItem(row) {
-    console.log('Ver Aprendiz:', row)
-    selectedApprentice.value = row
-    detailsApprentice.value = true
+    router.push({
+        name: 'aprendices.detail',
+        params: {
+            codigo: row.codigo
+        }
+    })
 }
 
 function editItem(row) {

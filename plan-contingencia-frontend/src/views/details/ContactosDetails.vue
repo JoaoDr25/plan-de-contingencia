@@ -16,7 +16,7 @@
 
         <template #column-right>
 
-            <BaseDetailItem class="program-status">
+            <BaseDetailItem class="status-chip">
                 <StatusChip :status="contact.estado" />
             </BaseDetailItem>
 
@@ -67,7 +67,7 @@ const dialog = computed({
 
 <style>
 
-.program-status {
+.status-chip {
     margin-bottom: 12px;
 }
 </style>

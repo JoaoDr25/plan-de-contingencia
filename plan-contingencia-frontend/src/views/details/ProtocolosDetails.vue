@@ -16,7 +16,7 @@
 
         <template #column-right>
 
-            <BaseDetailItem class="protocol-status">
+            <BaseDetailItem class="status-chip">
                 <StatusChip :status="protocol.estado" />
             </BaseDetailItem>
 
@@ -65,7 +65,7 @@ const dialog = computed({
 
 <style scoped>
 
-.protocol-status {
+.status-chip {
     margin-bottom: 12px;
 }
 </style>

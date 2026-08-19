@@ -115,6 +115,16 @@ const routes = [
           import('src/views/modules/AprendicesPage.vue')
       },
       {
+        path: 'aprendices/:codigo',
+        name: 'aprendices.detail',
+        meta: {
+          title: 'Información del Aprendiz',
+          icon: 'badge'
+        },
+        component: () =>
+          import('src/views/details/AprendicesDetail.vue')
+      },
+      {
         path: 'contactos',
         name: 'contactos.list',
         meta: {
@@ -153,8 +163,8 @@ const routes = [
     path: '/:catchAll(.*)*',
     name: 'not-found',
     meta: {
-          title: 'Página no encontrada'
-        },
+      title: 'Página no encontrada'
+    },
     component: () => import('src/views/error/ErrorNotFound.vue'),
   },
 ]

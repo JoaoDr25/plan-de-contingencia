@@ -60,8 +60,14 @@ const dialog = computed({
 </script>
 
 <style scoped>
-
 .activity-details__right-offset {
     margin-top: 46px;
+}
+
+@media (max-width: 600px) {
+
+    .activity-details__right-offset {
+        margin-top: 0;
+    }
 }
 </style>

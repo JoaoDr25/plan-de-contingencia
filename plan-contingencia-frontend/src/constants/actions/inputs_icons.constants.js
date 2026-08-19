@@ -6,6 +6,6 @@ export const INPUT_ICONS = {
     password: 'lock',
     date: 'event',
     time: 'schedule',
-    selec: 'arrow_drop_down',
+    select: 'arrow_drop_down',
     textarea: 'notes'
 }

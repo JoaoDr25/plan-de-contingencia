@@ -8,7 +8,7 @@ export const APRENDICES_MOCK = [
     programa: 'Análisis y Desarrollo de Software',
     ficha: '2876541',
     eps: 'Nueva EPS',
-    contacto: 'María Rojas - 3204567890',
+    contacto: '3204567890',
     estado: 'Activo'
   },
   {
@@ -20,7 +20,7 @@ export const APRENDICES_MOCK = [
     programa: 'Gestión Administrativa',
     ficha: '2876542',
     eps: 'Sanitas',
-    contacto: 'Carlos González - 3115678901',
+    contacto: '3115678901',
     estado: 'Activo'
   },
   {
@@ -32,7 +32,7 @@ export const APRENDICES_MOCK = [
     programa: 'Producción Agropecuaria',
     ficha: '2876543',
     eps: 'SURA',
-    contacto: 'Ana Martínez - 3156789012',
+    contacto: '3156789012',
     estado: 'Inactivo'
   },
   {
@@ -44,7 +44,7 @@ export const APRENDICES_MOCK = [
     programa: 'Construcción de Edificaciones',
     ficha: '2876544',
     eps: 'Compensar',
-    contacto: 'Luis Pérez - 3187890123',
+    contacto: '3187890123',
     estado: 'Activo'
   },
   {
@@ -56,7 +56,7 @@ export const APRENDICES_MOCK = [
     programa: 'Electricidad Industrial',
     ficha: '2876545',
     eps: 'Famisanar',
-    contacto: 'Mónica Herrera - 3178901234',
+    contacto: '3178901234',
     estado: 'Activo'
   },
   {
@@ -68,7 +68,7 @@ export const APRENDICES_MOCK = [
     programa: 'Gestión Logística',
     ficha: '2876546',
     eps: 'Coosalud',
-    contacto: 'Pedro Torres - 3109012345',
+    contacto: '3109012345',
     estado: 'Suspendido'
   },
   {
@@ -80,7 +80,7 @@ export const APRENDICES_MOCK = [
     programa: 'Mantenimiento de Equipos de Cómputo',
     ficha: '2876547',
     eps: 'Nueva EPS',
-    contacto: 'Sandra Rodríguez - 3190123456',
+    contacto: '3190123456',
     estado: 'Activo'
   },
   {
@@ -92,7 +92,7 @@ export const APRENDICES_MOCK = [
     programa: 'Control de Calidad de Alimentos',
     ficha: '2876548',
     eps: 'Salud Total',
-    contacto: 'Jorge Castro - 3161234567',
+    contacto: '3161234567',
     estado: 'Activo'
   },
   {
@@ -104,7 +104,7 @@ export const APRENDICES_MOCK = [
     programa: 'Mecánica Automotriz',
     ficha: '2876549',
     eps: 'SURA',
-    contacto: 'Patricia Ramírez - 3212345678',
+    contacto: '3212345678',
     estado: 'Retirado'
   }
 ]

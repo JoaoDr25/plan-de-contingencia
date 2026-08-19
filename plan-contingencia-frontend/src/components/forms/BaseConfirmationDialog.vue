@@ -2,18 +2,18 @@
 
     <BaseDialog v-model="dialog" :title="title" width="500px">
 
-        <div v-if="message" class="base-confirmation-dialog__message">
+        <!-- <div v-if="message" class="base-confirmation-dialog__message">
             {{ message }}
-        </div>
+        </div> -->
 
         <template #actions>
 
             <div class="base-confirmation-dialog__actions">
 
-                <component :is="confirmButtonComponent" :label="confirmLabel" :loading="loading"
+                <component :is="confirmButtonComponent" :label="confirmLabel" :icon="confirmIcon" size="sm"  :loading="loading"
                     @click="handleConfirm" />
 
-                <SecondaryActionButton :label="cancelLabel" :disable="loading" @click="handleCancel" />
+                <SecondaryActionButton :label="cancelLabel" icon="close" size="sm" :disable="loading" @click="handleCancel" />
 
             </div>
 
@@ -35,7 +35,7 @@ import DangerActionButton from '../actions/DangerActionButton.vue'
 const {
     modelValue,
     title,
-    message,
+    // message,
     confirmLabel,
     cancelLabel,
     variant,
@@ -94,6 +94,12 @@ const confirmButtonComponent = computed(() => {
         : PrimaryActionButton
 })
 
+const confirmIcon = computed(() => {
+    return variant === 'danger'
+        ? 'delete'
+        : 'check'
+})
+
 function handleConfirm() {
     emit('confirm')
 }
@@ -122,5 +128,21 @@ function handleCancel() {
     justify-content: center;
     align-items: center;
     gap: 12px;
+}
+
+.base-confirmation-dialog__actions
+:deep(.primary-action-button--sm) {
+    width: auto;
+    min-width: 114px;
+}
+
+@media (max-width: 480px) {
+
+    .base-confirmation-dialog__actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
 }
 </style>

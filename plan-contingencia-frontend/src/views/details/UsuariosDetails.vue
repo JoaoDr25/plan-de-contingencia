@@ -18,7 +18,7 @@
 
         <template #column-right>
 
-            <BaseDetailItem class="user-status">
+            <BaseDetailItem class="status-chip">
                 <StatusChip :status="user.estado" />
             </BaseDetailItem>
 
@@ -69,7 +69,7 @@ const dialog = computed({
 
 <style scoped>
 
-.user-status {
+.status-chip {
     margin-bottom: 12px;
 }
 </style>

@@ -16,7 +16,7 @@
 
         <template #column-right>
 
-             <BaseDetailItem  class="activity-details__right-offset" label="Riesgos Asociados" :value="danger.riesgos" />
+             <BaseDetailItem  class="danger-details__right-offset" label="Riesgos Asociados" :value="danger.riesgos" />
 
             <BaseDetailItem label="Fecha de Creación" :value="danger.fecha" />
 
@@ -60,7 +60,14 @@ const dialog = computed({
 
 <style scoped>
 
-.activity-details__right-offset {
+.danger-details__right-offset {
     margin-top: 46px;
+}
+
+@media (max-width: 600px) {
+
+    .danger-details__right-offset {
+        margin-top: 0;
+    }
 }
 </style>
