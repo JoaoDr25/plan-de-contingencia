@@ -1,7 +1,10 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required } from 'src/validators/form.validator'
+import { 
+    required,
+    maxLength,
+} from 'src/validators/form.validator'
 
 export const ACTIVITY_FORM_FIELDS = [
     {
@@ -10,10 +13,10 @@ export const ACTIVITY_FORM_FIELDS = [
         label: 'Nombre de la Actividad',
         // placeholder: 'Ingrese el nombre de la actividad',
         icon: 'directions_walk',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -70,10 +73,10 @@ export const ACTIVITY_FORM_FIELDS = [
         // placeholder: 'Ingrese la descripción de la actividad',
         icon: 'description',
         type: 'textarea',
-        maxlength: 500,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(500)
         ]
     }
 ]

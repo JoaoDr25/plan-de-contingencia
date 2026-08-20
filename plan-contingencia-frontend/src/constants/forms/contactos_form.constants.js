@@ -1,7 +1,11 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required } from 'src/validators/form.validator'
+import { 
+    required, 
+    maxLength, 
+    phone 
+} from 'src/validators/form.validator'
 
 export const CONTACTS_FORM_FIELDS = [
 
@@ -52,10 +56,10 @@ export const CONTACTS_FORM_FIELDS = [
         label: 'Nombre de la Entidad',
         // placeholder: 'Ingrese el nombre de la entidad',
         icon: 'business',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -64,10 +68,10 @@ export const CONTACTS_FORM_FIELDS = [
         label: 'Teléfono Principal',
         // placeholder: 'Ingrese el teléfono principal',
         icon: 'phone',
-        maxlength: 20,
         required: true,
         rules: [
-            required
+            required,
+            phone
         ]
     },
     {
@@ -76,10 +80,10 @@ export const CONTACTS_FORM_FIELDS = [
         label: 'Ciudad',
         // placeholder: 'Ingrese la ciudad',
         icon: 'location_city',
-        maxlength: 100,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(80)
         ]
     },
     {
@@ -88,10 +92,10 @@ export const CONTACTS_FORM_FIELDS = [
         label: 'Dirección',
         // placeholder: 'Ingrese la dirección',
         icon: 'location_on',
-        maxlength: 100,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(80)
         ]
     },
     {

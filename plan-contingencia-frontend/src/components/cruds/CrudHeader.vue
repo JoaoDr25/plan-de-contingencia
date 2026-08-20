@@ -60,7 +60,6 @@ const {
     font-size: $font-size-4xl;
     letter-spacing: 0.05px;
     color: $color-text-primary;
-    font-size: $font-family-base;
 }
 
 .crud-header__divider {

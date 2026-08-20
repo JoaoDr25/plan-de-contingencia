@@ -1,7 +1,10 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required } from 'src/validators/form.validator'
+import {
+    required,
+    maxLength
+} from 'src/validators/form.validator'
 
 export const USER_FORM_FIELDS = [
     
@@ -11,10 +14,10 @@ export const USER_FORM_FIELDS = [
         label: 'Nombre del Usuario',
         // placeholder: 'Ingrese el nombre del usuario',
         icon: 'person',
-        maxlength: 80,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -23,10 +26,10 @@ export const USER_FORM_FIELDS = [
         label: 'Correo Institucional',
         // placeholder: 'Ingrese el correo institucional',
         icon: 'mail',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -35,10 +38,10 @@ export const USER_FORM_FIELDS = [
         label: 'Apellido del Usuario',
         // placeholder: 'Ingrese el apellido del usuario',
         icon: 'person_outline',
-        maxlength: 80,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -47,10 +50,10 @@ export const USER_FORM_FIELDS = [
         label: 'Centro de Formación',
         // placeholder: 'Ingrese el centro de formación',
         icon: 'business',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -84,10 +87,10 @@ export const USER_FORM_FIELDS = [
         label: 'N.º Documento',
         // placeholder: 'Ingrese el número de documento',
         icon: 'badge',
-        maxlength: 20,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(20)
         ]
     },
     {

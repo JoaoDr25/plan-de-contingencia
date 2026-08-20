@@ -1,19 +1,36 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
+import {
+    required,
+    minLength,
+    maxLength,
+    onlyLetters,
+    phone
+} from 'src/validators/form.validator'
+
 export const APPRENTICE_INFO_FORM_FIELDS = [
     {
         component: BaseInput,
         model: 'eps',
         label: 'EPS',
         icon: 'health_and_safety',
-        required: true
+        required: true,
+        rules: [
+            required,
+            minLength(3),
+            maxLength(120)
+        ]
     },
     {
         component: BaseSelect,
         model: 'tipoSangre',
         label: 'Tipo de Sangre',
         icon: 'bloodtype',
+        required: true,
+        rules: [
+            required
+        ],
         options: [
             { label: 'A+', value: 'A+' },
             { label: 'A-', value: 'A-' },
@@ -27,29 +44,38 @@ export const APPRENTICE_INFO_FORM_FIELDS = [
     },
     {
         component: BaseInput,
-        model: 'condicionesMedicas',
-        label: 'Condiciones Médicas',
-        type: 'textarea',
-        icon: 'medical_information'
-    },
-    {
-        component: BaseInput,
-        model: 'nombreContacto',
+        model: 'contacto',
         label: 'Nombre Completo del Contacto',
-        icon: 'person'
+        icon: 'person',
+        required: true,
+        rules: [
+            required,
+            minLength(3),
+            maxLength(120),
+            onlyLetters
+        ]
     },
     {
         component: BaseInput,
-        model: 'telefonoContacto',
+        model: 'telefono',
         label: 'Teléfono de Contacto',
         type: 'tel',
-        icon: 'phone'
+        icon: 'phone',
+        required: true,
+        rules: [
+            required,
+            phone
+        ]
     },
     {
         component: BaseSelect,
         model: 'parentesco',
         label: 'Parentesco',
         icon: 'family_restroom',
+        required: true,
+        rules: [
+            required
+        ],
         options: [
             { label: 'Padre', value: 'Padre' },
             { label: 'Madre', value: 'Madre' },
@@ -63,6 +89,22 @@ export const APPRENTICE_INFO_FORM_FIELDS = [
         component: BaseInput,
         model: 'direccion',
         label: 'Dirección',
-        icon: 'location_on'
+        icon: 'location_on',
+        required: true,
+        rules: [
+            required,
+            minLength(5),
+            maxLength(120)
+        ]
+    },
+    {
+        component: BaseInput,
+        model: 'condicionesMedicas',
+        label: 'Condiciones Médicas',
+        type: 'textarea',
+        icon: 'medical_information',
+        rules: [
+            maxLength(250)
+        ]
     }
 ]

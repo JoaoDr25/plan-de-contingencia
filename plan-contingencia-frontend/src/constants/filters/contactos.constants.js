@@ -2,7 +2,7 @@ export const CONTACTOS_FILTERS = [
 
     {
         label: 'Tipo Contacto',
-        value: 'tipo-contacto'
+        value: 'tipo'
     },
     {
         label: 'Nombre',

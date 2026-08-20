@@ -2,10 +2,6 @@
 
     <BaseDialog v-model="dialog" :title="title" width="500px">
 
-        <!-- <div v-if="message" class="base-confirmation-dialog__message">
-            {{ message }}
-        </div> -->
-
         <template #actions>
 
             <div class="base-confirmation-dialog__actions">
@@ -35,7 +31,6 @@ import DangerActionButton from '../actions/DangerActionButton.vue'
 const {
     modelValue,
     title,
-    // message,
     confirmLabel,
     cancelLabel,
     variant,

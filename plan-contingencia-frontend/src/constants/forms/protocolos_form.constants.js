@@ -1,7 +1,10 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required } from 'src/validators/form.validator'
+import { 
+    required, 
+    maxLength 
+} from 'src/validators/form.validator'
 
 export const PROTOCOL_FORM_FIELDS = [
 
@@ -11,10 +14,10 @@ export const PROTOCOL_FORM_FIELDS = [
         label: 'Tipo de Emergencia',
         // placeholder: 'Ingrese el tipo de emergencia',
         icon: 'warning',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -24,10 +27,10 @@ export const PROTOCOL_FORM_FIELDS = [
         // placeholder: 'Ingrese la acción inmediata',
         icon: 'flash_on',
         type: 'textarea',
-        maxlength: 250,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(250)
         ]
     },
     {
@@ -36,10 +39,10 @@ export const PROTOCOL_FORM_FIELDS = [
         label: 'Responsable',
         // placeholder: 'Ingrese el responsable',
         icon: 'person',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -48,10 +51,10 @@ export const PROTOCOL_FORM_FIELDS = [
         label: 'Medio de Comunicación',
         // placeholder: 'Ingrese el medio de comunicación',
         icon: 'phone',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {

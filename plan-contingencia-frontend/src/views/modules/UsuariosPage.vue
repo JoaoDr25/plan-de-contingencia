@@ -107,7 +107,7 @@ const {
     endRow
 } = useCrudTable({
     sourceRows,
-    defaultFilter: 'numeroDocumento',
+    defaultFilter: 'documento',
     exactSearchField: 'estado',
     defaultRowsPerPage: 8
 })

@@ -14,12 +14,12 @@
                     </div>
 
                     <div class="detail-card__status">
-                        <StatusChip v-if="apprentice" :status="apprentice.estado" />
+                        <StatusChip v-if="apprenticeData" :status="apprenticeData.estado" />
                     </div>
 
                 </div>
 
-                <div v-if="apprentice" class="detail-card__body detail-card__body--apprentice">
+                <div v-if="apprenticeData" class="detail-card__body detail-card__body--apprentice">
 
                     <div class="detail-card__logo">
                         <img :src="logoSena" alt="Logo SENA">
@@ -31,13 +31,13 @@
 
                         <div class="detail-card__empty-slot" aria-hidden="true"></div>
 
-                        <BaseDetailItem label="Tipo de Documento" :value="apprentice.tipo" />
+                        <BaseDetailItem label="Tipo de Documento" :value="apprenticeData.tipo" />
 
-                        <BaseDetailItem label="N.º Documento" :value="apprentice.documento" />
+                        <BaseDetailItem label="N.º Documento" :value="apprenticeData.documento" />
 
-                        <BaseDetailItem label="Programa de Formación" :value="apprentice.programa" />
+                        <BaseDetailItem label="Programa de Formación" :value="apprenticeData.programa" />
 
-                        <BaseDetailItem label="Ficha" :value="apprentice.ficha" />
+                        <BaseDetailItem label="Ficha" :value="apprenticeData.ficha" />
 
                     </div>
 
@@ -62,7 +62,7 @@
 
                 <div class="detail-card__fields detail-card__fields--medical">
 
-                    <BaseDetailItem label="EPS" :value="apprentice?.eps || 'No registrada'" />
+                    <BaseDetailItem label="EPS" :value="apprenticeData?.eps || 'No registrada'" />
 
                     <BaseDetailItem label="Tipo de Sangre" :value="additionalInfo?.tipoSangre || 'No registrado'" />
 
@@ -109,6 +109,12 @@
 
             </div>
 
+            <AprendicesInfoDialog v-model="infoDialog" :apprentice="apprentice" @save="handleInfoSave" />
+
+            <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
+                :message="confirmationMessage" :confirm-label="confirmationLabel" :variant="confirmationVariant"
+                @confirm="confirmInfoUpdate" @cancel="cancelInfoUpdate" />
+
         </div>
 
     </BasePage>
@@ -117,7 +123,7 @@
 
 <script setup>
 
-import { computed } from 'vue'
+import { computed, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { APRENDICES_MOCK } from 'src/mocks/aprendices.mock'
@@ -128,10 +134,51 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 
+import AprendicesInfoDialog from '../dialogs/AprendicesInfoDialog.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 import logoSena from 'src/assets/logos/logo-sena.png'
 
 const route = useRoute()
 const router = useRouter()
+
+const infoDialog = ref(false)
+const confirmationDialog = ref(false)
+
+const pendingInfoData = ref(null)
+
+const confirmationTitle = 'Confirmar actualización'
+const confirmationMessage = '¿Está seguro de actualizar la información del aprendiz?'
+const confirmationLabel = 'Actualizar'
+const confirmationVariant = 'primary'
+
+function handleInfoSave(formData) {
+    pendingInfoData.value = formData
+    infoDialog.value = false
+    confirmationDialog.value = true
+}
+
+function confirmInfoUpdate() {
+    updateApprenticeInfo(pendingInfoData.value)
+
+    pendingInfoData.value = null
+    confirmationDialog.value = false
+}
+
+function updateApprenticeInfo(formData) {
+    Object.assign(apprenticeData, formData)
+
+    const index = APRENDICES_MOCK.findIndex(
+        item => String(item.codigo) === String(route.params.codigo)
+    )
+    if (index !== -1) {
+        Object.assign(APRENDICES_MOCK[index], formData)
+    }
+}
+
+function cancelInfoUpdate() {
+    pendingInfoData.value = null
+    confirmationDialog.value = false
+}
 
 const apprentice = computed(() => {
     return APRENDICES_MOCK.find(
@@ -139,16 +186,22 @@ const apprentice = computed(() => {
     ) ?? null
 })
 
+const apprenticeData = reactive({})
+
+if (apprentice.value) {
+    Object.assign(apprenticeData, apprentice.value)
+}
+
 const fullName = computed(() => {
 
     if (!apprentice.value) {
         return 'No registrado'
     }
-    return `${apprentice.value.nombre} ${apprentice.value.apellido}`
+    return `${apprenticeData.nombre} ${apprenticeData.apellido}`
 })
 
 const additionalInfo = computed(() => {
-    return null
+    return apprenticeData
 })
 
 const emergencyContact = computed(() => {
@@ -162,30 +215,16 @@ const emergencyContact = computed(() => {
         }
     }
 
-    const contact = apprentice.value.contacto ?? ''
-
-    const separatorIndex = contact.indexOf(' - ')
-
-    if (separatorIndex === -1) {
-        return {
-            name: '',
-            phone: contact,
-            relationship: '',
-            address: ''
-        }
-    }
-
     return {
-        name: contact.substring(0, separatorIndex),
-        phone: contact.substring(separatorIndex + 3),
-        relationship: '',
-        address: ''
+        name: apprenticeData.contacto ?? '',
+        phone: apprenticeData.telefono ?? '',
+        relationship: apprenticeData.parentesco ?? '',
+        address: apprenticeData.direccion ?? ''
     }
 })
 
 function openInfoDialog() {
-    console.log('Completar información del aprendiz:', apprentice.value)
-
+    infoDialog.value = true
 }
 
 function goBack() {
@@ -324,6 +363,7 @@ function goBack() {
     gap: 10px;
     width: 100%;
     box-sizing: border-box;
+    padding-bottom: 12px;
 }
 
 .update_actions {
@@ -410,7 +450,7 @@ function goBack() {
         padding: 14px;
     }
 
-     .apprentice-detail-page {
+    .apprentice-detail-page {
         max-width: 90%;
         padding: 8px;
     }

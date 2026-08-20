@@ -80,7 +80,7 @@ const form = reactive({
     nombre: '',
     apellido: '',
     eps: '',
-    contacto: '',
+    telefono: '',
     tipo: null,
     documento: '',
     estado: 'Activo'
@@ -127,7 +127,7 @@ function resetForm(data = {}) {
     form.nombre = data.nombre ?? ''
     form.apellido = data.apellido ?? ''
     form.eps = data.eps ?? ''
-    form.contacto = data.contacto ?? ''
+    form.telefono = data.telefono ?? ''
     form.tipo = data.tipo ?? null
     form.documento = data.documento ?? ''
     form.estado = data.estado ?? 'Activo'

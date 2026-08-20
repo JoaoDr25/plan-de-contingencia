@@ -47,7 +47,7 @@ export const APRENDICES_COLUMNS = [
     {
         name: 'contacto',
         label: 'Contacto de Emergencia',
-        field: 'contacto',
+        field: 'telefono',
         align: 'center',
         sortable: false,
         maxWidth: '200px',

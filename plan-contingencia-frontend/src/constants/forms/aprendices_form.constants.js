@@ -1,7 +1,13 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required } from 'src/validators/form.validator'
+import {
+    required,
+    minLength,
+    maxLength,
+    onlyLetters,
+    phone
+} from 'src/validators/form.validator'
 
 export const APPRENTICE_FORM_FIELDS = [
 
@@ -11,10 +17,11 @@ export const APPRENTICE_FORM_FIELDS = [
         label: 'Ficha',
         // placeholder: 'Ingrese la ficha',
         icon: 'badge',
-        maxlength: 10,
         required: true,
         rules: [
-            required
+            required,
+            minLength(3),
+            maxLength(10),
         ]
     },
     {
@@ -26,7 +33,10 @@ export const APPRENTICE_FORM_FIELDS = [
         options: [],
         required: true,
         rules: [
-            required
+            required,
+            minLength(3),
+            maxLength(120),
+            onlyLetters
         ]
     },
     {
@@ -35,22 +45,26 @@ export const APPRENTICE_FORM_FIELDS = [
         label: 'Nombre del Aprendiz',
         // placeholder: 'Ingrese el nombre del aprendiz',
         icon: 'person',
-        maxlength: 60,
         required: true,
         rules: [
-            required
+            required,
+            minLength(3),
+            maxLength(120),
+            onlyLetters
         ]
     },
-        {
+    {
         component: BaseInput,
         model: 'apellido',
         label: 'Apellido del Aprendiz',
         // placeholder: 'Ingrese el apellido del aprendiz',
         icon: 'person',
-        maxlength: 60,
         required: true,
         rules: [
-            required
+            required,
+            minLength(3),
+            maxLength(120),
+            onlyLetters
         ]
     },
     {
@@ -59,22 +73,25 @@ export const APPRENTICE_FORM_FIELDS = [
         label: 'Nombre de EPS',
         // placeholder: 'Ingrese el nombre de la EPS',
         icon: 'health_and_safety',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            minLength(3),
+            maxLength(120),
         ]
     },
     {
         component: BaseInput,
-        model: 'contacto',
+        model: 'telefono',
         label: 'Contacto de Emergencia',
         // placeholder: 'Ingrese el número de contacto',
         icon: 'contact_phone',
         maxlength: 15,
         required: true,
         rules: [
-            required
+            required,
+            phone,
+            maxLength(10),
         ]
     },
     {
@@ -102,7 +119,7 @@ export const APPRENTICE_FORM_FIELDS = [
             required
         ]
     },
-       {
+    {
         component: BaseInput,
         model: 'documento',
         label: 'N° Documento Aprendiz',
@@ -111,7 +128,10 @@ export const APPRENTICE_FORM_FIELDS = [
         maxlength: 15,
         required: true,
         rules: [
-            required
+            required,
+            minLength(3),
+            maxLength(10),
+
         ]
     },
     {

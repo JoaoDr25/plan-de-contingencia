@@ -1,7 +1,10 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required } from 'src/validators/form.validator'
+import { 
+    required, 
+    maxLength 
+} from 'src/validators/form.validator'
 
 export const RISK_FORM_FIELDS = [
 
@@ -11,10 +14,10 @@ export const RISK_FORM_FIELDS = [
         label: 'Nombre del Riesgo',
         // placeholder: 'Ingrese el nombre del riesgo',
         icon: 'warning',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -63,10 +66,10 @@ export const RISK_FORM_FIELDS = [
         // placeholder: 'Ingrese la descripción del riesgo',
         icon: 'description',
         type: 'textarea',
-        maxlength: 250,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(250)
         ],
     },
     {
@@ -76,10 +79,10 @@ export const RISK_FORM_FIELDS = [
         // placeholder: 'Ingrese las consecuencias',
         icon: 'error_outline',
         type: 'textarea',
-        maxlength: 250,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(250)
         ],
     }
 ]

@@ -1,7 +1,10 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required } from 'src/validators/form.validator'
+import { 
+    required, 
+    maxLength 
+} from 'src/validators/form.validator'
 
 export const EPP_FORM_FIELDS = [
 
@@ -11,10 +14,10 @@ export const EPP_FORM_FIELDS = [
         label: 'Nombre de EPP',
         // placeholder: 'Ingrese el nombre del EPP',
         icon: 'shield',
-        maxlength: 120,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(120)
         ]
     },
     {
@@ -90,10 +93,10 @@ export const EPP_FORM_FIELDS = [
         // placeholder: 'Ingrese la descripción del EPP',
         icon: 'description',
         type: 'textarea',
-        maxlength: 250,
         required: true,
         rules: [
-            required
+            required,
+            maxLength(250)
         ]
     },
     {

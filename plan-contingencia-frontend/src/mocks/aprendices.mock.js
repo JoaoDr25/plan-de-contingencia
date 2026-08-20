@@ -8,7 +8,12 @@ export const APRENDICES_MOCK = [
     programa: 'Análisis y Desarrollo de Software',
     ficha: '2876541',
     eps: 'Nueva EPS',
-    contacto: '3204567890',
+    telefono: '3204567890',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
     estado: 'Activo'
   },
   {
@@ -20,7 +25,12 @@ export const APRENDICES_MOCK = [
     programa: 'Gestión Administrativa',
     ficha: '2876542',
     eps: 'Sanitas',
-    contacto: '3115678901',
+    telefono: '3115678901',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
     estado: 'Activo'
   },
   {
@@ -32,7 +42,12 @@ export const APRENDICES_MOCK = [
     programa: 'Producción Agropecuaria',
     ficha: '2876543',
     eps: 'SURA',
-    contacto: '3156789012',
+    telefono: '3156789012',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
     estado: 'Inactivo'
   },
   {
@@ -44,7 +59,12 @@ export const APRENDICES_MOCK = [
     programa: 'Construcción de Edificaciones',
     ficha: '2876544',
     eps: 'Compensar',
-    contacto: '3187890123',
+    telefono: '3187890123',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
     estado: 'Activo'
   },
   {
@@ -56,7 +76,12 @@ export const APRENDICES_MOCK = [
     programa: 'Electricidad Industrial',
     ficha: '2876545',
     eps: 'Famisanar',
-    contacto: '3178901234',
+    telefono: '3178901234',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
     estado: 'Activo'
   },
   {
@@ -68,8 +93,13 @@ export const APRENDICES_MOCK = [
     programa: 'Gestión Logística',
     ficha: '2876546',
     eps: 'Coosalud',
-    contacto: '3109012345',
-    estado: 'Suspendido'
+    telefono: '3109012345',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
+    estado: 'Inactivo'
   },
   {
     codigo: 7,
@@ -80,7 +110,12 @@ export const APRENDICES_MOCK = [
     programa: 'Mantenimiento de Equipos de Cómputo',
     ficha: '2876547',
     eps: 'Nueva EPS',
-    contacto: '3190123456',
+    telefono: '3190123456',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
     estado: 'Activo'
   },
   {
@@ -92,7 +127,12 @@ export const APRENDICES_MOCK = [
     programa: 'Control de Calidad de Alimentos',
     ficha: '2876548',
     eps: 'Salud Total',
-    contacto: '3161234567',
+    telefono: '3161234567',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
     estado: 'Activo'
   },
   {
@@ -104,7 +144,12 @@ export const APRENDICES_MOCK = [
     programa: 'Mecánica Automotriz',
     ficha: '2876549',
     eps: 'SURA',
-    contacto: '3212345678',
-    estado: 'Retirado'
+    telefono: '3212345678',
+    tipoSangre: '',
+    condicionesMedicas: 'Ninguna',
+    contacto: '',
+    parentesco: '',
+    direccion: '',
+    estado: 'Inactivo'
   }
 ]
