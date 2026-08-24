@@ -30,8 +30,13 @@ export const STATUS_MAP = {
         textColor: '#FFFFFF'
     },
 
+    'en revision': {
+        color: '#D07A18',
+        textColor: '#FFFFFF'
+    },
+
     cancelado: {
-        color: '#D32F2F',
+        color: '#4F4F4F',
         textColor: '#FFFFFF'
     }
 

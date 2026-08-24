@@ -20,11 +20,17 @@ const props = defineProps({
 
 })
 
-const normalizedStatus = computed(() => {
-
-    return props.status
+function normalizeStatus(value) {
+    return value
         .trim()
         .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+}
+
+const normalizedStatus = computed(() => {
+
+    return normalizeStatus(props.status)
 
 })
 

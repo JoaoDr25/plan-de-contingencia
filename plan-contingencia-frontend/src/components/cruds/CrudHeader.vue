@@ -4,10 +4,10 @@
 
         <div class="crud-header__content">
 
-            <h1 class="crud-header__title">
-
+            <h1 class="crud-header__title" :class="{
+                'crud-header__title--uppercase': uppercaseTitle
+            }">
                 {{ title }}
-
             </h1>
 
             <div class="crud-header__divider"></div>
@@ -28,11 +28,17 @@
 
 const {
     title,
+    uppercaseTitle
 } = defineProps({
     title: {
         type: String,
         required: true
+    },
+    uppercaseTitle: {
+        type: Boolean,
+        default: false
     }
+
 })
 
 </script>
@@ -60,6 +66,11 @@ const {
     font-size: $font-size-4xl;
     letter-spacing: 0.05px;
     color: $color-text-primary;
+}
+
+.crud-header__title--uppercase {
+    text-transform: uppercase;
+    font-size: $font-size-3xl;
 }
 
 .crud-header__divider {

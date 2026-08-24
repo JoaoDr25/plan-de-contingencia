@@ -1,19 +1,8 @@
-<template>0000000000
+<template>
 
     <BasePage>
 
-        <CrudHeader title="Planes de Contingencia">
-
-            <template #actions>
-
-                <PrimaryActionButton
-                    label="Crear"
-                    icon="add_circle_outline"
-                    size="sm"
-                    @click="createPlan"
-                />
-
-            </template>
+        <CrudHeader title="Planes de Contingencia" :uppercase-title="true" >
 
         </CrudHeader>
 
@@ -23,7 +12,7 @@
 
             <template #center>
 
-                <CrudFilters
+                <PlanFilters
                     v-model="selectedStatus"
                     :options="PLAN_STATUS_OPTIONS"
                 />
@@ -102,12 +91,11 @@ import { usePlansTable } from 'src/composables/usePlansTable'
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
 import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
-import CrudFilters from 'src/components/cruds/CrudFilters.vue'
+import PlanFilters from 'src/components/plans/PlanFilters.vue'
 import BaseSearch from 'src/components/forms/BaseSearch.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
-import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
 
 
@@ -133,13 +121,6 @@ const {
     defaultStatus: 'todos',
     defaultRowsPerPage: 8
 })
-
-function createPlan() {
-
-    router.push({
-        name: 'planes.create'
-    })
-}
 
 function viewPlan(row) {
 

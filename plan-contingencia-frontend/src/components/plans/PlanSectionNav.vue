@@ -2,21 +2,11 @@
 
     <div class="plans-section-nav">
 
-        <button
-            v-for="section in sections"
-            :key="section.name"
-            type="button"
-            class="plans-section-nav__item"
-            :class="{
-                'plans-section-nav__item--active': isActive(section.route)
-            }"
-            @click="navigateTo(section.route)"
-        >
+        <button v-for="section in sections" :key="section.name" type="button" class="plans-section-nav__item" :class="{
+            'plans-section-nav__item--active': isActive(section.route)
+        }" @click="navigateTo(section.route)">
 
-            <q-icon
-                :name="section.icon"
-                class="plans-section-nav__icon"
-            />
+            <q-icon :name="section.icon" class="plans-section-nav__icon" />
 
             <span class="plans-section-nav__label">
                 {{ section.label }}
@@ -71,6 +61,8 @@ function navigateTo(sectionRoute) {
 </script>
 
 <style scoped lang="scss">
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
 
 .plans-section-nav {
     display: grid;
@@ -81,7 +73,6 @@ function navigateTo(sectionRoute) {
 
 .plans-section-nav__item {
     position: relative;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -98,7 +89,8 @@ function navigateTo(sectionRoute) {
 }
 
 .plans-section-nav__item:hover {
-    background-color: rgba(46, 125, 50, 0.06);
+    background-color: #2E7D32;
+    color: #FFFFFF;
 }
 
 .plans-section-nav__item--active {
@@ -112,10 +104,34 @@ function navigateTo(sectionRoute) {
 }
 
 .plans-section-nav__label {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: $font-size-md;
+    font-weight: 500;
     text-transform: uppercase;
     line-height: 1.2;
+    letter-spacing: 1px;
 }
 
+@media (max-width: 600px) {
+
+    .plans-section-nav {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+
+    .plans-section-nav__item {
+        width: 100%;
+        min-height: 58px;
+        padding: 10px 16px;
+    }
+
+    .plans-section-nav__icon {
+        font-size: 18px;
+        margin-bottom: 3px;
+    }
+
+    .plans-section-nav__label {
+        font-size: $font-size-md;
+    }
+
+}
 </style>

@@ -7,42 +7,42 @@ export const PLANES_COLUMNS = [
         align: 'center',
         sortable: false
     },
-
     {
         name: 'programa',
         label: 'Programa de Formación',
         field: 'programaFormacionNombre',
         align: 'left',
         sortable: true,
-        maxWidth: '250px',
         ellipsis: true
     },
-
     {
         name: 'actividad',
         label: 'Actividad',
         field: 'descripcionActividad',
         align: 'left',
         sortable: true,
-        maxWidth: '250px',
         ellipsis: true
     },
-
     {
         name: 'fecha',
-        label: 'Fecha de Creación',
+        label: 'Fecha de Salida',
+        field: 'fecha',
+        align: 'center',
+        sortable: false
+    },
+    {
+        name: 'hora',
+        label: 'Hora de Creación',
         field: 'createdAt',
         align: 'left',
-        sortable: true
+        sortable: false
     },
-
     {
         name: 'estado',
         label: 'Estado',
         field: 'estado',
         align: 'center'
     },
-
     {
         name: 'opciones',
         label: 'Opciones',

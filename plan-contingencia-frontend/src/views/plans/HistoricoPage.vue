@@ -1,70 +1,19 @@
 <template>
-  <q-page class="flex flex-center">
-    Lista de Planes de Contingencia
-  </q-page>
+
+    <BasePage>
+
+        <CrudHeader title="Planes de Contingencia"  :uppercase-title="true"/>
+
+        <PlanSectionNav />
+
+    </BasePage>
+
 </template>
 
 <script setup>
 
-// function getPlanPermissions(status) {
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
 
-//     switch (status) {
-
-//         case 'Borrador':
-
-//             return {
-
-//                 canEdit: true,
-//                 canDelete: true
-
-//             }
-
-//         case 'En Revisión':
-
-//             return {
-
-//                 canEdit: true,
-//                 canDelete: true
-
-//             }
-
-//         case 'Aprobado':
-
-//             return {
-
-//                 canEdit: true,
-//                 canDelete: false
-
-//             }
-
-//         case 'Ejecutado':
-
-//             return {
-
-//                 canEdit: false,
-//                 canDelete: false
-
-//             }
-
-//         case 'Cancelado':
-
-//             return {
-
-//                 canEdit: false,
-//                 canDelete: false
-
-//             }
-
-//         default:
-
-//             return {
-
-//                 canEdit: false,
-//                 canDelete: false
-
-//             }
-
-//     }
-
-// }
 </script>
