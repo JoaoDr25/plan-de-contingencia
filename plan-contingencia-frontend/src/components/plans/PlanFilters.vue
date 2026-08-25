@@ -2,17 +2,29 @@
 
     <div class="plan-filters">
 
-        <div class="plan-filters__status">
+        <q-input
+            v-model="searchText"
+            class="plan-filters__search"
+            outlined
+            dense
+            placeholder="Buscar por código, programa o actividad..."
+            clearable
+        >
+            <template #prepend>
+                <q-icon name="search" />
+            </template>
+        </q-input>
 
-            <q-option-group
-                v-model="selectedFilter"
-                :options="options"
-                type="radio"
-                color="primary"
-                class="plan-filters__options"
-            />
-
-        </div>
+        <q-select
+            v-model="selectedStatus"
+            class="plan-filters__status"
+            outlined
+            dense
+            emit-value
+            map-options
+            :options="options"
+            label="Estado"
+        />
 
     </div>
 
@@ -23,6 +35,7 @@
 import { computed } from 'vue'
 
 const props = defineProps({
+
     options: {
         type: Array,
         required: true
@@ -30,17 +43,29 @@ const props = defineProps({
     modelValue: {
         type: String,
         required: true
+    },
+    searchValue: {
+        type: String,
+        default: ''
     }
 })
 
 const emit = defineEmits([
-    'update:modelValue'
+    'update:modelValue',
+    'update:searchValue'
 ])
 
-const selectedFilter = computed({
+const selectedStatus = computed({
     get: () => props.modelValue,
     set: (value) => {
         emit('update:modelValue', value)
+    }
+})
+
+const searchText = computed({
+    get: () => props.searchValue,
+    set: (value) => {
+        emit('update:searchValue', value)
     }
 })
 
@@ -54,54 +79,48 @@ const selectedFilter = computed({
 .plan-filters {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
     width: 100%;
     font-family: $font-family-base;
 }
 
+.plan-filters__search {
+    width: 300px;
+}
+
+.plan-filters__search :deep(.q-field__control) {
+    height: 38px;
+    border-radius: 6px;
+}
 
 .plan-filters__status {
-    display: flex;
-    align-items: center;
-    width: 100%;
+    width: 120px;
 }
 
-
-.plan-filters__options {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.15rem 0.45rem;
+.plan-filters :deep(.q-field__label) {
+    font-size: 0.75rem;
 }
 
-
-.plan-filters :deep(.q-radio__inner) {
-    font-size: 1.35rem;
-    color: $color-primary;
-}
-
-
-.plan-filters :deep(.q-radio__label) {
-    padding-left: 0;
-    font-size: 0.8rem;
+.plan-filters :deep(.q-field__native) {
     font-family: $font-family-base;
-    color: $color-text-secondary;
+    font-size: 0.8rem;
 }
 
-
-@media (max-width: 900px) {
-    .plan-filters__options {
-        justify-content: flex-start;
-    }
+.plan-filters :deep(.q-field__prepend) {
+    padding-right: 4px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+
     .plan-filters {
-        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    .plan-filters__options {
-        justify-content: center;
-        gap: 0.35rem 0.7rem;
+    .plan-filters__search,
+    .plan-filters__status {
+        width: 100%;
     }
 }
 

@@ -1,3 +1,5 @@
+import { formatTime } from "src/utils/date.utils"
+
 export const PLANES_COLUMNS = [
 
     {
@@ -34,8 +36,9 @@ export const PLANES_COLUMNS = [
         name: 'hora',
         label: 'Hora de Creación',
         field: 'createdAt',
-        align: 'left',
-        sortable: false
+        align: 'center',
+        sortable: false,
+        format: (value) => formatTime(value)
     },
     {
         name: 'estado',

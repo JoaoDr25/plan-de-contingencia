@@ -2,7 +2,7 @@
 
     <BasePage>
 
-        <CrudHeader title="Planes de Contingencia" :uppercase-title="true" >
+        <CrudHeader title="Planes de Contingencia" :uppercase-title="true">
 
         </CrudHeader>
 
@@ -12,37 +12,16 @@
 
             <template #center>
 
-                <PlanFilters
-                    v-model="selectedStatus"
-                    :options="PLAN_STATUS_OPTIONS"
-                />
-
-            </template>
-
-            <template #left>
-
-                <BaseSearch
-                    v-model="searchText"
-                    placeholder="Buscar por número, programa, actividad o instructor..."
-                />
+                <PlanFilters v-model="selectedStatus" v-model:search-value="searchText"
+                    :options="PLAN_STATUS_OPTIONS" />
 
             </template>
 
         </CrudToolbar>
 
-        <BaseTable
-            :rows="paginatedRows"
-            :columns="PLANES_COLUMNS"
-            :loading="loading"
-            :current-page="currentPage"
-            :total-pages="totalPages"
-            :rows-per-page="rowsPerPage"
-            :start="startRow"
-            :end="endRow"
-            :total="filteredRows.length"
-            @change-page="currentPage = $event"
-            @change-rows-per-page="setRowsPerPage"
-        >
+        <BaseTable :rows="paginatedRows" :columns="PLANES_COLUMNS" :loading="loading" :current-page="currentPage"
+            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
             <template #body-cell-estado="props">
 
@@ -58,12 +37,8 @@
 
                 <q-td :props="props">
 
-                    <CrudActions
-                        :actions="DEFAULT_CRUD_ACTIONS"
-                        @view="viewPlan(props.row)"
-                        @edit="editPlan(props.row)"
-                        @delete="deletePlan(props.row)"
-                    />
+                    <PlanActions :actions="getPlanActions(props.row, currentRole)" @view="viewPlan(props.row)"
+                        @edit="editPlan(props.row)" @delete="deletePlan(props.row)" />
 
                 </q-td>
 
@@ -75,33 +50,33 @@
 
 </template>
 
-
 <script setup>
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
 import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
 import { PLANES_COLUMNS } from 'src/constants/tables/planes.columns'
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
+import { PLAN_ROLES } from 'src/constants/actions/plan.constants'
 
 import { usePlansTable } from 'src/composables/usePlansTable'
+import { getPlanActions } from 'src/utils/actions.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
 import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
 import PlanFilters from 'src/components/plans/PlanFilters.vue'
-import BaseSearch from 'src/components/forms/BaseSearch.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
-import CrudActions from 'src/components/actions/CrudActions.vue'
+import PlanActions from 'src/components/actions/PlanActions.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
-
 
 const router = useRouter()
 
 const sourceRows = ref(PLANES_MOCK)
+
+const currentRole = PLAN_ROLES.USUARIO
 
 const loading = ref(false)
 
