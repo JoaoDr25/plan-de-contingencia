@@ -1,51 +1,42 @@
-export const CRUD_ACTIONS = {
+export const PLAN_DETAIL_ACTIONS_CONFIG = {
 
-    view: {
-        icon: 'visibility',
-        variant: 'success',
-        tooltip: 'Ver'
-    },
-    edit: {
+    editar: {
         icon: 'edit_square',
         variant: 'success',
         tooltip: 'Editar'
     },
-    delete: {
-        icon: 'clear',
-        variant: 'danger',
-        tooltip: 'Eliminar'
-    }
-}
 
-
-export const PLAN_DETAILS_ACTIONS = {
-
-    approve: {
+    aprobar: {
         icon: 'check_circle',
         variant: 'success',
         tooltip: 'Aprobar'
     },
-    reject: {
+
+    no_aprobar: {
         icon: 'cancel',
         variant: 'danger',
         tooltip: 'No aprobar'
     },
-    execute: {
+
+    ejecutar: {
         icon: 'play_arrow',
         variant: 'success',
         tooltip: 'Ejecutar'
     },
-    cancel: {
+
+    cancelar: {
         icon: 'cancel',
         variant: 'danger',
         tooltip: 'Cancelar'
     },
-    returnToEdit: {
-        icon: 'edit_square',
-        variant: 'success',
+
+    mandar_edicion: {
+        icon: 'edit_note',
+        variant: 'warning',
         tooltip: 'Mandar a edición'
     },
-    print: {
+    
+    imprimir: {
         icon: 'print',
         variant: 'success',
         tooltip: 'Imprimir'

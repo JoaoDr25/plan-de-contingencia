@@ -71,7 +71,7 @@
 
 import { ref, computed } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { CONTACTOS_FILTERS } from 'src/constants/filters/contactos.constants'
 import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns'
 import { CONTACTOS_MOCK } from 'src/mocks/contactos.mock'

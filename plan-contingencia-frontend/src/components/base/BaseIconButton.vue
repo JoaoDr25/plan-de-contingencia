@@ -12,7 +12,7 @@
 import { computed } from 'vue';
 
 import { ICON_BUTTON_VARIANTS } from 'src/constants/actions/icon_buttons.constants';
-import { CRUD_ACTIONS } from 'src/constants/actions/actions.constants';
+import { CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants';
 
 const {
     action,

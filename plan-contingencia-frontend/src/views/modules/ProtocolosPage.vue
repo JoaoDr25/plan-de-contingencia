@@ -71,7 +71,7 @@
 
 import { ref, computed } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { PROTOCOLOS_FILTERS } from 'src/constants/filters/protocolos.constants'
 import { PROTOCOLOS_COLUMNS } from 'src/constants/tables/protocolos.columns'
 import { PROTOCOLOS_MOCK } from 'src/mocks/protocolos.mock'

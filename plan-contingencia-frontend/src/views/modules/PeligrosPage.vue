@@ -61,7 +61,7 @@
 
 import { ref, computed } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { PELIGROS_FILTERS } from 'src/constants/filters/peligros.constants'
 import { PELIGROS_COLUMNS } from 'src/constants/tables/peligros.columns'
 import { PELIGROS_MOCK } from 'src/mocks/peligros.mock'

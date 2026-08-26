@@ -8,6 +8,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
+        ficha: '3174863',
 
         actividadId: '66c300000000000000000001',
         descripcionActividad: 'Visita técnica a unidad productiva agropecuaria.',
@@ -27,7 +28,62 @@ export const PLANES_MOCK = [
 
         riesgosId: [
             '66e500000000000000000001',
-            '66e500000000000000000002'
+            '66e500000000000000000002',
+            '66e500000000000000000003',
+            '66e500000000000000000004',
+            '66e500000000000000000005'
+        ],
+        riesgos: [
+            {
+                _id: '66e500000000000000000001',
+                peligroId: '66d500000000000000000001',
+                peligroNombre: 'Caídas al mismo nivel',
+                riesgo: 'Resbalón en superficies húmedas',
+                categoria: 'Físico',
+                nivel: 'ALTO',
+                consecuencia: 'Contusiones, esguinces o fracturas.',
+                prevencion: 'Mantener superficies secas y utilizar calzado adecuado.'
+            },
+            {
+                _id: '66e500000000000000000002',
+                peligroId: '66d500000000000000000001',
+                peligroNombre: 'Caídas al mismo nivel',
+                riesgo: 'Tropiezo por obstáculos',
+                categoria: 'Físico',
+                nivel: 'MEDIO',
+                consecuencia: 'Caídas y lesiones musculares.',
+                prevencion: 'Mantener rutas despejadas y señalizadas.'
+            },
+            {
+                _id: '66e500000000000000000003',
+                peligroId: '66d500000000000000000002',
+                peligroNombre: 'Exposición a ruido',
+                riesgo: 'Fatiga auditiva',
+                categoria: 'Físico',
+                nivel: 'MEDIO',
+                consecuencia: 'Disminución temporal de la capacidad auditiva.',
+                prevencion: 'Uso de protección auditiva.'
+            },
+            {
+                _id: '66e500000000000000000004',
+                peligroId: '66d500000000000000000003',
+                peligroNombre: 'Manipulación de herramientas',
+                riesgo: 'Cortes por herramientas manuales',
+                categoria: 'Mecánico',
+                nivel: 'MEDIO',
+                consecuencia: 'Heridas y laceraciones.',
+                prevencion: 'Capacitación y uso correcto de herramientas.'
+            },
+            {
+                _id: '66e500000000000000000005',
+                peligroId: '66d500000000000000000004',
+                peligroNombre: 'Contacto eléctrico',
+                riesgo: 'Descarga eléctrica',
+                categoria: 'Físico',
+                nivel: 'ALTO',
+                consecuencia: 'Quemaduras, lesiones graves o muerte.',
+                prevencion: 'Verificar aislamiento y aplicar procedimientos seguros.'
+            }
         ],
 
         aprendicesId: [
@@ -38,13 +94,16 @@ export const PLANES_MOCK = [
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000001'
+                '670700000000000000000001',
+                '670700000000000000000002',
+                '670700000000000000000003'
             ],
+
             otro: {
-                nombreEntidad: '',
-                telefono: '',
+                nombreEntidad: 'Bomberos Voluntarios',
+                telefono: '607 765 4321',
                 descripcion: '',
-                ciudad: ''
+                ciudad: 'Socorro'
             }
         },
 
@@ -57,31 +116,43 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Fortalecer los conocimientos adquiridos sobre producción agropecuaria.',
-            objetivoSoporteLink: '',
             competencia: 'Implementar procesos productivos agropecuarios.',
             resultadoAprendizaje: 'Reconocer las condiciones necesarias para el desarrollo de procesos productivos.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
 
         planTrabajo: [
+
             {
-                numero: 1,
                 horaInicio: '07:00',
-                horaFin: '08:00',
-                duracion: '1 hora',
-                actividad: 'Desplazamiento',
-                descripcion: 'Traslado desde el centro de formación hasta el lugar de destino.',
-                lugar: 'Centro Agroturístico - SENA'
+                actividad: 'Visita técnica a la unidad productiva',
+                duracion: '02:00 h',
+                lugar: 'Finca Experimental El Porvenir'
             },
+
             {
-                numero: 2,
-                horaInicio: '08:00',
-                horaFin: '12:00',
-                duracion: '4 horas',
-                actividad: 'Visita técnica',
-                descripcion: 'Reconocimiento de procesos productivos.',
+                horaInicio: '09:00',
+                actividad: 'Reconocimiento de las áreas productivas',
+                duracion: '01:30 h',
+                lugar: 'Área de producción'
+            },
+
+            {
+                horaInicio: '11:00',
+                actividad: 'Actividad práctica relacionada con el proceso formativo',
+                duracion: '02:00 h',
+                lugar: 'Unidad productiva'
+            },
+
+            {
+                horaInicio: '14:00',
+                actividad: 'Socialización de resultados de la visita',
+                duracion: '01:00 h',
                 lugar: 'Finca Experimental El Porvenir'
             }
         ],
@@ -93,19 +164,41 @@ export const PLANES_MOCK = [
 
         seguridadVial: {
             aplica: true,
+
             items: [
                 {
                     itemId: '1',
-                    nombre: 'Revisión de condiciones del vehículo',
+                    nombre: 'Licencia del conductor',
                     cumple: true,
-                    soporte: '',
+                    soporte: 'https://ejemplo.com/licencia-conductor.pdf',
                     observacion: ''
                 },
                 {
                     itemId: '2',
-                    nombre: 'Uso de cinturón de seguridad',
+                    nombre: 'SOAT',
                     cumple: true,
-                    soporte: '',
+                    soporte: 'https://ejemplo.com/soat.pdf',
+                    observacion: ''
+                },
+                {
+                    itemId: '3',
+                    nombre: 'Revisión Tecno-mecánica',
+                    cumple: true,
+                    soporte: 'https://ejemplo.com/revision-tecnomecanica.pdf',
+                    observacion: ''
+                },
+                {
+                    itemId: '4',
+                    nombre: 'Botiquín',
+                    cumple: true,
+                    soporte: 'https://ejemplo.com/botiquin.pdf',
+                    observacion: ''
+                },
+                {
+                    itemId: '5',
+                    nombre: 'Extintor',
+                    cumple: true,
+                    soporte: 'https://ejemplo.com/extintor.pdf',
                     observacion: ''
                 }
             ]
@@ -174,10 +267,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Reconocer ecosistemas y prácticas de conservación.',
-            objetivoSoporteLink: '',
             competencia: 'Gestionar procesos ambientales.',
             resultadoAprendizaje: 'Identificar factores ambientales presentes en el territorio.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -253,10 +348,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Aplicar conocimientos relacionados con el establecimiento de cultivos.',
-            objetivoSoporteLink: '',
             competencia: 'Manejar sistemas productivos agropecuarios.',
             resultadoAprendizaje: 'Aplicar procedimientos básicos de manejo de cultivos.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -333,10 +430,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Realizar seguimiento al proceso productivo.',
-            objetivoSoporteLink: '',
             competencia: 'Supervisar procesos productivos.',
             resultadoAprendizaje: 'Evaluar condiciones del proceso productivo.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -416,10 +515,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Analizar diferentes sistemas de producción.',
-            objetivoSoporteLink: '',
             competencia: 'Gestionar sistemas productivos.',
             resultadoAprendizaje: 'Comparar diferentes alternativas de producción.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -495,10 +596,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Identificar condiciones ambientales del territorio.',
-            objetivoSoporteLink: '',
             competencia: 'Evaluar condiciones ambientales.',
             resultadoAprendizaje: 'Reconocer factores ambientales relevantes.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -576,10 +679,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Aplicar conocimientos de producción agropecuaria.',
-            objetivoSoporteLink: '',
             competencia: 'Manejar sistemas productivos agropecuarios.',
             resultadoAprendizaje: 'Aplicar procedimientos de manejo productivo.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -655,10 +760,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Observar procesos de conservación ambiental.',
-            objetivoSoporteLink: '',
             competencia: 'Gestionar procesos ambientales.',
             resultadoAprendizaje: 'Identificar prácticas de conservación.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -734,10 +841,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Realizar seguimiento al proyecto formativo.',
-            objetivoSoporteLink: '',
             competencia: 'Gestionar proyectos productivos.',
             resultadoAprendizaje: 'Evaluar el desarrollo de actividades productivas.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -813,10 +922,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Aplicar conocimientos adquiridos durante la formación.',
-            objetivoSoporteLink: '',
             competencia: 'Implementar procesos productivos.',
             resultadoAprendizaje: 'Ejecutar actividades propias del proceso productivo.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -892,10 +1003,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Analizar condiciones ambientales.',
-            objetivoSoporteLink: '',
             competencia: 'Evaluar condiciones ambientales.',
             resultadoAprendizaje: 'Analizar factores ambientales.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -969,10 +1082,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Realizar actividad práctica.',
-            objetivoSoporteLink: '',
             competencia: 'Implementar procesos productivos.',
             resultadoAprendizaje: 'Aplicar procedimientos técnicos.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -1046,10 +1161,12 @@ export const PLANES_MOCK = [
 
         contextoAcademico: {
             objetivo: 'Desarrollar actividad práctica.',
-            objetivoSoporteLink: '',
             competencia: 'Manejar procesos productivos.',
             resultadoAprendizaje: 'Aplicar técnicas de producción.',
-            actasComportamientoLink: '',
+            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
             consentimientoMenores: false,
             consentimientoLink: ''
         },
@@ -1071,4 +1188,31 @@ export const PLANES_MOCK = [
         updatedAt: '2026-08-01T09:00:00.000Z'
     }
 
+]
+
+export const MOCK_APRENDICES = [
+    {
+        _id: '66f600000000000000000001',
+        documento: '1098765432',
+        nombreCompleto: 'Juan Sebastián Rodríguez',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000002',
+        documento: '1023456789',
+        nombreCompleto: 'María Fernanda López',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000003',
+        documento: '1001234567',
+        nombreCompleto: 'Carlos Andrés Martínez',
+        estado: 'inactivo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    }
 ]

@@ -72,7 +72,7 @@
 
 import { ref } from 'vue'
 
-import { USUARIOS_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { USUARIOS_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { USUARIOS_FILTERS } from 'src/constants/filters/usuarios.constants'
 import { USUARIOS_COLUMNS } from 'src/constants/tables/usuarios.columns'
 import { USUARIOS_MOCK } from 'src/mocks/usuarios.mock'

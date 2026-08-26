@@ -69,7 +69,7 @@
 
 import { ref, computed } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants'
 import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns'
 import { RIESGOS_MOCK } from 'src/mocks/riesgos.mock'

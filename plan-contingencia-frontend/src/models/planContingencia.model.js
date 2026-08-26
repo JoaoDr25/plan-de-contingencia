@@ -1,6 +1,11 @@
 export const PLAN_CONTINGENCIA_MODEL = {
+
     _id: null,
+
     numero: null,
+
+
+    // Información general
 
     clasificacionInformacion: null,
 
@@ -14,7 +19,6 @@ export const PLAN_CONTINGENCIA_MODEL = {
     usuarioNombre: null,
 
     fecha: null,
-    fechaCierre: null,
     horaSalida: null,
     horaRegreso: null,
 
@@ -25,42 +29,66 @@ export const PLAN_CONTINGENCIA_MODEL = {
     contactoLugar: null,
 
     riesgosId: [],
+
     aprendicesId: [],
 
     contactosEmergencia: {
+
         contactosBase: [],
+
         otro: {
+
             nombreEntidad: '',
             telefono: '',
             descripcion: '',
             ciudad: ''
+
         }
+
     },
 
     articulacionFormativa: {
+
         proyectoFormativo: false,
         visitaEmpresa: false,
         investigacion: false,
         otro: ''
+
     },
 
     contextoAcademico: {
+
         objetivo: '',
-        objetivoSoporteLink: '',
+
         competencia: '',
+
         resultadoAprendizaje: '',
+
+        planeacionPedagogicaLink: '',
+
+        guiaAprendizajeLink: '',
+
+        otrosSoportesLink: '',
+
         actasComportamientoLink: '',
+
         consentimientoMenores: false,
+
         consentimientoLink: ''
+
     },
 
     planTrabajo: [],
 
     epp: [],
 
+
     seguridadVial: {
+
         aplica: false,
+
         items: []
+
     },
 
     estado: 'borrador',
@@ -69,4 +97,5 @@ export const PLAN_CONTINGENCIA_MODEL = {
 
     createdAt: null,
     updatedAt: null
+
 }

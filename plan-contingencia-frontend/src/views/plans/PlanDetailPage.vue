@@ -14,9 +14,7 @@
 
 
       <PlanSection number="1" title="Información General" icon="description">
-
         <PlanGeneralInfo v-if="plan" :plan="plan" />
-
       </PlanSection>
 
 
@@ -24,6 +22,29 @@
         <PlanAcademicContext :plan="plan" />
       </PlanSection>
 
+      <PlanSection :number="3" title="Soportes Académicos" icon="attach_file">
+        <PlanAcademicSupports :plan="plan" />
+      </PlanSection>
+
+      <PlanSection :number="4" title="Plan de Trabajo" icon="schedule">
+        <PlanWorkPlan :plan="plan" />
+      </PlanSection>
+
+      <PlanSection :number="5" title="Participantes" icon="groups">
+        <PlanParticipants :plan="plan" />
+      </PlanSection>
+
+      <PlanSection :number="6" title="Riesgos Asociados" icon="warning">
+        <PlanRisks :plan="plan" />
+      </PlanSection>
+
+      <PlanSection :number="7" title="Seguridad y recursos" icon="security">
+        <PlanSecurityResources :plan="plan" />
+      </PlanSection>
+
+       <PlanSection :number="8" title="Flujo de Revisión y Aprobación" icon="sync">
+        <PlanReview :plan="plan" />
+      </PlanSection>
 
     </div>
 
@@ -43,8 +64,14 @@ import CrudHeader from 'src/components/cruds/CrudHeader.vue'
 import PlanSection from 'src/components/details/PlanSection.vue'
 import PlanGeneralInfo from 'src/components/details/PlanGeneralInfo.vue'
 import PlanAcademicContext from 'src/components/details/PlanAcademicContext.vue'
+import PlanAcademicSupports from 'src/components/details/PlanAcademicSupports.vue'
+import PlanWorkPlan from 'src/components/details/PlanWorkPlan.vue'
+import PlanParticipants from 'src/components/details/PlanParticipants.vue'
+import PlanRisks from 'src/components/details/PlanRisks.vue'
+import PlanSecurityResources from 'src/components/details/PlanSecurityResources.vue'
 
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
+import PlanReview from 'src/components/details/PlanReview.vue'
 
 const route = useRoute()
 

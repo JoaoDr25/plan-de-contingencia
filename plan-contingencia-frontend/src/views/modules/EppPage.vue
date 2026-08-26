@@ -79,7 +79,7 @@
 
 import { ref, computed } from 'vue'
 
-import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/crud_actions.constants'
+import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { EPP_FILTERS } from 'src/constants/filters/epp.constants'
 import { EPP_COLUMNS } from 'src/constants/tables/epp.columns'
 import { EPP_MOCK } from 'src/mocks/epp.mock'
