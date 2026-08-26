@@ -62,7 +62,7 @@ const routes = [
           icon: 'description'
         },
         component: () =>
-          import('src/views/plans/PlanDetailPage.vue')
+          import('src/views/plans/PlanDetailsPage.vue')
       },
       {
         path: 'programas',

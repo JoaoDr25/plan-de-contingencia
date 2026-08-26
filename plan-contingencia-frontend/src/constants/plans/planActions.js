@@ -1,4 +1,4 @@
-import { PLAN_ROLES } from './roles.constants'
+import { PLAN_ROLES } from "../system/roles.constants"
 
 export const PLAN_ACTIONS = {
     EDITAR: 'editar',
@@ -78,6 +78,6 @@ export const PLAN_DETAIL_ACTIONS = {
     }
 }
 
-export function getPlanDetailActions(role, state) {
+export function getPlanDetailsActions(role, state) {
     return PLAN_DETAIL_ACTIONS[role]?.[state] ?? []
 }

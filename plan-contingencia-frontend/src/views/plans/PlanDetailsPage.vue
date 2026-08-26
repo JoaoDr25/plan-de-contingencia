@@ -69,9 +69,9 @@ import PlanWorkPlan from 'src/components/details/PlanWorkPlan.vue'
 import PlanParticipants from 'src/components/details/PlanParticipants.vue'
 import PlanRisks from 'src/components/details/PlanRisks.vue'
 import PlanSecurityResources from 'src/components/details/PlanSecurityResources.vue'
+import PlanReview from 'src/components/details/PlanReview.vue'
 
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
-import PlanReview from 'src/components/details/PlanReview.vue'
 
 const route = useRoute()
 
@@ -85,8 +85,8 @@ const plan = computed(() => {
 
 </script>
 
-
 <style scoped lang="scss">
+
 .plan-detail {
   display: flex;
   flex-direction: column;

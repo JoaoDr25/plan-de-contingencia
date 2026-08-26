@@ -20,10 +20,7 @@ import { computed } from 'vue'
 
 import BaseIconButton from 'src/components/base/BaseIconButton.vue'
 
-import {
-    getPlanDetailActions
-} from 'src/constants/actions/plan.actions'
-
+import { getPlanDetailsActions } from 'src/constants/plans/plan.actions'
 
 const props = defineProps({
 
@@ -36,12 +33,9 @@ const props = defineProps({
         type: String,
         required: true
     }
-
 })
 
-
 const emit = defineEmits([
-
     'editar',
     'aprobar',
     'no_aprobar',
@@ -49,38 +43,29 @@ const emit = defineEmits([
     'cancelar',
     'mandar_edicion',
     'imprimir'
-
 ])
-
 
 const actions = computed(() => {
 
-    return getPlanDetailActions(
+    return getPlanDetailsActions(
         props.role,
         props.state
     )
-
 })
 
-
 function handleAction(action) {
-
     emit(action)
-
 }
 
 </script>
 
-
 <style scoped lang="scss">
 
 .plan-details-actions {
-
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 6px;
-
 }
 
 </style>
