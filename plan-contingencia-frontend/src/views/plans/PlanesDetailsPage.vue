@@ -4,12 +4,10 @@
 
     <CrudHeader title="Plan de Contingencia" :uppercase-title="true" />
 
-    <div class="plan-detail">
+     <div v-if="plan" class="plan-detail">
 
       <div class="plan-detail__header">
-
         <StatusChip :status="plan.estado" />
-
       </div>
 
 
@@ -48,6 +46,10 @@
 
     </div>
 
+    <div class="plan-footer">
+      <PlanDetailsActions :role="role" :state="state" @action="handlePlanAction"/>
+    </div>
+
   </BasePage>
 
 </template>
@@ -55,12 +57,12 @@
 
 <script setup>
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
-// import StatusChip from 'src/components/status/StatusChip.vue'
+import StatusChip from 'src/components/states/StatusChip.vue'
 import PlanSection from 'src/components/details/PlanSection.vue'
 import PlanGeneralInfo from 'src/components/details/PlanGeneralInfo.vue'
 import PlanAcademicContext from 'src/components/details/PlanAcademicContext.vue'
@@ -70,6 +72,7 @@ import PlanParticipants from 'src/components/details/PlanParticipants.vue'
 import PlanRisks from 'src/components/details/PlanRisks.vue'
 import PlanSecurityResources from 'src/components/details/PlanSecurityResources.vue'
 import PlanReview from 'src/components/details/PlanReview.vue'
+import PlanDetailsActions from 'src/components/actions/PlanDetailsActions.vue'
 
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
 
@@ -80,8 +83,17 @@ const plan = computed(() => {
   return PLANES_MOCK.find(
     item => item._id === route.params.id
   )
-
 })
+
+const role = ref('coordinacion')
+
+const state = computed(() => {
+    return plan.value?.estado
+})
+
+function handlePlanAction(action) {
+    console.log('Acción seleccionada:', action)
+}
 
 </script>
 

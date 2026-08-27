@@ -42,7 +42,7 @@ const routes = [
           icon: 'history'
         },
         component: () =>
-          import('src/views/plans/HistoricoPage.vue')
+          import('src/views/plans/PlanesHistoricPage.vue')
       },
       {
         path: 'planes/consulta',
@@ -52,7 +52,7 @@ const routes = [
           icon: 'search'
         },
         component: () =>
-          import('src/views/plans/ConsultaPage.vue')
+          import('src/views/plans/PlanesConsultationPage.vue')
       },
       {
         path: 'planes/:id',
@@ -62,7 +62,7 @@ const routes = [
           icon: 'description'
         },
         component: () =>
-          import('src/views/plans/PlanDetailsPage.vue')
+          import('src/views/plans/PlanesDetailsPage.vue')
       },
       {
         path: 'programas',

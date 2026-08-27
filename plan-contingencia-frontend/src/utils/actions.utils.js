@@ -1,4 +1,4 @@
-import { PLAN_ROLES } from 'src/constants/actions/plan.constants'
+import { ROLES } from "src/constants/system/roles.constants"
 
 export function getPlanActions(plan, role) {
 
@@ -11,7 +11,7 @@ export function getPlanActions(plan, role) {
     const status = String(plan.estado || '').toLowerCase()
     const currentRole = String(role || '').toLowerCase()
 
-    if (currentRole === PLAN_ROLES.USUARIO) {
+    if (currentRole === ROLES.USUARIO) {
 
         if (status === 'borrador') {
             actions.push(
@@ -25,19 +25,19 @@ export function getPlanActions(plan, role) {
         return actions
     }
 
-    if (currentRole === PLAN_ROLES.PEDAGOGIA) {
+    if (currentRole === ROLES.PEDAGOGIA) {
 
         actions.push('view')
         return actions
     }
 
-    if (currentRole === PLAN_ROLES.SST) {
+    if (currentRole === ROLES.SST) {
 
         actions.push('view')
         return actions
     }
 
-    if (currentRole === PLAN_ROLES.COORDINACION) {
+    if (currentRole === ROLES.COORDINACION) {
 
         actions.push('view')
         return actions

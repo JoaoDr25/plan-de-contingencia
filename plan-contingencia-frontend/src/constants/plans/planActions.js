@@ -1,4 +1,4 @@
-import { PLAN_ROLES } from "../system/roles.constants"
+import { ROLES } from "../system/roles.constants"
 
 export const PLAN_ACTIONS = {
     EDITAR: 'editar',
@@ -11,7 +11,7 @@ export const PLAN_ACTIONS = {
 }
 
 export const PLAN_DETAIL_ACTIONS = {
-    [PLAN_ROLES.USUARIO]: {
+    [ROLES.USUARIO]: {
         borrador: [
             PLAN_ACTIONS.EDITAR
         ],
@@ -26,7 +26,7 @@ export const PLAN_DETAIL_ACTIONS = {
         ]
     },
 
-    [PLAN_ROLES.PEDAGOGIA]: {
+    [ROLES.PEDAGOGIA]: {
         en_revision: [
             PLAN_ACTIONS.APROBAR,
             PLAN_ACTIONS.NO_APROBAR
@@ -42,7 +42,7 @@ export const PLAN_DETAIL_ACTIONS = {
         ]
     },
 
-    [PLAN_ROLES.SST]: {
+    [ROLES.SST]: {
         en_revision: [
             PLAN_ACTIONS.APROBAR,
             PLAN_ACTIONS.NO_APROBAR
@@ -58,7 +58,7 @@ export const PLAN_DETAIL_ACTIONS = {
         ]
     },
 
-    [PLAN_ROLES.COORDINACION]: {
+    [ROLES.COORDINACION]: {
         en_revision: [
             PLAN_ACTIONS.APROBAR,
             PLAN_ACTIONS.NO_APROBAR

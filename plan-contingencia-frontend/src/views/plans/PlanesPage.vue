@@ -58,7 +58,7 @@ import { useRouter } from 'vue-router'
 import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
 import { PLANES_COLUMNS } from 'src/constants/tables/planes.columns'
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
-import { PLAN_ROLES } from 'src/constants/actions/plan.constants'
+import { ROLES } from 'src/constants/system/roles.constants'
 
 import { usePlansTable } from 'src/composables/usePlansTable'
 import { getPlanActions } from 'src/utils/actions.utils'
@@ -76,7 +76,7 @@ const router = useRouter()
 
 const sourceRows = ref(PLANES_MOCK)
 
-const currentRole = PLAN_ROLES.USUARIO
+const currentRole = ROLES.USUARIO
 
 const loading = ref(false)
 

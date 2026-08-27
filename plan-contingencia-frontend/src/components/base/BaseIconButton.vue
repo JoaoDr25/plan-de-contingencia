@@ -60,6 +60,7 @@ const button = computed(() => {
 </script>
 
 <style scoped lang="scss">
+
 .base-icon-button {
     width: var(--button-size);
     height: var(--button-size);
