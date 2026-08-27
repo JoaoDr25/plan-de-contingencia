@@ -42,6 +42,13 @@ const props = defineProps({
     }
 })
 
+function getReviewStatus(role) {
+    return props.plan.aprobaciones?.[role] ?? 'pendiente'
+}
+
+function getReviewStatusLabel(role) {
+    return getReviewStatus(role).toUpperCase()
+}
 
 const formatDateTime = (value) => {
     if (!value) {
@@ -76,28 +83,31 @@ const reviewSteps = computed(() => [
     {
         id: 'pedagogia',
         title: 'REVISIÓN POR PEDAGOGÍA',
-        status: 'pendiente',
-        statusLabel: 'PENDIENTE',
+        status: getReviewStatus('pedagogia'),
+        statusLabel: getReviewStatusLabel('pedagogia'),
         date: '00/00/0000 00:00 a. m.'
     },
     {
         id: 'sst',
         title: 'REVISIÓN POR SST',
-        status: 'pendiente',
-        statusLabel: 'PENDIENTE',
+        status: getReviewStatus('sst'),
+        statusLabel: getReviewStatusLabel('sst'),
         date: '00/00/0000 00:00 a. m.'
     },
     {
         id: 'coordinacion',
         title: 'APROBACIÓN POR COORDINACIÓN',
-        status: 'pendiente',
-        statusLabel: 'PENDIENTE',
+        status: getReviewStatus('coordinacion'),
+        statusLabel: getReviewStatusLabel('coordinacion'),
         date: '00/00/0000 00:00 a. m.'
     }
 ])
 </script>
 
 <style scoped lang="scss">
+
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
 
 .plan-section {
     width: 100%;
@@ -117,16 +127,13 @@ const reviewSteps = computed(() => [
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #eaf5eb;
-    color: #2e7d32;
-    font-size: 22px;
+    background-color: $color-background-field;
+    color: $color-success;
 }
 
 .section-header h2 {
     margin: 0;
-    color: #18732b;
-    font-size: 20px;
-    font-weight: 700;
+    color: $color-success;
 }
 
 .review-flow {
@@ -153,37 +160,38 @@ const reviewSteps = computed(() => [
 
 .review-content h3 {
     margin: 0 0 10px;
-
-    color: #18732b;
-    font-size: 14px;
+    color: $color-success;
+    font-size: $font-size-sm;
     font-weight: 700;
 }
 
 .status-badge {
     display: inline-block;
-
     padding: 5px 12px;
     border-radius: 4px;
-
-    font-size: 12px;
-    font-weight: 700;
+    font-size: $font-size-xs;
+    font-weight: 500;
 }
 
 .status-proceso {
-    background-color: #4caf50;
-    color: #fff;
+    background-color: $color-success;
+    color: $color-surface;
 }
 
 .status-pendiente {
-    background-color: #f4b400;
-    color: #fff;
+    background-color: $color-warning;
+    color: $color-surface;
+}
+
+.status-aprobado {
+    background-color: $color-success;
+    color: $color-surface;
 }
 
 .review-content p {
     margin: 8px 0 0;
-
     color: #333;
-    font-size: 13px;
+    font-size: $font-size-xs;
 }
 
 @media (max-width: 900px) {

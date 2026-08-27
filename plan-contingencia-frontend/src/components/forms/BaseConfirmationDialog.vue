@@ -1,15 +1,16 @@
 <template>
 
-    <BaseDialog v-model="dialog" :title="title" width="500px">
+    <BaseDialog v-model="dialog" :title="title" width="500px" persistent>
 
         <template #actions>
 
             <div class="base-confirmation-dialog__actions">
 
-                <component :is="confirmButtonComponent" :label="confirmLabel" :icon="confirmIcon" size="sm"  :loading="loading"
-                    @click="handleConfirm" />
+                <component :is="confirmButtonComponent" :label="confirmLabel" :icon="confirmIcon" size="sm"
+                    :loading="loading" :disable="loading" @click="handleConfirm" />
 
-                <SecondaryActionButton :label="cancelLabel" icon="close" size="sm" :disable="loading" @click="handleCancel" />
+                <SecondaryActionButton :label="cancelLabel" icon="close" size="sm" :disable="loading"
+                    @click="handleCancel" />
 
             </div>
 
@@ -45,10 +46,6 @@ const {
         type: String,
         required: true
     },
-    message: {
-        type: String,
-        default: ''
-    },
     confirmLabel: {
         type: String,
         default: 'Confirmar'
@@ -60,7 +57,7 @@ const {
     variant: {
         type: String,
         default: 'primary',
-        validator: value => ['primary', 'danger'].includes(value)
+        validator: value => ['primary', 'secondary', 'danger'].includes(value)
     },
     loading: {
         type: Boolean,
@@ -84,15 +81,27 @@ const dialog = computed({
 })
 
 const confirmButtonComponent = computed(() => {
-    return variant === 'danger'
-        ? DangerActionButton
-        : PrimaryActionButton
+
+    switch (variant) {
+        case 'danger':
+            return DangerActionButton
+        case 'secondary':
+            return SecondaryActionButton
+        default:
+            return PrimaryActionButton
+    }
 })
 
 const confirmIcon = computed(() => {
-    return variant === 'danger'
-        ? 'delete'
-        : 'check'
+
+    switch (variant) {
+        case 'danger':
+            return 'close'
+        case 'secondary':
+            return 'check'
+        default:
+            return 'check'
+    }
 })
 
 function handleConfirm() {
@@ -107,16 +116,9 @@ function handleCancel() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
-
-.base-confirmation-dialog__message {
-    padding: 24px;
-    text-align: center;
-    font-family: $font-family-base;
-    font-size: $font-size-sm;
-    color: $color-text-primary;
-}
 
 .base-confirmation-dialog__actions {
     display: flex;
@@ -125,8 +127,7 @@ function handleCancel() {
     gap: 12px;
 }
 
-.base-confirmation-dialog__actions
-:deep(.primary-action-button--sm) {
+.base-confirmation-dialog__actions:deep(.primary-action-button--sm) {
     width: auto;
     min-width: 114px;
 }
@@ -138,6 +139,5 @@ function handleCancel() {
         width: 100%;
         gap: 8px;
     }
-
 }
 </style>

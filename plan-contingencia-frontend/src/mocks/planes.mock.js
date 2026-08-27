@@ -203,8 +203,13 @@ export const PLANES_MOCK = [
                 }
             ]
         },
+        aprobaciones: {
+            pedagogia: 'aprobado',
+            sst: 'aprobado',
+            coordinacion: 'pendiente'
+        },
 
-        estado: 'borrador',
+        estado: 'en revision',
 
         observaciones: '',
 

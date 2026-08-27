@@ -27,7 +27,7 @@ export const PLAN_DETAIL_ACTIONS = {
     },
 
     [ROLES.PEDAGOGIA]: {
-        en_revision: [
+        'en revision': [
             PLAN_ACTIONS.APROBAR,
             PLAN_ACTIONS.NO_APROBAR
         ],
@@ -43,7 +43,7 @@ export const PLAN_DETAIL_ACTIONS = {
     },
 
     [ROLES.SST]: {
-        en_revision: [
+        'en revision': [
             PLAN_ACTIONS.APROBAR,
             PLAN_ACTIONS.NO_APROBAR
         ],
@@ -59,7 +59,7 @@ export const PLAN_DETAIL_ACTIONS = {
     },
 
     [ROLES.COORDINACION]: {
-        en_revision: [
+        'en revision': [
             PLAN_ACTIONS.APROBAR,
             PLAN_ACTIONS.NO_APROBAR
         ],

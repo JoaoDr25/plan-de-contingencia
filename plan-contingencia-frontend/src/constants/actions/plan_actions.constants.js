@@ -3,19 +3,19 @@ import { PLAN_ACTIONS } from "../plans/planActions"
 export const PLAN_ACTIONS_BUTTONS = {
 
     [PLAN_ACTIONS.EDITAR]: {
-        label: 'Editar',
+        label: 'Editar Plan',
         icon: 'edit',
         type: 'primary'
     },
 
     [PLAN_ACTIONS.APROBAR]: {
-        label: 'Aprobar',
+        label: 'Aprobar Plan',
         icon: 'check',
         type: 'primary'
     },
 
     [PLAN_ACTIONS.NO_APROBAR]: {
-        label: 'No aprobar',
+        label: 'No Aprobar',
         icon: 'close',
         type: 'danger'
     },
@@ -33,7 +33,7 @@ export const PLAN_ACTIONS_BUTTONS = {
     },
 
     [PLAN_ACTIONS.MANDAR_EDICION]: {
-        label: 'Mandar a edición',
+        label: 'Enviar a Edición',
         icon: 'edit',
         type: 'secondary'
     },
