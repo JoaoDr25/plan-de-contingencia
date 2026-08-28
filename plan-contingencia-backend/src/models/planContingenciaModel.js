@@ -61,7 +61,7 @@ const planContingenciaSchema = new mongoose.Schema({
         match: [/^\d{2}:\d{2}$/, "Formato HH:mm inválido"],
         required: true
     },
-    horaRegreso: { 
+    horaRegreso: {
         type: String,
         match: [/^\d{2}:\d{2}$/]
     },
@@ -75,7 +75,7 @@ const planContingenciaSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    lugarDestino: { 
+    lugarDestino: {
         type: String,
         required: true,
         trim: true
@@ -141,31 +141,50 @@ const planContingenciaSchema = new mongoose.Schema({
         }
     },
     contextoAcademico: {
+
         objetivo: {
             type: String,
             trim: true
         },
-        objetivoSoporteLink: {
-            type: String,
-            trim: true,
-            validate: urlValidator
-        },
+
         competencia: {
             type: String,
             trim: true
         },
+
         resultadoAprendizaje: {
             type: String,
             trim: true
         },
+
+        planeacionPedagogicaLink: {
+            type: String,
+            trim: true,
+            validate: urlValidator
+        },
+
+        guiaAprendizajeLink: {
+            type: String,
+            trim: true,
+            validate: urlValidator
+        },
+
+        otrosSoportesLink: {
+            type: String,
+            trim: true,
+            validate: urlValidator
+        },
+
         actasComportamientoLink: {
             type: String,
             trim: true,
             validate: urlValidator
         },
+
         consentimientoMenores: {
-            type: Boolean,
+            type: Boolean
         },
+
         consentimientoLink: {
             type: String,
             trim: true,
