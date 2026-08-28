@@ -50,14 +50,9 @@
       <PlanDetailsActions :role="role" :plan="plan" @action="handlePlanAction" />
     </div>
 
-    <BaseConfirmationDialog
-    v-model="showConfirmation"
-    title="Aprobar plan"
-    confirm-label="Aprobar"
-    cancel-label="Cancelar"
-    variant="primary"
-    @confirm="confirmPlanAction"
-/>
+    <BaseConfirmationDialog v-model="showConfirmation" :title="confirmationConfig.title"
+      :confirm-label="confirmationConfig.confirmLabel" :cancel-label="confirmationConfig.cancelLabel"
+      :variant="confirmationConfig.variant" @confirm="confirmPlanAction" />
 
   </BasePage>
 
@@ -66,7 +61,7 @@
 
 <script setup>
 
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -87,14 +82,19 @@ import PlanDetailsActions from 'src/components/actions/PlanDetailsActions.vue'
 import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
+import { PLAN_ACTIONS } from 'src/constants/plans/planActions'
+import { PLAN_ACTIONS_CONFIRMATION } from 'src/constants/actions/plan_confirmation.constants'
+import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notifications.constants'
+
+import { notifySuccess } from 'src/utils/notifications.utils'
 
 import {
-    approvePlan,
-    rejectPlan,
-    executePlan,
-    cancelPlan,
-    sendPlanToEdition
-} from 'src/utils/plan.workflow'
+  approvePlan,
+  rejectPlan,
+  executePlan,
+  cancelPlan,
+  sendPlanToEdition
+} from 'src/utils/workflow.utils'
 
 const route = useRoute()
 
@@ -104,60 +104,107 @@ const showConfirmation = ref(false)
 const pendingAction = ref(null)
 
 const plan = ref(
-    PLANES_MOCK.find(
-        item => item._id === route.params.id
-    )
+  PLANES_MOCK.find(
+    item => item._id === route.params.id
+  )
 )
+
+const confirmationConfig = computed(() => {
+
+  return (
+    PLAN_ACTIONS_CONFIRMATION[pendingAction.value] ?? {
+      title: 'Confirmar acción',
+      confirmLabel: 'Confirmar',
+      cancelLabel: 'Cancelar',
+      variant: 'primary'
+    }
+  )
+
+})
+
 
 function handlePlanAction(action) {
 
-    if (action === 'aprobar') {
+  if (PLAN_ACTIONS_CONFIRMATION[action]) {
 
-        pendingAction.value = action
-        showConfirmation.value = true
+    pendingAction.value = action
+    showConfirmation.value = true
 
-        return
-    }
+    return
+  }
 
-    switch (action) {
+  executePlanAction(action)
 
-        case 'no_aprobar':
-            rejectPlan(plan.value, role.value)
-            break
-        case 'ejecutar':
-            executePlan(plan.value, role.value)
-            break
-        case 'cancelar':
-            cancelPlan(plan.value, role.value)
-            break
-        case 'mandar_edicion':
-            sendPlanToEdition(plan.value, role.value)
-            break
-        case 'editar':
-            console.log('Editar plan')
-            break
-        case 'imprimir':
-            console.log('Imprimir plan')
-            break
-    }
 }
+
 
 function confirmPlanAction() {
 
-    switch (pendingAction.value) {
+  executePlanAction(pendingAction.value)
 
-        case 'aprobar':
-            approvePlan(plan.value, role.value)
-            break
-    }
-    pendingAction.value = null
-    showConfirmation.value = false
+  pendingAction.value = null
+  showConfirmation.value = false
+}
+
+
+function executePlanAction(action) {
+
+  switch (action) {
+    case PLAN_ACTIONS.APROBAR:
+      plan.value = approvePlan(
+        plan.value,
+        role.value
+      )
+      break
+
+    case PLAN_ACTIONS.NO_APROBAR:
+      plan.value = rejectPlan(
+        plan.value,
+        role.value
+      )
+      break
+
+    case PLAN_ACTIONS.EJECUTAR:
+      plan.value = executePlan(
+        plan.value,
+        role.value
+      )
+      break
+
+    case PLAN_ACTIONS.CANCELAR:
+      plan.value = cancelPlan(
+        plan.value,
+        role.value
+      )
+      break
+
+    case PLAN_ACTIONS.MANDAR_EDICION:
+      plan.value = sendPlanToEdition(
+        plan.value,
+        role.value
+      )
+      break
+
+    case PLAN_ACTIONS.EDITAR:
+      console.log('Editar plan')
+      break
+
+    case PLAN_ACTIONS.IMPRIMIR:
+      console.log('Imprimir plan')
+      break
+  }
+
+  const notification = PLAN_ACTION_NOTIFICATIONS[action]
+
+  if (notification) {
+    notifySuccess(notification.successMessage)
+  }
+
 }
 
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -172,5 +219,4 @@ function confirmPlanAction() {
   justify-content: flex-start;
   margin-bottom: 4px;
 }
-
 </style>

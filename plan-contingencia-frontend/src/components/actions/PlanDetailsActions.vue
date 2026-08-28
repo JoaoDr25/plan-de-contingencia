@@ -38,7 +38,7 @@ import { PLAN_ACTIONS_BUTTONS } from 'src/constants/actions/plan_actions.constan
 import { PLAN_DETAIL_ACTIONS } from 'src/constants/plans/planActions';
 import { PLAN_ACTIONS } from 'src/constants/plans/planActions';
 
-import { canApprovePlan, canRejectPlan } from 'src/utils/plan.workflow.js';
+import { canApprovePlan, canRejectPlan } from 'src/utils/workflow.utils.js';
 
 const {
     role,
@@ -108,7 +108,6 @@ function handleBack() {
 </script>
 
 <style scoped lang="scss">
-
 .plan-details-actions {
     display: flex;
     justify-content: flex-end;

@@ -46,6 +46,9 @@
 
         </BaseTable>
 
+        <BaseConfirmationDialog v-model="showConfirmation" title="Eliminar plan" confirm-label="Eliminar"
+            cancel-label="Cancelar" variant="danger" @confirm="confirmDeletePlan" />
+
     </BasePage>
 
 </template>
@@ -62,6 +65,7 @@ import { ROLES } from 'src/constants/system/roles.constants'
 
 import { usePlansTable } from 'src/composables/usePlansTable'
 import { getPlanActions } from 'src/utils/actions.utils'
+import { notifySuccess } from 'src/utils/notifications.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -71,6 +75,8 @@ import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import PlanActions from 'src/components/actions/PlanActions.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
 
 const router = useRouter()
 
@@ -79,6 +85,9 @@ const sourceRows = ref(PLANES_MOCK)
 const currentRole = ROLES.USUARIO
 
 const loading = ref(false)
+
+const showConfirmation = ref(false)
+const selectedPlan = ref(null)
 
 const {
     selectedStatus,
@@ -110,7 +119,7 @@ function viewPlan(row) {
 function editPlan(row) {
 
     router.push({
-        name: 'planes.edit',
+        name: 'planes.create',
         params: {
             id: row._id
         }
@@ -118,7 +127,24 @@ function editPlan(row) {
 }
 
 function deletePlan(row) {
-    console.log('Eliminar Plan:', row)
+    selectedPlan.value = row
+    showConfirmation.value = true
+}
+
+function confirmDeletePlan() {
+
+    if (!selectedPlan.value) {
+        return
+    }
+
+    sourceRows.value = sourceRows.value.filter(
+        plan => plan._id !== selectedPlan.value._id
+    )
+
+    notifySuccess('Plan Eliminado Correctamente')
+
+    selectedPlan.value = null
+    showConfirmation.value = false
 }
 
 </script>
