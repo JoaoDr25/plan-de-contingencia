@@ -4,7 +4,7 @@
 
     <DashboardHeader />
     
-    <DashboardSummary />
+    <DashboardSummary :plans="PLANES_MOCK" />
 
     <DashboardModules />
 
@@ -14,6 +14,7 @@
 
 <script setup>
 
+import { PLANES_MOCK } from 'src/mocks/planes.mock';
 import BasePage from 'src/components/base/BasePage.vue';
 import DashboardHeader from 'src/components/dashboard/DashboardHeader.vue';
 import DashboardSummary from 'src/components/dashboard/DashboardSummary.vue';

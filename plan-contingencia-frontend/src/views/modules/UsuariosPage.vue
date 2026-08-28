@@ -58,7 +58,7 @@
 
         <UsuariosDialog v-model="dialog" :user="selectedUser" @save="handleUserSave" />
 
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
@@ -75,8 +75,10 @@ import { ref } from 'vue'
 import { USUARIOS_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { USUARIOS_FILTERS } from 'src/constants/filters/usuarios.constants'
 import { USUARIOS_COLUMNS } from 'src/constants/tables/usuarios.columns'
+
 import { USUARIOS_MOCK } from 'src/mocks/usuarios.mock'
 import { useCrudTable } from 'src/composables/useCrudTable'
+import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -87,10 +89,10 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import UsuariosDialog from '../dialogs/UsuariosDialog.vue'
 import UsuariosDetails from '../details/UsuariosDetails.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 const sourceRows = ref(USUARIOS_MOCK)
 
@@ -135,7 +137,6 @@ async function syncUsers() {
 }
 
 const confirmationTitle = 'Confirmar actualización'
-const confirmationMessage = '¿Está seguro de actualizar este usuario?'
 const confirmationLabel = 'Actualizar'
 const confirmationVariant = 'primary'
 
@@ -167,6 +168,7 @@ function updateUser(formData) {
 function confirmAction() {
 
     updateUser(pendingActionData.value)
+    notifySuccess('Usuario actualizado correctamente')
 
     pendingActionData.value = null
     confirmationDialog.value = false

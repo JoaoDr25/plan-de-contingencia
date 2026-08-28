@@ -56,7 +56,7 @@
 <script setup>
 
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
 import { PLANES_COLUMNS } from 'src/constants/tables/planes.columns'
@@ -79,6 +79,7 @@ import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.
 
 
 const router = useRouter()
+const route = useRoute()
 
 const sourceRows = ref(PLANES_MOCK)
 
@@ -102,7 +103,7 @@ const {
     setRowsPerPage
 } = usePlansTable({
     sourceRows,
-    defaultStatus: 'todos',
+    defaultStatus: route.query.estado || 'todos',
     defaultRowsPerPage: 8
 })
 

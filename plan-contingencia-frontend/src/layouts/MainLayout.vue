@@ -6,7 +6,7 @@
     <AppDrawer v-model="leftDrawerOpen" @closeDrawer="closeDrawer" />
 
     <div class="layout-back-button">
-      <BackButton route-name="dashboard" />
+      <BackButton route-name="dashboard" :use-history="usePreviousRoute" />
     </div>
 
     <q-page-container class="page-root">
@@ -25,7 +25,8 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 import AppHeader from 'src/components/layout/AppHeader.vue';
 import AppDrawer from 'src/components/layout/AppDrawer.vue';
@@ -33,7 +34,12 @@ import AppFooter from 'src/components/layout/AppFooter.vue';
 import FloatingScrollButtons from 'src/components/base/FloatingScrollButtons.vue';
 import BackButton from 'src/components/actions/BackButton.vue';
 
+const route = useRoute()
 const leftDrawerOpen = ref(false)
+
+const usePreviousRoute = computed(() => {
+  return route.meta.backToPrevious === true
+})
 
 function toggleDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value

@@ -5,7 +5,8 @@
 
             <q-btn flat dense round icon="menu" @click="handleToggleDrawer" />
 
-            <q-toolbar-title class="app-header__title">
+            <q-toolbar-title class="app-header__title" role="button" tabindex="0" @click="goToDashboard"
+                @keydown.enter="goToDashboard" @keydown.space.prevent="goToDashboard">
                 {{ APP_TITLE }}
             </q-toolbar-title>
 
@@ -19,12 +20,20 @@
 
 <script setup>
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const emit = defineEmits([
     'toggleDrawer'
 ])
 
 function handleToggleDrawer() {
     emit('toggleDrawer')
+}
+
+function goToDashboard() {
+    router.push({ name: 'dashboard' })
 }
 
 const APP_TITLE = "PLANES DE CONTINGENCIA"
@@ -44,6 +53,7 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 }
 
 .app-header__title {
+    cursor: pointer;
     font-family: $font-family-base;
     font-size: 0.98rem;
     font-weight: 500;

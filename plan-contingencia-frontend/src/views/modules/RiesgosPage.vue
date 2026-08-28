@@ -55,7 +55,7 @@
 
         <RiesgosDialog v-model="dialog" :mode="dialogMode" :risk="selectedRisk" @save="handleRiskSave" />
 
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
@@ -73,8 +73,10 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants'
 import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns'
 import { RIESGOS_MOCK } from 'src/mocks/riesgos.mock'
+
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -85,10 +87,10 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import LevelChip from 'src/components/states/LevelChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import RiesgosDialog from '../dialogs/RiesgosDialog.vue'
 import RiesgosDetails from '../details/RiesgosDetails.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 const sourceRows = ref(RIESGOS_MOCK)
 
@@ -128,16 +130,6 @@ const confirmationTitle = computed(() => {
         delete: 'Confirmar eliminación'
     }
     return titles[dialogMode.value]
-})
-
-const confirmationMessage = computed(() => {
-    const messages = {
-        create: '¿Está seguro de crear este riesgo?',
-        edit: '¿Está seguro de actualizar este riesgo?',
-        delete: '¿Está seguro de eliminar este riesgo?'
-    }
-
-    return messages[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
@@ -208,12 +200,15 @@ function deleteRisk(row) {
 function confirmAction() {
     if (dialogMode.value === 'create') {
         createRisk(pendingActionData.value)
+        notifySuccess('Riesgo creado correctamente')
     }
     if (dialogMode.value === 'edit') {
         updateRisk(pendingActionData.value)
+        notifySuccess('Riesgo actualizado correctamente')
     }
     if (dialogMode.value === 'delete') {
         deleteRisk(selectedRisk.value)
+        notifySuccess('Riesgo eliminado correctamente')
     }
     pendingActionData.value = null
     confirmationDialog.value = false

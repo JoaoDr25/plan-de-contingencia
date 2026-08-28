@@ -32,6 +32,7 @@
 import { reactive, computed, watch } from 'vue'
 
 import { PROTOCOL_FORM_FIELDS } from 'src/constants/forms/protocolos_form.constants'
+import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
@@ -103,7 +104,7 @@ function validateForm() {
             const result = rule(value)
 
             if (result !== true) {
-                return false
+                return result
             }
         }
     }
@@ -111,7 +112,10 @@ function validateForm() {
 }
 
 function handleSave() {
-    if (!validateForm()) {
+     const validationResult = validateForm()
+
+    if (validationResult !== true) {
+        notifyWarning(validationResult)
         return
     }
     console.log('Datos del formulario:', form)

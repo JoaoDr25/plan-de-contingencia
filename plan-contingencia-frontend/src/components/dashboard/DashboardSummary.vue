@@ -4,8 +4,8 @@
 
         <div class="dashboard-summary__grid">
 
-            <DashboardStatCard v-for="item in dashboardSummary" :key="item.id" :icon="item.icon" :value="item.value"
-                :title="item.title" :description="item.description" />
+            <DashboardStatCard v-for="item in summaryItems" :key="item.id" :icon="item.icon" :value="item.value"
+                :title="item.title" :description="item.description" @click="openSummary(item)" />
 
         </div>
 
@@ -15,8 +15,47 @@
 
 <script setup>
 
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { dashboardSummary } from 'src/constants/navigation/dashboard.constants.js';
 import DashboardStatCard from './DashboardStatCard.vue';
+
+const props = defineProps({
+    plans: {
+        type: Array,
+        default: () => []
+    }
+})
+
+const router = useRouter()
+
+function normalizeStatus(status) {
+    return String(status ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim()
+}
+
+const summaryItems = computed(() => {
+    const plans = props.plans
+
+    return dashboardSummary.map(item => ({
+        ...item,
+        value: item.status === 'todos'
+            ? plans.length
+            : plans.filter(plan => normalizeStatus(plan.estado) === normalizeStatus(item.status)).length
+    }))
+})
+
+function openSummary(item) {
+    router.push({
+        name: item.routeName,
+        query: {
+            estado: item.status
+        }
+    })
+}
 
 </script>
 

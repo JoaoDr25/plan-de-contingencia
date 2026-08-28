@@ -58,7 +58,7 @@
         <AprendicesDialog v-model="dialog" :mode="dialogMode" :apprentice="selectedApprentice"
             @save="handleApprenticeSave" />
 
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
@@ -75,8 +75,10 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { APRENDICES_FILTERS } from 'src/constants/filters/aprendices.constants'
 import { APRENDICES_COLUMNS } from 'src/constants/tables/aprendices.columns'
 import { APRENDICES_MOCK } from 'src/mocks/aprendices.mock'
+
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -87,9 +89,10 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import AprendicesDialog from '../dialogs/AprendicesDialog.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
 
 const sourceRows = ref(APRENDICES_MOCK)
 
@@ -130,15 +133,6 @@ const confirmationTitle = computed(() => {
         delete: 'Confirmar eliminación'
     }
     return titles[dialogMode.value]
-})
-
-const confirmationMessage = computed(() => {
-    const messages = {
-        create: '¿Está seguro de crear este aprendiz?',
-        edit: '¿Está seguro de actualizar este aprendiz?',
-        delete: '¿Está seguro de eliminar este aprendiz?'
-    }
-    return messages[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
@@ -209,12 +203,15 @@ function deleteApprentice(row) {
 function confirmAction() {
     if (dialogMode.value === 'create') {
         createApprentice(pendingActionData.value)
+        notifySuccess('Aprendiz creado correctamente')
     }
     if (dialogMode.value === 'edit') {
         updateApprentice(pendingActionData.value)
+        notifySuccess('Aprendiz actualizado correctamente')
     }
     if (dialogMode.value === 'delete') {
         deleteApprentice(selectedApprentice.value)
+        notifySuccess('Aprendiz eliminado correctamente')
     }
     pendingActionData.value = null
     confirmationDialog.value = false

@@ -74,6 +74,7 @@ import { PROGRAMAS_MOCK } from 'src/mocks/programas.mock';
 import { useCrudTable } from 'src/composables/useCrudTable';
 import { getCurrentDate } from 'src/utils/date.utils.js';
 import { notifySuccess } from 'src/utils/notifications.utils.js';
+import { notifyError } from 'src/utils/notifications.utils.js';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import CrudHeader from 'src/components/cruds/CrudHeader.vue';
@@ -191,6 +192,7 @@ function deleteProgram(row) {
     program => program.id === row.id
   )
   if (index === -1) {
+    notifyError('No fue posible eliminar el programa') //Futura implementación
     return
   }
   sourceRows.value.splice(index, 1)
@@ -234,5 +236,4 @@ function deleteItem(row) {
   selectedProgram.value = row
   confirmationDialog.value = true
 }
-
 </script>

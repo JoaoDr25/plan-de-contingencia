@@ -13,30 +13,34 @@ export const dashboardSummary = [
     {
         id: "planes-totales",
         title: 'Planes Totales',
-        value: 16,
         description: 'Todos los planes registrados',
-        icon: 'assignment'
+        icon: 'assignment',
+        routeName: 'planes.list',
+        status: 'todos'
     },
     {
         id: "en-revision",
         title: 'En Revisión',
-        value: 8,
         description: 'Planes en Revisión',
-        icon: 'edit'
+        icon: 'edit',
+        routeName: 'planes.list',
+        status: 'en revisión'
     },
     {
         id: "aprobados",
         title: 'Aprobados',
-        value: 16,
         description: 'Planes Aprobados',
-        icon: 'task_alt'
+        icon: 'task_alt',
+        routeName: 'planes.list',
+        status: 'aprobado'
     },
     {
         id: "ejecutados",
         title: 'Ejecutados',
-        value: 8,
         description: 'Planes Finalizados',
-        icon: 'event_available'
+        icon: 'event_available',
+        routeName: 'planes.list',
+        status: 'ejecutado'
     }
 ]
 

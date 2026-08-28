@@ -19,7 +19,8 @@ const routes = [
         name: 'planes.list',
         meta: {
           title: 'Planes de Contingencia',
-          icon: 'description'
+          icon: 'description',
+          backToPrevious: true
         },
         component: () =>
           import('src/views/plans/PlanesPage.vue')
@@ -29,7 +30,8 @@ const routes = [
         name: 'planes.create',
         meta: {
           title: 'Planes de Contingencia',
-          icon: 'description'
+          icon: 'description',
+          backToPrevious: true
         },
         component: () =>
           import('src/views/plans/PlanCreatePage.vue')
@@ -59,7 +61,8 @@ const routes = [
         name: 'planes.detail',
         meta: {
           title: 'Planes de Contingencia',
-          icon: 'description'
+          icon: 'description',
+          backToPrevious: true
         },
         component: () =>
           import('src/views/plans/PlanesDetailsPage.vue')
@@ -139,10 +142,11 @@ const routes = [
         name: 'aprendices.detail',
         meta: {
           title: 'Información del Aprendiz',
-          icon: 'badge'
+          icon: 'badge',
+          backToPrevious: true
         },
         component: () =>
-          import('src/views/details/AprendicesDetail.vue')
+          import('src/views/details/AprendicesDetails.vue')
       },
       {
         path: 'contactos',

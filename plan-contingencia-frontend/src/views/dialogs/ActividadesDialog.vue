@@ -4,22 +4,14 @@
 
         <BaseFormGrid>
 
-            <BaseFormField
-                v-for="field in ACTIVITY_FORM_FIELDS"
-                :key="field.model"
-                :field="field"
-                v-model="form[field.model]"
-            />
+            <BaseFormField v-for="field in ACTIVITY_FORM_FIELDS" :key="field.model" :field="field"
+                v-model="form[field.model]" />
 
         </BaseFormGrid>
 
         <template #actions>
 
-            <BaseDialogActions
-                :save-label="saveLabel"
-                @save="handleSave"
-                @cancel="closeDialog"
-            />
+            <BaseDialogActions :save-label="saveLabel" @save="handleSave" @cancel="closeDialog" />
 
         </template>
 
@@ -32,6 +24,7 @@
 import { reactive, computed, watch } from 'vue'
 
 import { ACTIVITY_FORM_FIELDS } from 'src/constants/forms/actividades_form.constants'
+import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
@@ -102,7 +95,7 @@ function validateForm() {
             const result = rule(value)
 
             if (result !== true) {
-                return false
+                return result
             }
         }
     }
@@ -111,7 +104,10 @@ function validateForm() {
 
 
 function handleSave() {
-    if (!validateForm()) {
+    const validationResult = validateForm()
+
+    if (validationResult !== true) {
+        notifyWarning(validationResult)
         return
     }
     console.log('Datos del formulario:', form)

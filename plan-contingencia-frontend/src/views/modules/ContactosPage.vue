@@ -57,7 +57,7 @@
 
         <ContactosDialog v-model="dialog" :mode="dialogMode" :contact="selectedContact" @save="handleContactSave" />
 
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
@@ -75,8 +75,10 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { CONTACTOS_FILTERS } from 'src/constants/filters/contactos.constants'
 import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns'
 import { CONTACTOS_MOCK } from 'src/mocks/contactos.mock'
+
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -87,10 +89,11 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import ContactosDialog from '../dialogs/ContactosDialog.vue'
 import ContactosDetails from '../details/ContactosDetails.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+
 
 const sourceRows = ref(CONTACTOS_MOCK)
 
@@ -130,15 +133,6 @@ const confirmationTitle = computed(() => {
         delete: 'Confirmar eliminación'
     }
     return titles[dialogMode.value]
-})
-
-const confirmationMessage = computed(() => {
-    const messages = {
-        create: '¿Está seguro de crear este contacto de emergencia?',
-        edit: '¿Está seguro de actualizar este contacto de emergencia?',
-        delete: '¿Está seguro de eliminar este contacto de emergencia?'
-    }
-    return messages[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
@@ -209,12 +203,15 @@ function deleteContact(row) {
 function confirmAction() {
     if (dialogMode.value === 'create') {
         createContact(pendingActionData.value)
+        notifySuccess('Contacto creado correctamente')
     }
     if (dialogMode.value === 'edit') {
         updateContact(pendingActionData.value)
+        notifySuccess('Contacto actualizado correctamente')
     }
     if (dialogMode.value === 'delete') {
         deleteContact(selectedContact.value)
+        notifySuccess('Contacto eliminado correctamente')
     }
     pendingActionData.value = null
     confirmationDialog.value = false

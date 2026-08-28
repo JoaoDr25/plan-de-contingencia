@@ -24,6 +24,7 @@
 import { reactive, computed, watch } from 'vue';
 
 import { PROGRAM_FORM_FIELDS } from 'src/constants/forms/programas_form.constants';
+import { notifyWarning } from 'src/utils/notifications.utils';
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue';
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue';
@@ -46,7 +47,7 @@ const {
         validator: value =>
             ['create', 'edit'].includes(value)
     },
-      program: {
+    program: {
         type: Object,
         default: null
     }
@@ -95,7 +96,7 @@ function validateForm() {
         for (const rule of rules) {
             const result = rule(value)
             if (result !== true) {
-                return false
+                return result
             }
         }
     }
@@ -103,11 +104,14 @@ function validateForm() {
 }
 
 function handleSave() {
-    if (!validateForm()) {
+    const validationResult = validateForm()
+
+    if (validationResult !== true) {
+        notifyWarning(validationResult)
         return
     }
     console.log('Datos del formulario:', form)
-    emit('save', {...form})
+    emit('save', { ...form })
 }
 
 function resetForm(data = {}) {

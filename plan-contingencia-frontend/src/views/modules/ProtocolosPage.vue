@@ -57,7 +57,7 @@
 
         <ProtocolosDialog v-model="dialog" :mode="dialogMode" :protocol="selectedProtocol" @save="handleProtocolSave" />
 
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
@@ -75,8 +75,10 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { PROTOCOLOS_FILTERS } from 'src/constants/filters/protocolos.constants'
 import { PROTOCOLOS_COLUMNS } from 'src/constants/tables/protocolos.columns'
 import { PROTOCOLOS_MOCK } from 'src/mocks/protocolos.mock'
+
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -87,10 +89,10 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import ProtocolosDialog from '../dialogs/ProtocolosDialog.vue'
 import ProtocolosDetails from '../details/ProtocolosDetails.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 const sourceRows = ref(PROTOCOLOS_MOCK)
 
@@ -130,15 +132,6 @@ const confirmationTitle = computed(() => {
         delete: 'Confirmar eliminación'
     }
     return titles[dialogMode.value]
-})
-
-const confirmationMessage = computed(() => {
-    const messages = {
-        create: '¿Está seguro de crear este protocolo?',
-        edit: '¿Está seguro de actualizar este protocolo?',
-        delete: '¿Está seguro de eliminar este protocolo?'
-    }
-    return messages[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
@@ -209,12 +202,15 @@ function deleteProtocol(row) {
 function confirmAction() {
     if (dialogMode.value === 'create') {
         createProtocol(pendingActionData.value)
+        notifySuccess('Protocolo creado correctamente')
     }
     if (dialogMode.value === 'edit') {
         updateProtocol(pendingActionData.value)
+        notifySuccess('Protocolo actualizado correctamente')
     }
     if (dialogMode.value === 'delete') {
         deleteProtocol(selectedProtocol.value)
+        notifySuccess('Protocolo eliminado correctamente')
     }
     pendingActionData.value = null
     confirmationDialog.value = false

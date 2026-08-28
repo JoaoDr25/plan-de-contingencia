@@ -10,14 +10,25 @@ import { useRouter } from "vue-router";
 
 const router = useRouter()
 
-const { routeName } = defineProps({
+const { routeName, useHistory } = defineProps({
     routeName: {
         type: String,
         required: true
+    },
+    useHistory: {
+        type: Boolean,
+        default: false
     }
 })
 
 function goBack() {
+    const historyPosition = window.history.state?.position ?? 0
+
+    if (useHistory && historyPosition > 0) {
+        router.back()
+        return
+    }
+
     router.push({
         name: routeName
     })
@@ -26,6 +37,7 @@ function goBack() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 
 .back-button {

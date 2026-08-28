@@ -65,7 +65,7 @@
 
         <EppDialog v-model="dialog" :mode="dialogMode" :epp="selectedEpp" @save="handleEppSave" />
 
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
@@ -83,8 +83,10 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { EPP_FILTERS } from 'src/constants/filters/epp.constants'
 import { EPP_COLUMNS } from 'src/constants/tables/epp.columns'
 import { EPP_MOCK } from 'src/mocks/epp.mock'
+
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -96,10 +98,10 @@ import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import LevelChip from 'src/components/states/LevelChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import EppDialog from '../dialogs/EppDialog.vue'
 import EppDetails from '../details/EppDetails.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 const sourceRows = ref(EPP_MOCK)
 
@@ -139,15 +141,6 @@ const confirmationTitle = computed(() => {
         delete: 'Confirmar eliminación'
     }
     return titles[dialogMode.value]
-})
-
-const confirmationMessage = computed(() => {
-    const messages = {
-        create: '¿Está seguro de crear este EPP?',
-        edit: '¿Está seguro de actualizar este EPP?',
-        delete: '¿Está seguro de eliminar este EPP?'
-    }
-    return messages[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
@@ -218,12 +211,15 @@ function deleteEpp(row) {
 function confirmAction() {
     if (dialogMode.value === 'create') {
         createEpp(pendingActionData.value)
+        notifySuccess('EPP creado correctamente')
     }
     if (dialogMode.value === 'edit') {
         updateEpp(pendingActionData.value)
+        notifySuccess('EPP actualizado correctamente')
     }
     if (dialogMode.value === 'delete') {
         deleteEpp(selectedEpp.value)
+        notifySuccess('EPP eliminado correctamente')
     }
     pendingActionData.value = null
     confirmationDialog.value = false

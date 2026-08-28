@@ -47,7 +47,7 @@
 
         <PeligrosDialog v-model="dialog" :mode="dialogMode" :danger="selectedDanger" @save="handleDangerSave" />
 
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :message="confirmationMessage"
+        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
@@ -65,8 +65,10 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { PELIGROS_FILTERS } from 'src/constants/filters/peligros.constants'
 import { PELIGROS_COLUMNS } from 'src/constants/tables/peligros.columns'
 import { PELIGROS_MOCK } from 'src/mocks/peligros.mock'
+
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -76,10 +78,10 @@ import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 import PeligrosDialog from '../dialogs/PeligrosDialog.vue'
 import PeligrosDetails from '../details/PeligrosDetails.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
 const sourceRows = ref(PELIGROS_MOCK)
 
@@ -120,15 +122,6 @@ const confirmationTitle = computed(() => {
         delete: 'Confirmar eliminación'
     }
     return titles[dialogMode.value]
-})
-
-const confirmationMessage = computed(() => {
-    const messages = {
-        create: '¿Está seguro de crear este peligro?',
-        edit: '¿Está seguro de actualizar este peligro?',
-        delete: '¿Está seguro de eliminar este peligro?'
-    }
-    return messages[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
@@ -199,12 +192,15 @@ function deleteDanger(row) {
 function confirmAction() {
     if (dialogMode.value === 'create') {
         createDanger(pendingActionData.value)
+        notifySuccess('Peligro creado correctamente')
     }
     if (dialogMode.value === 'edit') {
         updateDanger(pendingActionData.value)
+        notifySuccess('Peligro actualizado correctamente')
     }
     if (dialogMode.value === 'delete') {
         deleteDanger(selectedDanger.value)
+        notifySuccess('Peligro eliminado correctamente')
     }
     pendingActionData.value = null
     confirmationDialog.value = false

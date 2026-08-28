@@ -24,6 +24,7 @@
 import { reactive, computed, watch } from 'vue'
 
 import { APPRENTICE_INFO_FORM_FIELDS } from 'src/constants/forms/aprendices_info.constants'
+import { notifyWarning } from 'src/utils/notifications.utils'
 import { toTitleCase } from 'src/utils/text.utils'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
@@ -112,7 +113,7 @@ function validateForm() {
         for (const rule of rules) {
             const result = rule(value)
             if (result !== true) {
-                return false
+                return result
             }
         }
     }
@@ -120,11 +121,12 @@ function validateForm() {
 }
 
 function handleSave() {
+ const validationResult = validateForm()
 
-    if (!validateForm()) {
+    if (validationResult !== true) {
+        notifyWarning(validationResult)
         return
     }
-    
     const TITLE_CASE_FIELDS = ['eps', 'contacto', 'direccion', 'condicionesMedicas']
 
     for (const field of TITLE_CASE_FIELDS) {
