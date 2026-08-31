@@ -77,7 +77,6 @@ import PlanActions from 'src/components/actions/PlanActions.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
 import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
 
-
 const router = useRouter()
 const route = useRoute()
 
@@ -142,7 +141,7 @@ function confirmDeletePlan() {
         plan => plan._id !== selectedPlan.value._id
     )
 
-    notifySuccess('Plan Eliminado Correctamente')
+    notifySuccess('Plan eliminado correctamente')
 
     selectedPlan.value = null
     showConfirmation.value = false

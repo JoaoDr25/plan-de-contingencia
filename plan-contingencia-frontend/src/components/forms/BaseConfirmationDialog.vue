@@ -132,6 +132,13 @@ function handleCancel() {
     min-width: 114px;
 }
 
+.base-confirmation-dialog__actions:deep(.danger-action-button--sm),
+.base-confirmation-dialog__actions:deep(.secondary-action-button--sm) {
+    width: auto;
+    min-width: 130px;
+    height: 35px;
+}
+
 @media (max-width: 480px) {
 
     .base-confirmation-dialog__actions {

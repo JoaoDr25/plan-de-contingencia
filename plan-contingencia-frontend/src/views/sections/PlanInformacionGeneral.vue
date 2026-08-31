@@ -99,16 +99,6 @@
                 {{ formatHour(plan.horaSalida) }}
             </span>
         </div>
-        <!-- 
-        <div class="info-item">
-            <span class="info-item__label">
-                Código del Plan
-            </span>
-
-            <span class="info-item__value">
-                N.º {{ plan.numero ?? 'No disponible' }}
-            </span>
-        </div> -->
 
     </div>
 
@@ -151,31 +141,67 @@ function formatClassification(value) {
 
 <style scoped lang="scss">
 
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 .plan-general-info {
     display: grid;
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+        1.2fr 1fr 1fr;
     column-gap: 40px;
     row-gap: 22px;
+    padding-bottom: 8px;
+    width: 100%;
 }
 
 .info-item {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
+    min-width: 0;
+    line-height: 1.4;
 }
 
 .info-item__label {
-    font-size: 11px;
+    font-size: $font-size-xs;
     font-weight: 700;
     text-transform: uppercase;
     color: #287C2D;
+    line-height: 1.2;
 }
 
 .info-item__value {
-    font-size: 13px;
+    font-size: $font-size-md;
     line-height: 1.4;
     color: #222222;
     word-break: break-word;
+    overflow-wrap: break-word;
 }
+
+@media (max-width: 900px) {
+
+    .plan-general-info {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 30px;
+        row-gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .plan-general-info {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        row-gap: 18px;
+    }
+
+    .info-item__label {
+        font-size: $font-size-xs;
+    }
+
+    .info-item__value {
+        font-size: $font-size-xs;
+    }
+}
+
 </style>

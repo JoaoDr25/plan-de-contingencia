@@ -30,7 +30,7 @@
 
     </div>
 
-    <PlanRisksDialog
+    <PlanesRiesgosDialog
         v-model="showModal"
         :danger="selectedDanger"
     />
@@ -42,7 +42,7 @@
 import { computed, ref } from 'vue'
 
 import BaseIconButton from 'src/components/base/BaseIconButton.vue'
-import PlanRisksDialog from '../dialogs/PlanRisksDialog.vue'
+import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
 
 const props = defineProps({
 
@@ -109,6 +109,9 @@ function openRisks(danger) {
 
 <style scoped lang="scss">
 
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 .plan-risks {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -120,7 +123,8 @@ function openRisks(danger) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 16px;
+    min-width: 0;
     padding: 14px 16px;
     border: 1px solid #E0E0E0;
     border-radius: 6px;
@@ -132,6 +136,7 @@ function openRisks(danger) {
     flex-direction: column;
     gap: 5px;
     min-width: 0;
+    flex: 1;
 }
 
 .danger-item__label {
@@ -142,9 +147,56 @@ function openRisks(danger) {
 }
 
 .danger-item__value {
+    min-width: 0;
+
     font-size: 13px;
     line-height: 1.4;
     color: #222222;
+
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+@media (max-width: 1210px) {
+
+    .plan-risks {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 24px;
+        row-gap: 16px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .plan-risks {
+        grid-template-columns: 1fr;
+        row-gap: 12px;
+    }
+
+    .danger-item {
+        padding: 13px 14px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .plan-risks {
+        row-gap: 10px;
+    }
+
+    .danger-item {
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .danger-item__label {
+        font-size: 10px;
+    }
+
+    .danger-item__value {
+        font-size: $font-size-md;
+    }
 }
 
 </style>

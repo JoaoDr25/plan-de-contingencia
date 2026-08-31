@@ -47,12 +47,13 @@ defineProps({
 
 .plan-section {
     display: flex;
-    gap: 18px;
+    gap: 20px;
     padding: 20px;
     background: #FFFFFF;
     border: 1px solid #E0E0E0;
     border-radius: 6px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    width: 100%;
 }
 
 .plan-section__icon {
@@ -78,13 +79,10 @@ defineProps({
 
 .plan-section__title {
     margin: 0 0 18px;
-
     font-size: 17px;
     font-weight: 700;
     line-height: 1.2;
-
     text-transform: uppercase;
-
     color: #287C2D;
 }
 

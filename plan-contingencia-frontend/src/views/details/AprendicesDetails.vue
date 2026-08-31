@@ -236,6 +236,7 @@ function goBack() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -361,9 +362,7 @@ function goBack() {
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    width: 100%;
     box-sizing: border-box;
-    padding-bottom: 12px;
 }
 
 .update_actions {
@@ -544,7 +543,6 @@ function goBack() {
 
     .apprentice-detail__actions {
         width: 100%;
-        justify-content: center;
     }
 
     .apprentice-detail__actions :deep(.primary-action-button),

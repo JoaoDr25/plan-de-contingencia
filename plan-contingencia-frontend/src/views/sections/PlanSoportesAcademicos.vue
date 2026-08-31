@@ -8,13 +8,9 @@
                 Planeación Pedagógica
             </span>
 
-            <a
-                v-if="plan.contextoAcademico?.planeacionPedagogicaLink"
-                :href="plan.contextoAcademico.planeacionPedagogicaLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="support-item__link"
-            >
+            <a v-if="plan.contextoAcademico?.planeacionPedagogicaLink"
+                :href="plan.contextoAcademico.planeacionPedagogicaLink" target="_blank" rel="noopener noreferrer"
+                class="support-item__link">
                 <span class="support-item__icon">
                     <q-icon name="open_in_new" size="14px" />
                 </span>
@@ -24,10 +20,7 @@
                 </span>
             </a>
 
-            <span
-                v-else
-                class="support-item__empty"
-            >
+            <span v-else class="support-item__empty">
                 No registrado
             </span>
 
@@ -39,13 +32,8 @@
                 Guía de Aprendizaje
             </span>
 
-            <a
-                v-if="plan.contextoAcademico?.guiaAprendizajeLink"
-                :href="plan.contextoAcademico.guiaAprendizajeLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="support-item__link"
-            >
+            <a v-if="plan.contextoAcademico?.guiaAprendizajeLink" :href="plan.contextoAcademico.guiaAprendizajeLink"
+                target="_blank" rel="noopener noreferrer" class="support-item__link">
                 <span class="support-item__icon">
                     <q-icon name="open_in_new" size="14px" />
                 </span>
@@ -55,10 +43,7 @@
                 </span>
             </a>
 
-            <span
-                v-else
-                class="support-item__empty"
-            >
+            <span v-else class="support-item__empty">
                 No registrado
             </span>
 
@@ -70,13 +55,8 @@
                 Otros Soportes
             </span>
 
-            <a
-                v-if="plan.contextoAcademico?.otrosSoportesLink"
-                :href="plan.contextoAcademico.otrosSoportesLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="support-item__link"
-            >
+            <a v-if="plan.contextoAcademico?.otrosSoportesLink" :href="plan.contextoAcademico.otrosSoportesLink"
+                target="_blank" rel="noopener noreferrer" class="support-item__link">
                 <span class="support-item__icon">
                     <q-icon name="open_in_new" size="14px" />
                 </span>
@@ -86,10 +66,7 @@
                 </span>
             </a>
 
-            <span
-                v-else
-                class="support-item__empty"
-            >
+            <span v-else class="support-item__empty">
                 No registrado
             </span>
 
@@ -101,13 +78,9 @@
                 Acta de Comportamiento
             </span>
 
-            <a
-                v-if="plan.contextoAcademico?.actasComportamientoLink"
-                :href="plan.contextoAcademico.actasComportamientoLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="support-item__link"
-            >
+            <a v-if="plan.contextoAcademico?.actasComportamientoLink"
+                :href="plan.contextoAcademico.actasComportamientoLink" target="_blank" rel="noopener noreferrer"
+                class="support-item__link">
                 <span class="support-item__icon">
                     <q-icon name="open_in_new" size="14px" />
                 </span>
@@ -117,10 +90,7 @@
                 </span>
             </a>
 
-            <span
-                v-else
-                class="support-item__empty"
-            >
+            <span v-else class="support-item__empty">
                 No registrado
             </span>
 
@@ -172,45 +142,52 @@ function getSupportName(link) {
 </script>
 
 <style scoped lang="scss">
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
 
 .plan-academic-supports {
     display: grid;
     grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+        1.2fr 1fr 1fr;
     column-gap: 40px;
     row-gap: 22px;
+    padding-bottom: 8px;
+    width: 100%;
 }
 
 .support-item {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 7px;
+    min-width: 0;
+    line-height: 1.3;
 }
 
 .support-item__label {
-    font-size: 11px;
+    font-size: $font-size-xs;
     font-weight: 700;
     text-transform: uppercase;
     color: #287C2D;
+    line-height: 1.2;
 }
 
 .support-item__link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     align-self: flex-start;
     gap: 7px;
     max-width: 100%;
-    font-size: 13px;
+    min-width: 0;
     font-weight: 400;
     color: #333333;
     text-decoration: none;
+    font-size: $font-size-md;
+    line-height: 1.4;
 }
-
 
 .support-item__link:hover {
     color: #287C2D;
 }
-
 
 .support-item__icon {
     display: inline-flex;
@@ -226,14 +203,43 @@ function getSupportName(link) {
 }
 
 .support-item__name {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .support-item__empty {
-    font-size: 13px;
+    font-size: $font-size-md;
     color: #666666;
+    line-height: 1.4;
 }
 
+@media (max-width: 900px) {
+
+    .plan-academic-supports {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 30px;
+        row-gap: 22px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .plan-academic-supports {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        row-gap: 18px;
+    }
+
+    .support-item {
+        gap: 6px;
+    }
+
+    .support-item__link {
+        width: 100%;
+        max-width: 100%;
+        font-size: $font-size-xs;
+    }
+}
 </style>

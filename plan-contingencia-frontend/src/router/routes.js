@@ -23,7 +23,7 @@ const routes = [
           backToPrevious: true
         },
         component: () =>
-          import('src/views/plans/PlanesPage.vue')
+          import('src/views/plans/PlanesPagina.vue')
       },
       {
         path: 'planes/crear',
@@ -34,7 +34,7 @@ const routes = [
           backToPrevious: true
         },
         component: () =>
-          import('src/views/plans/PlanCreatePage.vue')
+          import('src/views/plans/PlanCrear.vue')
       },
       {
         path: 'planes/historico',
@@ -44,7 +44,7 @@ const routes = [
           icon: 'history'
         },
         component: () =>
-          import('src/views/plans/PlanesHistoricPage.vue')
+          import('src/views/plans/PlanesHistorico.vue')
       },
       {
         path: 'planes/consulta',
@@ -54,7 +54,7 @@ const routes = [
           icon: 'search'
         },
         component: () =>
-          import('src/views/plans/PlanesConsultationPage.vue')
+          import('src/views/plans/PlanesConsulta.vue')
       },
       {
         path: 'planes/:id',
@@ -65,7 +65,7 @@ const routes = [
           backToPrevious: true
         },
         component: () =>
-          import('src/views/plans/PlanesDetailsPage.vue')
+          import('src/views/plans/PlanesDetalles.vue')
       },
       {
         path: 'programas',

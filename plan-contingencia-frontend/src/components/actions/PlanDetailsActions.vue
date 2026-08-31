@@ -127,14 +127,14 @@ function handleBack() {
 @media (max-width: 500px) {
 
     .plan-details-actions {
-
-        width: 100%;
         flex-direction: column;
-        align-items: stretch;
+        align-items: center;
+        gap: 8px;
     }
 
-    .plan-details-actions>* {
-        width: 100%;
+    .plan-details-actions :deep(.q-btn) {
+        width: 100% !important;
+        max-width: none !important;
     }
 }
 </style>

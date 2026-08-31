@@ -8,6 +8,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Tecnólogo',
         ficha: '3174863',
 
         actividadId: '66c300000000000000000001',
@@ -225,6 +226,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000002',
         descripcionActividad: 'Salida académica para reconocimiento ambiental.',
@@ -309,6 +311,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000003',
         descripcionActividad: 'Práctica de reconocimiento de cultivos.',
@@ -388,6 +391,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000004',
         descripcionActividad: 'Visita técnica de seguimiento a proceso productivo.',
@@ -472,6 +476,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Técnico',
 
         actividadId: '66c300000000000000000005',
         descripcionActividad: 'Salida académica para reconocimiento de sistemas productivos.',
@@ -555,6 +560,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000006',
         descripcionActividad: 'Actividad de reconocimiento de condiciones ambientales.',
@@ -638,6 +644,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000007',
         descripcionActividad: 'Visita técnica a unidad productiva.',
@@ -719,6 +726,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000008',
         descripcionActividad: 'Visita de observación ambiental.',
@@ -800,6 +808,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Técnico',
 
         actividadId: '66c300000000000000000009',
         descripcionActividad: 'Visita de seguimiento a proyecto formativo.',
@@ -881,6 +890,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000010',
         descripcionActividad: 'Salida técnica de aplicación de conocimientos.',
@@ -962,6 +972,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000011',
         descripcionActividad: 'Salida académica de reconocimiento ambiental.',
@@ -1043,6 +1054,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Técnico',
 
         actividadId: '66c300000000000000000012',
         descripcionActividad: 'Salida técnica cancelada por condiciones externas.',
@@ -1122,6 +1134,7 @@ export const PLANES_MOCK = [
 
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
+        programaFormacionNivel: 'Tecnólogo',
 
         actividadId: '66c300000000000000000013',
         descripcionActividad: 'Salida académica cancelada por reprogramación institucional.',
@@ -1198,7 +1211,8 @@ export const PLANES_MOCK = [
 export const MOCK_APRENDICES = [
     {
         _id: '66f600000000000000000001',
-        documento: '1098765432',
+        tipo: 'Cédula de Ciudadanía',
+        numeroDocumento: '1098765432',
         nombreCompleto: 'Juan Sebastián Rodríguez',
         estado: 'activo',
         ficha: '3174863',
@@ -1206,7 +1220,8 @@ export const MOCK_APRENDICES = [
     },
     {
         _id: '66f600000000000000000002',
-        documento: '1023456789',
+        tipo: 'Tarjeta de Identidad',
+        numeroDocumento: '1023456789',
         nombreCompleto: 'María Fernanda López',
         estado: 'activo',
         ficha: '3174863',
@@ -1214,9 +1229,10 @@ export const MOCK_APRENDICES = [
     },
     {
         _id: '66f600000000000000000003',
-        documento: '1001234567',
+        tipo: 'Cédula de Ciudadanía',
+        numeroDocumento: '1001234567',
         nombreCompleto: 'Carlos Andrés Martínez',
-        estado: 'inactivo',
+        estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66b200000000000000000001'
     }

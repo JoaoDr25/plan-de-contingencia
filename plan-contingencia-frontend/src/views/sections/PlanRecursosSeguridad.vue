@@ -1,4 +1,5 @@
 <template>
+    
     <section class="plan-section">
 
         <div class="security-grid">
@@ -228,11 +229,12 @@ const contactoAdicional = computed(() => {
 
 .security-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0;
 }
 
 .security-column {
+    min-width: 0;
     padding: 0 28px;
     min-height: 220px;
 }
@@ -249,7 +251,6 @@ const contactoAdicional = computed(() => {
     border-left: 1px solid #cfcfcf;
 }
 
-
 .security-column h3,
 .security-observations h3 {
     margin: 0 0 20px;
@@ -262,6 +263,7 @@ const contactoAdicional = computed(() => {
 
 .security-subtitle {
     margin-bottom: 18px;
+
     color: #18732b;
     font-size: 14px;
     font-weight: 700;
@@ -274,10 +276,10 @@ const contactoAdicional = computed(() => {
 
 .security-list li {
     margin-bottom: 10px;
-
     color: #333;
     font-size: 14px;
     line-height: 1.4;
+    overflow-wrap: break-word;
 }
 
 .security-list-links {
@@ -289,12 +291,19 @@ const contactoAdicional = computed(() => {
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0;
+}
+
+.security-list-links li span {
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 .support-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     color: #2e7d32;
     text-decoration: none;
     font-size: 17px;
@@ -309,6 +318,7 @@ const contactoAdicional = computed(() => {
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 18px;
+    min-width: 0;
 }
 
 .contact-icon {
@@ -327,8 +337,14 @@ const contactoAdicional = computed(() => {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-width: 0;
     font-size: 13px;
     line-height: 1.35;
+}
+
+.contact-info strong,
+.contact-info span {
+    overflow-wrap: break-word;
 }
 
 .contact-info strong {
@@ -371,6 +387,115 @@ const contactoAdicional = computed(() => {
     color: #333;
     font-size: 14px;
     line-height: 1.5;
+    overflow-wrap: break-word;
 }
 
+@media (max-width: 1210px) {
+
+    .security-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px 0;
+    }
+
+    .security-column {
+        padding: 0 20px;
+        min-height: auto;
+    }
+
+    .security-column:first-child {
+        padding-left: 0;
+    }
+
+    .security-column:nth-child(2) {
+        padding-right: 0;
+    }
+
+    .security-column:nth-child(3) {
+        grid-column: 1 / -1;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 20px;
+        border-left: none;
+        border-top: 1px solid #cfcfcf;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .security-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .security-column {
+        width: 100%;
+        min-height: auto;
+
+        padding: 18px 0;
+        border-left: none !important;
+        border-top: 1px solid #cfcfcf;
+    }
+
+    .security-column:first-child {
+        padding-top: 0;
+        border-top: none;
+    }
+
+    .security-column:last-child {
+        padding-right: 0;
+    }
+
+    .security-column h3 {
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
+    .security-subtitle {
+        margin-bottom: 14px;
+        font-size: 13px;
+    }
+
+    .security-list li {
+        margin-bottom: 9px;
+        font-size: 13px;
+    }
+
+    .emergency-contact {
+        margin-bottom: 15px;
+    }
+
+    .security-observations {
+        margin-top: 18px;
+        padding-top: 18px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .security-column {
+        padding: 16px 0;
+    }
+
+    .security-column h3 {
+        font-size: 13px;
+    }
+
+    .security-subtitle {
+        font-size: 12px;
+    }
+
+    .security-list li,
+    .security-observations p {
+        font-size: 13px;
+    }
+
+    .contact-info {
+        font-size: 13px;
+    }
+
+    .additional-contact {
+        margin-top: 22px;
+    }
+}
 </style>

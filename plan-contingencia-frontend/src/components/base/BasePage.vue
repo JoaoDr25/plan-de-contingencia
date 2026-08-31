@@ -21,7 +21,7 @@
     min-height: 100%;
     max-width: 87%;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 0;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;

@@ -197,7 +197,7 @@ const reviewSteps = computed(() => [
 @media (max-width: 900px) {
     .review-flow {
         grid-template-columns: 1fr 1fr;
-        gap: 24px 0;
+        gap: 2px 0;
     }
 
     .review-step:nth-child(3) {
