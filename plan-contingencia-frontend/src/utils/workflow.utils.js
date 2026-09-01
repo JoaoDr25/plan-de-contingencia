@@ -86,7 +86,7 @@ export function executePlan(plan, role) {
 }
 
 
-export function cancelPlan(plan, role) {
+export function cancelPlan(plan, role, observations = '') {
 
     if (!plan) {
         return plan
@@ -100,21 +100,52 @@ export function cancelPlan(plan, role) {
         return plan
     }
 
+    let updatedObservaciones = plan.observaciones || ''
+
+    if (observations) {
+        const timestamp = new Date().toLocaleDateString('es-CO', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        })
+        const roleLabel = role ? ` (${role})` : ''
+        const newObs = `[${timestamp}] Cancelado${roleLabel}: ${observations}`
+        updatedObservaciones = updatedObservaciones
+            ? `${updatedObservaciones}\n${newObs}`
+            : newObs
+    }
+
     return {
         ...plan,
-        estado: 'cancelado'
+        estado: 'cancelado',
+        observaciones: updatedObservaciones
     }
 }
 
-export function rejectPlan(plan, role) {
+export function rejectPlan(plan, role, observations = '') {
 
     if (!canRejectPlan(role, plan)) {
         return plan
     }
 
+    let updatedObservaciones = plan.observaciones || ''
+
+    if (observations) {
+        const timestamp = new Date().toLocaleDateString('es-CO', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        })
+        const newObs = `[${timestamp}] No Aprobado (${role}): ${observations}`
+        updatedObservaciones = updatedObservaciones
+            ? `${updatedObservaciones}\n${newObs}`
+            : newObs
+    }
+
     return {
         ...plan,
         estado: 'borrador',
+        observaciones: updatedObservaciones,
         aprobaciones: {
             pedagogia: 'pendiente',
             sst: 'pendiente',
@@ -123,15 +154,31 @@ export function rejectPlan(plan, role) {
     }
 }
 
-export function sendPlanToEdition(plan) {
+export function sendPlanToEdition(plan, role = '', observations = '') {
 
     if (!plan || plan.estado !== 'aprobado') {
         return plan
     }
 
+    let updatedObservaciones = plan.observaciones || ''
+
+    if (observations) {
+        const timestamp = new Date().toLocaleDateString('es-CO', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        })
+        const roleLabel = role ? ` (${role})` : ''
+        const newObs = `[${timestamp}] Solicitud de Edición${roleLabel}: ${observations}`
+        updatedObservaciones = updatedObservaciones
+            ? `${updatedObservaciones}\n${newObs}`
+            : newObs
+    }
+
     return {
         ...plan,
         estado: 'borrador',
+        observaciones: updatedObservaciones,
         aprobaciones: {
             pedagogia: 'pendiente',
             sst: 'pendiente',

@@ -22,24 +22,24 @@
                 <div class="info-item">
 
                     <span class="info-label">
-                        Ficha
-                    </span>
-
-                    <span class="info-value">
-                        {{ plan.ficha || 'No registrada' }}
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
                         Nivel de formación
                     </span>
 
                     <span class="info-value">
                         {{ plan.programaFormacionNivel || 'No registrado' }}
+                    </span>
+
+                </div>
+
+
+                 <div class="info-item">
+
+                    <span class="info-label">
+                        Ficha
+                    </span>
+
+                    <span class="info-value">
+                        {{ plan.ficha || 'No registrada' }}
                     </span>
 
                 </div>
@@ -202,33 +202,36 @@ function closeDialog() {
 
 .participants-dialog__info {
     display: grid;
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-    gap: 25px;
-    margin: 20px 5px 30px 20px;
-    align-self: center;
+    // grid-template-columns:
+    //     repeat(4, minmax(0, 1fr));
+        grid-template-columns:
+        1.5fr 1.5fr 1fr 1fr;
+    gap: 15px;
+    margin: 20px 5px 35px 5px;
+    // margin: 10px 0 20px 0;
+    justify-items: center;
     text-align: center;
 }
 
 .info-item {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
     min-width: 0;
     align-items: center;
+    text-align: center;
 }
 
 .info-label {
-    font-size: $font-size-xs;
-    font-weight: 700;
+    font-size: $font-size-sm;
+    font-weight: 600;
     text-transform: uppercase;
     color: #287C2D;
 }
 
 .info-value {
     font-size: $font-size-md;
-    line-height: 1.4;
-    color: #222222;
+    line-height: 1.2;
 }
 
 .participants-table-wrapper {
@@ -252,16 +255,14 @@ function closeDialog() {
     border-top: 1px solid #D6D6D6;
     border-bottom: 1px solid #D6D6D6;
     background-color: #FAFAFA;
-    color: #287C2D;
     font-size: $font-size-xs;
-    font-weight: 700;
+    font-weight: 600;
     text-align: left;
 }
 
 .participants-table td {
     padding: 12px 12px;
     border-bottom: 1px solid #E2E2E2;
-    color: #333333;
     line-height: 1.4;
     font-size: $font-size-md;
 }
@@ -287,14 +288,13 @@ function closeDialog() {
 .participants-table__empty {
     padding: 30px !important;
     text-align: center !important;
-    color: #666666 !important;
 }
 
 .participants-dialog__actions {
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    padding-right: 12px;
+    padding: 5px 28px 0 0;
 }
 
 @media (max-width: 700px) {

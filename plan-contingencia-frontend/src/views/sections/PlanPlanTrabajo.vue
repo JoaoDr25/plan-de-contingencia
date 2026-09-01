@@ -89,12 +89,11 @@ defineProps({
     font-size: $font-size-xs;
     font-weight: 700;
     text-transform: uppercase;
-    color: #287C2D;
+    color: $color-primary;
 }
 
 .work-plan-row {
-    min-height: 38px;
-    padding: 9px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -106,14 +105,12 @@ defineProps({
     min-width: 0;
     font-size: $font-size-md;
     line-height: 1.4;
-    color: #222222;
     word-break: break-word;
     overflow-wrap: anywhere;
 }
 
 .work-plan-empty {
     font-size: $font-size-md;
-    color: #666666;
     line-height: 1.4;
 }
 
@@ -158,7 +155,7 @@ defineProps({
         font-size: $font-size-xs;
         font-weight: 700;
         text-transform: uppercase;
-        color: #287C2D;
+        color: $color-primary;
         line-height: 1.2;
     }
 

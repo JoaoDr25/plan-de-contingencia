@@ -148,7 +148,7 @@ function getSupportName(link) {
 .plan-academic-supports {
     display: grid;
     grid-template-columns:
-        1.2fr 1fr 1fr;
+        1fr 1fr 1fr 1fr;
     column-gap: 40px;
     row-gap: 22px;
     padding-bottom: 8px;
@@ -167,7 +167,7 @@ function getSupportName(link) {
     font-size: $font-size-xs;
     font-weight: 700;
     text-transform: uppercase;
-    color: #287C2D;
+    color: $color-primary;
     line-height: 1.2;
 }
 
@@ -186,20 +186,25 @@ function getSupportName(link) {
 }
 
 .support-item__link:hover {
-    color: #287C2D;
+    color: $color-primary;
 }
 
 .support-item__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
-    border: 1px solid #BDBDBD;
-    border-radius: 4px;
-    color: #555555;
-    background-color: #F7F7F7;
+    border: none;
+    border-radius: 0;
+    color: $color-primary;
+    background-color: transparent;
+    padding: 0;
+}
+
+.support-item__icon :deep(.q-icon) {
+    font-size: 20px;
 }
 
 .support-item__name {
@@ -213,6 +218,13 @@ function getSupportName(link) {
     font-size: $font-size-md;
     color: #666666;
     line-height: 1.4;
+}
+
+@media (max-width: 1250px) {
+
+    .plan-academic-supports {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 900px) {

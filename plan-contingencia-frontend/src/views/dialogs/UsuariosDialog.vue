@@ -10,7 +10,7 @@
 
                 <q-file v-model="firmaFile" label="Firma del Usuario" :clearable="!!firmaFile"
                     accept="image/png,image/jpeg,image/webp" :display-value="firmaFile?.name || form.firmaNombre || ''"
-                    max-file-size="1048576" :disable="!canEditUserConfiguration" @rejected="handleFirmaRejected">
+                    max-file-size="1048576" @rejected="handleFirmaRejected">
 
                     <template #prepend>
                         <q-icon name="draw" />
@@ -35,11 +35,8 @@
 
         <template #actions>
 
-            <BaseDialogActions v-if="canEditUserConfiguration" save-label="Actualizar" @save="handleSave"
+            <BaseDialogActions save-label="Actualizar" @save="handleSave"
                 @cancel="closeDialog" />
-
-            <SecondaryActionButton v-else label="Cerrar" icon="close" size="sm" @click="closeDialog" />
-
 
         </template>
 
@@ -58,7 +55,6 @@ import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
 import BaseFormField from 'src/components/forms/BaseFormField.vue'
 import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue'
-import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 
 const {
     modelValue,
@@ -103,6 +99,12 @@ const form = reactive({
     documento: '',
     rol: null,
     estado: 'Activo',
+    redConocimiento: '',
+    correoPersonal: '',
+    telefono: '',
+    areaTematica: '',
+    tipoVinculacion: null,
+    maximoHoras: '',
     firma: null,
     firmaNombre: null,
 })
@@ -123,9 +125,11 @@ function clearFirma() {
 const formFields = computed(() => {
 
     return USER_FORM_FIELDS.map(field => {
-        const isConfigurableField =
-            field.model === 'rol' ||
-            field.model === 'estado'
+        const isConfigurableField = [
+            'rol',
+            'estado'
+        ].includes(field.model)
+
         return {
             ...field,
             readonly: !isConfigurableField || !canEditUserConfiguration
@@ -137,7 +141,10 @@ function validateForm() {
 
     const fieldsToValidate =
         USER_FORM_FIELDS.filter(field =>
-            ['rol', 'estado'].includes(field.model)
+            [
+                'rol',
+                'estado'
+            ].includes(field.model)
         )
 
     for (const field of fieldsToValidate) {
@@ -183,9 +190,11 @@ function handleSave() {
         notifyWarning(validationResult)
         return
     }
-    const payload = {
-        rol: form.rol,
-        estado: form.estado
+    const payload = {}
+
+    if (canEditUserConfiguration) {
+        payload.rol = form.rol
+        payload.estado = form.estado
     }
 
     if (firmaModificada.value) {
@@ -204,6 +213,12 @@ function resetForm(data = {}) {
     form.documento = data.documento ?? ''
     form.rol = data.rol ?? null
     form.estado = data.estado ?? 'Activo'
+    form.redConocimiento = data.redConocimiento ?? ''
+    form.correoPersonal = data.correoPersonal ?? ''
+    form.telefono = data.telefono ?? ''
+    form.areaTematica = data.areaTematica ?? ''
+    form.tipoVinculacion = data.tipoVinculacion ?? null
+    form.maximoHoras = data.maximoHoras ?? ''
 
     form.firma = data.firma ?? null
     form.firmaNombre = data.firmaNombre ?? null
@@ -247,6 +262,7 @@ function closeDialog() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 

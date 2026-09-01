@@ -23,7 +23,7 @@ const routes = [
           backToPrevious: true
         },
         component: () =>
-          import('src/views/plans/PlanesPagina.vue')
+          import('src/views/plans/PlanesPage.vue')
       },
       {
         path: 'planes/crear',
@@ -34,7 +34,7 @@ const routes = [
           backToPrevious: true
         },
         component: () =>
-          import('src/views/plans/PlanCrear.vue')
+          import('src/views/plans/PlanCreate.vue')
       },
       {
         path: 'planes/historico',
@@ -44,7 +44,7 @@ const routes = [
           icon: 'history'
         },
         component: () =>
-          import('src/views/plans/PlanesHistorico.vue')
+          import('src/views/plans/PlanesHistoric.vue')
       },
       {
         path: 'planes/consulta',
@@ -54,7 +54,7 @@ const routes = [
           icon: 'search'
         },
         component: () =>
-          import('src/views/plans/PlanesConsulta.vue')
+          import('src/views/plans/PlanesConsultation.vue')
       },
       {
         path: 'planes/:id',
@@ -65,7 +65,18 @@ const routes = [
           backToPrevious: true
         },
         component: () =>
-          import('src/views/plans/PlanesDetalles.vue')
+          import('src/views/plans/PlanesDetails.vue')
+      },
+      {
+        path: 'planes/etapa/:id',
+        name: 'planes.stage',
+        meta: {
+          title: 'Detalles del Plan de Contingencia',
+          icon: 'description',
+          backToPrevious: true
+        },
+        component: () =>
+          import('src/views/plans/PlanReview.vue')
       },
       {
         path: 'programas',
@@ -179,17 +190,6 @@ const routes = [
           import('src/views/modules/ParametrosPage.vue')
       }
     ]
-  },
-
-  // Always leave this as last one,
-  // but you can also remove it
-  {
-    path: '/:catchAll(.*)*',
-    name: 'not-found',
-    meta: {
-      title: 'Página no encontrada'
-    },
-    component: () => import('src/views/error/ErrorNotFound.vue'),
   },
 ]
 

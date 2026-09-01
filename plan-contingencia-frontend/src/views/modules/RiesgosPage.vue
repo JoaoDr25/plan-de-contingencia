@@ -87,7 +87,7 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import LevelChip from 'src/components/states/LevelChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import RiesgosDialog from '../dialogs/RiesgosDialog.vue'
 import RiesgosDetails from '../details/RiesgosDetails.vue'

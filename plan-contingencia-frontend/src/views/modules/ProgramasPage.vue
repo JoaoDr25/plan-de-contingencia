@@ -85,7 +85,7 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue';
 import StatusChip from 'src/components/states/StatusChip.vue';
 import CrudActions from 'src/components/actions/CrudActions.vue';
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue';
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue';
 
 import ProgramasDialog from '../dialogs/ProgramasDialog.vue';
 import ProgramasDetails from '../details/ProgramasDetails.vue';

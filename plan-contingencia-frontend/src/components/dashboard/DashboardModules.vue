@@ -34,6 +34,7 @@ import DashboardModuleCard from './DashboardModuleCard.vue';
 
 .dashboard-modules {
     width: 100%;
+    padding-bottom: 50px;
 }
 
 .dashboard-modules__title {

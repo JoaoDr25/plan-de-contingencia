@@ -20,11 +20,14 @@
 
             </div>
 
-            <BaseIconButton
-                action="view"
+            <button
+                type="button"
+                class="danger-item__action"
                 :aria-label="`Ver riesgos asociados a ${danger.nombre}`"
                 @click="openRisks(danger)"
-            />
+            >
+                <q-icon name="open_in_new" size="18px" class="danger-item__action-icon" />
+            </button>
 
         </div>
 
@@ -41,7 +44,6 @@
 
 import { computed, ref } from 'vue'
 
-import BaseIconButton from 'src/components/base/BaseIconButton.vue'
 import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
 
 const props = defineProps({
@@ -117,6 +119,7 @@ function openRisks(danger) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     column-gap: 40px;
     row-gap: 22px;
+    padding-bottom: 8px;
 }
 
 .danger-item {
@@ -128,7 +131,7 @@ function openRisks(danger) {
     padding: 14px 16px;
     border: 1px solid #E0E0E0;
     border-radius: 6px;
-    background: #FFFFFF;
+    background: $color-surface;
 }
 
 .danger-item__content {
@@ -140,27 +143,52 @@ function openRisks(danger) {
 }
 
 .danger-item__label {
-    font-size: 11px;
+    font-size: $font-size-xs;
     font-weight: 700;
     text-transform: uppercase;
-    color: #287C2D;
+    color: $color-primary;
 }
 
 .danger-item__value {
     min-width: 0;
-
-    font-size: 13px;
+    font-size: $font-size-md;
     line-height: 1.4;
-    color: #222222;
-
     overflow-wrap: break-word;
     word-break: break-word;
+}
+
+.danger-item__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $color-primary;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.danger-item__action-icon {
+    color: $color-primary;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.danger-item__action:hover {
+    color: $color-primary;
+}
+
+.danger-item__action:hover .danger-item__action-icon {
+    color: $color-primary;
+    transform: scale(1.08);
 }
 
 @media (max-width: 1210px) {
 
     .plan-risks {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         column-gap: 24px;
         row-gap: 16px;
     }
@@ -170,7 +198,7 @@ function openRisks(danger) {
 @media (max-width: 700px) {
 
     .plan-risks {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         row-gap: 12px;
     }
 
@@ -179,9 +207,10 @@ function openRisks(danger) {
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 600px) {
 
     .plan-risks {
+        grid-template-columns: 1fr;
         row-gap: 10px;
     }
 
@@ -191,11 +220,11 @@ function openRisks(danger) {
     }
 
     .danger-item__label {
-        font-size: 10px;
+        font-size: $font-size-xs;
     }
 
     .danger-item__value {
-        font-size: $font-size-md;
+        font-size: $font-size-xs;
     }
 }
 

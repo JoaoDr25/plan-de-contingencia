@@ -20,11 +20,11 @@
             <div class="summary-item">
 
                 <span class="summary-item__label">
-                    Ficha
+                    Nivel de formación
                 </span>
 
                 <span class="summary-item__value">
-                    {{ plan.ficha || 'No registrada' }}
+                    {{ plan.programaFormacionNivel || 'No registrado' }}
                 </span>
 
             </div>
@@ -33,11 +33,11 @@
             <div class="summary-item">
 
                 <span class="summary-item__label">
-                    Nivel de formación
+                    Ficha
                 </span>
 
                 <span class="summary-item__value">
-                    {{ plan.programaFormacionNivel || 'No registrado' }}
+                    {{ plan.ficha || 'No registrada' }}
                 </span>
 
             </div>

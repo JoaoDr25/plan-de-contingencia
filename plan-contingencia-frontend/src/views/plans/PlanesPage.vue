@@ -75,7 +75,7 @@ import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import PlanActions from 'src/components/actions/PlanActions.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 const router = useRouter()
 const route = useRoute()

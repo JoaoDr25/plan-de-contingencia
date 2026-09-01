@@ -7,7 +7,7 @@
     <div v-if="plan" class="plan-detail">
 
       <div class="plan-detail__header">
-        <StatusChip :status="plan.estado" />
+        <StatusChip class="plan-detail-status" :status="plan.estado" />
       </div>
 
 
@@ -52,7 +52,9 @@
 
     <BaseConfirmationDialog v-model="showConfirmation" :title="confirmationConfig.title"
       :confirm-label="confirmationConfig.confirmLabel" :cancel-label="confirmationConfig.cancelLabel"
-      :variant="confirmationConfig.variant" @confirm="confirmPlanAction" />
+      :variant="confirmationConfig.variant"
+      :show-observations="pendingAction === PLAN_ACTIONS.NO_APROBAR || pendingAction === PLAN_ACTIONS.MANDAR_EDICION || pendingAction === PLAN_ACTIONS.CANCELAR"
+      @confirm="confirmPlanAction" />
 
   </BasePage>
 
@@ -62,14 +64,14 @@
 <script setup>
 
 import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import PlanSection from 'src/components/plans/PlanSection.vue'
 import PlanDetailsActions from 'src/components/actions/PlanDetailsActions.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import PlanInformacionGeneral from '../sections/PlanInformacionGeneral.vue'
 import PlanContextoAcademico from '../sections/PlanContextoAcademico.vue'
@@ -85,7 +87,7 @@ import { PLAN_ACTIONS } from 'src/constants/plans/planActions'
 import { PLAN_ACTIONS_CONFIRMATION } from 'src/constants/actions/plan_confirmation.constants'
 import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notifications.constants'
 
-import { notifySuccess } from 'src/utils/notifications.utils'
+import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
 
 import {
   approvePlan,
@@ -97,6 +99,7 @@ import {
 
 
 const route = useRoute()
+const router = useRouter()
 
 const role = ref('coordinacion')
 
@@ -134,14 +137,22 @@ function handlePlanAction(action) {
 }
 
 
-function confirmPlanAction() {
-  executePlanAction(pendingAction.value)
+function confirmPlanAction(payload) {
+  const currentAction = pendingAction.value
+  executePlanAction(currentAction, payload?.observations)
   pendingAction.value = null
   showConfirmation.value = false
+
+  if (currentAction === PLAN_ACTIONS.APROBAR && plan.value) {
+    router.push({
+      name: 'planes.stage',
+      params: { id: plan.value._id }
+    })
+  }
 }
 
 
-function executePlanAction(action) {
+function executePlanAction(action, observations = '') {
 
   switch (action) {
     case PLAN_ACTIONS.APROBAR:
@@ -154,7 +165,8 @@ function executePlanAction(action) {
     case PLAN_ACTIONS.NO_APROBAR:
       plan.value = rejectPlan(
         plan.value,
-        role.value
+        role.value,
+        observations
       )
       break
 
@@ -168,14 +180,16 @@ function executePlanAction(action) {
     case PLAN_ACTIONS.CANCELAR:
       plan.value = cancelPlan(
         plan.value,
-        role.value
+        role.value,
+        observations
       )
       break
 
     case PLAN_ACTIONS.MANDAR_EDICION:
       plan.value = sendPlanToEdition(
         plan.value,
-        role.value
+        role.value,
+        observations
       )
       break
 
@@ -191,7 +205,11 @@ function executePlanAction(action) {
   const notification = PLAN_ACTION_NOTIFICATIONS[action]
 
   if (notification) {
-    notifySuccess(notification.successMessage)
+    if (notification.type === 'warning') {
+      notifyWarning(notification.successMessage)
+    } else {
+      notifySuccess(notification.successMessage)
+    }
   }
 
 }
@@ -199,6 +217,7 @@ function executePlanAction(action) {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -213,9 +232,17 @@ function executePlanAction(action) {
 
 .plan-detail__header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 10px;
   width: 100%;
+}
+
+.plan-detail-status {
+  padding: 13px;
+  font-weight: 500;
+  font-size: $font-size-sm;
 }
 
 .plan-footer {

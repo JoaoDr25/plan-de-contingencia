@@ -5,9 +5,11 @@
 
             <q-btn flat dense round icon="menu" @click="handleToggleDrawer" />
 
-            <q-toolbar-title class="app-header__title" role="button" tabindex="0" @click="goToDashboard"
-                @keydown.enter="goToDashboard" @keydown.space.prevent="goToDashboard">
-                {{ APP_TITLE }}
+            <q-toolbar-title class="app-header__title">
+                <span class="app-header__title-text" role="button" tabindex="0" @click="goToDashboard"
+                    @keydown.enter="goToDashboard" @keydown.space.prevent="goToDashboard">
+                    {{ APP_TITLE }}
+                </span>
             </q-toolbar-title>
 
             <q-btn flat dense round icon="logout">
@@ -53,12 +55,16 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 }
 
 .app-header__title {
-    cursor: pointer;
     font-family: $font-family-base;
     font-size: 0.98rem;
     font-weight: 500;
     padding-top: 0.1rem;
     letter-spacing: 0.8px;
+}
+
+.app-header__title-text {
+    cursor: pointer;
+    display: inline-block;
 }
 
 @media (max-width: 600px) {

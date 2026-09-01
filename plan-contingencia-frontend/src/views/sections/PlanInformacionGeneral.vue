@@ -4,22 +4,22 @@
 
         <div class="info-item">
             <span class="info-item__label">
-                Programa de Formación
+                Código del Plan
             </span>
 
             <span class="info-item__value">
-                {{ plan.programaFormacionNombre || 'No disponible' }}
+                N° {{ plan.numero || 'N/A' }}
             </span>
         </div>
 
 
         <div class="info-item">
             <span class="info-item__label">
-                Lugar de Salida
+                Programa de Formación
             </span>
 
             <span class="info-item__value">
-                {{ plan.lugarSalida || 'No disponible' }}
+                {{ plan.programaFormacionNombre || 'No disponible' }}
             </span>
         </div>
 
@@ -37,11 +37,11 @@
 
         <div class="info-item">
             <span class="info-item__label">
-                Actividad
+                Lugar de Salida
             </span>
 
             <span class="info-item__value">
-                {{ plan.descripcionActividad || 'No disponible' }}
+                {{ plan.lugarSalida || 'No disponible' }}
             </span>
         </div>
 
@@ -70,11 +70,11 @@
 
         <div class="info-item">
             <span class="info-item__label">
-                Descripción de la Actividad
+                Actividad
             </span>
 
             <span class="info-item__value">
-                {{ plan.descripcionActividad || 'No registrada' }}
+                {{ plan.descripcionActividad || 'No disponible' }}
             </span>
         </div>
 
@@ -99,6 +99,17 @@
                 {{ formatHour(plan.horaSalida) }}
             </span>
         </div>
+
+
+        <!-- <div class="info-item">
+            <span class="info-item__label">
+                Descripción de la Actividad
+            </span>
+
+            <span class="info-item__value">
+                {{ plan.descripcionActividad || 'No registrada' }}
+            </span>
+        </div> -->
 
     </div>
 
@@ -140,7 +151,6 @@ function formatClassification(value) {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -166,19 +176,18 @@ function formatClassification(value) {
     font-size: $font-size-xs;
     font-weight: 700;
     text-transform: uppercase;
-    color: #287C2D;
+    color: $color-primary;
     line-height: 1.2;
 }
 
 .info-item__value {
     font-size: $font-size-md;
     line-height: 1.4;
-    color: #222222;
     word-break: break-word;
     overflow-wrap: break-word;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
 
     .plan-general-info {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -203,5 +212,4 @@ function formatClassification(value) {
         font-size: $font-size-xs;
     }
 }
-
 </style>

@@ -98,7 +98,7 @@ import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import LevelChip from 'src/components/states/LevelChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import EppDialog from '../dialogs/EppDialog.vue'
 import EppDetails from '../details/EppDetails.vue'

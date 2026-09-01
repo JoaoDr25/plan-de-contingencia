@@ -35,7 +35,7 @@ function goToCreatePlan(){
     display: flex;
     align-items: center;
     width: 100%;
-    padding-bottom: 30px;
+    padding: 30px 0 20px 0;
 }
 
 .dashboard-header__actions {

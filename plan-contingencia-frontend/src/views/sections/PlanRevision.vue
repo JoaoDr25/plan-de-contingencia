@@ -3,19 +3,12 @@
 
         <div class="review-flow">
 
-            <div
-                v-for="step in reviewSteps"
-                :key="step.id"
-                class="review-step"
-            >
+            <div v-for="step in reviewSteps" :key="step.id" class="review-step">
                 <div class="review-content">
 
                     <h3>{{ step.title }}</h3>
 
-                    <span
-                        class="status-badge"
-                        :class="`status-${step.status}`"
-                    >
+                    <span class="status-badge" :class="`status-${step.status}`">
                         {{ step.statusLabel }}
                     </span>
 
@@ -33,6 +26,7 @@
 
 
 <script setup>
+
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -47,18 +41,19 @@ function getReviewStatus(role) {
 }
 
 function getReviewStatusLabel(role) {
-    return getReviewStatus(role).toUpperCase()
+    const value = getReviewStatus(role).toLowerCase()
+    return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
 const formatDateTime = (value) => {
     if (!value) {
-        return '00/00/0000 00:00 a. m.'
+        return 'Sin fecha registrada'
     }
 
     const date = new Date(value)
 
     if (Number.isNaN(date.getTime())) {
-        return '00/00/0000 00:00 a. m.'
+        return 'Sin fecha registrada'
     }
 
     return new Intl.DateTimeFormat('es-CO', {
@@ -71,46 +66,62 @@ const formatDateTime = (value) => {
     }).format(date)
 }
 
-
-const reviewSteps = computed(() => [
-    {
-        id: 'generacion',
-        title: 'GENERACIÓN DEL PLAN',
-        status: 'proceso',
-        statusLabel: 'EN PROCESO',
-        date: formatDateTime(props.plan.createdAt)
-    },
-    {
-        id: 'pedagogia',
-        title: 'REVISIÓN POR PEDAGOGÍA',
-        status: getReviewStatus('pedagogia'),
-        statusLabel: getReviewStatusLabel('pedagogia'),
-        date: '00/00/0000 00:00 a. m.'
-    },
-    {
-        id: 'sst',
-        title: 'REVISIÓN POR SST',
-        status: getReviewStatus('sst'),
-        statusLabel: getReviewStatusLabel('sst'),
-        date: '00/00/0000 00:00 a. m.'
-    },
-    {
-        id: 'coordinacion',
-        title: 'APROBACIÓN POR COORDINACIÓN',
-        status: getReviewStatus('coordinacion'),
-        statusLabel: getReviewStatusLabel('coordinacion'),
-        date: '00/00/0000 00:00 a. m.'
+function getReviewDate(role) {
+    const map = {
+        generacion: props.plan.createdAt,
+        pedagogia: props.plan.aprobaciones?.fechaPedagogia ?? props.plan.updatedAt,
+        sst: props.plan.aprobaciones?.fechaSst ?? props.plan.updatedAt,
+        coordinacion: props.plan.aprobaciones?.fechaCoordinacion ?? props.plan.updatedAt
     }
-])
+
+    return map[role] ?? null
+}
+
+const reviewSteps = computed(() => {
+    const planStatus = props.plan.estado ?? 'en revision'
+    const generationStatus = planStatus === 'aprobado' ? 'aprobado' : 'proceso'
+    const generationLabel = generationStatus === 'aprobado' ? 'Aprobado' : 'En proceso'
+
+    return [
+        {
+            id: 'generacion',
+            title: 'GENERACIÓN DEL PLAN',
+            status: generationStatus,
+            statusLabel: generationLabel,
+            date: formatDateTime(getReviewDate('generacion'))
+        },
+        {
+            id: 'pedagogia',
+            title: 'REVISIÓN POR PEDAGOGÍA',
+            status: getReviewStatus('pedagogia'),
+            statusLabel: getReviewStatusLabel('pedagogia'),
+            date: formatDateTime(getReviewDate('pedagogia'))
+        },
+        {
+            id: 'sst',
+            title: 'REVISIÓN POR SST',
+            status: getReviewStatus('sst'),
+            statusLabel: getReviewStatusLabel('sst'),
+            date: formatDateTime(getReviewDate('sst'))
+        },
+        {
+            id: 'coordinacion',
+            title: 'APROBACIÓN POR COORDINACIÓN',
+            status: getReviewStatus('coordinacion'),
+            statusLabel: getReviewStatusLabel('coordinacion'),
+            date: formatDateTime(getReviewDate('coordinacion'))
+        }
+    ]
+})
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
 .plan-section {
     width: 100%;
+    padding-bottom: 8px;
 }
 
 .section-header {
@@ -154,7 +165,7 @@ const reviewSteps = computed(() => [
     padding-right: 0;
 }
 
-.review-step + .review-step {
+.review-step+.review-step {
     border-left: 1px dotted #999;
 }
 
@@ -170,7 +181,8 @@ const reviewSteps = computed(() => [
     padding: 5px 12px;
     border-radius: 4px;
     font-size: $font-size-xs;
-    font-weight: 500;
+    font-weight: 400;
+    text-transform: capitalize;
 }
 
 .status-proceso {
@@ -190,8 +202,7 @@ const reviewSteps = computed(() => [
 
 .review-content p {
     margin: 8px 0 0;
-    color: #333;
-    font-size: $font-size-xs;
+    font-size: 0.75rem;
 }
 
 @media (max-width: 900px) {
@@ -217,11 +228,10 @@ const reviewSteps = computed(() => [
         padding: 0;
     }
 
-    .review-step + .review-step {
+    .review-step+.review-step {
         border-left: none;
         border-top: 1px dotted #999;
         padding-top: 18px;
     }
 }
-
 </style>

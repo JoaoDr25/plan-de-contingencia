@@ -135,7 +135,7 @@ import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.
 import StatusChip from 'src/components/states/StatusChip.vue'
 
 import AprendicesInfoDialog from '../dialogs/AprendicesInfoDialog.vue'
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 import logoSena from 'src/assets/logos/logo-sena.png'
 
 const route = useRoute()

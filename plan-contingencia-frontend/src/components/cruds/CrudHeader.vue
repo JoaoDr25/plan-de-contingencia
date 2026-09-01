@@ -66,6 +66,7 @@ const {
     font-size: $font-size-4xl;
     letter-spacing: 0.05px;
     color: $color-text-primary;
+    padding-top: 25px;
 }
 
 .crud-header__title--uppercase {

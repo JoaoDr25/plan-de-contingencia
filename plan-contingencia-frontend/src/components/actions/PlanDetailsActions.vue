@@ -102,17 +102,23 @@ function handleAction(action) {
 }
 
 function handleBack() {
-    router.back()
+    router.push({ name: 'planes.list' })
 }
 
 </script>
 
 <style scoped lang="scss">
+
 .plan-details-actions {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 10px;
+}
+
+.plan-details-actions :deep(.q-btn) {
+    height: 35px !important;
+    min-height: 35px !important;
 }
 
 @media (max-width: 800px) {

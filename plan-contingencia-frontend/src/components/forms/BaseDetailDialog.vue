@@ -86,7 +86,7 @@ function closeDialog() {
 .base-details {
     display: grid;
     grid-template-columns:
-        115px minmax(210px, 1.5fr) minmax(150px, 1fr);
+        145px minmax(220px, 1.4fr) minmax(150px, 1.12fr);
     column-gap: 22px;
     padding: 0 22px;
     align-items: start;
@@ -101,7 +101,7 @@ function closeDialog() {
 }
 
 .base-details__logo img {
-    width: 140px;
+    width: 150px;
     height: auto;
 }
 

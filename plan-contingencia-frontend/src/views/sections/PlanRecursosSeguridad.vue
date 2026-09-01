@@ -1,5 +1,5 @@
 <template>
-    
+
     <section class="plan-section">
 
         <div class="security-grid">
@@ -11,14 +11,13 @@
                     EPP SELECCIONADO
                 </div>
 
-                <ul class="security-list">
-                    <li
-                        v-for="item in eppSeleccionado"
-                        :key="item._id"
-                    >
-                        {{ item.nombre }}
-                    </li>
-                </ul>
+                <div class="security-column__content">
+                    <ul class="security-list">
+                        <li v-for="item in eppSeleccionado" :key="item._id">
+                            {{ item.nombre }}
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="security-column">
@@ -28,66 +27,38 @@
                     ELEMENTOS DE SEGURIDAD VIAL
                 </div>
 
-                <ul class="security-list security-list-links">
-                    <li
-                        v-for="item in seguridadVialItems"
-                        :key="item.itemId"
-                    >
-                        <span>{{ item.nombre }}</span>
+                <div class="security-column__content">
+                    <ul class="security-list security-list-links">
+                        <li v-for="item in seguridadVialItems" :key="item.itemId">
+                            <a v-if="item.soporte" :href="item.soporte" target="_blank" rel="noopener noreferrer"
+                                class="support-link" title="Abrir soporte">
+                                <q-icon name="open_in_new" />
+                            </a>
 
-                        <a
-                            v-if="item.soporte"
-                            :href="item.soporte"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="support-link"
-                            title="Abrir soporte"
-                        >
-                            <q-icon name="open_in_new" />
-                        </a>
-                    </li>
-                </ul>
+                            <span>{{ item.nombre }}</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="security-column">
                 <h3>CONTACTOS DE EMERGENCIA</h3>
 
-                <div
-                    v-for="contacto in contactosEmergencia"
-                    :key="contacto._id"
-                    class="emergency-contact"
-                >
-                    <div class="contact-icon">
-                        <q-icon :name="contacto.icono" />
-                    </div>
+                <div class="security-column__content">
+                    <div class="emergency-contact-list">
+                        <div v-for="contacto in contactosEmergencia" :key="contacto._id" class="emergency-contact">
+                            <div class="contact-info">
+                                <strong>{{ contacto.nombre }}</strong>
 
-                    <div class="contact-info">
-                        <strong>{{ contacto.nombre }}</strong>
+                                <span v-if="contacto.entidad">
+                                    {{ contacto.entidad }}
+                                </span>
 
-                        <span v-if="contacto.entidad">
-                            {{ contacto.entidad }}
-                        </span>
-
-                        <span>
-                            Tel: {{ contacto.telefono }}
-                        </span>
-                    </div>
-                </div>
-
-                <div
-                    v-if="contactoAdicional"
-                    class="additional-contact"
-                >
-                    <h3>CONTACTO ADICIONAL (OTRO)</h3>
-
-                    <div class="additional-contact-info">
-                        <strong>
-                            {{ contactoAdicional.nombreEntidad }}
-                        </strong>
-
-                        <span>
-                            Tel: {{ contactoAdicional.telefono }}
-                        </span>
+                                <p>
+                                    Tel: {{ contacto.telefono }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -178,27 +149,33 @@ const contactosCatalogo = [
 
 const contactosEmergencia = computed(() => {
     const ids = props.plan.contactosEmergencia?.contactosBase || []
-
-    return ids
+    const contactos = ids
         .map(id => contactosCatalogo.find(contacto => contacto._id === id))
         .filter(Boolean)
-})
 
-const contactoAdicional = computed(() => {
     const otro = props.plan.contactosEmergencia?.otro
 
-    if (!otro?.nombreEntidad) {
-        return null
+    if (otro?.nombreEntidad) {
+        contactos.push({
+            _id: 'contacto-adicional',
+            nombre: 'Otro',
+            entidad: otro.nombreEntidad,
+            telefono: otro.telefono,
+            icono: 'contact_phone'
+        })
     }
 
-    return otro
+    return contactos
 })
 </script>
 
 <style scoped lang="scss">
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
 
 .plan-section {
     width: 100%;
+    padding-bottom: 8px;
 }
 
 .section-header {
@@ -215,15 +192,13 @@ const contactoAdicional = computed(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #eaf5eb;
-    color: #2e7d32;
-    font-size: 22px;
+    background-color: $color-surface;
+    color: $color-primary;
 }
 
 .section-header h2 {
     margin: 0;
-    color: #18732b;
-    font-size: 20px;
+    color: $color-primary;
     font-weight: 700;
 }
 
@@ -237,6 +212,15 @@ const contactoAdicional = computed(() => {
     min-width: 0;
     padding: 0 28px;
     min-height: 220px;
+    display: flex;
+    flex-direction: column;
+}
+
+.security-column__content {
+    max-height: 180px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px;
 }
 
 .security-column:first-child {
@@ -247,25 +231,23 @@ const contactoAdicional = computed(() => {
     padding-right: 0;
 }
 
-.security-column + .security-column {
+.security-column+.security-column {
     border-left: 1px solid #cfcfcf;
 }
 
 .security-column h3,
 .security-observations h3 {
     margin: 0 0 20px;
-
-    color: #18732b;
-    font-size: 15px;
+    color: $color-primary;
+    font-size: $font-size-md;
     font-weight: 700;
     line-height: 1.3;
 }
 
 .security-subtitle {
     margin-bottom: 18px;
-
-    color: #18732b;
-    font-size: 14px;
+    color: $color-primary;
+    font-size: $font-size-xs;
     font-weight: 700;
 }
 
@@ -276,8 +258,7 @@ const contactoAdicional = computed(() => {
 
 .security-list li {
     margin-bottom: 10px;
-    color: #333;
-    font-size: 14px;
+    font-size: $font-size-md;
     line-height: 1.4;
     overflow-wrap: break-word;
 }
@@ -304,33 +285,26 @@ const contactoAdicional = computed(() => {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: #2e7d32;
+    color: $color-primary;
     text-decoration: none;
-    font-size: 17px;
 }
 
 .support-link:hover {
-    color: #1b5e20;
+    color: $color-primary;
+}
+
+.emergency-contact-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-start;
 }
 
 .emergency-contact {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 18px;
-    min-width: 0;
-}
-
-.contact-icon {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    background-color: #eaf5eb;
-    color: #2e7d32;
+    flex: 1 1 150px;
+    max-width: 100%;
 }
 
 .contact-info {
@@ -338,8 +312,8 @@ const contactoAdicional = computed(() => {
     flex-direction: column;
     gap: 2px;
     min-width: 0;
-    font-size: 13px;
-    line-height: 1.35;
+    font-size: $font-size-md;
+    line-height: 1.45;
 }
 
 .contact-info strong,
@@ -347,13 +321,15 @@ const contactoAdicional = computed(() => {
     overflow-wrap: break-word;
 }
 
-.contact-info strong {
-    color: #2e6f38;
-    font-weight: 700;
+.contact-info p {
+font-size: $font-size-sm;
 }
 
-.contact-info span {
-    color: #333;
+.contact-info strong {
+    color: $color-primary;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: $font-size-xs;
 }
 
 .additional-contact {
@@ -364,8 +340,7 @@ const contactoAdicional = computed(() => {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    color: #333;
-    font-size: 13px;
+    font-size: $font-size-md;
 }
 
 .additional-contact-info strong {
@@ -384,8 +359,7 @@ const contactoAdicional = computed(() => {
 
 .security-observations p {
     margin: 0;
-    color: #333;
-    font-size: 14px;
+    font-size: $font-size-md;
     line-height: 1.5;
     overflow-wrap: break-word;
 }
@@ -420,7 +394,7 @@ const contactoAdicional = computed(() => {
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
 
     .security-grid {
         display: flex;
@@ -431,7 +405,6 @@ const contactoAdicional = computed(() => {
     .security-column {
         width: 100%;
         min-height: auto;
-
         padding: 18px 0;
         border-left: none !important;
         border-top: 1px solid #cfcfcf;
@@ -448,12 +421,10 @@ const contactoAdicional = computed(() => {
 
     .security-column h3 {
         margin-bottom: 16px;
-        font-size: 14px;
     }
 
     .security-subtitle {
         margin-bottom: 14px;
-        font-size: 13px;
     }
 
     .security-list li {
@@ -465,13 +436,31 @@ const contactoAdicional = computed(() => {
         margin-bottom: 15px;
     }
 
+    .contact-info {
+        font-size: $font-size-sm;
+    }
+
+    .additional-contact-info {
+        font-size: $font-size-xs;
+    }
+
     .security-observations {
         margin-top: 18px;
         padding-top: 18px;
     }
+
+    .security-observations p {
+        font-size: $font-size-xs;
+    }
 }
 
 @media (max-width: 450px) {
+
+    .security-column__content {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+    }
 
     .security-column {
         padding: 16px 0;

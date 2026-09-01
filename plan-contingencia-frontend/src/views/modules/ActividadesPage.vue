@@ -47,14 +47,11 @@
         <ActividadesDialog v-model="dialog" :mode="dialogMode" :activity="selectedActivity"
             @save="handleActivitySave" />
 
-
         <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
-
         <ActividadesDetails v-model="detailsActivity" :activity="selectedActivity" />
-
 
     </BasePage>
 
@@ -81,7 +78,7 @@ import CrudToolbar from 'src/components/cruds/CrudToolbar.vue';
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue';
 import BaseTable from 'src/components/tables/BaseTable.vue';
 import CrudActions from 'src/components/actions/CrudActions.vue';
-import BaseConfirmationDialog from 'src/components/forms/BaseConfirmationDialog.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import ActividadesDialog from '../dialogs/ActividadesDialog.vue'
 import ActividadesDetails from '../details/ActividadesDetails.vue'

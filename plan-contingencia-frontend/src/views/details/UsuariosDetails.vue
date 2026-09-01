@@ -1,32 +1,42 @@
 <template>
 
-    <BaseDetailDialog v-model="dialog" title="Información del Usuario" width="650px">
+    <BaseDetailDialog v-model="dialog" title="Información del Usuario" width="780px">
 
         <template #column-left>
 
-            <BaseDetailItem label="Código" :value="user.codigo" />
+            <BaseDetailItem label="Código" :value="user?.codigo" />
 
-            <BaseDetailItem label="Nombre Completo" :value="user.nombre + ' ' + user.apellido" />
+            <BaseDetailItem label="Nombre Completo" :value="user ? `${user.nombre} ${user.apellido}` : ''" />
 
-            <BaseDetailItem label="Correo Institucional" :value="user.correo" />
+            <BaseDetailItem label="Correo Institucional" :value="user?.correo" />
 
-            <BaseDetailItem label="Tipo de Documento" :value="user.tipo" />
+            <BaseDetailItem label="Tipo de Documento" :value="user?.tipo" />
 
-            <BaseDetailItem label="Último Acceso" :value="user.acceso" />
+            <BaseDetailItem label="Teléfono" :value="user?.telefono || 'No registrado'" />
 
+            <BaseDetailItem label="Área Temática" :value="user?.areaTematica || 'No registrada'" />
+
+            <BaseDetailItem label="Máximo de Horas"
+                :value="user?.maximoHoras ? `${user.maximoHoras} horas` : 'No registrado'" />
         </template>
 
         <template #column-right>
 
             <BaseDetailItem class="status-chip">
-                <StatusChip :status="user.estado" />
+                <StatusChip v-if="user" :status="user.estado" />
             </BaseDetailItem>
 
-            <BaseDetailItem label="Rol Asignado" :value="user.rol" />
+            <BaseDetailItem label="Rol Asignado" :value="user?.rol" />
 
-            <BaseDetailItem label="Centro de Formación" :value="user.centro" />
+            <!-- <BaseDetailItem label="Centro de Formación" :value="user?.centro" /> -->
 
-            <BaseDetailItem label="N° Documento" :value="user.documento" />
+            <BaseDetailItem label="Correo Personal" :value="user?.correoPersonal || 'No registrado'" />
+
+            <BaseDetailItem label="N° Documento" :value="user?.documento" />
+
+            <BaseDetailItem label="Tipo de Vinculación" :value="user?.tipoVinculacion || 'No registrado'" />
+
+            <BaseDetailItem label="Red de Conocimiento" :value="user?.redConocimiento || 'No registrada'" />
 
         </template>
 

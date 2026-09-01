@@ -87,6 +87,7 @@ const searchText = computed({
 
 .plan-filters__search {
     width: 300px;
+    max-width: 100%;
 }
 
 .plan-filters__search :deep(.q-field__control) {
@@ -95,7 +96,8 @@ const searchText = computed({
 }
 
 .plan-filters__status {
-    width: 120px;
+    width: 140px;
+    max-width: 100%;
 }
 
 .plan-filters :deep(.q-field__label) {
@@ -111,16 +113,22 @@ const searchText = computed({
     padding-right: 4px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 550px) {
 
     .plan-filters {
         flex-direction: column;
-        align-items: stretch;
+        align-items: flex-end;
+        gap: 10px;
     }
 
-    .plan-filters__search,
+    .plan-filters__search {
+        width: 300px;
+        max-width: 100%;
+    }
+
     .plan-filters__status {
-        width: 100%;
+        width: 140px;
+        max-width: 100%;
     }
 }
 

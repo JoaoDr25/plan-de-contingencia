@@ -1,76 +1,80 @@
 <template>
 
-    <BaseDialog v-model="dialog" :title="dialogTitle" width="1200px">
+    <BaseDialog v-model="dialog" :title="dialogTitle" width="1100px">
 
-        <div class="risks-table-wrapper">
+        <div class="risks-dialog">
 
-            <table class="risks-table">
+            <div class="risks-table-wrapper">
 
-                <thead>
+                <table class="risks-table">
 
-                    <tr>
+                    <thead>
 
-                        <th class="risks-table__number">
-                            N
-                        </th>
+                        <tr>
 
-                        <th>
-                            Riesgo
-                        </th>
+                            <th class="risks-table__number">
+                                N
+                            </th>
 
-                        <th class="risks-table__level">
-                            Nivel
-                        </th>
+                            <th>
+                                RIESGO
+                            </th>
 
-                        <th>
-                            Consecuencia
-                        </th>
+                            <th class="risks-table__level">
+                                NIVEL
+                            </th>
 
-                        <th>
-                            Prevención
-                        </th>
+                            <th>
+                                CONSECUENCIA
+                            </th>
 
-                    </tr>
+                            <th>
+                                PREVENCIÓN
+                            </th>
 
-                </thead>
+                        </tr>
 
-                <tbody>
+                    </thead>
 
-                    <tr v-for="(risk, index) in risks" :key="risk._id">
+                    <tbody>
 
-                        <td class="risks-table__number">
-                            {{ index + 1 }}
-                        </td>
+                        <tr v-for="(risk, index) in risks" :key="risk._id">
 
-                        <td>
-                            {{ risk.riesgo || 'No disponible' }}
-                        </td>
+                            <td class="risks-table__number">
+                                {{ index + 1 }}
+                            </td>
 
-                        <td class="risks-table__level">
-                            <LevelChip :level="risk.nivel" context="riesgo" />
-                        </td>
+                            <td>
+                                {{ risk.riesgo || 'No disponible' }}
+                            </td>
 
-                        <td>
-                            {{ risk.consecuencia || 'No disponible' }}
-                        </td>
+                            <td class="risks-table__level">
+                                <LevelChip :level="risk.nivel" context="riesgo" />
+                            </td>
 
-                        <td>
-                            {{ risk.prevencion || 'No disponible' }}
-                        </td>
+                            <td>
+                                {{ risk.consecuencia || 'No disponible' }}
+                            </td>
 
-                    </tr>
+                            <td>
+                                {{ risk.prevencion || 'No disponible' }}
+                            </td>
 
-                    <tr v-if="!risks.length">
+                        </tr>
 
-                        <td colspan="5" class="risks-table__empty">
-                            No hay riesgos asociados a este peligro.
-                        </td>
+                        <tr v-if="!risks.length">
 
-                    </tr>
+                            <td colspan="5" class="risks-table__empty">
+                                No hay riesgos asociados a este peligro.
+                            </td>
 
-                </tbody>
+                        </tr>
 
-            </table>
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 
@@ -142,37 +146,41 @@ function closeDialog() {
 
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
- 
+
+.risks-dialog {
+    width: 100%;
+}
+
 .risks-table-wrapper {
     width: 100%;
+    max-height: min(320px, 45vh);
     overflow-x: auto;
+    overflow-y: auto;
 }
 
 .risks-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
-    table-layout: auto;
 }
 
 .risks-table th {
-    padding: 15px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 10px 12px;
+    border-top: 1px solid #D6D6D6;
+    border-bottom: 1px solid #D6D6D6;
+    background-color: $color-surface;
+    font-size: $font-size-xs;
+    font-weight: 600;
     text-align: left;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #287C2D;
-    background: #F5F5F5;
-    border-top: 1px solid #D9D9D9;
-    border-bottom: 1px solid #D9D9D9;
 }
 
 .risks-table td {
     padding: 12px 12px;
-    vertical-align: top;
-    color: #333333;
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E2E2E2;
     line-height: 1.4;
+    font-size: $font-size-md;
 }
 
 .risks-table tbody tr:last-child td {
@@ -180,7 +188,7 @@ function closeDialog() {
 }
 
 .risks-table tbody tr:hover {
-    background: #FAFAFA;
+    background-color: $color-surface;
 }
 
 .risks-table__number {
@@ -189,38 +197,20 @@ function closeDialog() {
 }
 
 .risks-table__level {
-    width: 80px;
+    width: 110px;
     text-align: center !important;
 }
 
 .risks-table__empty {
     padding: 30px !important;
     text-align: center !important;
-    color: #666666 !important;
-}
-
-.risk-level {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 55px;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 100px;
-    text-align: center !important;
-}
-
-.risks-table__empty {
-    padding: 30px !important;
-    text-align: center !important;
-    color: #666666 !important
 }
 
 .risks-dialog__actions {
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    padding-right: 0;
+    padding: 5px 5px 0 0;
 }
 
 @media (max-width: 700px) {

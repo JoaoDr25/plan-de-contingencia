@@ -90,7 +90,14 @@ export const PLANES_MOCK = [
         aprendicesId: [
             '66f600000000000000000001',
             '66f600000000000000000002',
-            '66f600000000000000000003'
+            '66f600000000000000000003',
+            '66f600000000000000000004',
+            '66f600000000000000000005',
+            '66f600000000000000000006',
+            '66f600000000000000000007',
+            '66f600000000000000000008',
+            '66f600000000000000000009',
+            '66f600000000000000000010'
         ],
 
         contactosEmergencia: {
@@ -227,6 +234,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '2876549',
 
         actividadId: '66c300000000000000000002',
         descripcionActividad: 'Salida académica para reconocimiento ambiental.',
@@ -312,6 +320,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '3174863',
 
         actividadId: '66c300000000000000000003',
         descripcionActividad: 'Práctica de reconocimiento de cultivos.',
@@ -392,6 +401,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '3174863',
 
         actividadId: '66c300000000000000000004',
         descripcionActividad: 'Visita técnica de seguimiento a proceso productivo.',
@@ -477,6 +487,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Técnico',
+        ficha: '2876543',
 
         actividadId: '66c300000000000000000005',
         descripcionActividad: 'Salida académica para reconocimiento de sistemas productivos.',
@@ -561,6 +572,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '2876549',
 
         actividadId: '66c300000000000000000006',
         descripcionActividad: 'Actividad de reconocimiento de condiciones ambientales.',
@@ -645,6 +657,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '3174863',
 
         actividadId: '66c300000000000000000007',
         descripcionActividad: 'Visita técnica a unidad productiva.',
@@ -727,6 +740,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '2876549',
 
         actividadId: '66c300000000000000000008',
         descripcionActividad: 'Visita de observación ambiental.',
@@ -809,6 +823,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Técnico',
+        ficha: '2876543',
 
         actividadId: '66c300000000000000000009',
         descripcionActividad: 'Visita de seguimiento a proyecto formativo.',
@@ -891,6 +906,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '3174863',
 
         actividadId: '66c300000000000000000010',
         descripcionActividad: 'Salida técnica de aplicación de conocimientos.',
@@ -973,6 +989,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000002',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '2876549',
 
         actividadId: '66c300000000000000000011',
         descripcionActividad: 'Salida académica de reconocimiento ambiental.',
@@ -1055,6 +1072,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Técnico',
+        ficha: '2876543',
 
         actividadId: '66c300000000000000000012',
         descripcionActividad: 'Salida técnica cancelada por condiciones externas.',
@@ -1135,6 +1153,7 @@ export const PLANES_MOCK = [
         programaFormacionId: '66b200000000000000000001',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
+        ficha: '3174863',
 
         actividadId: '66c300000000000000000013',
         descripcionActividad: 'Salida académica cancelada por reprogramación institucional.',
@@ -1232,6 +1251,69 @@ export const MOCK_APRENDICES = [
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1001234567',
         nombreCompleto: 'Carlos Andrés Martínez',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000004',
+        tipo: 'Cédula de Ciudadanía',
+        numeroDocumento: '1095847362',
+        nombreCompleto: 'Laura Daniela Torres',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000005',
+        tipo: 'Tarjeta de Identidad',
+        numeroDocumento: '1032456712',
+        nombreCompleto: 'Andrés Felipe Morales',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000006',
+        tipo: 'Cédula de Ciudadanía',
+        numeroDocumento: '1098234561',
+        nombreCompleto: 'Valentina Castro Silva',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000007',
+        tipo: 'Cédula de Ciudadanía',
+        numeroDocumento: '1002345890',
+        nombreCompleto: 'Camilo Eduardo Vargas',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000008',
+        tipo: 'Tarjeta de Identidad',
+        numeroDocumento: '1035678901',
+        nombreCompleto: 'Sofia Alejandra Ruiz',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000009',
+        tipo: 'Cédula de Ciudadanía',
+        numeroDocumento: '1098123456',
+        nombreCompleto: 'Mateo Alexander Gómez',
+        estado: 'activo',
+        ficha: '3174863',
+        programaFormacionId: '66b200000000000000000001'
+    },
+    {
+        _id: '66f600000000000000000010',
+        tipo: 'Cédula de Ciudadanía',
+        numeroDocumento: '1003456789',
+        nombreCompleto: 'Isabella Natalia Mendoza',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66b200000000000000000001'

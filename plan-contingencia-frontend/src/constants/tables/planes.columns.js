@@ -10,6 +10,13 @@ export const PLANES_COLUMNS = [
         sortable: false
     },
     {
+        name: 'ficha',
+        label: 'Ficha',
+        field: 'ficha',
+        align: 'left',
+        sortable: true
+    },
+    {
         name: 'programa',
         label: 'Programa de Formación',
         field: 'programaFormacionNombre',
