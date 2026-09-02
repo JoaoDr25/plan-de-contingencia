@@ -12,8 +12,14 @@
 
             <template #center>
 
-                <PlanFilters v-model="selectedStatus" v-model:search-value="searchText"
-                    :options="PLAN_STATUS_OPTIONS" />
+                <BaseFilterBar>
+
+                    <BaseSearch v-model="searchText"  placeholder="Buscar por código, programa o actividad..." />
+
+                    <BaseSelect v-model="selectedStatus" label="Estado" :options="PLAN_STATUS_OPTIONS" size="filter"
+                        :show-icon="false" />
+
+                </BaseFilterBar>
 
             </template>
 
@@ -63,18 +69,20 @@ import { PLANES_COLUMNS } from 'src/constants/tables/planes.columns'
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
 import { ROLES } from 'src/constants/system/roles.constants'
 
-import { usePlansTable } from 'src/composables/usePlansTable'
+import { usePlansTable } from 'src/composables/usePlanTable'
 import { getPlanActions } from 'src/utils/actions.utils'
 import { notifySuccess } from 'src/utils/notifications.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
 import CrudToolbar from 'src/components/cruds/CrudToolbar.vue'
-import PlanFilters from 'src/components/plans/PlanFilters.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import PlanActions from 'src/components/actions/PlanActions.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
+import BaseFilterBar from 'src/components/base/BaseFilterBar.vue'
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import BaseSelect from 'src/components/forms/BaseSelect.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 const router = useRouter()

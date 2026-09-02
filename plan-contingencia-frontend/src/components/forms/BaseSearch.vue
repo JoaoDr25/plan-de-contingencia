@@ -1,11 +1,13 @@
 <template>
 
-    <div class="base-search">
+    <div class="base-search" >
 
         <q-input v-model="search" v-bind="$attrs" outlined dense :debounce="debounce" :placeholder="placeholder">
 
             <template #prepend>
+
                 <q-icon name="search" />
+
             </template>
 
         </q-input>
@@ -47,6 +49,7 @@ const search = computed({
 
 
 <style scoped lang="scss">
+
 .base-search {
     width: 340px;
     flex-shrink: 0;
