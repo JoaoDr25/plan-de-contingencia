@@ -254,13 +254,13 @@ const isEmpty = computed(() => {
 }
 
 .base-select--filter {
-    width: 160px;
+    width: 260px;
     max-width: 100%;
 }
 
 .base-select--filter :deep(.q-field__control) {
-    min-height: 37px;
-    height: 37px;
+    min-height: 40px;
+    height: 40px;
     border-radius: 4px;
     background-color: $color-surface;
 }

@@ -83,6 +83,7 @@ import PlanRecursosSeguridad from '../sections/PlanRecursosSeguridad.vue'
 import PlanRevision from '../sections/PlanRevision.vue'
 
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
+import { PLANES_HISTORICO_MOCK } from 'src/mocks/historico.mock'
 import { PLAN_ACTIONS } from 'src/constants/plans/planActions'
 import { PLAN_ACTIONS_CONFIRMATION } from 'src/constants/actions/plan_confirmation.constants'
 import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notifications.constants'
@@ -106,11 +107,29 @@ const role = ref('coordinacion')
 const showConfirmation = ref(false)
 const pendingAction = ref(null)
 
-const plan = ref(
-  PLANES_MOCK.find(
-    item => item._id === route.params.id
-  )
-)
+const plan = ref(getPlanById(route.params.id))
+
+function getPlanById(id) {
+
+  const planMock = PLANES_MOCK.find(item => item._id === id)
+
+  if (planMock) {
+    return planMock
+  }
+
+  const historicalPlan = PLANES_HISTORICO_MOCK.find(item => item._id === id)
+
+  if (!historicalPlan) {
+    return PLANES_MOCK[0]
+  }
+
+  return {
+    ...PLANES_MOCK[0],
+    ...historicalPlan,
+    fecha: historicalPlan.createdAt,
+    fechaCierre: historicalPlan.fechaCierre
+  }
+}
 
 const confirmationConfig = computed(() => {
 

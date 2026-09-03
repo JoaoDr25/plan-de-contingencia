@@ -57,17 +57,6 @@ const routes = [
           import('src/views/plans/PlanesConsultation.vue')
       },
       {
-        path: 'planes/:id',
-        name: 'planes.detail',
-        meta: {
-          title: 'Planes de Contingencia',
-          icon: 'description',
-          backToPrevious: true
-        },
-        component: () =>
-          import('src/views/plans/PlanesDetails.vue')
-      },
-      {
         path: 'planes/etapa/:id',
         name: 'planes.stage',
         meta: {
@@ -77,6 +66,17 @@ const routes = [
         },
         component: () =>
           import('src/views/plans/PlanReview.vue')
+      },
+      {
+        path: 'planes/:id',
+        name: 'planes.detail',
+        meta: {
+          title: 'Planes de Contingencia',
+          icon: 'description',
+          backToPrevious: true
+        },
+        component: () =>
+          import('src/views/plans/PlanesDetails.vue')
       },
       {
         path: 'programas',

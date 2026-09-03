@@ -13,6 +13,7 @@ export function notifyWarning(message) {
     Notify.create({
         message,
         type: 'warning',
+        icon: false,
         position: 'bottom',
         timeout: 1800
     })

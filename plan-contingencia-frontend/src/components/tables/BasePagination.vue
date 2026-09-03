@@ -110,6 +110,7 @@ function changeRowsPerPage(value) {
     justify-content: flex-end;
     gap: 4px;
     padding: 10px 5px 0 0;
+    padding-bottom: 20px;
 }
 
 .base-pagination__rows {

@@ -1,6 +1,8 @@
 <template>
 
-    <div class="base-search" >
+    <div class="base-search" :class="{
+        'base-search--filter': size === 'filter'
+    }">
 
         <q-input v-model="search" v-bind="$attrs" outlined dense :debounce="debounce" :placeholder="placeholder">
 
@@ -33,6 +35,10 @@ const props = defineProps({
     debounce: {
         type: Number,
         default: 300
+    },
+    size: {
+        type: String,
+        default: 'default'
     }
 })
 
@@ -62,6 +68,10 @@ const search = computed({
 .base-search :deep(.q-field__control) {
     height: 38px;
     border-radius: 6px;
+}
+
+.base-search--filter :deep(.q-field__control) {
+    height: 40px;
 }
 
 .base-search :deep(.q-field__native) {

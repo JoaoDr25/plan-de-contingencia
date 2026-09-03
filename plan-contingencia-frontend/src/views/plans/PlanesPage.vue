@@ -14,7 +14,7 @@
 
                 <BaseFilterBar>
 
-                    <BaseSearch v-model="searchText"  placeholder="Buscar por código, programa o actividad..." />
+                    <BaseSearch v-model="searchText" size="filter" placeholder="Buscar por código, programa o actividad..." />
 
                     <BaseSelect v-model="selectedStatus" label="Estado" :options="PLAN_STATUS_OPTIONS" size="filter"
                         :show-icon="false" />

@@ -1,7 +1,9 @@
 <template>
 
-    <q-input class="base-date-picker" :model-value="displayValue" :label="label" :placeholder="placeholder"
-        :disable="disable" :rules="rules" :required="required" readonly outlined dense hide-bottom-space>
+    <q-input class="base-date-picker" :class="{
+        'base-date-picker--filter': props.size === 'filter'
+    }" :model-value="displayValue" :label="props.label" :placeholder="props.placeholder"
+        :disable="props.disable" :rules="props.rules" :required="props.required" readonly outlined dense hide-bottom-space>
 
         <template #prepend>
 
@@ -12,7 +14,8 @@
 
         <q-popup-proxy ref="datePopup" cover transition-show="scale" transition-hide="scale">
 
-            <q-date :model-value="modelValue" mask="YYYY-MM-DD" :min="min" :max="max"
+            <q-date :model-value="props.modelValue" mask="YYYY-MM-DD" minimal :min="effectiveMin" :max="effectiveMax"
+                :options="isDateAllowed"
                 @update:model-value="selectDate" />
 
         </q-popup-proxy>
@@ -27,16 +30,7 @@ import { computed, ref } from 'vue'
 
 import { formatDate } from 'src/utils/date.utils'
 
-const {
-    modelValue,
-    label,
-    placeholder,
-    min,
-    max,
-    disable,
-    rules,
-    required
-} = defineProps({
+const props = defineProps({
 
     modelValue: {
         type: String,
@@ -76,6 +70,11 @@ const {
     required: {
         type: Boolean,
         default: false
+    },
+
+    size: {
+        type: String,
+        default: 'default'
     }
 })
 
@@ -85,19 +84,30 @@ const emit = defineEmits([
 
 const datePopup = ref(null)
 
+const normalizeDate = (value) => value?.replaceAll('-', '/')
+
+const effectiveMin = computed(() => normalizeDate(props.min))
+const effectiveMax = computed(() => normalizeDate(props.max))
+
+function isDateAllowed(value) {
+
+    const normalizedValue = normalizeDate(value)
+
+    return (!effectiveMin.value || normalizedValue >= effectiveMin.value) &&
+        (!effectiveMax.value || normalizedValue <= effectiveMax.value)
+}
+
 const displayValue = computed(() => {
 
-    if (!modelValue) {
+    if (!props.modelValue) {
         return ''
     }
-
-    return formatDate(modelValue)
+    return formatDate(props.modelValue)
 })
 
 function selectDate(value) {
 
     emit('update:modelValue', value)
-
     datePopup.value?.hide()
 }
 
@@ -109,7 +119,7 @@ function selectDate(value) {
 @use 'src/css/typography.scss' as *;
 
 .base-date-picker {
-    width: 105px;
+    width: 100%;
 }
 
 .base-date-picker :deep(.q-field__control) {
@@ -131,25 +141,42 @@ function selectDate(value) {
     display: none;
 }
 
-.base-date-picker :deep(.q-field__label) {
-    font-size: 0.65rem;
+.base-date-picker--filter {
+    width: 260px;
+    max-width: 100%;
+}
+
+.base-date-picker--filter :deep(.q-field__control) {
+    min-height: 40px;
+    height: 40px;
+    background-color: $color-surface;
+}
+
+.base-date-picker--filter :deep(.q-field__label) {
+    font-size: $font-size-xs;
     color: $color-text-secondary;
+    padding-left: 6px;
+    padding-top: 1px;
 }
 
-.base-date-picker :deep(.q-field__native) {
-    padding-top: 0;
-    padding-bottom: 0;
-    font-size: 0.72rem;
-    color: $color-text-primary;
-    line-height: 20px;
+.base-date-picker--filter.q-field--focused :deep(.q-field__label),
+.base-date-picker--filter.q-field--float :deep(.q-field__label) {
+    color: $color-primary;
 }
 
-.base-date-picker :deep(.q-field__prepend) {
-    padding-right: 4px;
-    color: $color-text-secondary;
+.base-date-picker--filter :deep(.q-field__native) {
+    font-size: $font-size-xs;
+    line-height: 25px;
+    padding-left: 10px;
+    padding-top: 16px;
 }
 
-.base-date-picker :deep(.q-field__prepend .q-icon) {
-    font-size: 15px;
+.base-date-picker--filter :deep(.q-field__prepend) {
+    padding-right: 3px;
+    padding-left: 2px;
+}
+
+.base-date-picker--filter :deep(.q-field__prepend .q-icon) {
+    font-size: 18px;
 }
 </style>
