@@ -59,7 +59,6 @@ const drawerOpen = defineModel()
 <style scoped lang="scss">
 
 @use 'src/css/variables.scss' as *;
-@use 'src/css/mixins.scss' as *;
 @use 'src/css/typography.scss' as *;
 
 .app-drawer {

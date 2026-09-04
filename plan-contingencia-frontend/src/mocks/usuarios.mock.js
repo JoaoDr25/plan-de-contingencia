@@ -161,4 +161,5 @@ export const USUARIOS_MOCK = [
         acceso: '30/07/2026 09:18',
         estado: 'Inactivo'
     }
+    
 ]

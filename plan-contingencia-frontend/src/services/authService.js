@@ -16,6 +16,7 @@ export function login(documento, correo) {
         }
     }
 
+
     if (user.estado !== 'Activo') {
         return {
             success: false,
@@ -27,4 +28,5 @@ export function login(documento, correo) {
         success: true,
         user
     }
+    
 }

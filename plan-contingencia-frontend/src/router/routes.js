@@ -198,7 +198,8 @@ const routes = [
           import('src/views/modules/ParametrosPage.vue')
       }
     ]
-  },
+  }
+
 ]
 
 export default routes
