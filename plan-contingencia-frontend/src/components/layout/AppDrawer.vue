@@ -40,6 +40,7 @@
 
 import AppLogo from './AppLogo.vue';
 import DrawerMenuItem from '../navigation/DrawerMenuItem.vue';
+
 import { navigation } from 'src/constants/navigation/navigation.constants.js';
 import { ROLES } from 'src/constants/system/roles.constants.js';
 
@@ -56,6 +57,7 @@ const drawerOpen = defineModel()
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/mixins.scss' as *;
 @use 'src/css/typography.scss' as *;
