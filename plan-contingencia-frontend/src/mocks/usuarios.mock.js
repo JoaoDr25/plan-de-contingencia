@@ -13,7 +13,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Desarrollo Web y Software',
         tipoVinculacion: 'Planta',
         maximoHoras: 40,
-        rol: 'Administrador',
+        rol: 'administrador',
         acceso: '30/07/2026 08:15',
         estado: 'Activo'
     },
@@ -31,7 +31,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Producción Agropecuaria',
         tipoVinculacion: 'Contratista',
         maximoHoras: 32,
-        rol: 'Instructor',
+        rol: 'usuario',
         acceso: '30/07/2026 07:42',
         estado: 'Activo'
     },
@@ -67,7 +67,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Gestión Ambiental',
         tipoVinculacion: 'Contratista',
         maximoHoras: 20,
-        rol: 'Instructor',
+        rol: 'usuario',
         acceso: '30/07/2026 09:05',
         estado: 'Inactivo'
     },
@@ -85,7 +85,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Mantenimiento Mecánico',
         tipoVinculacion: 'Planta Temporal',
         maximoHoras: 36,
-        rol: 'Instructor',
+        rol: 'usuario',
         acceso: '28/07/2026 14:20',
         estado: 'Activo'
     },
@@ -103,7 +103,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Bienestar al Aprendiz',
         tipoVinculacion: 'Planta',
         maximoHoras: 40,
-        rol: 'Líder de Bienestar',
+        rol: 'sst',
         acceso: '30/07/2026 08:51',
         estado: 'Activo'
     },
@@ -121,7 +121,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Electricidad y Electrónica',
         tipoVinculacion: 'Contratista',
         maximoHoras: 32,
-        rol: 'Instructor',
+        rol: 'usuario',
         acceso: '27/07/2026 10:12',
         estado: 'Activo'
     },
@@ -139,7 +139,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Coordinación y Pedagogía',
         tipoVinculacion: 'Planta',
         maximoHoras: 40,
-        rol: 'Coordinador',
+        rol: 'pedagogia',
         acceso: '29/07/2026 11:45',
         estado: 'Activo'
     },
@@ -157,7 +157,7 @@ export const USUARIOS_MOCK = [
         areaTematica: 'Sistemas y Redes',
         tipoVinculacion: 'Planta Temporal',
         maximoHoras: 24,
-        rol: 'Administrador',
+        rol: 'usuario',
         acceso: '30/07/2026 09:18',
         estado: 'Inactivo'
     }

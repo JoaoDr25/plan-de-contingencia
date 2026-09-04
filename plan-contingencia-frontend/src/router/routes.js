@@ -1,4 +1,12 @@
 const routes = [
+   {
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: 'Inicio de sesión'
+    },
+    component: () => import('src/views/auth/LoginPage.vue')
+  },
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
