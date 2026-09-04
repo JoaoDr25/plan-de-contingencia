@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { login as authenticateUser } from 'src/services/authService'
-import { A } from 'vue-router/dist/index-BQLwgiyK.js'
 
 export const useAuthStore = defineStore('auth', () => {
 
     const currentUser = ref(null)
-    
+
     const isAuthenticated = computed(() => {
         return currentUser.value !== null
     })
