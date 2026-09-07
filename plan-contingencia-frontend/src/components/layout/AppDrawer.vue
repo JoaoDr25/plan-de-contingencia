@@ -10,17 +10,11 @@
 
         <div class="app-drawer__user">
 
-            <h2 class="app-drawer__role">
-                ADMINISTRADOR
-            </h2>
+            <h2 class="app-drawer__role">{{ roleLabel }}</h2>
 
-            <P class="app-drawer__name">
-                Nombre Completo Administrador
-            </P>
+            <p class="app-drawer__name">{{ userName }}</p>
 
-            <p class="app-drawer__email">
-                correoinstitucional@soy.sena.edu.co
-            </p>
+            <p class="app-drawer__email">{{ userEmail }}</p>
 
         </div>
 
@@ -28,7 +22,7 @@
 
         <div class="app-drawer__content">
 
-            <DrawerMenuItem v-for="item in navigation[ROLES.ADMINISTRADOR]" :key="item.title" :title="item.title"
+            <DrawerMenuItem v-for="item in visibleNavigation" :key="item.routeName" :title="item.title"
                 :icon="item.icon" :route-name="item.routeName" @closeDrawer="handleCloseDrawer"/>
         </div>
 
@@ -41,6 +35,9 @@
 import AppLogo from './AppLogo.vue';
 import DrawerMenuItem from '../navigation/DrawerMenuItem.vue';
 
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from 'src/stores/auth.store'
 import { navigation } from 'src/constants/navigation/navigation.constants.js';
 import { ROLES } from 'src/constants/system/roles.constants.js';
 
@@ -53,6 +50,28 @@ function handleCloseDrawer() {
 }
 
 const drawerOpen = defineModel()
+const router = useRouter()
+const authStore = useAuthStore()
+
+const userName = computed(() => {
+    const user = authStore.currentUser
+    return [user?.nombre, user?.apellido].filter(Boolean).join(' ') || 'Usuario'
+})
+
+const userEmail = computed(() => authStore.currentUser?.correo || 'Correo no disponible')
+
+const roleLabel = computed(() => String(authStore.role || 'usuario').toUpperCase())
+
+const visibleNavigation = computed(() => {
+    const administratorItems = navigation[ROLES.ADMINISTRADOR] || []
+
+    return administratorItems.filter(item => {
+        const route = router.getRoutes().find(registeredRoute => registeredRoute.name === item.routeName)
+        const roles = route?.meta?.roles ?? []
+
+        return roles.length === 0 || roles.includes(authStore.role)
+    })
+})
 
 </script>
 

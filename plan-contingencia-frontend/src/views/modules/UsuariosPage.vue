@@ -6,8 +6,10 @@
 
             <template #actions>
 
-                <PrimaryActionButton label="Sincronizar" icon="sync" size="sm" :loading="syncing" :disable="syncing"
-                    @click="syncUsers" />
+                <div class="usuarios-page__actions-slot">
+                    <PrimaryActionButton v-if="canSyncUsers" label="Sincronizar" icon="sync" size="sm"
+                        :loading="syncing" :disable="syncing" @click="syncUsers" />
+                </div>
 
             </template>
 
@@ -70,15 +72,18 @@
 
 <script setup>
 
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { USUARIOS_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { USUARIOS_FILTERS } from 'src/constants/filters/usuarios.constants'
 import { USUARIOS_COLUMNS } from 'src/constants/tables/usuarios.columns'
 
 import { USUARIOS_MOCK } from 'src/mocks/usuarios.mock'
+import { ROLES } from 'src/constants/system/roles.constants'
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { notifySuccess } from 'src/utils/notifications.utils.js'
+import { mergeUsersFromRepfora } from 'src/utils/userSync.utils'
+import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils.js'
+import { useAuthStore } from 'src/stores/auth.store'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -94,7 +99,12 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import UsuariosDialog from '../dialogs/UsuariosDialog.vue'
 import UsuariosDetails from '../details/UsuariosDetails.vue'
 
-const sourceRows = ref(USUARIOS_MOCK)
+const sourceRows = ref(USUARIOS_MOCK.map(user => ({ ...user })))
+const authStore = useAuthStore()
+
+const canSyncUsers = computed(() => {
+    return String(authStore.role || '').toLowerCase() === ROLES.ADMINISTRADOR
+})
 
 const {
     selectedFilter,
@@ -127,10 +137,22 @@ const pendingActionData = ref(null)
 
 async function syncUsers() {
 
+    if (!canSyncUsers.value) {
+        return
+    }
+
     syncing.value = true
 
     try {
-        // sincronización
+        const syncResult = mergeUsersFromRepfora(sourceRows.value, USUARIOS_MOCK)
+        sourceRows.value = syncResult.users
+
+        if (syncResult.added === 0) {
+            notifyWarning('No hay usuarios nuevos para agregar')
+            return
+        }
+
+        notifySuccess(`${syncResult.added} usuario(s) nuevo(s) agregado(s)`)
     } finally {
         syncing.value = false
     }
@@ -186,3 +208,11 @@ function viewItem(row) {
 }
 
 </script>
+
+<style scoped lang="scss">
+
+.usuarios-page__actions-slot {
+    min-height: 38px;
+}
+
+</style>

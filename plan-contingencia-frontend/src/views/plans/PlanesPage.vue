@@ -43,7 +43,7 @@
 
                 <q-td :props="props">
 
-                    <PlanActions :actions="getPlanActions(props.row, currentRole)" @view="viewPlan(props.row)"
+                    <PlanActions :actions="getPlanActions(props.row, authStore.role, authStore.currentUser)" @view="viewPlan(props.row)"
                         @edit="editPlan(props.row)" @delete="deletePlan(props.row)" />
 
                 </q-td>
@@ -67,10 +67,10 @@ import { useRoute, useRouter } from 'vue-router'
 import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
 import { PLANES_COLUMNS } from 'src/constants/tables/planes.columns'
 import { PLANES_MOCK } from 'src/mocks/planes.mock'
-import { ROLES } from 'src/constants/system/roles.constants'
+import { useAuthStore } from 'src/stores/auth.store'
 
 import { usePlansTable } from 'src/composables/usePlanTable'
-import { getPlanActions } from 'src/utils/actions.utils'
+import { getPlanActions, isPlanOwner } from 'src/utils/actions.utils'
 import { notifySuccess } from 'src/utils/notifications.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -90,7 +90,7 @@ const route = useRoute()
 
 const sourceRows = ref(PLANES_MOCK)
 
-const currentRole = ROLES.USUARIO
+const authStore = useAuthStore()
 
 const loading = ref(false)
 
@@ -126,6 +126,10 @@ function viewPlan(row) {
 
 function editPlan(row) {
 
+    if (!isEditableDraft(row)) {
+        return
+    }
+
     router.push({
         name: 'planes.create',
         params: {
@@ -135,8 +139,18 @@ function editPlan(row) {
 }
 
 function deletePlan(row) {
+
+    if (!isEditableDraft(row)) {
+        return
+    }
+
     selectedPlan.value = row
     showConfirmation.value = true
+}
+
+function isEditableDraft(plan) {
+    return String(plan?.estado || '').toLowerCase() === 'borrador' &&
+        isPlanOwner(plan, authStore.currentUser)
 }
 
 function confirmDeletePlan() {

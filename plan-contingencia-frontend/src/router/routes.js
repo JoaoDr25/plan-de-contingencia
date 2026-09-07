@@ -1,3 +1,13 @@
+import { ROLES } from 'src/constants/system/roles.constants.js'
+
+const USER_ROL = [ROLES.USUARIO]
+const ADMIN_ROL = [ROLES.ADMINISTRADOR]
+const ALL_ROL = [
+  ROLES.SST,
+  ROLES.PEDAGOGIA,
+  ROLES.COORDINACION,
+]
+
 const routes = [
    {
     path: '/login',
@@ -10,6 +20,9 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    meta: {
+      requiresAuth: true
+    },
     children: [
 
       {
@@ -28,7 +41,7 @@ const routes = [
         meta: {
           title: 'Planes de Contingencia',
           icon: 'description',
-          backToPrevious: true
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/plans/PlanesPage.vue')
@@ -39,7 +52,8 @@ const routes = [
         meta: {
           title: 'Planes de Contingencia',
           icon: 'description',
-          backToPrevious: true
+          backToPrevious: true,
+          roles: [...USER_ROL, ...ADMIN_ROL]
         },
         component: () =>
           import('src/views/plans/PlanCreate.vue')
@@ -49,7 +63,8 @@ const routes = [
         name: 'planes.history',
         meta: {
           title: 'Histórico de Planes',
-          icon: 'history'
+          icon: 'history',
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/plans/PlanesHistoric.vue')
@@ -59,7 +74,8 @@ const routes = [
         name: 'planes.consultation',
         meta: {
           title: 'Consulta de Planes',
-          icon: 'search'
+          icon: 'search',
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/plans/PlanesConsultation.vue')
@@ -70,7 +86,8 @@ const routes = [
         meta: {
           title: 'Detalles del Plan de Contingencia',
           icon: 'description',
-          backToPrevious: true
+          backToPrevious: true,
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/plans/PlanReview.vue')
@@ -81,6 +98,7 @@ const routes = [
         meta: {
           title: 'Planes de Contingencia',
           icon: 'description',
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL],
           backToPrevious: true
         },
         component: () =>
@@ -91,7 +109,8 @@ const routes = [
         name: 'programas.list',
         meta: {
           title: 'Programas de Formación',
-          icon: 'school'
+          icon: 'school',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/ProgramasPage.vue')
@@ -101,7 +120,8 @@ const routes = [
         name: 'actividades.list',
         meta: {
           title: 'Actividades',
-          icon: 'event'
+          icon: 'event',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/ActividadesPage.vue')
@@ -111,7 +131,8 @@ const routes = [
         name: 'peligros.list',
         meta: {
           title: 'Peligros',
-          icon: 'warning'
+          icon: 'warning',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/PeligrosPage.vue')
@@ -121,7 +142,8 @@ const routes = [
         name: 'riesgos.list',
         meta: {
           title: 'Riesgos',
-          icon: 'report_problem'
+          icon: 'report_problem',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/RiesgosPage.vue')
@@ -131,7 +153,8 @@ const routes = [
         name: 'protocolos.list',
         meta: {
           title: 'Protocolos',
-          icon: 'assignment'
+          icon: 'assignment',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/ProtocolosPage.vue')
@@ -141,7 +164,8 @@ const routes = [
         name: 'usuarios.list',
         meta: {
           title: 'Usuarios',
-          icon: 'group'
+          icon: 'group',
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/UsuariosPage.vue')
@@ -151,7 +175,8 @@ const routes = [
         name: 'aprendices.list',
         meta: {
           title: 'Aprendices',
-          icon: 'badge'
+          icon: 'badge',
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/AprendicesPage.vue')
@@ -162,7 +187,8 @@ const routes = [
         meta: {
           title: 'Información del Aprendiz',
           icon: 'badge',
-          backToPrevious: true
+          backToPrevious: true,
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/details/AprendicesDetails.vue')
@@ -172,7 +198,8 @@ const routes = [
         name: 'contactos.list',
         meta: {
           title: 'Contactos de Emergencia',
-          icon: 'call'
+          icon: 'call',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/ContactosPage.vue')
@@ -182,7 +209,8 @@ const routes = [
         name: 'epp.list',
         meta: {
           title: 'Elementos de Protección Personal',
-          icon: 'healt_and_safety'
+          icon: 'healt_and_safety',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/EppPage.vue')
@@ -192,7 +220,8 @@ const routes = [
         name: 'parametros.list',
         meta: {
           title: 'Parámetros del sistema',
-          icon: 'settings'
+          icon: 'settings',
+          roles: [...ADMIN_ROL, ...ALL_ROL]
         },
         component: () =>
           import('src/views/modules/ParametrosPage.vue')

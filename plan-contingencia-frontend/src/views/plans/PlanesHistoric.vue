@@ -138,6 +138,7 @@ function clearFilters() {
 .historico-filter-bar {
     justify-content: flex-start;
     align-items: center;
+    max-width: 100%;
 }
 
 .historico-filter-actions {
@@ -163,19 +164,7 @@ function clearFilters() {
         width: 100%;
         margin-left: 0;
         padding-left: 0;
-    }
-}
-
-@media (max-width: 550px) {
-
-    .historico-filter-actions {
-        flex-direction: column;
-        align-items: stretch;
-        padding-left: 0;
-    }
-
-    .historico-filter-actions :deep(.base-clear-filters) {
-        align-self: flex-end;
+        padding-top: 6px;
     }
 }
 
@@ -215,6 +204,20 @@ function clearFilters() {
     .historico-filter-actions :deep(.base-clear-filters) {
         align-self: center;
         margin-left: 0;
+        padding-top: 6px;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .historico-filter-actions {
+        flex-direction: column;
+        align-items: stretch;
+        padding-left: 0;
+    }
+
+    .historico-filter-actions :deep(.base-clear-filters) {
+        align-self: flex-end;
     }
 }
 </style>

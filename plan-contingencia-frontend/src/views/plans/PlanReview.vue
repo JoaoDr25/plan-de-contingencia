@@ -495,6 +495,7 @@ function viewFullPlan() {
 
     .plan-stage-detail__actions {
         flex-direction: column;
+        padding-bottom: 28px;
     }
 }
 </style>

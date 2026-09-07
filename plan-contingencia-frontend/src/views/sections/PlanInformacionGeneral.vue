@@ -26,13 +26,24 @@
 
         <div class="info-item">
             <span class="info-item__label">
+                Instructor responsable
+            </span>
+
+            <span class="info-item__value">
+                {{ plan.usuarioNombre || 'No disponible' }}
+            </span>
+        </div>
+
+
+        <!-- <div class="info-item">
+            <span class="info-item__label">
                 Clasificación de la Información
             </span>
 
             <span class="info-item__value">
                 {{ formatClassification(plan.clasificacionInformacion) }}
             </span>
-        </div>
+        </div> -->
 
 
         <div class="info-item">
@@ -138,15 +149,15 @@ function formatTransport(value) {
 }
 
 
-function formatClassification(value) {
+// function formatClassification(value) {
 
-    const classifications = {
-        publica: 'Pública',
-        clasificada: 'Clasificada',
-        reservada: 'Reservada'
-    }
-    return classifications[value] || 'No disponible'
-}
+//     const classifications = {
+//         publica: 'Pública',
+//         clasificada: 'Clasificada',
+//         reservada: 'Reservada'
+//     }
+//     return classifications[value] || 'No disponible'
+// }
 
 </script>
 

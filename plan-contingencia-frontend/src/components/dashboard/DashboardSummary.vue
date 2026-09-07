@@ -17,6 +17,7 @@
 
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from 'src/stores/auth.store'
 import { dashboardSummary } from 'src/constants/navigation/dashboard.constants.js';
 import DashboardStatCard from './DashboardStatCard.vue';
 
@@ -28,6 +29,16 @@ const props = defineProps({
 })
 
 const router = useRouter()
+const authStore = useAuthStore()
+
+const accessibleSummaryItems = computed(() => {
+    return dashboardSummary.filter(item => {
+        const route = router.getRoutes().find(registeredRoute => registeredRoute.name === item.routeName)
+        const roles = route?.meta?.roles ?? []
+
+        return roles.length === 0 || roles.includes(authStore.role)
+    })
+})
 
 function normalizeStatus(status) {
     return String(status ?? '')
@@ -40,7 +51,7 @@ function normalizeStatus(status) {
 const summaryItems = computed(() => {
     const plans = props.plans
 
-    return dashboardSummary.map(item => ({
+    return accessibleSummaryItems.value.map(item => ({
         ...item,
         value: item.status === 'todos'
             ? plans.length
@@ -66,6 +77,16 @@ function openSummary(item) {
 
 .dashboard-summary {
     width: 100%;
+}
+
+.dashboard-summary__title {
+    margin: 0 0 1.25rem;
+    color: $color-text-primary;
+    font-family: $font-family-base;
+    font-size: 1.36rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-align: center;
 }
 
 .dashboard-summary__grid {

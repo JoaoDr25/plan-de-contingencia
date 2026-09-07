@@ -2,16 +2,12 @@
 
     <section class="dashboard-modules">
 
-        <h2 class="dashboard-modules__title">
-
-            ADMINISTRADOR DEL SISTEMA
-
-        </h2>
+        <h2 class="dashboard-modules__title">{{ roleTitle }}</h2>
 
         <div class="dashboard-modules__grid">
 
 
-            <DashboardModuleCard v-for="module in dashboardModules" :key="module.id" :title="module.title"
+            <DashboardModuleCard v-for="module in visibleModules" :key="module.id" :title="module.title"
                 :image="module.image" :route-name="module.routeName" />
 
         </div>
@@ -22,8 +18,30 @@
 
 <script setup>
 
+import { computed } from 'vue'
+import { useAuthStore } from 'src/stores/auth.store'
+import { useRouter } from 'vue-router'
 import { dashboardModules } from 'src/constants/navigation/dashboard.constants.js';
+
 import DashboardModuleCard from './DashboardModuleCard.vue';
+
+const authStore = useAuthStore()
+const router = useRouter()
+
+const visibleModules = computed(() => {
+    return dashboardModules.filter(module => {
+        const route = router.getRoutes().find(item => item.name === module.routeName)
+        const roles = route?.meta?.roles ?? []
+
+        return roles.length === 0 || roles.includes(authStore.role)
+    })
+})
+
+const roleTitle = computed(() => {
+    return authStore.role === 'usuario'
+        ? 'CONFIGURACIÓN DEL SISTEMA'
+        : 'ADMINISTRADOR DEL SISTEMA'
+})
 
 </script>
 

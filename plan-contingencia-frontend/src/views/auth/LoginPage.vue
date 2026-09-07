@@ -1,107 +1,131 @@
 <template>
-    <div class="login-page">
-        <div class="login-page__container">
+    <q-layout view="lHh Lpr lFf" class="login-layout">
 
-            <div class="login-page__header">
-                <img src="src/assets/logos/logo-sena.png" alt="SENA" class="login-page__logo" />
+        <AppHeader :show-menu="false" :show-logout="false" />
 
-                <p class="login-page__subtitle">
-                    PLANES DE CONTINGENCIA
-                </p>
-            </div>
+        <q-page-container>
+            <div class="login-page">
+                <div class="login-page__container">
 
-            <q-card class="login-page__card">
-                <q-card-section>
-
-                    <div class="login-page__form-header">
-                        <h2>Inicio de sesión</h2>
-
-                        <p>
-                            Ingrese sus credenciales institucionales
-                        </p>
+                    <div class="login-page__header">
+                        <h1>SISTEMA DE GESTIÓN DE PLANES DE CONTINGENCIA</h1>
                     </div>
 
-                    <q-form ref="loginForm" class="login-page__form" @submit.prevent="handleLogin">
+                    <q-card class="login-page__card">
+                        <q-card-section>
 
-                        <q-input v-model="form.documento" label="Documento" placeholder="Ingrese su número de documento"
-                            outlined :disable="loading" :rules="[
-                                val => !!val || 'El documento es obligatorio',
-                                val =>
-                                    /^\d+$/.test(val) ||
-                                    'El documento debe contener únicamente números'
-                            ]" />
+                            <div class="login-page__form-header">
+                                <!-- <h2>Inicio de sesión</h2> -->
 
-                        <q-input v-model="form.correo" label="Correo institucional" placeholder="correo@soy.sena.edu.co"
-                            type="email" outlined :disable="loading" :rules="[
-                                val => !!val || 'El correo institucional es obligatorio',
-                                val =>
-                                    /.+@.+\..+/.test(val) ||
-                                    'Ingrese un correo electrónico válido'
-                            ]" />
+                                <!-- <p>
+                                    Ingrese sus Credenciales Institucionales
+                                </p> -->
+                                <p>
+                                    INGRESE SUS CREDENCIALES INSTITUCIONALES
+                                </p>
+                            </div>
 
-                        <q-btn type="submit" label="Ingresar" icon="login" color="primary" unelevated class="full-width"
-                            :loading="loading" />
+                            <q-form ref="loginForm" class="login-page__form" @submit.prevent="handleLogin">
 
-                    </q-form>
+                                <BaseInput v-model="form.documento" label="Documento"
+                                    :placeholder="focusedField === 'documento' ? 'Ingrese su número de documento' : ''"
+                                    type="number" :disable="loading" :rules="[
+                                        val => !!val || 'El documento es obligatorio',
+                                        val =>
+                                            /^\d+$/.test(val) ||
+                                            'El documento debe contener únicamente números'
+                                    ]" @focus="focusedField = 'documento'" @blur="clearFocusedField" />
 
-                </q-card-section>
-            </q-card>
+                                <BaseInput v-model="form.correo" label="Correo institucional"
+                                    :placeholder="focusedField === 'correo' ? 'correo@soy.sena.edu.co' : ''"
+                                    type="email" :disable="loading" :rules="[
+                                        val => !!val || 'El correo institucional es obligatorio',
+                                        val =>
+                                            /.+@.+\..+/.test(val) ||
+                                            'Ingrese un correo electrónico válido'
+                                    ]" @focus="focusedField = 'correo'" @blur="clearFocusedField" />
 
-            <div class="login-page__footer">
-                Sistema de gestión de Planes de Contingencia
+                                <div class="login-page__submit">
+                                    <PrimaryActionButton type="submit" label="CONSULTAR" icon="" size="sm"
+                                        :loading="loading" />
+                                </div>
+
+                            </q-form>
+
+                        </q-card-section>
+                    </q-card>
+
+                </div>
             </div>
-
-        </div>
-    </div>
+        </q-page-container>
+    </q-layout>
 </template>
 
 <script setup>
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth.store'
-import { notifySuccess, notifyError } from 'src/utils/notifications.utils'
+import { notifySuccess, notifyWarning, notifyError } from 'src/utils/notifications.utils'
+import AppHeader from 'src/components/layout/AppHeader.vue'
+import BaseInput from 'src/components/forms/BaseInput.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 
 const loginForm = ref(null)
 
 const loading = ref(false)
+const focusedField = ref('')
 
 const form = ref({
     documento: '',
     correo: ''
 })
 
+function clearFocusedField() {
+    focusedField.value = ''
+}
+
 async function handleLogin() {
-  const isValid = await loginForm.value.validate()
+    const isValid = await loginForm.value.validate()
 
-  if (!isValid) {
-    return
-  }
-
-  loading.value = true
-
-  try {
-    const result = await authStore.login(
-      form.value.documento.trim(),
-      form.value.correo.trim()
-    )
-
-    if (!result.success) {
-      notifyError(result.message)
-      return
+    if (!isValid) {
+        notifyWarning('Complete los campos requeridos')
+        return
     }
 
-    notifySuccess('Inicio de sesión exitoso')
+    loading.value = true
 
-    await router.push({
-      name: 'dashboard'
-    })
-  } finally {
-    loading.value = false
-  }
+    try {
+        const result = await authStore.login(
+            form.value.documento.trim(),
+            form.value.correo.trim()
+        )
+
+        if (!result.success && result.message === 'Documento o correo institucional incorrecto') {
+            notifyWarning('El documento o correo institucional no coinciden')
+            return
+        }
+
+        if (!result.success) {
+            notifyError(result.message)
+            return
+        }
+
+        notifySuccess('Inicio de sesión exitoso')
+
+        const redirectPath = typeof route.query.redirect === 'string' && route.query.redirect.startsWith('/')
+            ? route.query.redirect
+            : '/'
+
+        await router.push(redirectPath)
+    } finally {
+        loading.value = false
+    }
 }
 
 </script>
@@ -112,72 +136,87 @@ async function handleLogin() {
 @use 'src/css/typography.scss' as *;
 
 .login-page {
-    min-height: 100vh;
+    min-height: calc(100vh - 56px);
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
-    padding: 24px;
-    background: $color-background;
+    padding: $spacing-xl $spacing-lg;
+    background: $color-surface;
 }
 
 .login-page__container {
     width: 100%;
-    max-width: 420px;
+    max-width: 560px;
 }
 
 .login-page__header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 10rem;
 }
 
-.login-page__logo {
-    width: 90px;
-    height: auto;
-    margin-bottom: 12px;
-}
-
-.login-page__title {
-    margin: 0;
-    font-size: 32px;
-    font-weight: 700;
-    color: $primary;
-}
-
-.login-page__subtitle {
-    margin: 4px 0 0;
-    color: $color-text-secondary;
+.login-page__header h1 {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    margin-top: 10px;
+    text-transform: uppercase;
+    color: #000000;
+    white-space: nowrap;
 }
 
 .login-page__card {
-    border-radius: 12px;
+    border-radius: 5px;
+    border: 1px solid $color-border;
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+    background-color: $color-surface;
 }
 
 .login-page__form-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: $spacing-lg;
 }
 
 .login-page__form-header h2 {
-    margin: 0 0 8px;
-    font-size: 24px;
+    margin-bottom: $spacing-sm;
+    font-size: $font-size-3xl;
+    color: $color-text-primary;
 }
 
 .login-page__form-header p {
-    margin: 0;
+    margin: 10px 0 0 0;
     color: $color-text-secondary;
 }
 
 .login-page__form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $spacing-md;
 }
 
-.login-page__footer {
-    margin-top: 24px;
+.login-page__submit {
+    display: flex;
+    justify-content: center;
+    padding-top: $spacing-xs;
+}
+
+.login-page__submit :deep(.q-icon.on-left) {
+    display: none;
+}
+
+.login-page__submit :deep(.q-btn__content) {
+    justify-content: center;
+    width: 100%;
     text-align: center;
-    font-size: 13px;
-    color: $color-text-secondary;
 }
 
+@media (max-width: 600px) {
+    .login-page {
+        padding: $spacing-lg $spacing-md;
+    }
+
+    .login-page__header h1 {
+        font-size: $font-size-md;
+        white-space: normal;
+    }
+}
 </style>

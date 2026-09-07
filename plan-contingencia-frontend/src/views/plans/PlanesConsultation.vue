@@ -12,7 +12,8 @@
 
                 <BaseFilterBar class="consulta-filter-bar">
 
-                    <BaseSearch v-model="codigoPlan" size="filter" label="Código del plan" placeholder="Ej. PC-2024-0001" />
+                    <BaseSearch v-model="codigoPlan" size="filter" label="Código del plan"
+                        placeholder="Ej. PC-2024-0001" />
 
                     <BaseSearch v-model="ficha" size="filter" label="Ficha" placeholder="Buscar por ficha..." />
 
@@ -146,7 +147,6 @@ function clearFilters() {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -154,6 +154,7 @@ function clearFilters() {
     justify-content: flex-start;
     align-items: center;
     column-gap: 19px;
+    max-width: 100%;
 }
 
 .consulta-filter-bar :deep(.base-search) {
@@ -185,12 +186,25 @@ function clearFilters() {
     .consulta-filter-bar {
         justify-content: flex-start;
     }
+
+    .consulta-filter-bar :deep(.base-clear-filters) {
+        margin-top: 6px;
+    }
 }
 
 @media (max-width: 700px) {
 
     .consulta-filter-bar {
         justify-content: flex-start;
+    }
+}
+
+@media (max-width: 791px) {
+
+    .consulta-filter-bar :deep(.base-clear-filters) {
+        align-self: flex-start;
+        margin-left: 0;
+        margin-top: 6px;
     }
 }
 

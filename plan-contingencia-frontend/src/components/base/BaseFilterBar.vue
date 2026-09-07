@@ -24,6 +24,7 @@
     flex-wrap: wrap;
     gap: 12px;
     width: 100%;
+    max-width: 640px;
     font-family: $font-family-base;
 }
 
@@ -45,6 +46,7 @@
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
+        max-width: 100%;
     }
 }
 </style>

@@ -3,7 +3,7 @@
 
         <q-toolbar>
 
-            <q-btn flat dense round icon="menu" @click="handleToggleDrawer" />
+            <q-btn v-if="showMenu" flat dense round icon="menu" @click="handleToggleDrawer" />
 
             <q-toolbar-title class="app-header__title">
                 <span class="app-header__title-text" role="button" tabindex="0" @click="goToDashboard"
@@ -12,7 +12,7 @@
                 </span>
             </q-toolbar-title>
 
-            <q-btn flat dense round icon="logout">
+            <q-btn v-if="showLogout" flat dense round icon="logout" @click="handleLogout">
             </q-btn>
 
         </q-toolbar>
@@ -23,8 +23,21 @@
 <script setup>
 
 import { useRouter } from 'vue-router'
+import { useAuthStore } from 'src/stores/auth.store'
 
 const router = useRouter()
+const authStore = useAuthStore()
+
+const { showMenu, showLogout } = defineProps({
+    showMenu: {
+        type: Boolean,
+        default: true
+    },
+    showLogout: {
+        type: Boolean,
+        default: true
+    }
+})
 
 const emit = defineEmits([
     'toggleDrawer'
@@ -36,6 +49,11 @@ function handleToggleDrawer() {
 
 function goToDashboard() {
     router.push({ name: 'dashboard' })
+}
+
+function handleLogout() {
+    authStore.logout()
+    router.push({ name: 'login' })
 }
 
 const APP_TITLE = "PLANES DE CONTINGENCIA"

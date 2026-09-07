@@ -14,8 +14,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000001',
         descripcionActividad: 'Visita técnica a unidad productiva agropecuaria.',
 
-        usuarioId: '66d400000000000000000001',
-        usuarioNombre: 'Carlos Andrés Gómez',
+        usuarioId: '2',
+        usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-09-15',
         horaSalida: '07:00',
@@ -239,8 +239,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000002',
         descripcionActividad: 'Salida académica para reconocimiento ambiental.',
 
-        usuarioId: '66d400000000000000000002',
-        usuarioNombre: 'María Fernanda Rodríguez',
+        usuarioId: '4',
+        usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-09-18',
         horaSalida: '06:30',
@@ -325,8 +325,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000003',
         descripcionActividad: 'Práctica de reconocimiento de cultivos.',
 
-        usuarioId: '66d400000000000000000003',
-        usuarioNombre: 'Jorge Luis Martínez',
+        usuarioId: '5',
+        usuarioNombre: 'Luis Fernando Ramírez',
 
         fecha: '2026-09-22',
         horaSalida: '07:30',
@@ -406,8 +406,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000004',
         descripcionActividad: 'Visita técnica de seguimiento a proceso productivo.',
 
-        usuarioId: '66d400000000000000000001',
-        usuarioNombre: 'Carlos Andrés Gómez',
+        usuarioId: '2',
+        usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-09-25',
         horaSalida: '07:00',
@@ -492,8 +492,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000005',
         descripcionActividad: 'Salida académica para reconocimiento de sistemas productivos.',
 
-        usuarioId: '66d400000000000000000004',
-        usuarioNombre: 'Laura Marcela Pérez',
+        usuarioId: '7',
+        usuarioNombre: 'Miguel Ángel Hernández',
 
         fecha: '2026-09-28',
         horaSalida: '06:00',
@@ -577,8 +577,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000006',
         descripcionActividad: 'Actividad de reconocimiento de condiciones ambientales.',
 
-        usuarioId: '66d400000000000000000002',
-        usuarioNombre: 'María Fernanda Rodríguez',
+        usuarioId: '4',
+        usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-10-02',
         horaSalida: '07:00',
@@ -662,8 +662,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000007',
         descripcionActividad: 'Visita técnica a unidad productiva.',
 
-        usuarioId: '66d400000000000000000001',
-        usuarioNombre: 'Carlos Andrés Gómez',
+        usuarioId: '2',
+        usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-08-10',
         horaSalida: '07:00',
@@ -745,8 +745,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000008',
         descripcionActividad: 'Visita de observación ambiental.',
 
-        usuarioId: '66d400000000000000000002',
-        usuarioNombre: 'María Fernanda Rodríguez',
+        usuarioId: '4',
+        usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-08-12',
         horaSalida: '06:30',
@@ -828,8 +828,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000009',
         descripcionActividad: 'Visita de seguimiento a proyecto formativo.',
 
-        usuarioId: '66d400000000000000000004',
-        usuarioNombre: 'Laura Marcela Pérez',
+        usuarioId: '7',
+        usuarioNombre: 'Miguel Ángel Hernández',
 
         fecha: '2026-08-15',
         horaSalida: '07:30',
@@ -911,8 +911,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000010',
         descripcionActividad: 'Salida técnica de aplicación de conocimientos.',
 
-        usuarioId: '66d400000000000000000001',
-        usuarioNombre: 'Carlos Andrés Gómez',
+        usuarioId: '2',
+        usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-07-20',
         horaSalida: '07:00',
@@ -994,8 +994,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000011',
         descripcionActividad: 'Salida académica de reconocimiento ambiental.',
 
-        usuarioId: '66d400000000000000000002',
-        usuarioNombre: 'María Fernanda Rodríguez',
+        usuarioId: '4',
+        usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-07-25',
         horaSalida: '06:30',
@@ -1077,8 +1077,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000012',
         descripcionActividad: 'Salida técnica cancelada por condiciones externas.',
 
-        usuarioId: '66d400000000000000000004',
-        usuarioNombre: 'Laura Marcela Pérez',
+        usuarioId: '7',
+        usuarioNombre: 'Miguel Ángel Hernández',
 
         fecha: '2026-07-28',
         horaSalida: '07:00',
@@ -1158,8 +1158,8 @@ export const PLANES_MOCK = [
         actividadId: '66c300000000000000000013',
         descripcionActividad: 'Salida académica cancelada por reprogramación institucional.',
 
-        usuarioId: '66d400000000000000000003',
-        usuarioNombre: 'Jorge Luis Martínez',
+        usuarioId: '5',
+        usuarioNombre: 'Luis Fernando Ramírez',
 
         fecha: '2026-08-05',
         horaSalida: '07:30',

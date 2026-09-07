@@ -96,7 +96,7 @@ const search = computed({
 @media (max-width:600px) {
 
     .base-search {
-        min-width: 240px;
+        min-width: 0;
         width: 100%;
     }
 }

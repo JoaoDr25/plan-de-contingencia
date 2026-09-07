@@ -8,7 +8,8 @@
 
             <div class="firma-field">
 
-                <q-file v-model="firmaFile" label="Firma del Usuario" :clearable="!!firmaFile"
+                <q-file v-model="firmaFile" label="Firma del Usuario" :disable="!isOwnUser"
+                    :clearable="isOwnUser && !!firmaFile"
                     accept="image/png,image/jpeg,image/webp" :display-value="firmaFile?.name || form.firmaNombre || ''"
                     max-file-size="1048576" @rejected="handleFirmaRejected">
 
@@ -18,7 +19,7 @@
 
                     <template #append>
 
-                        <q-icon v-if="form.firma && !firmaFile" name="cancel" class="firma-clear"
+                        <q-icon v-if="isOwnUser && form.firma && !firmaFile" name="cancel" class="firma-clear"
                             @click.stop="clearFirma" />
 
                     </template>
@@ -49,7 +50,9 @@
 import { reactive, computed, watch, ref } from 'vue'
 
 import { USER_FORM_FIELDS } from 'src/constants/forms/usuarios_form.constants'
+import { ROLES } from 'src/constants/system/roles.constants'
 import { notifyWarning } from 'src/utils/notifications.utils'
+import { useAuthStore } from 'src/stores/auth.store'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
@@ -112,8 +115,25 @@ const form = reactive({
 const firmaFile = ref(null)
 const firmaModificada = ref(false)
 const firmaError = ref('')
+const authStore = useAuthStore()
+
+const canEditConfiguration = computed(() => {
+    return canEditUserConfiguration && authStore.role === ROLES.ADMINISTRADOR
+})
+
+const isOwnUser = computed(() => {
+    return Boolean(
+        user &&
+        authStore.currentUser &&
+        user.documento === authStore.currentUser.documento
+    )
+})
 
 function clearFirma() {
+
+    if (!isOwnUser.value) {
+        return
+    }
 
     firmaFile.value = null
     form.firma = null
@@ -132,7 +152,8 @@ const formFields = computed(() => {
 
         return {
             ...field,
-            readonly: !isConfigurableField || !canEditUserConfiguration
+            readonly: !isConfigurableField || !canEditConfiguration.value,
+            disable: isConfigurableField && !canEditConfiguration.value
         }
     })
 })
@@ -164,7 +185,7 @@ function validateForm() {
 }
 
 function handleFirmaSelected(file) {
-    if (!file) {
+    if (!file || !isOwnUser.value) {
         return
     }
     const reader = new FileReader()
@@ -178,6 +199,10 @@ function handleFirmaSelected(file) {
 }
 
 function handleFirmaRejected(rejectedEntries) {
+    if (!isOwnUser.value) {
+        return
+    }
+
     console.warn('Archivo de firma rechazado:', rejectedEntries)
     firmaError.value =
         'La imagen debe ser PNG, JPG o WEBP y no superar 1 MB.'
@@ -192,12 +217,12 @@ function handleSave() {
     }
     const payload = {}
 
-    if (canEditUserConfiguration) {
+    if (canEditConfiguration.value) {
         payload.rol = form.rol
         payload.estado = form.estado
     }
 
-    if (firmaModificada.value) {
+    if (isOwnUser.value && firmaModificada.value) {
         payload.firma = form.firma
         payload.firmaNombre = form.firmaNombre
     }

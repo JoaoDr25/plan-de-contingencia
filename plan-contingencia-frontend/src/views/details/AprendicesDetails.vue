@@ -495,6 +495,7 @@ function goBack() {
 
     .apprentice-detail__actions {
         justify-content: flex-end;
+        padding-bottom: 28px;
     }
 }
 
@@ -543,12 +544,12 @@ function goBack() {
 
     .apprentice-detail__actions {
         width: 100%;
+        padding-bottom: 28px;
     }
 
     .apprentice-detail__actions :deep(.primary-action-button),
     .apprentice-detail__actions :deep(.secondary-action-button) {
         max-width: 100%;
     }
-
 }
 </style>
