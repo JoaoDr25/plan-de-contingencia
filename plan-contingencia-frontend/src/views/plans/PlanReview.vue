@@ -410,6 +410,7 @@ function viewFullPlan() {
     flex-wrap: wrap;
     gap: 12px;
     box-sizing: border-box;
+    padding-bottom: 18px;
 }
 
 .plan-stage-detail__actions-right {
