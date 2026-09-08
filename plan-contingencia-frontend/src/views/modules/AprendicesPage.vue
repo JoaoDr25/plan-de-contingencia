@@ -74,7 +74,7 @@ import { useRouter } from 'vue-router'
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { APRENDICES_FILTERS } from 'src/constants/filters/aprendices.constants'
 import { APRENDICES_COLUMNS } from 'src/constants/tables/aprendices.columns'
-import { APRENDICES_MOCK } from 'src/mocks/aprendices.mock'
+import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'

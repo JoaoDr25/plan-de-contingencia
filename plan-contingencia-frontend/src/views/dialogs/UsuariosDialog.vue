@@ -8,8 +8,9 @@
 
             <div class="firma-field">
 
-                <q-file v-model="firmaFile" label="Firma del Usuario" :disable="!isOwnUser"
-                    :clearable="isOwnUser && !!firmaFile"
+                <q-file v-model="firmaFile" label="Firma del Usuario"
+                    :disable="!isOwnUser"
+                    :clearable="!!firmaFile"
                     accept="image/png,image/jpeg,image/webp" :display-value="firmaFile?.name || form.firmaNombre || ''"
                     max-file-size="1048576" @rejected="handleFirmaRejected">
 
@@ -19,7 +20,7 @@
 
                     <template #append>
 
-                        <q-icon v-if="isOwnUser && form.firma && !firmaFile" name="cancel" class="firma-clear"
+                        <q-icon v-if="form.firma && !firmaFile" name="cancel" class="firma-clear"
                             @click.stop="clearFirma" />
 
                     </template>
@@ -117,6 +118,10 @@ const firmaModificada = ref(false)
 const firmaError = ref('')
 const authStore = useAuthStore()
 
+function normalizeEmail(value) {
+    return String(value ?? '').trim().toLowerCase()
+}
+
 const canEditConfiguration = computed(() => {
     return canEditUserConfiguration && authStore.role === ROLES.ADMINISTRADOR
 })
@@ -125,7 +130,8 @@ const isOwnUser = computed(() => {
     return Boolean(
         user &&
         authStore.currentUser &&
-        user.documento === authStore.currentUser.documento
+        normalizeEmail(user.correo) &&
+        normalizeEmail(user.correo) === normalizeEmail(authStore.currentUser.correo)
     )
 })
 

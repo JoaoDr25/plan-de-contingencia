@@ -126,7 +126,7 @@
 import { computed, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { APRENDICES_MOCK } from 'src/mocks/aprendices.mock'
+import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import BaseDetailItem from 'src/components/forms/BaseDetailItem.vue'

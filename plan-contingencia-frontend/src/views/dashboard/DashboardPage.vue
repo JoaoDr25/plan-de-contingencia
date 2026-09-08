@@ -14,7 +14,7 @@
 
 <script setup>
 
-import { PLANES_MOCK } from 'src/mocks/planes.mock';
+import { PLANES_MOCK } from 'src/mocks/plans/planes.mock';
 
 import BasePage from 'src/components/base/BasePage.vue';
 import DashboardHeader from 'src/components/dashboard/DashboardHeader.vue';

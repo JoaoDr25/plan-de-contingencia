@@ -1,7 +1,8 @@
 <template>
 
     <q-input class="base-input" :class="{
-        'base-input--textarea': type === 'textarea'
+        'base-input--textarea': type === 'textarea',
+        'base-input--wizard': size === 'wizard'
     }" :model-value="modelValue" :label="label" :placeholder="placeholder" :type="type" :readonly="readonly"
         :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules" :required="required" outlined
         dense hide-bottom-space @update:model-value="emit('update:modelValue', $event)">
@@ -33,7 +34,8 @@ const {
     autofocus,
     icon,
     rules,
-    required
+    required,
+    size
 } = defineProps({
 
     modelValue: {
@@ -83,6 +85,11 @@ const {
     inputClass: {
         type: String,
         default: ''
+    },
+    size: {
+        type: String,
+        default: 'default',
+        validator: value => ['default', 'wizard'].includes(value)
     }
 })
 
@@ -200,5 +207,57 @@ const resolvedIcon = computed(() => {
     top: 15px;
     left: 3px;
     transform: none;
+}
+
+.base-input--wizard :deep(.q-field__control) {
+    min-height: 40px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: $color-surface;
+}
+
+.base-input--wizard :deep(.q-field__control:before) {
+    border: 1px solid #D1D5DB;
+}
+
+.base-input--wizard :deep(.q-field__control:hover:before) {
+    border: 1px solid #B8BEC6;
+}
+
+.base-input--wizard :deep(.q-field__control:after) {
+    display: none;
+}
+
+.base-input--wizard.q-field--focused :deep(.q-field__label),
+.base-input--wizard.q-field--float :deep(.q-field__label) {
+    color: $color-primary;
+    font-size: $font-size-xs;
+    font-weight: 400;
+    letter-spacing: 0;
+    padding: 0;
+}
+
+.base-input--wizard :deep(.q-field__native),
+.base-input--wizard :deep(.q-field__input) {
+    font-size: $font-size-xs;
+    line-height: 20px;
+    color: $color-text-primary;
+}
+
+.base-input--wizard :deep(.q-field__native) {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 5px;
+}
+
+.base-input--wizard :deep(.q-field__prepend) {
+    padding-top: 0;
+    padding-right: 3px;
+    padding-left: 2px;
+    opacity: 0.75;
+}
+
+.base-input--wizard :deep(.q-field__prepend .q-icon) {
+    font-size: 14px;
 }
 </style>

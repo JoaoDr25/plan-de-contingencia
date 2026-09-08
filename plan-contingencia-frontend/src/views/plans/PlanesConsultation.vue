@@ -91,7 +91,7 @@ import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
 
 import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
 import { PLANES_CONSULTA_COLUMNS } from 'src/constants/tables/consulta.columns'
-import { PLANES_CONSULTA_MOCK } from 'src/mocks/consulta.mock'
+import { PLANES_CONSULTA_MOCK } from 'src/mocks/plans/consulta.mock'
 
 import { usePlanesConsultaTable } from 'src/composables/useConsultaTable'
 

@@ -69,7 +69,7 @@ import { ref, computed } from 'vue'
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js';
 import { PROGRAMAS_FILTERS } from "src/constants/filters/programas.constants";
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns';
-import { PROGRAMAS_MOCK } from 'src/mocks/programas.mock';
+import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock.js';
 
 import { useCrudTable } from 'src/composables/useCrudTable';
 import { getCurrentDate } from 'src/utils/date.utils.js';

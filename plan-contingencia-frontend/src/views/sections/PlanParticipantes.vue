@@ -80,7 +80,7 @@
 
 import { computed, ref } from 'vue'
 
-import { MOCK_APRENDICES } from 'src/mocks/planes.mock'
+import { MOCK_APRENDICES } from 'src/mocks/plans/planes.mock.js'
 
 import ParticipantesDialog from '../modals/ParticipantesDialog.vue'
 

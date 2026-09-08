@@ -113,7 +113,7 @@ import PlanRevision from 'src/views/sections/PlanRevision.vue'
 import logoSena from 'src/assets/logos/logo-sena.png'
 
 import { ROLES } from 'src/constants/system/roles.constants'
-import { PLANES_MOCK } from 'src/mocks/planes.mock'
+import { PLANES_MOCK } from 'src/mocks/plans/planes.mock'
 import { PLAN_ACTIONS } from 'src/constants/plans/planActions'
 import { PLAN_ACTIONS_CONFIRMATION } from 'src/constants/actions/plan_confirmation.constants'
 import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notifications.constants'

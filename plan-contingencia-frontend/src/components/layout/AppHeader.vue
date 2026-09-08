@@ -28,7 +28,10 @@ import { useAuthStore } from 'src/stores/auth.store'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const { showMenu, showLogout } = defineProps({
+const {
+    showMenu,
+    showLogout
+} = defineProps({
     showMenu: {
         type: Boolean,
         default: true
@@ -61,15 +64,15 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
 .app-header {
     background-color: $color-primary;
 }
+
 .app-header :deep(.q-toolbar) {
-  min-height: 56px;
+    min-height: 56px;
 }
 
 .app-header__title {
@@ -86,8 +89,12 @@ const APP_TITLE = "PLANES DE CONTINGENCIA"
 }
 
 @media (max-width: 600px) {
-  .app-header { height: 56px; }
-  .app-header :deep(.q-toolbar) { min-height: 56px; }
-}
+    .app-header {
+        height: 56px;
+    }
 
+    .app-header :deep(.q-toolbar) {
+        min-height: 56px;
+    }
+}
 </style>

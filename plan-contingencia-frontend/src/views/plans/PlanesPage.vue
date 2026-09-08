@@ -66,7 +66,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
 import { PLANES_COLUMNS } from 'src/constants/tables/planes.columns'
-import { PLANES_MOCK } from 'src/mocks/planes.mock'
+import { PLANES_MOCK } from 'src/mocks/plans/planes.mock'
 import { useAuthStore } from 'src/stores/auth.store'
 
 import { usePlansTable } from 'src/composables/usePlanTable'

@@ -83,7 +83,7 @@ import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
 
 import { HISTORICO_STATUS_OPTIONS } from 'src/constants/filters/historico.constants'
 import { PLANES_HISTORICO_COLUMNS } from 'src/constants/tables/historico.columns'
-import { PLANES_HISTORICO_MOCK } from 'src/mocks/historico.mock'
+import { PLANES_HISTORICO_MOCK } from 'src/mocks/plans/historico.mock'
 
 import { usePlanesHistoricoTable } from 'src/composables/useHistoricoTable'
 

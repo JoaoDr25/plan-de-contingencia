@@ -1,4 +1,4 @@
-import { USUARIOS_MOCK } from 'src/mocks/usuarios.mock'
+import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock'
 
 export function login(documento, correo) {
 

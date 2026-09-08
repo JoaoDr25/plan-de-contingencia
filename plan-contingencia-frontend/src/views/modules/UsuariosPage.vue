@@ -78,7 +78,7 @@ import { USUARIOS_ACTIONS } from 'src/constants/actions/default_actions.constant
 import { USUARIOS_FILTERS } from 'src/constants/filters/usuarios.constants'
 import { USUARIOS_COLUMNS } from 'src/constants/tables/usuarios.columns'
 
-import { USUARIOS_MOCK } from 'src/mocks/usuarios.mock'
+import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock.js'
 import { ROLES } from 'src/constants/system/roles.constants'
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { mergeUsersFromRepfora } from 'src/utils/userSync.utils'

@@ -64,7 +64,7 @@ import { ref, computed } from 'vue';
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js';
 import { ACTIVIDADES_FILTERS } from 'src/constants/filters/actividades.constants';
 import { ACTIVIDADES_COLUMNS } from 'src/constants/tables/actividades.columns';
-import { ACTIVIDADES_MOCK } from 'src/mocks/actividades.mock';
+import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock.js';
 
 import { useCrudTable } from 'src/composables/useCrudTable';
 import { getCurrentDate } from 'src/utils/date.utils';

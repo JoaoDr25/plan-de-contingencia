@@ -1,101 +1,113 @@
-export const PLAN_CONTINGENCIA_MODEL = {
+export function createPlanContingenciaModel() {
+    return {
+        _id: null,
 
-    _id: null,
+        numero: null,
 
-    numero: null,
+        clasificacionInformacion: null,
 
+        programaFormacionId: null,
+        programaFormacionNombre: null,
+        programaFormacionNivel: null,
+        ficha: '',
 
-    // Información general
+        actividadId: null,
+        descripcionActividad: '',
 
-    clasificacionInformacion: null,
+        usuarioId: null,
+        usuarioNombre: '',
 
-    programaFormacionId: null,
-    programaFormacionNombre: null,
+        fecha: null,
+        horaSalida: null,
+        horaRegreso: null,
 
-    actividadId: null,
-    descripcionActividad: null,
+        tipoTransporte: null,
 
-    usuarioId: null,
-    usuarioNombre: null,
+        lugarSalida: '',
+        lugarDestino: '',
+        contactoLugar: '',
 
-    fecha: null,
-    horaSalida: null,
-    horaRegreso: null,
+        riesgosId: [],
 
-    tipoTransporte: null,
+        aprendicesId: [],
 
-    lugarSalida: null,
-    lugarDestino: null,
-    contactoLugar: null,
+        contactosEmergencia: {
+            contactosBase: [],
 
-    riesgosId: [],
+            otro: {
+                nombreEntidad: '',
+                telefono: '',
+                descripcion: '',
+                ciudad: ''
+            }
+        },
 
-    aprendicesId: [],
+        articulacionFormativa: {
+            proyectoFormativo: false,
+            visitaEmpresa: false,
+            investigacion: false,
+            otro: ''
+        },
 
-    contactosEmergencia: {
+        contextoAcademico: {
+            objetivo: '',
+            competencia: '',
+            resultadoAprendizaje: '',
 
-        contactosBase: [],
+            planeacionPedagogicaLink: '',
+            guiaAprendizajeLink: '',
+            otrosSoportesLink: '',
+            actasComportamientoLink: '',
 
-        otro: {
+            consentimientoMenores: false,
+            consentimientoLink: ''
+        },
 
-            nombreEntidad: '',
-            telefono: '',
-            descripcion: '',
-            ciudad: ''
+        planTrabajo: [],
 
-        }
+        epp: [],
 
-    },
+        seguridadVial: {
+            aplica: false,
+            items: []
+        },
 
-    articulacionFormativa: {
+        estado: 'borrador',
 
-        proyectoFormativo: false,
-        visitaEmpresa: false,
-        investigacion: false,
-        otro: ''
+        observaciones: '',
 
-    },
+        revision: {
+            validacionInformacion: false,
 
-    contextoAcademico: {
+            instructor: {
+                usuarioId: null,
+                nombre: '',
+                firma: null
+            },
 
-        objetivo: '',
+            pedagogia: {
+                usuarioId: null,
+                nombre: '',
+                firma: null,
+                estado: 'pendiente'
+            },
 
-        competencia: '',
+            sst: {
+                usuarioId: null,
+                nombre: '',
+                firma: null,
+                estado: 'pendiente'
+            },
 
-        resultadoAprendizaje: '',
+            coordinacion: {
+                usuarioId: null,
+                nombre: '',
+                firma: null,
+                estado: 'pendiente'
+            }
+        },
 
-        planeacionPedagogicaLink: '',
-
-        guiaAprendizajeLink: '',
-
-        otrosSoportesLink: '',
-
-        actasComportamientoLink: '',
-
-        consentimientoMenores: false,
-
-        consentimientoLink: ''
-
-    },
-
-    planTrabajo: [],
-
-    epp: [],
-
-
-    seguridadVial: {
-
-        aplica: false,
-
-        items: []
-
-    },
-
-    estado: 'borrador',
-
-    observaciones: '',
-
-    createdAt: null,
-    updatedAt: null
-
+        createdAt: null,
+        updatedAt: null
+    }
 }

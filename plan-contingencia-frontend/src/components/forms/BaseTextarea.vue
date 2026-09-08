@@ -1,6 +1,8 @@
 <template>
 
-    <q-input class="base-textarea" :model-value="modelValue" :label="label" :placeholder="placeholder"
+    <q-input class="base-textarea" :class="{
+        'base-textarea--wizard': size === 'wizard'
+    }" :model-value="modelValue" :label="label" :placeholder="placeholder"
         :readonly="readonly" :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules"
         :required="required" outlined dense autogrow type="textarea" hide-bottom-space
         @update:model-value="emit('update:modelValue', $event)">
@@ -31,7 +33,8 @@ const {
     autofocus,
     icon,
     rules,
-    required
+    required,
+    size
 } = defineProps({
 
     modelValue: {
@@ -80,6 +83,12 @@ const {
     required: {
         type: Boolean,
         default: false
+    },
+
+    size: {
+        type: String,
+        default: 'default',
+        validator: value => ['default', 'wizard'].includes(value)
     }
 
 })

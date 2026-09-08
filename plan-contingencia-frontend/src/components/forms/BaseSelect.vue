@@ -2,7 +2,8 @@
 
     <q-select class="base-select" :class="{
         'base-select--placeholder': isEmpty,
-        'base-select--filter': size === 'filter'
+        'base-select--filter': size === 'filter',
+        'base-select--wizard': size === 'wizard'
     }" :model-value="modelValue" :label="label" :display-value="displayValue" :options="options"
         :option-label="optionLabel" :option-value="optionValue" :multiple="multiple" :disable="disable"
         :readonly="readonly" :rules="rules" :required="required" outlined dense emit-value map-options hide-bottom-space
@@ -96,7 +97,8 @@ const {
     },
     size: {
         type: String,
-        default: 'default'
+        default: 'default',
+        validator: value => ['default', 'filter', 'wizard'].includes(value)
     }
 })
 
@@ -152,7 +154,6 @@ const isEmpty = computed(() => {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -316,6 +317,67 @@ const isEmpty = computed(() => {
 }
 
 .base-select--filter :deep(.q-field__append .q-icon) {
+    font-size: 16px;
+}
+
+.base-select--wizard :deep(.q-field__control) {
+    min-height: 40px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: $color-surface;
+}
+
+.base-select--wizard :deep(.q-field__control:before) {
+    border: 1px solid #D1D5DB;
+}
+
+.base-select--wizard :deep(.q-field__control:hover:before) {
+    border: 1px solid #B8BEC6;
+}
+
+.base-select--wizard :deep(.q-field__control:after) {
+    display: none;
+}
+
+.base-select--wizard.q-field--focused :deep(.q-field__label),
+.base-select--wizard.q-field--float :deep(.q-field__label) {
+    color: $color-primary;
+    font-size: $font-size-xs;
+    font-weight: 400;
+    letter-spacing: 0;
+    padding: 0;
+}
+
+.base-select--wizard :deep(.q-field__native),
+.base-select--wizard :deep(.q-field__input) {
+    font-size: $font-size-xs;
+    line-height: 20px;
+    color: $color-text-primary;
+}
+
+.base-select--wizard :deep(.q-field__native) {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 5px;
+}
+
+.base-select--wizard :deep(.q-field__prepend) {
+    padding-top: 0;
+    padding-right: 3px;
+    padding-left: 2px;
+    opacity: 0.75;
+}
+
+.base-select--wizard :deep(.q-field__prepend .q-icon) {
+    font-size: 14px;
+}
+
+.base-select--wizard :deep(.q-field__append) {
+    padding-left: 0;
+    padding-right: 3px;
+}
+
+.base-select--wizard :deep(.q-field__append .q-icon) {
     font-size: 16px;
 }
 </style>
