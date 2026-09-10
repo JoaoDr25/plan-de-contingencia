@@ -157,35 +157,46 @@ function getCellClass(column) {
 .base-table {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    min-width: 0;
 }
 
 .base-table__table {
+    width: 100%;
     border-radius: 5px 5px 0 0;
     font-family: $font-family-base;
     background-color: $color-surface;
+    overflow: hidden;
 }
 
+.base-table__table :deep(.q-table__container) {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
 
 .base-table__table :deep(thead th) {
     text-transform: uppercase;
     border-top: none;
     height: 50px;
+    white-space: nowrap;
 }
 
 .base-table__table :deep(tbody td) {
     height: 50px;
     text-transform: uppercase;
     border-bottom: 1px solid $color-border-table;
+    white-space: normal;
 }
 
 .base-table__table :deep(th) {
     font-weight: 600;
     color: $color-text-primary;
-    font-size: $font-size-sm;
+    font-size: clamp(0.7rem, 0.72vw, 0.84rem);
 }
 
 .base-table__table :deep(td) {
-    font-size: $font-size-sm;
+    font-size: clamp(0.7rem, 0.72vw, 0.84rem);
     vertical-align: middle;
 }
 
@@ -203,6 +214,27 @@ function getCellClass(column) {
 
 .base-table__table :deep(tbody tr:last-child td) {
     border-bottom: none;
+}
+
+@media (max-width: 1200px) {
+    .base-table__table :deep(thead th),
+    .base-table__table :deep(tbody td),
+    .base-table__table :deep(.q-table tbody tr) {
+        height: 44px;
+    }
+
+    .base-table__table :deep(th),
+    .base-table__table :deep(td) {
+        font-size: clamp(0.68rem, 0.7vw, 0.8rem);
+    }
+}
+
+@media (max-width: 900px) {
+    .base-table__table :deep(thead th),
+    .base-table__table :deep(tbody td),
+    .base-table__table :deep(.q-table tbody tr) {
+        height: 40px;
+    }
 }
 
 .base-table__table :deep(.column-index) {

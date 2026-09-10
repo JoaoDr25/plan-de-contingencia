@@ -32,7 +32,11 @@
 
                     <BaseDatePicker v-model="dateTo" label="Fecha hasta" size="filter" :min="dateFrom" />
 
-                    <BaseClearFilters align-right @clear="clearFilters" />
+                    <div class="consulta-filter-actions">
+
+                        <BaseClearFilters align-right @clear="clearFilters" />
+
+                    </div>
 
                 </BaseFilterBar>
 
@@ -155,6 +159,7 @@ function clearFilters() {
     align-items: center;
     column-gap: 19px;
     max-width: 100%;
+    flex-wrap: wrap;
 }
 
 .consulta-filter-bar :deep(.base-search) {
@@ -181,6 +186,18 @@ function clearFilters() {
     line-height: 20px;
 }
 
+.consulta-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    min-width: 0;
+}
+
+.consulta-filter-bar :deep(.base-clear-filters) {
+        padding-top: 6px;
+    }
+
 @media (max-width: 1100px) {
 
     .consulta-filter-bar {
@@ -188,30 +205,35 @@ function clearFilters() {
     }
 
     .consulta-filter-bar :deep(.base-clear-filters) {
-        margin-top: 6px;
-    }
-}
-
-@media (max-width: 700px) {
-
-    .consulta-filter-bar {
-        justify-content: flex-start;
+        padding-top: 6px;
     }
 }
 
 @media (max-width: 791px) {
 
-    .consulta-filter-bar :deep(.base-clear-filters) {
-        align-self: flex-start;
+    .consulta-filter-bar {
+        justify-content: center;
+    }
+
+    .consulta-filter-actions {
+        width: 100%;
         margin-left: 0;
-        margin-top: 6px;
+        justify-content: center;
+        padding-top: 6px;
+        order: 10;
+    }
+
+    .consulta-filter-bar :deep(.base-clear-filters) {
+        display: inline-flex;
+        justify-content: center;
+        padding-top: 6px;
+        margin: 0 auto;
     }
 }
 
 @media (max-width: 600px) {
 
     .consulta-filter-bar {
-        flex-direction: column;
         align-items: center;
         justify-content: center;
     }
@@ -233,9 +255,17 @@ function clearFilters() {
         max-width: 100%;
     }
 
-    .consulta-filter-bar :deep(.base-clear-filters) {
-        align-self: center;
+    .consulta-filter-actions {
+        width: 100%;
         margin-left: 0;
+        justify-content: center;
+    }
+
+    .consulta-filter-bar :deep(.base-clear-filters) {
+      display: inline-flex;
+        justify-content: center;
+        padding-top: 6px;
+        margin: 0 auto;
     }
 }
 </style>

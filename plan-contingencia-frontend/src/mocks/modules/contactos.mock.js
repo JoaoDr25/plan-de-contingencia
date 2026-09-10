@@ -1,5 +1,6 @@
 export const CONTACTOS_MOCK = [
     {
+        _id: '66i200000000000000000001',
         codigo: 1,
         tipo: 'Hospital',
         nombre: 'Hospital Universitario Erasmo Meoz',
@@ -9,6 +10,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000002',
         codigo: 2,
         tipo: 'Bomberos',
         nombre: 'Cuerpo de Bomberos Voluntarios',
@@ -18,6 +20,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000003',
         codigo: 3,
         tipo: 'Policía',
         nombre: 'Policía Metropolitana de Cúcuta',
@@ -27,6 +30,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000004',
         codigo: 4,
         tipo: 'Cruz Roja',
         nombre: 'Cruz Roja Colombiana - Seccional Norte de Santander',
@@ -36,6 +40,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000005',
         codigo: 5,
         tipo: 'Defensa Civil',
         nombre: 'Defensa Civil Colombiana - Junta Cúcuta',
@@ -45,6 +50,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000006',
         codigo: 6,
         tipo: 'Tránsito',
         nombre: 'Secretaría de Tránsito Municipal',
@@ -54,6 +60,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000007',
         codigo: 7,
         tipo: 'Ambulancia',
         nombre: 'Servicio de Ambulancias Vital',
@@ -63,6 +70,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000008',
         codigo: 8,
         tipo: 'Gestión del Riesgo',
         nombre: 'Oficina Municipal para la Gestión del Riesgo',
@@ -72,6 +80,7 @@ export const CONTACTOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66i200000000000000000009',
         codigo: 9,
         tipo: 'EPS',
         nombre: 'Nueva EPS',

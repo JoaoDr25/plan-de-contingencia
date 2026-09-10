@@ -19,6 +19,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth.store'
 import { dashboardSummary } from 'src/constants/navigation/dashboard.constants.js';
+
 import DashboardStatCard from './DashboardStatCard.vue';
 
 const props = defineProps({

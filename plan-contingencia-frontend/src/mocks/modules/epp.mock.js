@@ -1,5 +1,6 @@
 export const EPP_MOCK = [
   {
+    _id: '66h200000000000000000001',
     codigo: 1,
     nombre: 'Casco de Seguridad',
     categoria: 'Protección de Cabeza',
@@ -9,6 +10,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000002',
     codigo: 2,
     nombre: 'Gafas de Seguridad',
     categoria: 'Protección Ocular',
@@ -18,6 +20,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000003',
     codigo: 3,
     nombre: 'Guantes de Nitrilo',
     categoria: 'Protección de Manos',
@@ -27,6 +30,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000004',
     codigo: 4,
     nombre: 'Botas de Seguridad',
     categoria: 'Protección de Pies',
@@ -36,6 +40,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000005',
     codigo: 5,
     nombre: 'Chaleco Reflectivo',
     categoria: 'Protección Corporal',
@@ -45,6 +50,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000006',
     codigo: 6,
     nombre: 'Respirador N95',
     categoria: 'Protección Respiratoria',
@@ -54,6 +60,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000007',
     codigo: 7,
     nombre: 'Protector Auditivo Tipo Copa',
     categoria: 'Protección Auditiva',
@@ -63,6 +70,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000008',
     codigo: 8,
     nombre: 'Arnés de Seguridad',
     categoria: 'Protección contra Caídas',
@@ -72,6 +80,7 @@ export const EPP_MOCK = [
     fecha: '11/08/2026'
   },
   {
+    _id: '66h200000000000000000009',
     codigo: 9,
     nombre: 'Bata de Laboratorio',
     categoria: 'Protección Corporal',

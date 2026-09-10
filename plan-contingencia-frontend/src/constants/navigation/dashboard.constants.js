@@ -13,7 +13,7 @@ export const dashboardSummary = [
     {
         id: "planes-totales",
         title: 'Planes Totales',
-        description: 'Todos los planes registrados',
+        description: 'Todos los Planes',
         icon: 'assignment',
         routeName: 'planes.list',
         status: 'todos'

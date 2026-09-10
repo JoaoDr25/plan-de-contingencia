@@ -12,7 +12,7 @@
 
             <template #center>
 
-                <BaseFilterBar>
+                <BaseFilterBar class="planes-page-filter-bar">
 
                     <BaseSearch v-model="searchText" size="filter" placeholder="Buscar por código, programa o actividad..." />
 
@@ -170,3 +170,63 @@ function confirmDeletePlan() {
 }
 
 </script>
+
+<style scoped lang="scss">
+
+.planes-page-filter-bar {
+    justify-content: flex-end;
+    margin-left: auto;
+    width: 100%;
+    max-width: 100%;
+}
+
+.planes-page-filter-bar :deep(.base-search) {
+    width: 300px;
+    min-width: 200px;
+    max-width: 100%;
+    flex: 0 0 auto;
+}
+
+.planes-page-filter-bar :deep(.base-select--filter) {
+    width: 220px;
+    min-width: 180px;
+    max-width: 100%;
+    flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+
+    .planes-page-filter-bar {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .planes-page-filter-bar :deep(.base-search) {
+        width: 240px;
+        min-width: 240px;
+        max-width: 100%;
+    }
+
+    .planes-page-filter-bar :deep(.base-select--filter) {
+        width: 240px;
+        min-width: 240px;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 530px) {
+
+    .planes-page-filter-bar {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .planes-page-filter-bar :deep(.base-search),
+    .planes-page-filter-bar :deep(.base-select--filter) {
+       width: 240px;
+        min-width: 240px;
+        max-width: 100%;
+    }
+}
+
+</style>

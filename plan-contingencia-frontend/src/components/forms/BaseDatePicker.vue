@@ -73,9 +73,10 @@ const props = defineProps({
     },
 
     size: {
-        type: String,
-        default: 'default'
-    }
+  type: String,
+  default: 'default',
+  validator: value => ['default', 'filter'].includes(value)
+}
 })
 
 const emit = defineEmits([
@@ -142,8 +143,9 @@ function selectDate(value) {
 }
 
 .base-date-picker--filter {
-    width: 260px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 240px;
+    min-width: 180px;
 }
 
 .base-date-picker--filter :deep(.q-field__control) {

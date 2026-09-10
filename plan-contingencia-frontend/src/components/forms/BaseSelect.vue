@@ -255,8 +255,9 @@ const isEmpty = computed(() => {
 }
 
 .base-select--filter {
-    width: 260px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 240px;
+    min-width: 180px;
 }
 
 .base-select--filter :deep(.q-field__control) {

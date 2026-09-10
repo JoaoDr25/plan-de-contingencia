@@ -1,5 +1,6 @@
 export const USUARIOS_MOCK = [
     {
+        _id: '66f200000000000000000001',
         codigo: 1,
         tipo: 'Cédula de ciudadanía',
         documento: '1000000000',
@@ -18,6 +19,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000002',
         codigo: 2,
         tipo: 'Tarjeta de identidad',
         documento: '1023456789',
@@ -36,6 +38,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000003',
         codigo: 3,
         tipo: 'Pasaporte',
         documento: '1000000000',
@@ -54,6 +57,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000004',
         codigo: 4,
         tipo: 'Cédula de ciudadanía',
         documento: '1000000000',
@@ -72,6 +76,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000005',
         codigo: 5,
         tipo: 'Tarjeta de identidad',
         documento: '1033344455',
@@ -90,6 +95,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000006',
         codigo: 6,
         tipo: 'Pasaporte',
         documento: '1000000000',
@@ -108,6 +114,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000007',
         codigo: 7,
         tipo: 'Cédula de ciudadanía',
         documento: '1055566677',
@@ -126,6 +133,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000008',
         codigo: 8,
         tipo: 'Tarjeta de identidad',
         documento: '1000000000',
@@ -144,6 +152,7 @@ export const USUARIOS_MOCK = [
         estado: 'Activo'
     },
     {
+        _id: '66f200000000000000000009',
         codigo: 9,
         tipo: 'Pasaporte',
         documento: '1077788899',

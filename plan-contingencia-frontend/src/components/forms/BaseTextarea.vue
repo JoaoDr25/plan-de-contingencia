@@ -110,6 +110,7 @@ const resolvedIcon = computed(() => {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -158,6 +159,14 @@ const resolvedIcon = computed(() => {
     color: $color-text-secondary;
     opacity: 0.65;
     padding-right: 5px;
+}
+
+.base-textarea--wizard :deep(.q-field__control) {
+    min-height: 90px;
+}
+
+.base-textarea--wizard :deep(.q-field__native) {
+    min-height: 70px;
 }
 
 </style>

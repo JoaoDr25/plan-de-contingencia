@@ -6,15 +6,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000001',
+        programaFormacionId: '66a200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '3174863',
 
-        actividadId: '66c300000000000000000001',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Visita técnica a unidad productiva agropecuaria.',
 
-        usuarioId: '2',
+        usuarioId: '66f200000000000000000002',
         usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-09-15',
@@ -28,16 +28,16 @@ export const PLANES_MOCK = [
         contactoLugar: '3105551001',
 
         riesgosId: [
-            '66e500000000000000000001',
-            '66e500000000000000000002',
-            '66e500000000000000000003',
-            '66e500000000000000000004',
-            '66e500000000000000000005'
+            '66d200000000000000000001',
+            '66d200000000000000000002',
+            '66d200000000000000000003',
+            '66d200000000000000000004',
+            '66d200000000000000000005'
         ],
         riesgos: [
             {
-                _id: '66e500000000000000000001',
-                peligroId: '66d500000000000000000001',
+                _id: '66d200000000000000000001',
+                peligroId: '66c200000000000000000001',
                 peligroNombre: 'Caídas al mismo nivel',
                 riesgo: 'Resbalón en superficies húmedas',
                 categoria: 'Físico',
@@ -46,8 +46,8 @@ export const PLANES_MOCK = [
                 prevencion: 'Mantener superficies secas y utilizar calzado adecuado.'
             },
             {
-                _id: '66e500000000000000000002',
-                peligroId: '66d500000000000000000001',
+                _id: '66d200000000000000000002',
+                peligroId: '66c200000000000000000001',
                 peligroNombre: 'Caídas al mismo nivel',
                 riesgo: 'Tropiezo por obstáculos',
                 categoria: 'Físico',
@@ -56,8 +56,8 @@ export const PLANES_MOCK = [
                 prevencion: 'Mantener rutas despejadas y señalizadas.'
             },
             {
-                _id: '66e500000000000000000003',
-                peligroId: '66d500000000000000000002',
+                _id: '66d200000000000000000003',
+                peligroId: '66c200000000000000000002',
                 peligroNombre: 'Exposición a ruido',
                 riesgo: 'Fatiga auditiva',
                 categoria: 'Físico',
@@ -66,8 +66,8 @@ export const PLANES_MOCK = [
                 prevencion: 'Uso de protección auditiva.'
             },
             {
-                _id: '66e500000000000000000004',
-                peligroId: '66d500000000000000000003',
+                _id: '66d200000000000000000004',
+                peligroId: '66c200000000000000000003',
                 peligroNombre: 'Manipulación de herramientas',
                 riesgo: 'Cortes por herramientas manuales',
                 categoria: 'Mecánico',
@@ -76,8 +76,8 @@ export const PLANES_MOCK = [
                 prevencion: 'Capacitación y uso correcto de herramientas.'
             },
             {
-                _id: '66e500000000000000000005',
-                peligroId: '66d500000000000000000004',
+                _id: '66d200000000000000000005',
+                peligroId: '66c200000000000000000004',
                 peligroNombre: 'Contacto eléctrico',
                 riesgo: 'Descarga eléctrica',
                 categoria: 'Físico',
@@ -88,23 +88,23 @@ export const PLANES_MOCK = [
         ],
 
         aprendicesId: [
-            '66f600000000000000000001',
-            '66f600000000000000000002',
-            '66f600000000000000000003',
-            '66f600000000000000000004',
-            '66f600000000000000000005',
-            '66f600000000000000000006',
-            '66f600000000000000000007',
-            '66f600000000000000000008',
-            '66f600000000000000000009',
-            '66f600000000000000000010'
+            '66g200000000000000000001',
+            '66g200000000000000000002',
+            '66g200000000000000000003',
+            '66g200000000000000000004',
+            '66g200000000000000000005',
+            '66g200000000000000000006',
+            '66g200000000000000000007',
+            '66g200000000000000000008',
+            '66g200000000000000000009',
+            '66g200000000000000000009'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000001',
-                '670700000000000000000002',
-                '670700000000000000000003'
+                '66i200000000000000000001',
+                '66i200000000000000000002',
+                '66i200000000000000000003'
             ],
 
             otro: {
@@ -166,8 +166,8 @@ export const PLANES_MOCK = [
         ],
 
         epp: [
-            '671800000000000000000001',
-            '671800000000000000000002'
+            '66h200000000000000000001',
+            '66h200000000000000000002'
         ],
 
         seguridadVial: {
@@ -231,15 +231,14 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000002',
+        programaFormacionId: '66a200000000000000000009',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '2876549',
-
-        actividadId: '66c300000000000000000002',
+        actividadId: '66b200000000000000000003',
         descripcionActividad: 'Salida académica para reconocimiento ambiental.',
 
-        usuarioId: '4',
+        usuarioId: '66f200000000000000000004',
         usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-09-18',
@@ -253,17 +252,17 @@ export const PLANES_MOCK = [
         contactoLugar: '3115552002',
 
         riesgosId: [
-            '66e500000000000000000003'
+            '66d200000000000000000003'
         ],
 
         aprendicesId: [
-            '66f600000000000000000004',
-            '66f600000000000000000005'
+            '66g200000000000000000004',
+            '66g200000000000000000005'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000002'
+                '66i200000000000000000002'
             ],
             otro: {
                 nombreEntidad: '',
@@ -295,7 +294,7 @@ export const PLANES_MOCK = [
         planTrabajo: [],
 
         epp: [
-            '671800000000000000000003'
+            '66h200000000000000000003'
         ],
 
         seguridadVial: {
@@ -317,15 +316,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'clasificada',
 
-        programaFormacionId: '66b200000000000000000001',
+        programaFormacionId: '66a200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '3174863',
 
-        actividadId: '66c300000000000000000003',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Práctica de reconocimiento de cultivos.',
 
-        usuarioId: '5',
+        usuarioId: '66f200000000000000000005',
         usuarioNombre: 'Luis Fernando Ramírez',
 
         fecha: '2026-09-22',
@@ -339,11 +338,11 @@ export const PLANES_MOCK = [
         contactoLugar: '3125553003',
 
         riesgosId: [
-            '66e500000000000000000001'
+            '66d200000000000000000001'
         ],
 
         aprendicesId: [
-            '66f600000000000000000006'
+            '66g200000000000000000006'
         ],
 
         contactosEmergencia: {
@@ -398,15 +397,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000001',
+        programaFormacionId: '66a200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '3174863',
 
-        actividadId: '66c300000000000000000004',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Visita técnica de seguimiento a proceso productivo.',
 
-        usuarioId: '2',
+        usuarioId: '66f200000000000000000002',
         usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-09-25',
@@ -420,17 +419,17 @@ export const PLANES_MOCK = [
         contactoLugar: '3135554004',
 
         riesgosId: [
-            '66e500000000000000000002'
+            '66d200000000000000000002'
         ],
 
         aprendicesId: [
-            '66f600000000000000000007',
-            '66f600000000000000000008'
+            '66g200000000000000000007',
+            '66g200000000000000000008'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000001'
+                '66i200000000000000000001'
             ],
             otro: {
                 nombreEntidad: '',
@@ -462,7 +461,7 @@ export const PLANES_MOCK = [
         planTrabajo: [],
 
         epp: [
-            '671800000000000000000001'
+            '66h200000000000000000001'
         ],
 
         seguridadVial: {
@@ -484,15 +483,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000003',
+        programaFormacionId: '66a200000000000000000011',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Técnico',
         ficha: '2876543',
 
-        actividadId: '66c300000000000000000005',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Salida académica para reconocimiento de sistemas productivos.',
 
-        usuarioId: '7',
+        usuarioId: '66f200000000000000000007',
         usuarioNombre: 'Miguel Ángel Hernández',
 
         fecha: '2026-09-28',
@@ -506,18 +505,18 @@ export const PLANES_MOCK = [
         contactoLugar: '3145555005',
 
         riesgosId: [
-            '66e500000000000000000001',
-            '66e500000000000000000003'
+            '66d200000000000000000001',
+            '66d200000000000000000003'
         ],
 
         aprendicesId: [
-            '66f600000000000000000009',
-            '66f600000000000000000010'
+            '66g200000000000000000009',
+            '66g200000000000000000009'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000002'
+                '66i200000000000000000002'
             ],
             otro: {
                 nombreEntidad: '',
@@ -569,15 +568,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'clasificada',
 
-        programaFormacionId: '66b200000000000000000002',
+        programaFormacionId: '66a200000000000000000009',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '2876549',
 
-        actividadId: '66c300000000000000000006',
+        actividadId: '66b200000000000000000003',
         descripcionActividad: 'Actividad de reconocimiento de condiciones ambientales.',
 
-        usuarioId: '4',
+        usuarioId: '66f200000000000000000004',
         usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-10-02',
@@ -591,16 +590,16 @@ export const PLANES_MOCK = [
         contactoLugar: '3155556006',
 
         riesgosId: [
-            '66e500000000000000000003'
+            '66d200000000000000000003'
         ],
 
         aprendicesId: [
-            '66f600000000000000000011'
+            '66g200000000000000000002'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000003'
+                '66i200000000000000000003'
             ],
             otro: {
                 nombreEntidad: '',
@@ -632,7 +631,7 @@ export const PLANES_MOCK = [
         planTrabajo: [],
 
         epp: [
-            '671800000000000000000003'
+            '66h200000000000000000003'
         ],
 
         seguridadVial: {
@@ -654,15 +653,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000001',
+        programaFormacionId: '66a200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '3174863',
 
-        actividadId: '66c300000000000000000007',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Visita técnica a unidad productiva.',
 
-        usuarioId: '2',
+        usuarioId: '66f200000000000000000002',
         usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-08-10',
@@ -676,16 +675,16 @@ export const PLANES_MOCK = [
         contactoLugar: '3165557007',
 
         riesgosId: [
-            '66e500000000000000000001'
+            '66d200000000000000000001'
         ],
 
         aprendicesId: [
-            '66f600000000000000000012'
+            '66g200000000000000000003'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000001'
+                '66i200000000000000000001'
             ],
             otro: {
                 nombreEntidad: '',
@@ -737,15 +736,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000002',
+        programaFormacionId: '66a200000000000000000009',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '2876549',
 
-        actividadId: '66c300000000000000000008',
+        actividadId: '66b200000000000000000003',
         descripcionActividad: 'Visita de observación ambiental.',
 
-        usuarioId: '4',
+        usuarioId: '66f200000000000000000004',
         usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-08-12',
@@ -759,16 +758,16 @@ export const PLANES_MOCK = [
         contactoLugar: '3175558008',
 
         riesgosId: [
-            '66e500000000000000000003'
+            '66d200000000000000000003'
         ],
 
         aprendicesId: [
-            '66f600000000000000000013'
+            '66g200000000000000000004'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000002'
+                '66i200000000000000000002'
             ],
             otro: {
                 nombreEntidad: '',
@@ -820,15 +819,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'clasificada',
 
-        programaFormacionId: '66b200000000000000000003',
+        programaFormacionId: '66a200000000000000000011',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Técnico',
         ficha: '2876543',
 
-        actividadId: '66c300000000000000000009',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Visita de seguimiento a proyecto formativo.',
 
-        usuarioId: '7',
+        usuarioId: '66f200000000000000000007',
         usuarioNombre: 'Miguel Ángel Hernández',
 
         fecha: '2026-08-15',
@@ -842,16 +841,16 @@ export const PLANES_MOCK = [
         contactoLugar: '3185559009',
 
         riesgosId: [
-            '66e500000000000000000001'
+            '66d200000000000000000001'
         ],
 
         aprendicesId: [
-            '66f600000000000000000014'
+            '66g200000000000000000005'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000001'
+                '66i200000000000000000001'
             ],
             otro: {
                 nombreEntidad: '',
@@ -903,15 +902,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000001',
+        programaFormacionId: '66a200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '3174863',
 
-        actividadId: '66c300000000000000000010',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Salida técnica de aplicación de conocimientos.',
 
-        usuarioId: '2',
+        usuarioId: '66f200000000000000000002',
         usuarioNombre: 'Laura Marcela Rojas',
 
         fecha: '2026-07-20',
@@ -925,16 +924,16 @@ export const PLANES_MOCK = [
         contactoLugar: '3195551010',
 
         riesgosId: [
-            '66e500000000000000000001'
+            '66d200000000000000000001'
         ],
 
         aprendicesId: [
-            '66f600000000000000000015'
+            '66g200000000000000000006'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000001'
+                '66i200000000000000000001'
             ],
             otro: {
                 nombreEntidad: '',
@@ -986,15 +985,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000002',
+        programaFormacionId: '66a200000000000000000009',
         programaFormacionNombre: 'Gestión Ambiental',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '2876549',
 
-        actividadId: '66c300000000000000000011',
+        actividadId: '66b200000000000000000003',
         descripcionActividad: 'Salida académica de reconocimiento ambiental.',
 
-        usuarioId: '4',
+        usuarioId: '66f200000000000000000004',
         usuarioNombre: 'Diana Carolina Torres',
 
         fecha: '2026-07-25',
@@ -1008,16 +1007,16 @@ export const PLANES_MOCK = [
         contactoLugar: '3105551111',
 
         riesgosId: [
-            '66e500000000000000000003'
+            '66d200000000000000000003'
         ],
 
         aprendicesId: [
-            '66f600000000000000000016'
+            '66g200000000000000000007'
         ],
 
         contactosEmergencia: {
             contactosBase: [
-                '670700000000000000000002'
+                '66i200000000000000000002'
             ],
             otro: {
                 nombreEntidad: '',
@@ -1069,15 +1068,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'publica',
 
-        programaFormacionId: '66b200000000000000000003',
+        programaFormacionId: '66a200000000000000000011',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Técnico',
         ficha: '2876543',
 
-        actividadId: '66c300000000000000000012',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Salida técnica cancelada por condiciones externas.',
 
-        usuarioId: '7',
+        usuarioId: '66f200000000000000000007',
         usuarioNombre: 'Miguel Ángel Hernández',
 
         fecha: '2026-07-28',
@@ -1091,11 +1090,11 @@ export const PLANES_MOCK = [
         contactoLugar: '3115551212',
 
         riesgosId: [
-            '66e500000000000000000001'
+            '66d200000000000000000001'
         ],
 
         aprendicesId: [
-            '66f600000000000000000017'
+            '66g200000000000000000008'
         ],
 
         contactosEmergencia: {
@@ -1150,15 +1149,15 @@ export const PLANES_MOCK = [
 
         clasificacionInformacion: 'clasificada',
 
-        programaFormacionId: '66b200000000000000000001',
+        programaFormacionId: '66a200000000000000000003',
         programaFormacionNombre: 'Producción Agropecuaria',
         programaFormacionNivel: 'Tecnólogo',
         ficha: '3174863',
 
-        actividadId: '66c300000000000000000013',
+        actividadId: '66b200000000000000000001',
         descripcionActividad: 'Salida académica cancelada por reprogramación institucional.',
 
-        usuarioId: '5',
+        usuarioId: '66f200000000000000000005',
         usuarioNombre: 'Luis Fernando Ramírez',
 
         fecha: '2026-08-05',
@@ -1172,11 +1171,11 @@ export const PLANES_MOCK = [
         contactoLugar: '3125551313',
 
         riesgosId: [
-            '66e500000000000000000002'
+            '66d200000000000000000002'
         ],
 
         aprendicesId: [
-            '66f600000000000000000018'
+            '66g200000000000000000009'
         ],
 
         contactosEmergencia: {
@@ -1229,93 +1228,93 @@ export const PLANES_MOCK = [
 
 export const MOCK_APRENDICES = [
     {
-        _id: '66f600000000000000000001',
+        _id: '66g200000000000000000001',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1098765432',
         nombreCompleto: 'Juan Sebastián Rodríguez',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000002',
+        _id: '66g200000000000000000002',
         tipo: 'Tarjeta de Identidad',
         numeroDocumento: '1023456789',
         nombreCompleto: 'María Fernanda López',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000003',
+        _id: '66g200000000000000000003',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1001234567',
         nombreCompleto: 'Carlos Andrés Martínez',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000004',
+        _id: '66g200000000000000000004',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1095847362',
         nombreCompleto: 'Laura Daniela Torres',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000005',
+        _id: '66g200000000000000000005',
         tipo: 'Tarjeta de Identidad',
         numeroDocumento: '1032456712',
         nombreCompleto: 'Andrés Felipe Morales',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000006',
+        _id: '66g200000000000000000006',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1098234561',
         nombreCompleto: 'Valentina Castro Silva',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000007',
+        _id: '66g200000000000000000007',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1002345890',
         nombreCompleto: 'Camilo Eduardo Vargas',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000008',
+        _id: '66g200000000000000000008',
         tipo: 'Tarjeta de Identidad',
         numeroDocumento: '1035678901',
         nombreCompleto: 'Sofia Alejandra Ruiz',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000009',
+        _id: '66g200000000000000000009',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1098123456',
         nombreCompleto: 'Mateo Alexander Gómez',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     },
     {
-        _id: '66f600000000000000000010',
+        _id: '66g200000000000000000009',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1003456789',
         nombreCompleto: 'Isabella Natalia Mendoza',
         estado: 'activo',
         ficha: '3174863',
-        programaFormacionId: '66b200000000000000000001'
+        programaFormacionId: '66a200000000000000000003'
     }
 ]

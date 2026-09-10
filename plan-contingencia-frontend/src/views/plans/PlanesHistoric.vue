@@ -138,6 +138,7 @@ function clearFilters() {
 .historico-filter-bar {
     justify-content: flex-start;
     align-items: center;
+    width: 100%;
     max-width: 100%;
 }
 
@@ -147,6 +148,21 @@ function clearFilters() {
     gap: 12px;
     margin-left: auto;
     min-width: 0;
+    flex-wrap: nowrap;
+    max-width: 100%;
+}
+
+.historico-filter-actions :deep(.base-search) {
+    width: 240px;
+    min-width: 200px;
+    max-width: 100%;
+    flex: 0 0 auto;
+}
+
+.historico-filter-actions :deep(.base-clear-filters) {
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: 0;
 }
 
 @media (max-width: 1494px) and (min-width: 601px) {
@@ -155,6 +171,7 @@ function clearFilters() {
         flex: 1 1 auto;
         justify-content: space-between;
         margin-left: 0;
+        max-width: calc(100% - 100px);
     }
 }
 
@@ -217,7 +234,7 @@ function clearFilters() {
     }
 
     .historico-filter-actions :deep(.base-clear-filters) {
-        align-self: flex-end;
+        align-self: center;
     }
 }
 </style>

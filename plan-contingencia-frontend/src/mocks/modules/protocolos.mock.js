@@ -1,5 +1,6 @@
 export const PROTOCOLOS_MOCK = [
     {
+        _id: '66e200000000000000000001',
         codigo: 1,
         tipo: 'Accidente por Caída',
         accion: 'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
@@ -9,6 +10,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '12/02/2025'
     },
     {
+        _id: '66e200000000000000000002',
         codigo: 2,
         tipo: 'Incendio',
         accion: 'Evacuar el área de forma inmediata y notificar al Cuerpo de Bomberos.',
@@ -18,6 +20,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '18/05/2024'
     },
     {
+        _id: '66e200000000000000000003',
         codigo: 3,
         tipo: 'Emergencia Médica',
         accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
@@ -27,6 +30,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '23/08/2025'
     },
     {
+        _id: '66e200000000000000000004',
         codigo: 4,
         tipo: 'Derrame de Sustancias Químicas',
         accion: 'Aislar la zona, utilizar EPP y aplicar el procedimiento de contención.',
@@ -36,6 +40,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '05/11/2024'
     },
     {
+        _id: '66e200000000000000000005',
         codigo: 5,
         tipo: 'Picadura o Mordedura de Animal',
         accion: 'Prestar atención inicial y trasladar al aprendiz al centro asistencial más cercano.',
@@ -45,6 +50,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '30/03/2025'
     },
     {
+        _id: '66e200000000000000000006',
         codigo: 6,
         tipo: 'Condiciones Climáticas Extremas',
         accion: 'Suspender la actividad y trasladar al grupo a un lugar seguro.',
@@ -54,6 +60,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '16/09/2024'
     },
     {
+        _id: '66e200000000000000000007',
         codigo: 7,
         tipo: 'Accidente de Tránsito',
         accion: 'Asegurar la escena, contactar a los organismos de emergencia y reportar el incidente.',
@@ -63,6 +70,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '09/07/2025'
     },
     {
+        _id: '66e200000000000000000008',
         codigo: 8,
         tipo: 'Persona Extraviada',
         accion: 'Realizar conteo del grupo, activar la búsqueda y notificar a las autoridades si es necesario.',
@@ -72,6 +80,7 @@ export const PROTOCOLOS_MOCK = [
         fecha: '27/10/2024'
     },
     {
+        _id: '66e200000000000000000009',
         codigo: 9,
         tipo: 'Evacuación Preventiva',
         accion: 'Guiar al grupo hacia el punto de encuentro siguiendo la ruta de evacuación establecida.',

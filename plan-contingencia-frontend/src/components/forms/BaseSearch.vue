@@ -61,6 +61,12 @@ const search = computed({
     flex-shrink: 0;
 }
 
+.base-search--filter {
+    width: 100%;
+    max-width: 240px;
+    min-width: 180px;
+}
+
 .base-search :deep(.q-field) {
     font-size: 0.75rem;
 }

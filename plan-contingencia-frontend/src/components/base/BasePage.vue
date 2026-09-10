@@ -19,7 +19,7 @@
 .base-page {
     width: 100%;
     min-height: 100%;
-    max-width: 87%;
+    max-width: 90%;
     margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
@@ -27,6 +27,19 @@
     flex-direction: column;
     gap: 0.5rem;
     background-color: $color-surface;
+}
+
+@media (max-width: 1200px) {
+    .base-page {
+        max-width: 94%;
+    }
+}
+
+@media (max-width: 768px) {
+    .base-page {
+        max-width: 100%;
+        padding-inline: 0.5rem;
+    }
 }
 
 </style>

@@ -1,5 +1,6 @@
 export const PELIGROS_MOCK = [
     {
+        _id: '66c200000000000000000001',
         codigo: 1,
         nombre: 'Caída a Nivel',
         categoria: 'Locativo',
@@ -8,6 +9,7 @@ export const PELIGROS_MOCK = [
         fecha: '08/02/2025'
     },
     {
+        _id: '66c200000000000000000002',
         codigo: 2,
         nombre: 'Exposición a Sustancias Químicas',
         categoria: 'Químico',
@@ -16,6 +18,7 @@ export const PELIGROS_MOCK = [
         fecha: '21/06/2024'
     },
     {
+        _id: '66c200000000000000000003',
         codigo: 3,
         nombre: 'Radiación Solar',
         categoria: 'Físico',
@@ -24,6 +27,7 @@ export const PELIGROS_MOCK = [
         fecha: '15/09/2024'
     },
     {
+        _id: '66c200000000000000000004',
         codigo: 4,
         nombre: 'Herramientas Cortopunzantes',
         categoria: 'Mecánico',
@@ -32,6 +36,7 @@ export const PELIGROS_MOCK = [
         fecha: '30/11/2024'
     },
     {
+        _id: '66c200000000000000000005',
         codigo: 5,
         nombre: 'Contacto con Animales',
         categoria: 'Biológico',
@@ -40,6 +45,7 @@ export const PELIGROS_MOCK = [
         fecha: '04/04/2025'
     },
     {
+        _id: '66c200000000000000000006',
         codigo: 6,
         nombre: 'Manipulación Manual de Cargas',
         categoria: 'Ergonómico',
@@ -48,6 +54,7 @@ export const PELIGROS_MOCK = [
         fecha: '19/12/2024'
     },
     {
+        _id: '66c200000000000000000007',
         codigo: 7,
         nombre: 'Tránsito Vehicular',
         categoria: 'Seguridad',
@@ -56,6 +63,7 @@ export const PELIGROS_MOCK = [
         fecha: '26/07/2025'
     },
     {
+        _id: '66c200000000000000000008',
         codigo: 8,
         nombre: 'Condiciones Climáticas Adversas',
         categoria: 'Natural',
@@ -64,6 +72,7 @@ export const PELIGROS_MOCK = [
         fecha: '12/03/2026'
     },
     {
+        _id: '66c200000000000000000009',
         codigo: 9,
         nombre: 'Ruido Excesivo',
         categoria: 'Físico',

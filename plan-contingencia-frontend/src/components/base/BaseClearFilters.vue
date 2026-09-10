@@ -57,10 +57,24 @@ const emit = defineEmits([
     font-weight: 600;
     text-transform: uppercase;
     padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.base-clear-filters :deep(.q-btn__content) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 .base-clear-filters span {
     font-size: $font-size-xs;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 .base-clear-filters:hover {

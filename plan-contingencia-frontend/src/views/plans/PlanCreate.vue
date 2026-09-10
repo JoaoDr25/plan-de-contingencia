@@ -1,5 +1,4 @@
 <template>
-
   <q-page class="plan-create-page">
 
     <div class="plan-create-page__container">
@@ -12,91 +11,48 @@
 
       </header>
 
-      <WizardStepNav
-        :current-step="currentStep"
-        :completed-steps="completedSteps"
-        @update:current-step="handleStepNavigation"
-      />
+      <wizardStepNav :current-step="currentStep" :completed-steps="completedSteps"
+        @update:current-step="handleStepNavigation" />
 
-      <main class="wizard-content">
+      <q-form ref="wizardFormRef" class="wizard-form" @submit.prevent>
 
-        <section class="wizard-content__header">
+        <PlanInformacionGeneral v-if="currentStep === 1" v-model="planForm" />
 
-          <span class="wizard-content__step">
-            Paso {{ currentStep }} de {{ TOTAL_STEPS }}
-          </span>
+        <PlanContextoAcademico v-else-if="currentStep === 2" v-model="planForm" />
 
-          <h2 class="wizard-content__title">
-            {{ currentStepData.title }}
-          </h2>
+        <PlanPlanTrabajo v-else-if="currentStep === 3" v-model="planForm" />
 
-          <p class="wizard-content__description">
-            {{ currentStepData.description }}
-          </p>
+        <PlanParticipantes v-else-if="currentStep === 4" v-model="planForm" />
 
-        </section>
+        <PlanRiesgos v-else-if="currentStep === 5" ref="currentStepRef" v-model="planForm" />
 
-        <section class="wizard-placeholder">
+        <PlanSeguridad v-else-if="currentStep === 6" ref="currentStepRef" v-model="planForm" />
 
-          <div class="wizard-placeholder__number">
-            {{ currentStep }}
+        <PlanRevision v-else-if="currentStep === 7" ref="currentStepRef" v-model="planForm"
+          @go-to-step="handleStepNavigation" />
 
-          </div>
+        <section v-else class="wizard-placeholder">
 
-          <div>
-            <h3>{{ currentStepData.title }}</h3>
+          <h3>{{ currentStepData.title }}</h3>
 
-            <p>
-              Aquí se construirá el contenido correspondiente a este paso.
-            </p>
-
-            <p v-if="isCompletedStep(currentStep)" class="wizard-placeholder__completed">
-              Esta sección ya fue completada.
-            </p>
-
-          </div>
+          <p>{{ currentStepData.description }}</p>
 
         </section>
 
-      </main>
+      </q-form>
 
       <footer class="wizard-actions">
-        <q-btn
-          flat
-          no-caps
-          label="Cancelar"
-          icon="cancel"
-          class="wizard-actions__cancel"
-          @click="handleCancel"
-        />
+
+        <q-btn flat no-caps label="Cancelar" icon="cancel" class="wizard-actions__cancel" @click="handleCancel" />
 
         <div class="wizard-actions__navigation">
-          <q-btn
-            v-if="currentStep > 1"
-            flat
-            no-caps
-            label="Anterior"
-            class="wizard-actions__previous"
-            @click="goToPreviousStep"
-          />
+          <q-btn v-if="currentStep > 1" flat no-caps label="Anterior" class="wizard-actions__previous"
+            @click="goToPreviousStep" />
 
-          <q-btn
-            v-if="currentStep < TOTAL_STEPS"
-            unelevated
-            no-caps
-            label="Siguiente"
-            class="wizard-actions__next"
-            @click="goToNextStep"
-          />
+          <q-btn v-if="currentStep < TOTAL_STEPS" unelevated no-caps label="Siguiente" class="wizard-actions__next"
+            @click="goToNextStep" />
 
-          <q-btn
-            v-else
-            unelevated
-            no-caps
-            label="Generar Plan"
-            class="wizard-actions__next"
-            disable
-          />
+          <q-btn v-else unelevated no-caps label="Generar Plan" class="wizard-actions__next" disable />
 
         </div>
 
@@ -113,84 +69,60 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import WizardStepNav from 'src/components/wizard/wizardStepNav.vue'
+import wizardStepNav from 'src/components/wizard/wizardStepNav.vue'
+import PlanInformacionGeneral from '../wizard/PlanInformacionGeneral.vue'
+import PlanContextoAcademico from '../wizard/PlanContextoAcademico.vue'
+import PlanPlanTrabajo from '../wizard/PlanPlanTrabajo.vue'
+import PlanParticipantes from '../wizard/PlanParticipantes.vue'
+import PlanRiesgos from '../wizard/PlanRiesgos.vue'
+import PlanSeguridad from '../wizard/PlanSeguridad.vue'
+import PlanRevision from '../wizard/PlanRevision.vue'
+
+import { createPlanContingenciaModel } from 'src/models/planContingencia.model'
+import { PLAN_WIZARD_STEPS } from 'src/constants/plans/planWizard.js'
 
 const router = useRouter()
 
-const TOTAL_STEPS = 7
+const TOTAL_STEPS = PLAN_WIZARD_STEPS.length
 
 const currentStep = ref(1)
 const completedSteps = ref([])
 
-const steps = [
-  {
-    number: 1,
-    title: 'Información general',
-    description:
-      'Registre la información principal del plan de contingencia.'
-  },
-  {
-    number: 2,
-    title: 'Contexto académico',
-    description:
-      'Registre la información académica y la articulación formativa.'
-  },
-  {
-    number: 3,
-    title: 'Plan de trabajo',
-    description:
-      'Defina las actividades específicas que se desarrollarán durante la salida.'
-  },
-  {
-    number: 4,
-    title: 'Participantes',
-    description:
-      'Seleccione los aprendices que participarán en la actividad.'
-  },
-  {
-    number: 5,
-    title: 'Riesgos',
-    description:
-      'Seleccione los riesgos asociados a la actividad y las medidas de prevención.'
-  },
-  {
-    number: 6,
-    title: 'Seguridad',
-    description:
-      'Registre los elementos de protección, seguridad vial y contactos de emergencia.'
-  },
-  {
-    number: 7,
-    title: 'Revisión',
-    description:
-      'Revise la información, registre observaciones y defina los responsables.'
-  }
-]
+const planForm = ref(createPlanContingenciaModel())
+
+const wizardFormRef = ref(null)
+
+const steps = PLAN_WIZARD_STEPS
 
 const currentStepData = computed(() => {
   return (
-    steps.find(step => step.number === currentStep.value) ?? steps[0]
+    steps.find(step => step.number === currentStep.value) ??
+    steps[0]
   )
 })
-
-function isCompletedStep(stepNumber) {
-  return completedSteps.value.includes(stepNumber)
-}
 
 function handleStepNavigation(stepNumber) {
   if (stepNumber === currentStep.value) return
 
   const canNavigate =
     stepNumber < currentStep.value ||
-    completedSteps.value.includes(stepNumber)
+    completedSteps.value.includes(stepNumber) ||
+    (stepNumber === currentStep.value + 1 &&
+      completedSteps.value.includes(currentStep.value))
 
   if (!canNavigate) return
 
   currentStep.value = stepNumber
 }
 
-function goToNextStep() {
+async function goToNextStep() {
   if (currentStep.value >= TOTAL_STEPS) return
+
+  const isValid = await wizardFormRef.value?.validate()
+
+  if (!isValid) {
+    return
+  }
 
   if (!completedSteps.value.includes(currentStep.value)) {
     completedSteps.value.push(currentStep.value)
@@ -208,11 +140,9 @@ function goToPreviousStep() {
 function handleCancel() {
   router.back()
 }
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -225,6 +155,8 @@ function handleCancel() {
   max-width: 1360px;
   margin: 0 auto;
 }
+
+/* Encabezado */
 
 .plan-create-header {
   margin-bottom: 18px;
@@ -242,43 +174,25 @@ function handleCancel() {
   text-align: center;
 }
 
-.wizard-content {
-  padding: 24px 0 0;
+/* Formulario */
+
+.wizard-form {
+  padding-top: 24px;
 }
 
-.wizard-content__header {
-  margin-bottom: 20px;
-}
-
-.wizard-content__step {
-  display: block;
-  margin-bottom: 4px;
-  color: $color-primary;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.wizard-content__title {
-  margin: 0 0 6px;
-  color: #111;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.wizard-content__description {
-  margin: 0;
-  color: #666;
-  font-size: 13px;
-}
+/* Placeholder */
 
 .wizard-placeholder {
   display: flex;
   align-items: center;
   gap: 20px;
+
   min-height: 220px;
   padding: 32px;
+
   border: 1px solid #dedede;
   border-radius: 4px;
+
   background-color: #fff;
 }
 
@@ -286,39 +200,50 @@ function handleCancel() {
   display: flex;
   align-items: center;
   justify-content: center;
+
   flex: 0 0 auto;
+
   width: 64px;
   height: 64px;
+
   border-radius: 50%;
+
   background-color: $color-primary;
+
   color: #fff;
   font-size: 24px;
   font-weight: 700;
 }
 
-.wizard-placeholder h3 {
+.wizard-placeholder h2 {
   margin: 0 0 8px;
+
   color: #222;
   font-size: 18px;
 }
 
 .wizard-placeholder p {
   margin: 0 0 6px;
+
   color: #666;
   font-size: 13px;
 }
 
-.wizard-placeholder__completed {
+.wizard-placeholder__message {
   color: $color-primary !important;
   font-weight: 600;
 }
+
+/* Acciones */
 
 .wizard-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   margin-top: 24px;
   padding-top: 16px;
+
   border-top: 1px solid #e5e5e5;
 }
 
@@ -343,6 +268,8 @@ function handleCancel() {
   color: #fff;
 }
 
+/* Responsive */
+
 @media (max-width: 900px) {
   .plan-create-page {
     padding: 16px;
@@ -350,10 +277,6 @@ function handleCancel() {
 
   .plan-create-header__title {
     font-size: 19px;
-  }
-
-  .wizard-content {
-    padding-top: 18px;
   }
 }
 
@@ -365,6 +288,7 @@ function handleCancel() {
   .wizard-placeholder {
     flex-direction: column;
     align-items: flex-start;
+
     min-height: 180px;
     padding: 24px;
   }

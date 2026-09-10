@@ -1,5 +1,6 @@
 export const APRENDICES_MOCK = [
   {
+    _id: '66g200000000000000000001',
     codigo: 1,
     tipo: 'Cédula de Ciudadanía',
     documento: '1098765432',
@@ -17,6 +18,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
+    _id: '66g200000000000000000002',
     codigo: 2,
     tipo: 'Tarjeta de Identidad',
     documento: '1032456789',
@@ -34,6 +36,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
+    _id: '66g200000000000000000003',
     codigo: 3,
     tipo: 'Pasaporte',
     documento: '1012345678',
@@ -51,6 +54,7 @@ export const APRENDICES_MOCK = [
     estado: 'Inactivo'
   },
   {
+    _id: '66g200000000000000000004',
     codigo: 4,
     tipo: 'Cédula de Ciudadanía',
     documento: '1009876543',
@@ -68,6 +72,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
+    _id: '66g200000000000000000005',
     codigo: 5,
     tipo: 'Tarjeta de Identidad',
     documento: '1122334455',
@@ -85,6 +90,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
+    _id: '66g200000000000000000006',
     codigo: 6,
     tipo: 'Pasaporte',
     documento: '1099887766',
@@ -102,6 +108,7 @@ export const APRENDICES_MOCK = [
     estado: 'Inactivo'
   },
   {
+    _id: '66g200000000000000000007',
     codigo: 7,
     tipo: 'Cédula de Ciudadanía',
     documento: '1001122334',
@@ -119,6 +126,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
+    _id: '66g200000000000000000008',
     codigo: 8,
     tipo: 'Tarjeta de Identidad',
     documento: '1023456781',
@@ -136,6 +144,7 @@ export const APRENDICES_MOCK = [
     estado: 'Activo'
   },
   {
+    _id: '66g200000000000000000009',
     codigo: 9,
     tipo: 'Pasaporte',
     documento: '1011223344',
