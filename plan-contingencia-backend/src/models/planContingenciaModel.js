@@ -261,9 +261,45 @@ const planContingenciaSchema = new mongoose.Schema({
         enum: ["borrador", "en revision", "aprobado", "cancelado", "ejecutado"],
         default: "borrador"
     },
-    observaciones: {
-        type: String,
-        trim: true
+    revision: {
+        usuario: {
+            usuarioId: ObjectId,
+            nombre: String,
+            firma: String
+        },
+
+        pedagogia: {
+            usuarioId: ObjectId,
+            nombre: String,
+            firma: String,
+            estado: {
+                type: String,
+                enum: ['pendiente', 'aprobado', 'no aprobado']
+            },
+            fecha: Date
+        },
+
+        sst: {
+            usuarioId: ObjectId,
+            nombre: String,
+            firma: String,
+            estado: {
+                type: String,
+                enum: ['pendiente', 'aprobado', 'no aprobado']
+            },
+            fecha: Date
+        },
+
+        coordinacion: {
+            usuarioId: ObjectId,
+            nombre: String,
+            firma: String,
+            estado: {
+                type: String,
+                enum: ['pendiente', 'aprobado', 'no aprobado']
+            },
+            fecha: Date
+        }
     }
 }, {
     timestamps: true
