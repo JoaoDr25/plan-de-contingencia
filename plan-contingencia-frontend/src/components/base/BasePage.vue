@@ -37,7 +37,7 @@
 
 @media (max-width: 768px) {
     .base-page {
-        max-width: 100%;
+        max-width: 90%;
         padding-inline: 0.5rem;
     }
 }

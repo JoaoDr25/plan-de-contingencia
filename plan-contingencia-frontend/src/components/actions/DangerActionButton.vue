@@ -58,6 +58,7 @@ function handleClick() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -85,7 +86,7 @@ function handleClick() {
 
 .danger-action-button--md {
     border-radius: 4px;
-    min-width: 180px;
+    min-width: 160px;
     height: 40px;
     font-size: 0.80rem;
     text-transform: none;
@@ -103,7 +104,4 @@ function handleClick() {
     width: 100%;
 }
 
-// .danger-action-button:hover {
-//     background-color: $color-error-dark;
-// }
 </style>

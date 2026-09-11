@@ -37,18 +37,13 @@ const {
         type: String,
         default: 'md',
         validator: value => ['sm', 'md', 'lg'].includes(value)
-    },
-    // fullWidth: {
-    //     type: Boolean,
-    //     default: false
-    // }
+    }
 })
 
 const emit = defineEmits([
     'click'
 ])
 
-// icons de cierre/cancelación usan el trazo sin relleno para mantener el estilo outline del botón
 const resolvedIcon = computed(() => {
     return icon === 'cancel' || icon === 'close' ? 'highlight_off' : icon
 })

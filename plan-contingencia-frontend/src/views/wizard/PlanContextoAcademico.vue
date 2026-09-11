@@ -20,39 +20,47 @@
 
         </div>
 
-        <BaseTextarea
-          v-model="form.contextoAcademico.objetivo"
-          label="Objetivo"
-          placeholder="Escriba brevemente la razón académica de la salida..."
-          maxlength="1000"
-          required
-          size="wizard"
-          :rules="[requiredRule]"
-        />
+        <div class="contexto-field">
 
-        <BaseTextarea
-          v-model="form.contextoAcademico.competencia"
-          label="Competencia"
-          placeholder="Escriba la competencia que se pretende desarrollar..."
-          maxlength="1000"
-          required
-          size="wizard"
-          :rules="[requiredRule]"
-        />
+          <label class="contexto-field__label" for="objetivo">Objetivo <span>*</span></label>
 
-        <BaseTextarea
-          v-model="form.contextoAcademico.resultadoAprendizaje"
-          label="Resultados de aprendizaje"
-          placeholder="Escriba los resultados de aprendizaje esperados..."
-          maxlength="1000"
-          required
-          size="wizard"
-          :rules="[requiredRule]"
-        />
+          <p class="contexto-field__help">Explique brevemente la razón académica de la salida y su relación con la
+            planeación pedagógica.</p>
+
+          <BaseTextarea id="objetivo" v-model="form.contextoAcademico.objetivo" label="Objetivo"
+            placeholder="Escriba el objetivo de la actividad..." :maxlength="1000" counter required external-label
+            size="wizard" :rules="[requiredRule]" />
+
+        </div>
+
+        <div class="contexto-field">
+
+          <label class="contexto-field__label" for="competencia">Competencia <span>*</span></label>
+
+          <p class="contexto-field__help">Describa la competencia que se pretende desarrollar con la actividad.</p>
+
+          <BaseTextarea id="competencia" v-model="form.contextoAcademico.competencia" label="Competencia"
+            placeholder="Escriba la competencia..." :maxlength="1000" counter required external-label size="wizard"
+            :rules="[requiredRule]" />
+
+        </div>
+
+        <div class="contexto-field">
+
+          <label class="contexto-field__label" for="resultado-aprendizaje">Resultados de aprendizaje
+            <span>*</span></label>
+
+          <p class="contexto-field__help">Describa los resultados de aprendizaje esperados.</p>
+
+          <BaseTextarea id="resultado-aprendizaje" v-model="form.contextoAcademico.resultadoAprendizaje"
+            label="Resultados de aprendizaje" placeholder="Escriba los resultados de aprendizaje..." :maxlength="1000"
+            counter required external-label size="wizard" :rules="[requiredRule]" />
+
+        </div>
 
       </section>
 
-      <section class="contexto-section">
+      <section class="contexto-section contexto-section--soportes">
 
         <div class="section-title">
 
@@ -62,47 +70,53 @@
 
         </div>
 
-        <BaseInput
-          v-model="form.contextoAcademico.planeacionPedagogicaLink"
-          label="Planeación pedagógica"
-          placeholder="https://ejemplo.edu.co/planeacion.pdf"
-          type="url"
-          icon="link"
-          required
-          size="wizard"
-          :rules="[requiredRule, urlRule]"
-        />
+        <div class="contexto-field">
 
-        <BaseInput
-          v-model="form.contextoAcademico.guiaAprendizajeLink"
-          label="Guía de aprendizaje"
-          placeholder="https://ejemplo.edu.co/guia-aprendizaje.pdf"
-          type="url"
-          icon="link"
-          required
-          size="wizard"
-          :rules="[requiredRule, urlRule]"
-        />
+          <label class="contexto-field__label" for="planeacion-pedagogica">Planeación pedagógica <span>*</span></label>
 
-        <BaseInput
-          v-model="form.contextoAcademico.otrosSoportesLink"
-          label="Otros soportes"
-          placeholder="https://ejemplo.edu.co/soportes.pdf"
-          type="url"
-          icon="link"
-          size="wizard"
-          :rules="[optionalUrlRule]"
-        />
+          <p class="contexto-field__help">Enlace a la planeación pedagógica de la actividad.</p>
 
-        <BaseInput
-          v-model="form.contextoAcademico.actasComportamientoLink"
-          label="Acta de comportamiento"
-          placeholder="https://ejemplo.edu.co/acta.pdf"
-          type="url"
-          icon="link"
-          size="wizard"
-          :rules="[optionalUrlRule]"
-        />
+          <BaseInput id="planeacion-pedagogica" v-model="form.contextoAcademico.planeacionPedagogicaLink"
+            label="Planeación pedagógica" placeholder="https://ejemplo.edu.co/planeacion.pdf" type="url" icon="link"
+            required external-label size="wizard" :rules="[requiredRule, urlRule]" />
+
+        </div>
+
+        <div class="contexto-field">
+
+          <label class="contexto-field__label" for="guia-aprendizaje">Guía de aprendizaje <span>*</span></label>
+
+          <p class="contexto-field__help">Enlace a la guía de aprendizaje correspondiente.</p>
+
+          <BaseInput id="guia-aprendizaje" v-model="form.contextoAcademico.guiaAprendizajeLink"
+            label="Guía de aprendizaje" placeholder="https://ejemplo.edu.co/guia-aprendizaje.pdf" type="url" icon="link"
+            required external-label size="wizard" :rules="[requiredRule, urlRule]" />
+
+        </div>
+
+        <div class="contexto-field">
+
+          <label class="contexto-field__label" for="otros-soportes">Otros soportes</label>
+
+          <p class="contexto-field__help">Enlace a otros documentos o recursos de apoyo.</p>
+
+          <BaseInput id="otros-soportes" v-model="form.contextoAcademico.otrosSoportesLink" label="Otros soportes"
+            placeholder="https://ejemplo.edu.co/soportes.pdf" type="url" icon="link" external-label size="wizard"
+            :rules="[optionalUrlRule]" />
+
+        </div>
+
+        <div class="contexto-field">
+
+          <label class="contexto-field__label" for="acta-comportamiento">Acta de comportamiento</label>
+
+          <p class="contexto-field__help">Enlace al acta de comportamiento acordada para la actividad.</p>
+
+          <BaseInput id="acta-comportamiento" v-model="form.contextoAcademico.actasComportamientoLink"
+            label="Acta de comportamiento" placeholder="https://ejemplo.edu.co/acta.pdf" type="url" icon="link"
+            external-label size="wizard" :rules="[optionalUrlRule]" />
+
+        </div>
 
       </section>
 
@@ -123,53 +137,30 @@
 
           <div class="checkbox-group">
 
-            <q-checkbox
-              v-model="form.contextoAcademico.consentimientoMenores"
-              :true-value="true"
-              :false-value="false"
-              label="Sí"
-              @update:model-value="handleMenoresChange"
-            />
+            <q-checkbox v-model="form.contextoAcademico.consentimientoMenores" :true-value="true" :false-value="false"
+              label="Sí" size="sm" @update:model-value="handleMenoresChange" />
 
-            <q-checkbox
-              :model-value="!form.contextoAcademico.consentimientoMenores"
-              :true-value="true"
-              :false-value="false"
-              label="No"
-              @update:model-value="handleNoMenores"
-            />
+            <q-checkbox :model-value="!form.contextoAcademico.consentimientoMenores" :true-value="true"
+              :false-value="false" label="No" size="sm" @update:model-value="handleNoMenores" />
 
           </div>
 
         </div>
 
-        <div
-          v-if="form.contextoAcademico.consentimientoMenores"
-          class="conditional-field"
-        >
+        <div v-if="form.contextoAcademico.consentimientoMenores" class="conditional-field">
 
-          <BaseInput
-            v-model="form.contextoAcademico.consentimientoLink"
-            label="Consentimiento informado"
-            placeholder="https://ejemplo.edu.co/consentimiento.pdf"
-            type="url"
-            icon="link"
-            required
-            size="wizard"
-            :rules="[requiredRule, urlRule]"
-          />
+          <label class="contexto-field__label" for="consentimiento-informado">Consentimiento informado
+            <span>*</span></label>
 
-          <small class="field-help">
-            Ingrese una URL válida (http o https).
-          </small>
+            <p class="contexto-field__help">Enlace al consentimiento informado firmado por padres o acudientes.</p>
+
+          <BaseInput id="consentimiento-informado" v-model="form.contextoAcademico.consentimientoLink"
+            label="Consentimiento informado" placeholder="https://ejemplo.edu.co/consentimiento.pdf" type="url"
+            icon="link" required external-label size="wizard" :rules="[requiredRule, urlRule]" />
 
         </div>
 
-      </section>
-
-      <section class="contexto-section">
-
-        <div class="section-title">
+        <div class="section-title section-title--articulacion">
 
           <span class="section-number">4</span>
 
@@ -183,40 +174,29 @@
         </p>
 
         <div class="checkbox-list">
-          <q-checkbox
-            v-model="form.articulacionFormativa.proyectoFormativo"
-            label="Proyecto formativo"
-          />
+          <q-checkbox v-model="form.articulacionFormativa.proyectoFormativo" label="Proyecto formativo" size="sm"
+            dense />
 
-          <q-checkbox
-            v-model="form.articulacionFormativa.visitaEmpresa"
-            label="Visita a empresa"
-          />
+          <q-checkbox v-model="form.articulacionFormativa.visitaEmpresa" label="Visita a empresa" size="sm" dense />
 
-          <q-checkbox
-            v-model="form.articulacionFormativa.investigacion"
-            label="Investigación"
-          />
+          <q-checkbox v-model="form.articulacionFormativa.investigacion" label="Investigación" size="sm" dense />
 
-          <q-checkbox
-            v-model="form.articulacionFormativa.otroSeleccionado"
-            label="Otro"
-          />
+          <q-checkbox v-model="form.articulacionFormativa.otroSeleccionado" label="Otro" size="sm" dense />
 
         </div>
 
-        <BaseInput
-          v-if="form.articulacionFormativa.otroSeleccionado"
-          v-model="form.articulacionFormativa.otro"
-          label="Especificación"
-          placeholder="Especifique..."
-          maxlength="50"
-          required
-          size="wizard"
-          :rules="[requiredRule]"
-        />
+        <div v-if="form.articulacionFormativa.otroSeleccionado" class="contexto-field">
+
+          <label class="contexto-field__label" for="otra-articulacion">Especificación <span>*</span></label>
+
+          <BaseInput id="otra-articulacion" v-model="form.articulacionFormativa.otro" label="Especificación"
+            placeholder="Especifique..." :maxlength="50" required external-label size="wizard"
+            :rules="[requiredRule]" />
+
+        </div>
 
       </section>
+
     </div>
 
   </section>
@@ -224,6 +204,7 @@
 </template>
 
 <script setup>
+
 import { reactive } from 'vue'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
@@ -288,6 +269,9 @@ function handleNoMenores() {
 
 <style scoped lang="scss">
 
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 .plan-contexto-academico {
   width: 100%;
 }
@@ -297,22 +281,30 @@ function handleNoMenores() {
 
   h2 {
     margin: 0;
-    font-size: 18px;
+    color: $color-text-primary;
+    font-size: $font-size-2xl;
     font-weight: 700;
   }
 }
 
 .contexto-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
   align-items: start;
 }
 
 .contexto-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  min-width: 0;
+}
+
+.contexto-section--soportes .contexto-field {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 18px;
 }
 
 .section-title {
@@ -320,33 +312,59 @@ function handleNoMenores() {
   align-items: center;
   gap: 8px;
 
-  font-size: 13px;
+  color: $color-primary;
+  font-size: $font-size-sm;
   font-weight: 700;
-  color: $primary;
+}
+
+.section-title--articulacion {
+  margin-top: 8px;
 }
 
 .section-number {
   width: 20px;
   height: 20px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-  background-color: $primary;
-  color: white;
-
-  font-size: 11px;
-  font-weight: 700;
+  background-color: $color-primary;
+  color: $color-surface;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .section-description {
   margin: -4px 0 2px;
-
-  font-size: 11px;
+  font-size: $font-size-xs;
   line-height: 1.4;
-  color: #666;
+  color: $color-text-secondary;
+}
+
+.contexto-field {
+  min-width: 0;
+}
+
+.contexto-field__label {
+  display: block;
+  margin: 2px 0 2px;
+  color: $color-text-primary;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.contexto-field__label span {
+  color: $color-error;
+}
+
+.contexto-field__help {
+  min-height: 24px;
+  margin: 0;
+  color: $color-text-secondary;
+  font-size: $font-size-xs;
+  line-height: 1.5;
 }
 
 .field-block {
@@ -356,7 +374,8 @@ function handleNoMenores() {
 }
 
 .field-label {
-  font-size: 12px;
+  color: $color-text-primary;
+  font-size: $font-size-sm;
   font-weight: 600;
 }
 
@@ -369,7 +388,7 @@ function handleNoMenores() {
 .checkbox-list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 11px;
 }
 
 .conditional-field {
@@ -379,14 +398,18 @@ function handleNoMenores() {
 .field-help {
   display: block;
   margin-top: -4px;
-
   font-size: 10px;
-  color: #666;
+  color: $color-text-secondary;
 }
 
 @media (max-width: 900px) {
   .contexto-grid {
     grid-template-columns: 1fr;
   }
+
+.contexto-section--soportes .contexto-field {
+  padding-bottom: 5px;
+}
+
 }
 </style>

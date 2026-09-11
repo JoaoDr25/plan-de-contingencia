@@ -296,6 +296,10 @@ function renumberActivities() {
 </script>
 
 <style scoped lang="scss">
+
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 .plan-trabajo {
   width: 100%;
 }
@@ -305,7 +309,7 @@ function renumberActivities() {
 
   h2 {
     margin: 0;
-    font-size: 18px;
+    font-size: $font-size-2xl;
     font-weight: 700;
   }
 }
@@ -320,15 +324,16 @@ function renumberActivities() {
 .plan-info__item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 1px;
+  padding-bottom: 10px;
+
 
   span {
-    font-size: 11px;
-    color: #555;
+    font-size: $font-size-sm;
   }
 
   strong {
-    font-size: 12px;
+    font-size: $font-size-sm;
     font-weight: 500;
   }
 }
@@ -340,7 +345,6 @@ function renumberActivities() {
 .empty-state {
   padding: 28px;
   text-align: center;
-  color: #777;
   font-size: 13px;
 }
 

@@ -2,9 +2,9 @@
 
     <q-input class="base-textarea" :class="{
         'base-textarea--wizard': size === 'wizard'
-    }" :model-value="modelValue" :label="label" :placeholder="placeholder"
+    }" :model-value="modelValue" :label="externalLabel ? undefined : label" :placeholder="placeholder"
         :readonly="readonly" :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules"
-        :required="required" outlined dense autogrow type="textarea" hide-bottom-space
+        :required="required" outlined dense autogrow type="textarea" hide-bottom-space :counter="counter"
         @update:model-value="emit('update:modelValue', $event)">
 
         <template v-if="resolvedIcon" #prepend>
@@ -34,6 +34,8 @@ const {
     icon,
     rules,
     required,
+    counter,
+    externalLabel,
     size
 } = defineProps({
 
@@ -81,6 +83,14 @@ const {
         default: () => []
     },
     required: {
+        type: Boolean,
+        default: false
+    },
+    counter: {
+        type: Boolean,
+        default: false
+    },
+    externalLabel: {
         type: Boolean,
         default: false
     },
@@ -152,6 +162,7 @@ const resolvedIcon = computed(() => {
 .base-textarea :deep(.q-field__native::placeholder) {
     font-size: $font-size-sm;
     color: $color-text-secondary;
+    padding-top: 1.7px;
     opacity: 1;
 }
 
@@ -161,12 +172,55 @@ const resolvedIcon = computed(() => {
     padding-right: 5px;
 }
 
+.base-textarea :deep(.q-field__bottom) {
+    position: absolute;
+    right: 8px;
+    bottom: 5px;
+    z-index: 1;
+    padding: 0;
+    pointer-events: none;
+}
+
+.base-textarea :deep(.q-field__counter) {
+    color: $color-text-secondary;
+    font-size: 10px;
+}
+
 .base-textarea--wizard :deep(.q-field__control) {
     min-height: 90px;
+    background-color: $color-surface;
+    border: 1px solid $color-border;
+    font-size: $font-size-lg;
 }
 
 .base-textarea--wizard :deep(.q-field__native) {
     min-height: 70px;
+    padding-top: 10px;
 }
 
+.base-textarea--wizard :deep(.q-field__prepend .q-icon) {
+    font-size: 20px;
+    padding-top: 4px;
+}
+
+.base-textarea--wizard :deep(.q-field__native::placeholder) {
+    font-size: $font-size-md;
+    color: $color-text-secondary;
+    opacity: 0.75;
+}
+
+@media (max-width: 600px) {
+    .base-textarea--wizard :deep(.q-field__native::placeholder) {
+        line-height: 18px;
+        font-size: $font-size-md;
+    }
+
+    .base-textarea :deep(.q-field__prepend) {
+        padding-top: 7px;
+    }
+
+    .base-textarea--wizard :deep(.q-field__prepend .q-icon) {
+        padding-top: 0;
+    }
+}
 </style>

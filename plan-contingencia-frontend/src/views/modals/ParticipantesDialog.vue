@@ -4,61 +4,6 @@
 
         <div class="participants-dialog">
 
-            <div class="participants-dialog__info">
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Programa de formación
-                    </span>
-
-                    <span class="info-value">
-                        {{ plan.programaFormacionNombre || 'No registrado' }}
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Nivel de formación
-                    </span>
-
-                    <span class="info-value">
-                        {{ plan.programaFormacionNivel || 'No registrado' }}
-                    </span>
-
-                </div>
-
-
-                 <div class="info-item">
-
-                    <span class="info-label">
-                        Ficha
-                    </span>
-
-                    <span class="info-value">
-                        {{ plan.ficha || 'No registrada' }}
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Total aprendices
-                    </span>
-
-                    <span class="info-value">
-                        {{ participants.length }}
-                    </span>
-
-                </div>
-
-            </div>
-
             <div class="participants-table-wrapper">
 
                 <table class="participants-table">
@@ -200,40 +145,6 @@ function closeDialog() {
     width: 100%;
 }
 
-.participants-dialog__info {
-    display: grid;
-    // grid-template-columns:
-    //     repeat(4, minmax(0, 1fr));
-        grid-template-columns:
-        1.5fr 1.5fr 1fr 1fr;
-    gap: 15px;
-    margin: 20px 5px 35px 5px;
-    // margin: 10px 0 20px 0;
-    justify-items: center;
-    text-align: center;
-}
-
-.info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-    align-items: center;
-    text-align: center;
-}
-
-.info-label {
-    font-size: $font-size-sm;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #287C2D;
-}
-
-.info-value {
-    font-size: $font-size-md;
-    line-height: 1.2;
-}
-
 .participants-table-wrapper {
     width: 100%;
     max-height: min(320px, 45vh);
@@ -298,18 +209,6 @@ function closeDialog() {
 }
 
 @media (max-width: 700px) {
-
-    .participants-dialog__info {
-        grid-template-columns: 1fr;
-        gap: 0;
-        text-align: center;
-        margin-bottom: 0;
-    }
-
-    .info-item {
-        align-items: center;
-        margin-bottom: 10px;
-    }
 
     .participants-table {
         min-width: 650px;

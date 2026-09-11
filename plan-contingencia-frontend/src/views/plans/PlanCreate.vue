@@ -1,13 +1,9 @@
 <template>
-  <q-page class="plan-create-page">
-
-    <div class="plan-create-page__container">
+  <BasePage class="plan-create-page">
 
       <header class="plan-create-header">
 
-        <h1 class="plan-create-header__title">
-          CREAR PLAN DE CONTINGENCIA
-        </h1>
+        <CrudHeader title="Crear Plan de Contingencia" :uppercase-title="true" />
 
       </header>
 
@@ -31,44 +27,36 @@
         <PlanRevision v-else-if="currentStep === 7" ref="currentStepRef" v-model="planForm"
           @go-to-step="handleStepNavigation" />
 
-        <section v-else class="wizard-placeholder">
-
-          <h3>{{ currentStepData.title }}</h3>
-
-          <p>{{ currentStepData.description }}</p>
-
-        </section>
-
       </q-form>
 
       <footer class="wizard-actions">
 
-        <q-btn flat no-caps label="Cancelar" icon="cancel" class="wizard-actions__cancel" @click="handleCancel" />
+        <SecondaryActionButton label="Cancelar" icon="cancel" size="sm" @click="handleCancel" />
 
         <div class="wizard-actions__navigation">
-          <q-btn v-if="currentStep > 1" flat no-caps label="Anterior" class="wizard-actions__previous"
-            @click="goToPreviousStep" />
+          <SecondaryActionButton v-if="currentStep > 1" class="wizard-actions__button" label="Anterior" icon="arrow_back" size="sm" @click="goToPreviousStep" />
 
-          <q-btn v-if="currentStep < TOTAL_STEPS" unelevated no-caps label="Siguiente" class="wizard-actions__next"
-            @click="goToNextStep" />
+          <PrimaryActionButton v-if="currentStep < TOTAL_STEPS" class="wizard-actions__button" label="Siguiente" size="sm" @click="goToNextStep" />
 
-          <q-btn v-else unelevated no-caps label="Generar Plan" class="wizard-actions__next" disable />
+          <PrimaryActionButton v-else class="wizard-actions__button" label="Generar Plan" size="sm" disable />
 
         </div>
 
       </footer>
 
-    </div>
-
-  </q-page>
+  </BasePage>
 
 </template>
 
 <script setup>
 
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import BasePage from 'src/components/base/BasePage.vue'
+import CrudHeader from 'src/components/cruds/CrudHeader.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import wizardStepNav from 'src/components/wizard/wizardStepNav.vue'
 import PlanInformacionGeneral from '../wizard/PlanInformacionGeneral.vue'
 import PlanContextoAcademico from '../wizard/PlanContextoAcademico.vue'
@@ -91,15 +79,6 @@ const completedSteps = ref([])
 const planForm = ref(createPlanContingenciaModel())
 
 const wizardFormRef = ref(null)
-
-const steps = PLAN_WIZARD_STEPS
-
-const currentStepData = computed(() => {
-  return (
-    steps.find(step => step.number === currentStep.value) ??
-    steps[0]
-  )
-})
 
 function handleStepNavigation(stepNumber) {
   if (stepNumber === currentStep.value) return
@@ -143,20 +122,10 @@ function handleCancel() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
-.plan-create-page {
-  padding: 20px 32px 32px;
-}
-
-.plan-create-page__container {
-  width: 100%;
-  max-width: 1360px;
-  margin: 0 auto;
-}
-
-/* Encabezado */
 
 .plan-create-header {
   margin-bottom: 18px;
@@ -165,86 +134,24 @@ function handleCancel() {
 .plan-create-header__title {
   margin: 0;
   padding-bottom: 10px;
-
   border-bottom: 2px solid $color-primary;
-
-  color: #111;
   font-size: 22px;
   font-weight: 700;
   text-align: center;
 }
 
-/* Formulario */
-
 .wizard-form {
-  padding-top: 24px;
+  padding-top: 10px;
 }
-
-/* Placeholder */
-
-.wizard-placeholder {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  min-height: 220px;
-  padding: 32px;
-
-  border: 1px solid #dedede;
-  border-radius: 4px;
-
-  background-color: #fff;
-}
-
-.wizard-placeholder__number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex: 0 0 auto;
-
-  width: 64px;
-  height: 64px;
-
-  border-radius: 50%;
-
-  background-color: $color-primary;
-
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.wizard-placeholder h2 {
-  margin: 0 0 8px;
-
-  color: #222;
-  font-size: 18px;
-}
-
-.wizard-placeholder p {
-  margin: 0 0 6px;
-
-  color: #666;
-  font-size: 13px;
-}
-
-.wizard-placeholder__message {
-  color: $color-primary !important;
-  font-weight: 600;
-}
-
-/* Acciones */
 
 .wizard-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  margin-top: 24px;
-  padding-top: 16px;
-
-  border-top: 1px solid #e5e5e5;
+  margin-top: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: 1px solid $color-border;
 }
 
 .wizard-actions__navigation {
@@ -253,49 +160,21 @@ function handleCancel() {
   gap: 10px;
 }
 
-.wizard-actions__cancel {
-  color: #555;
+.wizard-actions__button {
+  width: 110px;
+  min-width: 90px;
+  height: 30px;
 }
-
-.wizard-actions__previous {
-  color: $color-primary;
-}
-
-.wizard-actions__next {
-  min-width: 110px;
-
-  background-color: $color-primary;
-  color: #fff;
-}
-
-/* Responsive */
 
 @media (max-width: 900px) {
-  .plan-create-page {
-    padding: 16px;
-  }
-
   .plan-create-header__title {
     font-size: 19px;
   }
 }
 
 @media (max-width: 600px) {
-  .plan-create-page {
-    padding: 12px;
-  }
-
-  .wizard-placeholder {
-    flex-direction: column;
-    align-items: flex-start;
-
-    min-height: 180px;
-    padding: 24px;
-  }
-
   .wizard-actions {
     flex-direction: column-reverse;
-    align-items: stretch;
     gap: 12px;
   }
 

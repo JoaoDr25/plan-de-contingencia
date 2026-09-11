@@ -4,7 +4,7 @@
         'base-select--placeholder': isEmpty,
         'base-select--filter': size === 'filter',
         'base-select--wizard': size === 'wizard'
-    }" :model-value="modelValue" :label="label" :display-value="displayValue" :options="options"
+    }" :model-value="modelValue" :label="externalLabel ? undefined : label" :display-value="displayValue || placeholder" :options="options"
         :option-label="optionLabel" :option-value="optionValue" :multiple="multiple" :disable="disable"
         :readonly="readonly" :rules="rules" :required="required" outlined dense emit-value map-options hide-bottom-space
         popup-content-class="base-select__popup" @update:model-value="emit('update:modelValue', $event)">
@@ -32,6 +32,7 @@ const {
     options,
     optionLabel,
     optionValue,
+    placeholder,
     hideSelectedValue,
     multiple,
     disable,
@@ -40,6 +41,7 @@ const {
     showIcon,
     rules,
     required,
+    externalLabel,
     size
 } = defineProps({
 
@@ -62,6 +64,10 @@ const {
     optionValue: {
         type: String,
         default: 'value'
+    },
+    placeholder: {
+        type: String,
+        default: ''
     },
     hideSelectedValue: {
         type: Boolean,
@@ -92,6 +98,10 @@ const {
         default: () => []
     },
     required: {
+        type: Boolean,
+        default: false
+    },
+    externalLabel: {
         type: Boolean,
         default: false
     },

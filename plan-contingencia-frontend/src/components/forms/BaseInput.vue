@@ -3,11 +3,17 @@
     <q-input class="base-input" :class="{
         'base-input--textarea': type === 'textarea',
         'base-input--wizard': size === 'wizard'
-    }" :model-value="modelValue" :label="label" :placeholder="placeholder" :type="type" :readonly="readonly"
+    }" :model-value="modelValue" :label="externalLabel ? undefined : label" :placeholder="placeholder" :type="type" :readonly="readonly"
         :disable="disable" :maxlength="maxlength" :autofocus="autofocus" :rules="rules" :required="required" outlined
         dense hide-bottom-space @update:model-value="emit('update:modelValue', $event)">
 
-        <template v-if="resolvedIcon" #prepend>
+        <template v-if="resolvedIcon && iconPosition === 'prepend'" #prepend>
+
+            <q-icon :name="resolvedIcon" />
+
+        </template>
+
+        <template v-if="resolvedIcon && iconPosition === 'append'" #append>
 
             <q-icon :name="resolvedIcon" />
 
@@ -33,8 +39,10 @@ const {
     maxlength,
     autofocus,
     icon,
+    iconPosition,
     rules,
     required,
+    externalLabel,
     size
 } = defineProps({
 
@@ -74,11 +82,20 @@ const {
         type: String,
         default: ''
     },
+    iconPosition: {
+        type: String,
+        default: 'prepend',
+        validator: value => ['prepend', 'append'].includes(value)
+    },
     rules: {
         type: Array,
         default: () => []
     },
     required: {
+        type: Boolean,
+        default: false
+    },
+    externalLabel: {
         type: Boolean,
         default: false
     },
@@ -258,6 +275,15 @@ const resolvedIcon = computed(() => {
 }
 
 .base-input--wizard :deep(.q-field__prepend .q-icon) {
-    font-size: 14px;
+    font-size: 18px;
+}
+
+.base-input--wizard :deep(.q-field__append) {
+    padding: 0 5px 0 0;
+    color: $color-text-secondary;
+}
+
+.base-input--wizard :deep(.q-field__append .q-icon) {
+    font-size: 18px;
 }
 </style>

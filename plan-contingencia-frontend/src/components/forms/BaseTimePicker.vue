@@ -1,10 +1,16 @@
 <template>
 
-    <q-input class="base-time-picker" :style="{ width, maxWidth: '100%' }" :model-value="displayValue"
-        :label="label" :placeholder="placeholder" :readonly="readonly" :disable="disable" :rules="rules"
+    <q-input class="base-time-picker" :class="{ 'base-time-picker--wizard': size === 'wizard' }" :style="{ width, maxWidth: '100%' }" :model-value="displayValue"
+        :label="externalLabel ? undefined : label" :placeholder="placeholder" :readonly="readonly" :disable="disable" :rules="rules"
         :required="required" outlined dense hide-bottom-space @mousedow="openPicker" @click="openPicker">
 
-        <template #prepend>
+        <template v-if="iconPosition === 'prepend'" #prepend>
+
+            <q-icon name="schedule" class="cursor-pointer" @mousedown.stop="openPicker" @click.stop="openPicker" />
+
+        </template>
+
+        <template v-if="iconPosition === 'append'" #append>
 
             <q-icon name="schedule" class="cursor-pointer" @mousedown.stop="openPicker" @click.stop="openPicker" />
 
@@ -59,6 +65,20 @@ const props = defineProps({
     required: {
         type: Boolean,
         default: false
+    },
+    externalLabel: {
+        type: Boolean,
+        default: false
+    },
+    iconPosition: {
+        type: String,
+        default: 'prepend',
+        validator: value => ['prepend', 'append'].includes(value)
+    },
+    size: {
+        type: String,
+        default: 'default',
+        validator: value => ['default', 'wizard'].includes(value)
     },
 
     width: {
@@ -150,5 +170,19 @@ function formatDisplayTime(value) {
 .base-time-picker :deep(.q-field__label),
 .base-time-picker :deep(.q-field__prepend) {
     cursor: pointer;
+}
+
+.base-time-picker--wizard :deep(.q-field__native) {
+    padding: 0 5px;
+    font-size: $font-size-xs;
+}
+
+.base-time-picker--wizard :deep(.q-field__append) {
+    padding: 0 5px 0 0;
+    color: $color-text-secondary;
+}
+
+.base-time-picker--wizard :deep(.q-field__append .q-icon) {
+    font-size: 18px;
 }
 </style>

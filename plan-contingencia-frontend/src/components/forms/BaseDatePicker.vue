@@ -1,11 +1,18 @@
 <template>
 
     <q-input class="base-date-picker" :class="{
-        'base-date-picker--filter': props.size === 'filter'
-    }" :model-value="displayValue" :label="props.label" :placeholder="props.placeholder"
+        'base-date-picker--filter': props.size === 'filter',
+        'base-date-picker--wizard': props.size === 'wizard'
+    }" :model-value="displayValue" :label="props.externalLabel ? undefined : props.label" :placeholder="props.placeholder"
         :disable="props.disable" :rules="props.rules" :required="props.required" readonly outlined dense hide-bottom-space>
 
-        <template #prepend>
+        <template v-if="props.iconPosition === 'prepend'" #prepend>
+
+            <q-icon name="event" />
+
+        </template>
+
+        <template v-if="props.iconPosition === 'append'" #append>
 
             <q-icon name="event" />
 
@@ -71,11 +78,20 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    externalLabel: {
+        type: Boolean,
+        default: false
+    },
+    iconPosition: {
+        type: String,
+        default: 'prepend',
+        validator: value => ['prepend', 'append'].includes(value)
+    },
 
     size: {
   type: String,
   default: 'default',
-  validator: value => ['default', 'filter'].includes(value)
+    validator: value => ['default', 'filter', 'wizard'].includes(value)
 }
 })
 
@@ -179,6 +195,26 @@ function selectDate(value) {
 }
 
 .base-date-picker--filter :deep(.q-field__prepend .q-icon) {
+    font-size: 18px;
+}
+
+.base-date-picker--wizard :deep(.q-field__control) {
+    min-height: 40px;
+    height: 40px;
+    background-color: $color-surface;
+}
+
+.base-date-picker--wizard :deep(.q-field__native) {
+    padding: 0 5px;
+    font-size: $font-size-xs;
+}
+
+.base-date-picker--wizard :deep(.q-field__append) {
+    padding: 0 5px 0 0;
+    color: $color-text-secondary;
+}
+
+.base-date-picker--wizard :deep(.q-field__append .q-icon) {
     font-size: 18px;
 }
 </style>

@@ -103,6 +103,7 @@ function handleStepClick(stepNumber) {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -110,31 +111,22 @@ function handleStepClick(stepNumber) {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     width: 100%;
-    margin: 0 auto;
-    border-bottom: 1px solid $color-primary;
+    margin: 20px auto;
 }
 
 .wizard-step-nav__step {
     position: relative;
-
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-
+    gap: 10px;
     min-height: 44px;
-    padding: 8px 6px;
-
+    padding: 8px 0;
     border: none;
     border-bottom: 2px solid transparent;
     background: transparent;
-
-    color: #777;
     font-family: inherit;
-    font-size: 12px;
-
     cursor: pointer;
-
     transition:
         background-color 0.2s ease,
         color 0.2s ease,
@@ -157,7 +149,7 @@ function handleStepClick(stepNumber) {
 }
 
 .wizard-step-nav__step--locked {
-    color: #8b8b8b;
+    color: $color-text-secondary;
     cursor: not-allowed;
 }
 
@@ -165,21 +157,14 @@ function handleStepClick(stepNumber) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     flex: 0 0 auto;
-
     width: 18px;
     height: 18px;
-
-    border: 1px solid #c7d0d5;
+    border: 1px solid $color-border;
     border-radius: 50%;
-
-    background-color: #fff;
-
-    color: #557;
+    background-color: $color-background-field;
     font-size: 10px;
     font-weight: 600;
-
     transition:
         background-color 0.2s ease,
         border-color 0.2s ease,
@@ -189,17 +174,32 @@ function handleStepClick(stepNumber) {
 .wizard-step-nav__indicator--active {
     border-color: $color-primary;
     background-color: $color-primary;
-    color: #fff;
+    color: $color-background-field;
 }
 
 .wizard-step-nav__indicator--completed {
     border-color: $color-primary;
-    background-color: #fff;
+    background-color: $color-background-field;
     color: $color-primary;
 }
 
 .wizard-step-nav__label {
     white-space: nowrap;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: $font-size-sm;
+}
+
+@media (max-width: 1450px) and (min-width: 901px) {
+    .wizard-step-nav__step {
+        padding: 6px 3px;
+    }
+
+    .wizard-step-nav__label {
+        white-space: normal;
+        line-height: 1.2;
+        
+    }
 }
 
 @media (max-width: 900px) {
@@ -210,24 +210,31 @@ function handleStepClick(stepNumber) {
 
     .wizard-step-nav__step {
         min-height: 40px;
-        font-size: 11px;
+        justify-content: flex-start;
     }
 
     .wizard-step-nav__label {
         white-space: normal;
-        text-align: center;
     }
 }
 
 @media (max-width: 600px) {
     .wizard-step-nav {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        padding: 4px 0;
+        justify-items: stretch;
+        padding: 4px 0 0 0;
+        margin: 0 auto;
+        column-gap: 10px;
     }
 
     .wizard-step-nav__step {
-        justify-content: flex-start;
         padding: 8px;
+        gap: 4px;
+    }
+
+    .wizard-step-nav__label {
+        white-space: nowrap;
+        font-size: 0.71rem;
     }
 }
 </style>

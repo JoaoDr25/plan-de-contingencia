@@ -6,7 +6,7 @@
         {
             'primary-action-button--full': fullWidth
         }
-    ]" :icon="icon" :label="label" :loading="loading" :disable="disable" @click="handleClick" />
+    ]" v-bind="icon ? { icon } : {}" :label="label" :loading="loading" :disable="disable" @click="handleClick" />
 
 </template>
 
@@ -60,6 +60,7 @@ function handleClick() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
