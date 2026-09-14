@@ -6,6 +6,13 @@ export const APRENDICES_COLUMNS = [
         align: 'center'
     },
     {
+        name: 'tipo',
+        label: 'Tipo Documento',
+        field: 'tipo',
+        align: 'left',
+        sortable: true
+    },
+    {
         name: 'documento',
         label: 'Documento',
         field: 'documento',

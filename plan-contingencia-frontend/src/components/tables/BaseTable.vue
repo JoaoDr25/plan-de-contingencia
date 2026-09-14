@@ -3,7 +3,8 @@
     <div class="base-table">
 
         <q-table flat bordered class="base-table__table" :rows="rows" :columns="columns" :row-key="rowKey"
-            :loading="loading" hide-bottom :pagination="{ rowsPerPage: 0 }" :rows-per-page-options="[0]" no-data-label="No existen registros">
+            :loading="loading" hide-bottom :pagination="{ rowsPerPage: 0 }" :rows-per-page-options="[0]"
+            no-data-label="No existen registros">
 
             <template #no-data>
 
@@ -54,12 +55,16 @@
 
         <div class="base-table__footer">
 
+             <div class="base-table__footer-left">
+                <slot name="footer-left" />
+            </div>
+
             <BaseTableInfo :start="start" :end="end" :total="total" />
 
         </div>
 
         <BasePagination :current-page="currentPage" :total-pages="totalPages" :rows-per-page="rowsPerPage"
-            @change="emit('change-page', $event)"   @change-rows-per-page="emit('change-rows-per-page', $event)" />
+            @change="emit('change-page', $event)" @change-rows-per-page="emit('change-rows-per-page', $event)" />
 
     </div>
 
@@ -217,6 +222,7 @@ function getCellClass(column) {
 }
 
 @media (max-width: 1200px) {
+
     .base-table__table :deep(thead th),
     .base-table__table :deep(tbody td),
     .base-table__table :deep(.q-table tbody tr) {
@@ -230,6 +236,7 @@ function getCellClass(column) {
 }
 
 @media (max-width: 900px) {
+
     .base-table__table :deep(thead th),
     .base-table__table :deep(tbody td),
     .base-table__table :deep(.q-table tbody tr) {
@@ -245,8 +252,8 @@ function getCellClass(column) {
 
 .base-table__footer {
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+    justify-content: space-between;
+    align-items: center;
     height: 45px;
     padding: 0 16px 5px;
     border-right: 1px solid $color-border-table;
@@ -257,10 +264,19 @@ function getCellClass(column) {
     background: $color-surface;
 }
 
+.base-table__footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: $font-size-xs;
+    color: $color-text-primary;
+}
+
 .base-table-info {
     font-size: 0.67rem;
     color: $color-text-primary;
     letter-spacing: 1px;
+    padding-top: 10px;
 }
 
 .base-table__ellipsis {

@@ -1,0 +1,56 @@
+export const PLAN_APRENDICES_COLUMNS = [
+    {
+        name: 'index',
+        label: 'N',
+        field: 'codigo',
+        align: 'center'
+    },
+   {
+        name: 'nombreCompleto',
+        label: 'Nombre Completo',
+        field: (row) => `${row.nombre} ${row.apellido}`,
+        align: 'left',
+        sortable: true,
+        maxWidth: '240px',
+        ellipsis: true
+    },
+     {
+        name: 'tipo',
+        label: 'Tipo de documento',
+        field: 'tipo',
+        align: 'left',
+        sortable: true,
+    },
+     {
+        name: 'documento',
+        label: 'Documento',
+        field: 'documento',
+        align: 'left',
+        sortable: true,
+    },
+    {
+        name: 'eps',
+        label: 'Nombre EPS',
+        field: 'eps',
+        align: 'left',
+        sortable: true,
+    },
+    {
+        name: 'contacto',
+        label: 'Contacto de Emergencia',
+        field: 'telefono',
+        align: 'center'
+    },
+    {
+        name: 'estado',
+        label: 'Estado',
+        field: 'estado',
+        align: 'center',
+    },
+    {
+        name: 'marcar',
+        label: 'Marcar',
+        field: 'marcar',
+        align: 'center',
+    },
+]

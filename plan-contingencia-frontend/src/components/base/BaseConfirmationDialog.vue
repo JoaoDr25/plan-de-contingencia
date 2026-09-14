@@ -182,9 +182,10 @@ function handleCancel() {
 }
 
 .base-confirmation-dialog__actions:deep(.danger-action-button--sm) {
-    width: 121px;
-    min-width: 121px;
+    width: 133px;
+    min-width: 133px;
     height: 35px;
+    white-space: nowrap;
 }
 
 @media (max-width: 480px) {

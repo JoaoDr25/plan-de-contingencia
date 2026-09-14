@@ -12,7 +12,10 @@
 
         <span>Fecha de salida</span>
 
-        <strong>{{ formattedDate }}</strong>
+        <div class="plan-info__value">
+          <q-icon name="event" />
+          <strong>{{ formattedDate }}</strong>
+        </div>
 
       </div>
 
@@ -20,7 +23,10 @@
 
         <span>Hora de salida</span>
 
-        <strong>{{ formattedTime(plan.horaSalida) }}</strong>
+        <div class="plan-info__value">
+          <q-icon name="schedule" />
+          <strong>{{ formattedTime(plan.horaSalida) }}</strong>
+        </div>
 
       </div>
 
@@ -28,7 +34,10 @@
 
         <span>Hora de regreso prevista</span>
 
-        <strong>{{ formattedTime(plan.horaRegreso) }}</strong>
+        <div class="plan-info__value">
+          <q-icon name="schedule" />
+          <strong>{{ formattedTime(plan.horaRegreso) }}</strong>
+        </div>
 
       </div>
 
@@ -36,20 +45,27 @@
 
     <div class="toolbar">
 
-      <q-btn
-        unelevated
-        color="primary"
-        icon="add_circle_outline"
+      <PrimaryActionButton
         label="Agregar"
+        icon="add_circle_outline"
+        size="sm"
         @click="handleAdd"
       />
 
     </div>
 
     <BaseTable
-      :rows="plan.planTrabajo"
+      :rows="paginatedRows"
       :columns="columns"
       row-key="numero"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
     >
 
       <template #body-cell-numero="props">
@@ -98,6 +114,8 @@
     <PlanActivityDialog
       v-model="dialogOpen"
       :activity="selectedActivity"
+      :hora-salida="plan.horaSalida"
+      :hora-regreso="plan.horaRegreso"
       @save="handleSaveActivity"
     />
 
@@ -118,8 +136,12 @@
 
 import { computed, ref } from 'vue'
 
+import { PLAN_TRABAJO_COLUMNS } from 'src/constants/tables/planTrabajo.columns.js'
+import { useCrudTable } from 'src/composables/useCrudTable'
+
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import PlanActivityDialog from '../modals/PlanActivityDialog.vue'
@@ -143,56 +165,23 @@ const selectedActivity = ref(null)
 
 const PLAN_TRABAJO_ACTIONS = ['edit', 'delete']
 
-const columns = [
-  {
-    name: 'numero',
-    label: 'Orden',
-    field: 'numero',
-    align: 'center',
-  },
-  {
-    name: 'actividad',
-    label: 'Actividad',
-    field: 'actividad',
-    align: 'left',
-  },
-  {
-    name: 'descripcion',
-    label: 'Descripción',
-    field: 'descripcion',
-    align: 'left',
-  },
-  {
-    name: 'horaInicio',
-    label: 'Hora inicio',
-    field: 'horaInicio',
-    align: 'center',
-  },
-  {
-    name: 'horaFin',
-    label: 'Hora fin',
-    field: 'horaFin',
-    align: 'center',
-  },
-  {
-    name: 'duracion',
-    label: 'Duración',
-    field: 'duracion',
-    align: 'center',
-  },
-  {
-    name: 'lugar',
-    label: 'Lugar',
-    field: 'lugar',
-    align: 'left',
-  },
-  {
-    name: 'opciones',
-    label: 'Opciones',
-    field: 'opciones',
-    align: 'center',
-  },
-]
+const columns = PLAN_TRABAJO_COLUMNS;
+
+const sourceRows = computed(() => plan.planTrabajo)
+
+const {
+  currentPage,
+  rowsPerPage,
+  setRowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow,
+} = useCrudTable({
+  sourceRows,
+  defaultRowsPerPage: 8,
+})
 
 const formattedDate = computed(() => {
   if (!plan.fecha) {
@@ -259,6 +248,8 @@ function handleSaveActivity(activity) {
 
   selectedActivity.value = null
 
+  renumberActivities()
+
   emit('update:modelValue', plan)
 }
 
@@ -289,9 +280,41 @@ function confirmDelete() {
 }
 
 function renumberActivities() {
+  sortActivitiesByTime()
+
   plan.planTrabajo.forEach((activity, index) => {
     activity.numero = index + 1
   })
+}
+
+function sortActivitiesByTime() {
+  plan.planTrabajo.sort((a, b) => {
+    const startA = timeToMinutes(a.horaInicio)
+    const startB = timeToMinutes(b.horaInicio)
+
+    if (startA !== startB) {
+      return (startA ?? Infinity) - (startB ?? Infinity)
+    }
+
+    const endA = timeToMinutes(a.horaFin)
+    const endB = timeToMinutes(b.horaFin)
+
+    return (endA ?? Infinity) - (endB ?? Infinity)
+  })
+}
+
+function timeToMinutes(value) {
+  if (!value || typeof value !== 'string') {
+    return null
+  }
+
+  const [hours, minutes] = value.split(':').map(Number)
+
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+    return null
+  }
+
+  return hours * 60 + minutes
 }
 </script>
 
@@ -324,9 +347,8 @@ function renumberActivities() {
 .plan-info__item {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 6px;
   padding-bottom: 10px;
-
 
   span {
     font-size: $font-size-sm;
@@ -334,7 +356,21 @@ function renumberActivities() {
 
   strong {
     font-size: $font-size-sm;
-    font-weight: 500;
+    font-weight: 400;
+  }
+}
+
+.plan-info__value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #D1D5DB;
+  padding-left: 10px;
+
+  .q-icon {
+    font-size: 18px;
+    color: $color-text-secondary;
   }
 }
 

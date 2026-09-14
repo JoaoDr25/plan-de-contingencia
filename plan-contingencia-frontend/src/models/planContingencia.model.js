@@ -43,9 +43,10 @@ export function createPlanContingenciaModel() {
         },
 
         articulacionFormativa: {
-            proyectoFormativo: false,
+            proyectoFormativo: true,
             visitaEmpresa: false,
             investigacion: false,
+            otroSeleccionado: false,
             otro: ''
         },
 
@@ -59,7 +60,7 @@ export function createPlanContingenciaModel() {
             otrosSoportesLink: '',
             actasComportamientoLink: '',
 
-            consentimientoMenores: false,
+            consentimientoMenores: true,
             consentimientoLink: ''
         },
 

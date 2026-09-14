@@ -184,7 +184,7 @@ const programaOptions = computed(() => {
     return PROGRAMAS_MOCK
         .filter(programa => programa.estado === 'Activo')
         .map(programa => ({
-            label: programa.nombre,
+            label: `${programa.nombre} - ${programa.ficha}`,
             value: programa._id
         }))
 })
@@ -202,6 +202,7 @@ function handleProgramaChange(programaId) {
     )
 
     form.programaFormacionNombre = programa?.nombre ?? ''
+    form.ficha = programa?.ficha ?? ''
 
     emit('update:modelValue', form)
 }

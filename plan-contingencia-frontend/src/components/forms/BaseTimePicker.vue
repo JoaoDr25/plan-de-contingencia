@@ -1,6 +1,6 @@
 <template>
 
-    <q-input class="base-time-picker" :class="{ 'base-time-picker--wizard': size === 'wizard' }" :style="{ width, maxWidth: '100%' }" :model-value="displayValue"
+    <q-input class="base-time-picker" :class="{ 'base-time-picker--wizard': size === 'wizard', 'base-time-picker--form': size === 'form' }" :style="{ width, maxWidth: '100%' }" :model-value="displayValue"
         :label="externalLabel ? undefined : label" :placeholder="placeholder" :readonly="readonly" :disable="disable" :rules="rules"
         :required="required" outlined dense hide-bottom-space @mousedow="openPicker" @click="openPicker">
 
@@ -19,7 +19,8 @@
         <q-popup-proxy ref="popupRef" cover transition-show="scale" transition-hide="scale"
             @before-show="syncPickerValue">
 
-            <q-time v-model="pickerValue" mask="HH:mm" format24h now-btn @update:model-value="handleTimeChange" />
+            <q-time v-model="pickerValue" mask="HH:mm" format24h now-btn :options="timeOptions"
+                @update:model-value="handleTimeChange" />
 
         </q-popup-proxy>
 
@@ -78,12 +79,22 @@ const props = defineProps({
     size: {
         type: String,
         default: 'default',
-        validator: value => ['default', 'wizard'].includes(value)
+        validator: value => ['default', 'wizard', 'form'].includes(value)
     },
 
     width: {
         type: String,
         default: '260px'
+    },
+
+    minTime: {
+        type: String,
+        default: ''
+    },
+
+    maxTime: {
+        type: String,
+        default: ''
     }
 })
 
@@ -104,6 +115,41 @@ const displayValue = computed({
 
 function syncPickerValue() {
     pickerValue.value = props.modelValue || ''
+}
+
+function parseTimeParts(value) {
+    if (!value || !/^\d{2}:\d{2}$/.test(value)) {
+        return null
+    }
+
+    const [hours, minutes] = value.split(':').map(Number)
+
+    return { hours, minutes }
+}
+
+// Habilita solo las horas/minutos dentro del rango [minTime, maxTime], si se definieron.
+function timeOptions(hr, min) {
+    const min0 = parseTimeParts(props.minTime)
+    const max0 = parseTimeParts(props.maxTime)
+
+    if (!min0 && !max0) {
+        return true
+    }
+
+    const lowerBound = min0 ? min0.hours * 60 + min0.minutes : -Infinity
+    const upperBound = max0 ? max0.hours * 60 + max0.minutes : Infinity
+
+    if (min === undefined) {
+        // Vista de horas: habilita la hora si contiene al menos un minuto dentro del rango.
+        const hourStart = hr * 60
+        const hourEnd = hourStart + 59
+
+        return hourEnd >= lowerBound && hourStart <= upperBound
+    }
+
+    const current = hr * 60 + min
+
+    return current >= lowerBound && current <= upperBound
 }
 
 function handleTimeChange(value) {
@@ -184,5 +230,60 @@ function formatDisplayTime(value) {
 
 .base-time-picker--wizard :deep(.q-field__append .q-icon) {
     font-size: 18px;
+}
+
+.base-time-picker--form :deep(.q-field__control) {
+    min-height: 50px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: $color-background-field;
+}
+
+.base-time-picker--form :deep(.q-field__control:before) {
+    border: none;
+}
+
+.base-time-picker--form :deep(.q-field__control:hover:before) {
+    border: none;
+}
+
+.base-time-picker--form :deep(.q-field__label) {
+    font-size: $font-size-md;
+    color: $color-text-secondary;
+}
+
+.base-time-picker--form.q-field--focused :deep(.q-field__label),
+.base-time-picker--form.q-field--float :deep(.q-field__label) {
+    color: $color-primary;
+    font-size: $font-size-md;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding-left: 2px;
+}
+
+.base-time-picker--form:not(.q-field--float) :deep(.q-field__label) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.base-time-picker--form :deep(.q-field__native) {
+    padding-top: 8px;
+    padding-bottom: 0;
+    padding-left: 5px;
+    font-size: $font-size-md;
+    line-height: 30px;
+    color: $color-text-primary;
+}
+
+.base-time-picker--form :deep(.q-field__prepend) {
+    color: $color-text-secondary;
+    opacity: 0.65;
+    padding-left: 2px;
+    padding-top: 6px;
+    padding-right: 10px;
+}
+
+.base-time-picker--form :deep(.q-field__prepend .q-icon) {
+    font-size: 21px;
 }
 </style>
