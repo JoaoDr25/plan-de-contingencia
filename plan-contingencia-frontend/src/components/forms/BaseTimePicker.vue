@@ -2,21 +2,21 @@
 
     <q-input class="base-time-picker" :class="{ 'base-time-picker--wizard': size === 'wizard', 'base-time-picker--form': size === 'form' }" :style="{ width, maxWidth: '100%' }" :model-value="displayValue"
         :label="externalLabel ? undefined : label" :placeholder="placeholder" :readonly="readonly" :disable="disable" :rules="rules"
-        :required="required" outlined dense hide-bottom-space @mousedow="openPicker" @click="openPicker">
+        :required="required" outlined dense hide-bottom-space @click="openPicker">
 
         <template v-if="iconPosition === 'prepend'" #prepend>
 
-            <q-icon name="schedule" class="cursor-pointer" @mousedown.stop="openPicker" @click.stop="openPicker" />
+            <q-icon name="schedule" class="cursor-pointer" @click.stop="openPicker" />
 
         </template>
 
         <template v-if="iconPosition === 'append'" #append>
 
-            <q-icon name="schedule" class="cursor-pointer" @mousedown.stop="openPicker" @click.stop="openPicker" />
+            <q-icon name="schedule" class="cursor-pointer" @click.stop="openPicker" />
 
         </template>
 
-        <q-popup-proxy ref="popupRef" cover transition-show="scale" transition-hide="scale"
+        <q-popup-proxy ref="popupRef" no-parent-event transition-show="scale" transition-hide="scale"
             @before-show="syncPickerValue">
 
             <q-time v-model="pickerValue" mask="HH:mm" format24h now-btn :options="timeOptions"

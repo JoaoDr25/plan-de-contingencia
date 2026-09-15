@@ -14,7 +14,10 @@
 
         <span>Programa de formación</span>
 
-        <strong>{{ programaNombre }}</strong>
+        <div class="program-info__value">
+          <q-icon name="school" />
+          <strong>{{ programaNombre }}</strong>
+        </div>
 
       </div>
 
@@ -22,7 +25,10 @@
 
         <span>Ficha</span>
 
-        <strong>{{ ficha }}</strong>
+        <div class="program-info__value">
+          <q-icon name="description" />
+          <strong>{{ ficha }}</strong>
+        </div>
 
       </div>
 
@@ -30,7 +36,10 @@
 
         <span>Total Aprendices de la Ficha</span>
 
-        <strong>{{ filteredAprendices.length }}</strong>
+        <div class="program-info__value">
+          <q-icon name="groups" />
+          <strong>{{ filteredAprendices.length }}</strong>
+        </div>
 
       </div>
 
@@ -45,7 +54,7 @@
 
         <q-btn class="participant-action-btn participant-action-btn--select" flat no-caps icon="check_box" label="Seleccionar todos" @click="selectAll" />
 
-        <q-btn class="participant-action-btn" flat no-caps icon="remove_done" label="Limpiar selección" @click="clearSelection" />
+        <q-btn class="participant-action-btn" flat no-caps icon="clear_all" label="Limpiar selección" @click="clearSelection" />
 
       </div>
 
@@ -298,7 +307,7 @@ defineExpose({
 
 .program-info {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr 1fr;
   gap: 18px;
   margin-bottom: 16px;
 }
@@ -314,11 +323,24 @@ defineExpose({
     font-size: $font-size-sm;
   }
 
-  strong {
+  .program-info__value {
+    display: flex;
+    align-items: center;
+    gap: 9px;
     min-height: 25px;
+    padding-left: 10px;
+    text-transform: uppercase;
+
+    .q-icon {
+      color: $color-text-secondary;
+      font-size: 19px;
+      opacity: 0.65;
+    }
+  }
+
+  strong {
     font-size: $font-size-sm;
     font-weight: 400;
-    padding-left: 10px;
   }
 }
 
@@ -338,13 +360,21 @@ defineExpose({
 }
 
 .participant-action-btn {
-  font-size: $font-size-sm;
+  font-size: $font-size-md;
   min-height: 36px;
   padding: 0 6px;
 }
 
 .participant-action-btn :deep(.q-icon) {
   font-size: 21px;
+}
+
+.participant-action-btn :deep(.q-icon.on-left) {
+  margin-right: 10px;
+}
+
+.participant-action-btn :deep(.q-btn__content) {
+  gap: 0;
 }
 
 .participant-action-btn--select :deep(.q-icon) {
@@ -361,7 +391,8 @@ defineExpose({
   padding-left: 11px;
 
   strong {
-    font-weight: 400;
+    font-weight: 500;
+    color: $color-primary;
   }
 }
 
@@ -378,6 +409,7 @@ defineExpose({
 @media (max-width: 900px) {
   .program-info {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .participants-toolbar {
@@ -388,5 +420,9 @@ defineExpose({
   .participants-toolbar__actions {
     justify-content: flex-end;
   }
+
+  .selection-summary {
+  padding-left: 0;
+}
 }
 </style>

@@ -14,7 +14,10 @@
 
         <span>Actividad a realizar</span>
 
-        <strong>{{ actividadNombre }}</strong>
+        <div class="plan-info__value">
+          <q-icon name="event_note" />
+          <strong>{{ actividadNombre }}</strong>
+        </div>
 
       </div>
 
@@ -22,17 +25,23 @@
 
         <span>Lugar de salida</span>
 
-        <strong>{{ plan.lugarSalida || '—' }}</strong>
-      
-    </div>
+        <div class="plan-info__value">
+          <q-icon name="location_on" />
+          <strong>{{ plan.lugarSalida || '—' }}</strong>
+        </div>
+
+      </div>
 
       <div class="plan-info__item">
 
         <span>Lugar de destino</span>
 
-        <strong>{{ plan.lugarDestino || '—' }}</strong>
-      
-    </div>
+        <div class="plan-info__value">
+          <q-icon name="location_on" />
+          <strong>{{ plan.lugarDestino || '—' }}</strong>
+        </div>
+
+      </div>
 
     </div>
 
@@ -40,71 +49,27 @@
 
       <div class="risks-toolbar__actions">
 
-        <q-btn
-          flat
-          no-caps
-          icon="check_box"
-          label="Seleccionar todos"
-          @click="selectAll"
-        />
+        <q-btn class="risk-action-btn risk-action-btn--select" flat no-caps icon="check_box" label="Seleccionar todos" @click="selectAll" />
 
-        <q-btn
-          flat
-          no-caps
-          icon="remove_done"
-          label="Limpiar selección"
-          @click="clearSelection"
-        />
+        <q-btn class="risk-action-btn" flat no-caps icon="clear_all" label="Limpiar selección" @click="clearSelection" />
       </div>
 
     </div>
 
     <div class="risk-grid">
 
-      <article
-        v-for="group in riskGroups"
-        :key="group.peligro._id"
-        class="risk-card"
-      >
+      <BaseDataCard v-for="group in riskGroups" :key="group.peligro._id" class="risk-card" :title="group.peligro.nombre"
+        :columns="riskCardColumns" :rows="group.riesgos" column-template="38% 52% 10%">
 
-        <div class="risk-card__header">
+        <template #header-icon>
 
-          <div class="risk-card__title">
+          <q-icon name="expand_more" size="20px" />
 
-            <q-icon
-              name="expand_more"
-              size="20px"
-            />
+        </template>
 
-            <span>{{ group.peligro.nombre }}</span>
+        <template #body="{ rows, gridStyle }">
 
-          </div>
-
-          <span class="risk-card__count">
-
-            {{ group.riesgos.length }} Riesgo{{ group.riesgos.length === 1 ? '' : 's' }}
-          
-        </span>
-
-        </div>
-
-        <div class="risk-card__columns">
-
-          <span>RIESGO ASOCIADO</span>
-
-          <span>DESCRIPCIÓN</span>
-
-          <span></span>
-
-        </div>
-
-        <div class="risk-card__body">
-
-          <div
-            v-for="riesgo in group.riesgos"
-            :key="riesgo._id"
-            class="risk-row"
-          >
+          <div v-for="riesgo in rows" :key="riesgo._id" class="risk-row" :style="gridStyle">
 
             <div class="risk-row__name">
 
@@ -119,30 +84,37 @@
             </div>
 
             <div class="risk-row__selection">
-                
-              <q-checkbox
-                :model-value="isSelected(group.peligro._id, riesgo._id)"
-                @update:model-value="
-                  (value) => handleSelection(group.peligro._id, riesgo._id, value)
-                "
-              />
+
+              <q-checkbox :model-value="isSelected(
+                group.peligro._id,
+                riesgo._id
+              )
+                " @update:model-value="
+                  (value) =>
+                    handleSelection(
+                      group.peligro._id,
+                      riesgo._id,
+                      value
+                    )
+                " />
 
             </div>
 
           </div>
 
-          <div
-            v-if="group.riesgos.length === 0"
-            class="risk-empty"
-          >
+        </template>
+
+        <template #empty>
+
+          <div class="risk-empty">
 
             No hay riesgos asociados a este peligro.
-          
-        </div>
 
-        </div>
+          </div>
 
-      </article>
+        </template>
+
+      </BaseDataCard>
 
     </div>
 
@@ -152,11 +124,6 @@
         N.º de Riesgos Seleccionados:
         {{ selectedCount }}
       </strong>
-
-
-      <span v-if="selectedCount === 0">
-        Debes seleccionar al menos un riesgo para continuar.
-      </span>
 
     </div>
 
@@ -172,6 +139,8 @@ import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
 import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock'
 import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock'
 
+import BaseDataCard from 'src/components/base/BaseDataCard.vue'
+
 const props = defineProps({
   modelValue: {
     type: Object,
@@ -184,6 +153,21 @@ const emit = defineEmits([
 ])
 
 const plan = props.modelValue
+
+const riskCardColumns = [
+  {
+    key: 'riesgo',
+    label: 'RIESGO ASOCIADO',
+  },
+  {
+    key: 'descripcion',
+    label: 'DESCRIPCIÓN',
+  },
+  {
+    key: 'selection',
+    label: '',
+  },
+]
 
 const selectedRiskRelations = ref(new Set())
 
@@ -285,6 +269,9 @@ defineExpose({
 
 <style scoped lang="scss">
 
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 .plan-riesgos {
   width: 100%;
 }
@@ -294,31 +281,47 @@ defineExpose({
 
   h2 {
     margin: 0;
-    font-size: 18px;
+    font-size: $font-size-2xl;
     font-weight: 700;
   }
 }
 
 .plan-info {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 12px;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 16px;
 }
 
 .plan-info__item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #D1D5DB;
 
   span {
-    font-size: 11px;
-    color: #555;
+    font-size: $font-size-sm;
+  }
+
+  .plan-info__value {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 25px;
+    padding-left: 10px;
+
+    .q-icon {
+      color: $color-text-secondary;
+      font-size: 19px;
+      opacity: 0.65;
+    }
   }
 
   strong {
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $font-size-sm;
+    font-weight: 400;
+    text-transform: uppercase;
   }
 }
 
@@ -326,6 +329,7 @@ defineExpose({
   display: flex;
   justify-content: flex-end;
   margin-bottom: 10px;
+  padding-top: 15px;
 }
 
 .risks-toolbar__actions {
@@ -334,83 +338,80 @@ defineExpose({
   gap: 6px;
 }
 
+.risk-card :deep(.base-data-card__title span) {
+  min-height: 36px;
+  padding: 0 6px;
+}
+
+.risk-action-btn :deep(.q-icon) {
+  font-size: 21px;
+}
+
+.risk-action-btn :deep(.q-icon.on-left) {
+  margin-right: 10px;
+}
+
+.risk-action-btn :deep(.q-btn__content) {
+  gap: 0;
+}
+
+.risk-action-btn--select :deep(.q-icon) {
+  color: $color-primary;
+}
+
 .risk-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 20px;
 }
 
 .risk-card {
-  height: 205px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid #d5d5d5;
-  border-radius: 5px;
-  background: #fff;
+  height: 242px;
 }
 
-.risk-card__header {
-  min-height: 32px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  border-bottom: 1px solid #d5d5d5;
-}
-
-.risk-card__title {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.risk-card__count {
-  padding: 3px 9px;
-  border-radius: 4px;
-  background: #e9ebee;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.risk-card__columns {
-  display: grid;
-  grid-template-columns: 38% 52% 10%;
-  padding: 6px 8px;
-  border-bottom: 1px solid #e5e5e5;
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.risk-card__body {
+.risk-card :deep(.base-data-card__title) {
+  position: relative;
   flex: 1;
-  overflow-y: auto;
+  justify-content: center;
+}
+
+.risk-card :deep(.base-data-card__title .q-icon) {
+  position: absolute;
+  left: 0;
+  padding-left: 15px;
+}
+
+.risk-card :deep(.base-data-card__title span) {
+  font-size: clamp(0.85rem, 0.70vw, 1.125rem);
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 
 .risk-row {
   display: grid;
-  grid-template-columns: 38% 52% 10%;
-  min-height: 30px;
+  min-height: 50px;
   align-items: center;
   border-bottom: 1px solid #eeeeee;
-  font-size: 11px;
+  font-size: clamp(0.7rem, 0.72vw, 0.84rem);
 }
 
 .risk-row:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid rgba($color-border-table, 0.55);
 }
 
 .risk-row__name {
   padding: 5px 8px;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: clamp(0.7rem, 0.72vw, 0.84rem);
+  text-transform: uppercase;
 }
 
 .risk-row__description {
   padding: 5px 8px;
-  line-height: 1.25;
+  line-height: 1.4;
+  font-size: clamp(0.7rem, 0.72vw, 0.84rem);
 }
 
 .risk-row__selection {
@@ -426,7 +427,6 @@ defineExpose({
 .risk-empty {
   padding: 20px;
   text-align: center;
-  color: #777;
   font-size: 12px;
 }
 
@@ -434,17 +434,15 @@ defineExpose({
   display: flex;
   align-items: center;
   gap: 18px;
-  margin-top: 10px;
-  font-size: 13px;
-}
-
-.selection-summary span {
-  color: #555;
+  margin: 15px 0 0 3px;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
-  
-    .risk-grid {
+
+  .risk-grid {
     grid-template-columns: 1fr;
   }
 
@@ -455,7 +453,11 @@ defineExpose({
 
   .plan-info {
     grid-template-columns: 1fr;
+     gap: 14px;
+  }
+
+  .plan-info__value {
+  padding-left: 0;
   }
 }
-
 </style>

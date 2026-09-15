@@ -71,13 +71,13 @@ export const PELIGROS_MOCK = [
         riesgos: 4 + "  Riesgos",
         fecha: '12/03/2026'
     },
-    {
-        _id: '66c200000000000000000009',
-        codigo: 9,
-        nombre: 'Ruido Excesivo',
-        categoria: 'Físico',
-        descripcion: 'Exposición a altos niveles de ruido en ambientes industriales.',
-        riesgos: 2 + "  Riesgos",
-        fecha: '09/01/2026'
-    }
+    // {
+    //     _id: '66c200000000000000000009',
+    //     codigo: 9,
+    //     nombre: 'Ruido Excesivo',
+    //     categoria: 'Físico',
+    //     descripcion: 'Exposición a altos niveles de ruido en ambientes industriales.',
+    //     riesgos: 2 + "  Riesgos",
+    //     fecha: '09/01/2026'
+    // }
 ]

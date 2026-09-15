@@ -19,7 +19,7 @@
         </template>
 
 
-        <q-popup-proxy ref="datePopup" cover transition-show="scale" transition-hide="scale">
+        <q-popup-proxy ref="datePopup" transition-show="scale" transition-hide="scale">
 
             <q-date :model-value="props.modelValue" mask="YYYY-MM-DD" minimal :min="effectiveMin" :max="effectiveMax"
                 :options="isDateAllowed"

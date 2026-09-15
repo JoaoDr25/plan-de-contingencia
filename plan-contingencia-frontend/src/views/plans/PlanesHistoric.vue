@@ -153,7 +153,7 @@ function clearFilters() {
 }
 
 .historico-filter-actions :deep(.base-search) {
-    width: 240px;
+    width: 300px;
     min-width: 200px;
     max-width: 100%;
     flex: 0 0 auto;

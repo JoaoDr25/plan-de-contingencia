@@ -72,6 +72,7 @@ const {
 .crud-header__title--uppercase {
     text-transform: uppercase;
     font-size: $font-size-3xl;
+    padding-bottom: 6px;
 }
 
 .crud-header__divider {

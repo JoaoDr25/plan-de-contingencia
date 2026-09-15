@@ -111,7 +111,7 @@
 
     </BaseTable>
 
-    <PlanActivityDialog
+    <PlanesActividadDialog
       v-model="dialogOpen"
       :activity="selectedActivity"
       :hora-salida="plan.horaSalida"
@@ -144,7 +144,7 @@ import CrudActions from 'src/components/actions/CrudActions.vue'
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
-import PlanActivityDialog from '../modals/PlanActivityDialog.vue'
+import PlanesActividadDialog from '../modals/PlanesActividadDialog.vue'
 
 const props = defineProps({
   modelValue: {
@@ -339,7 +339,7 @@ function timeToMinutes(value) {
 
 .plan-info {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1.5fr 1fr 1fr;
   gap: 20px;
   margin-bottom: 12px;
 }
