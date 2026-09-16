@@ -69,7 +69,6 @@ export function createPlanContingenciaModel() {
         epp: [],
 
         seguridadVial: {
-            aplica: false,
             items: []
         },
 

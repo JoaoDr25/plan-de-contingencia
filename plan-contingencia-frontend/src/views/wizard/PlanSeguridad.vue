@@ -1,250 +1,246 @@
 <template>
 
-  <section class="plan-seguridad">
+    <section class="plan-security">
 
-    <div class="section-header">
-      <h2>Seguridad</h2>
-    </div>
+        <div class="plan-security__grid">
 
-    <div class="security-grid">
+            <section class="security-section">
 
-      <section class="security-section">
+                <div class="section-title">
 
-        <div class="section-title">
+                    <span>
+                        elementos de protección personal
+                    </span>
 
-          <span class="section-number">1</span>
-          
-          <span>ELEMENTOS DE PROTECCIÓN PERSONAL</span>
-        
+                </div>
+
+                <div class="epp-list">
+
+                    <div
+                        v-for="epp in eppOptions"
+                        :key="epp._id"
+                        class="epp-item"
+                    >
+
+                        <q-checkbox
+                            :model-value="isEppSelected(epp._id)"
+                            size="sm"
+                            dense
+                            @update:model-value="
+                                value => handleEppSelection(epp._id, value)
+                            "
+                        />
+
+                        <span class="epp-item__name">
+                            {{ epp.nombre.toUpperCase() }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="security-notice">
+
+                    <q-icon
+                        name="info_outline"
+                        size="24px"
+                    />
+
+                    <span>
+                        Asegúrese de que los aprendices lleven los EPP
+                        seleccionados y se encuentren en buen estado.
+                    </span>
+
+                </div>
+
+            </section>
+
+            <section class="security-section">
+
+                <div class="section-title">
+
+                    <span>
+                        contactos de emergencia
+                    </span>
+
+                </div>
+
+                <BaseSelect
+                    v-model="plan.contactosEmergencia.contactosBase"
+                    label="Seleccionar contactos de emergencia"
+                    placeholder="Seleccionar contactos de emergencia"
+                    :options="contactOptions"
+                    option-label="label"
+                    option-value="value"
+                    :selected-text="'Seleccionar Contactos de Emergencia'"
+                    multiple
+                    size="wizard"
+                    external-label
+                />
+
+                <div
+                    v-if="selectedContacts.length"
+                    class="selected-contacts"
+                >
+
+                    <div
+                        v-for="contact in selectedContacts"
+                        :key="contact._id"
+                        class="selected-contact"
+                    >
+
+                        <div class="selected-contact__info">
+
+                            <strong>
+                                {{ contact.nombre }}
+                            </strong>
+
+                            <span>
+                                {{ contact.tipo }} · {{ contact.telefono }}
+                            </span>
+
+                        </div>
+
+                        <CrudActions
+                            :actions="['delete']"
+                            @delete="onDeleteContact(contact._id)"
+                        />
+
+                    </div>
+
+                </div>
+
+                <div class="other-contact">
+
+                    <PrimaryActionButton
+                        label="Agregar Contacto"
+                        icon="add_circle_outline"
+                        size="sm"
+                        @click="openAddContactDialog"
+                    />
+
+                </div>
+
+                <ContactosDialog
+                    v-model="showAddContactDialog"
+                    mode="create"
+                    :show-status="false"
+                    :show-type="false"
+                    :single-column="true"
+                    :width="400"
+                    custom-title="AGREGAR CONTACTO DE EMERGENCIA"
+                    @save="handleAdditionalContactSave"
+                />
+
+            </section>
+
+            <section class="security-section security-section--vial">
+
+                <div class="section-title">
+
+                    <span>
+                        seguridad vial
+                    </span>
+
+                </div>
+
+                <BaseDataCard
+                    class="security-vial-card"
+                    title="Verificación de seguridad vial"
+                    :columns="securityVialColumns"
+                    :rows="plan.seguridadVial.items"
+                    row-key="itemId"
+                    column-template="1.3fr 1.25fr 2fr 2fr"
+                    :max-body-height="'none'"
+                    empty-text="No existen elementos de seguridad vial para verificar."
+                >
+
+                    <template #body="{ rows, gridStyle }">
+
+                        <div
+                            v-for="row in rows"
+                            :key="row.itemId"
+                            class="security-vial-row"
+                            :style="gridStyle"
+                        >
+
+                            <div class="security-vial-item">
+                                {{ row.nombre.toUpperCase() }}
+                            </div>
+
+
+                            <div class="security-vial-status">
+
+                                <q-radio
+                                    :model-value="row.cumple"
+                                    :val="true"
+                                    label="Cumple"
+                                    dense
+                                    @update:model-value="
+                                        value => handleSecurityStatusChange(
+                                            row.itemId,
+                                            value
+                                        )
+                                    "
+                                />
+
+                                <q-radio
+                                    :model-value="row.cumple"
+                                    :val="false"
+                                    label="No cumple"
+                                    dense
+                                    @update:model-value="
+                                        value => handleSecurityStatusChange(
+                                            row.itemId,
+                                            value
+                                        )
+                                    "
+                                />
+
+                            </div>
+
+                            <div class="security-vial-field">
+
+                                <BaseInput
+                                    v-model="row.observacion"
+                                    label="Observación"
+                                    placeholder="Especifique..."
+                                    size="wizard"
+                                    external-label
+                                    @update:model-value="emitPlanUpdate"
+                                />
+
+                            </div>
+
+                            <div class="security-vial-field">
+
+                                <BaseInput
+                                    v-model="row.soporte"
+                                    label="Soporte"
+                                    placeholder="https://ejemplo.com/documento.pdf"
+                                    icon="link"
+                                    icon-position="prepend"
+                                    size="wizard"
+                                    external-label
+                                    @update:model-value="emitPlanUpdate"
+                                />
+
+                            </div>
+
+                        </div>
+
+                    </template>
+
+                </BaseDataCard>
+
+            </section>
+
         </div>
 
-        <p class="section-description">
-          Seleccione los elementos de protección personal requeridos
-          para la actividad.
-        </p>
-
-        <div class="epp-list">
-
-          <div
-            v-for="epp in eppOptions"
-            :key="epp._id"
-            class="epp-item"
-          >
-
-            <q-checkbox
-              :model-value="isEppSelected(epp._id)"
-              @update:model-value="
-                (value) => handleEppSelection(epp._id, value)
-              "
-            />
-
-            <div class="epp-item__content">
-
-              <span class="epp-item__name">
-                {{ epp.nombre }}
-              </span>
-
-              <span class="epp-item__category">
-                {{ epp.categoria }}
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="selection-counter">
-          {{ plan.epp.length }} elemento{{ plan.epp.length === 1 ? '' : 's' }}
-          seleccionado{{ plan.epp.length === 1 ? '' : 's' }}
-        </div>
-
-      </section>
-
-      <section class="security-section">
-
-        <div class="section-title">
-
-          <span class="section-number">2</span>
-
-          <span>SEGURIDAD VIAL</span>
-
-        </div>
-
-        <p class="section-description">
-          Indique si aplican las condiciones de seguridad vial para
-          la actividad.
-        </p>
-
-        <div class="field-block">
-
-          <label class="field-label">
-            ¿Aplica seguridad vial?
-          </label>
-
-          <div class="radio-group">
-
-            <q-radio
-              v-model="plan.seguridadVial.aplica"
-              :val="true"
-              label="Sí"
-              @update:model-value="handleRoadSafetyChange"
-            />
-
-            <q-radio
-              v-model="plan.seguridadVial.aplica"
-              :val="false"
-              label="No"
-              @update:model-value="handleRoadSafetyChange"
-            />
-          </div>
-
-        </div>
-
-        <div
-          v-if="plan.seguridadVial.aplica"
-          class="security-vial-list"
-        >
-
-          <div
-            v-for="item in securityVialItems"
-            :key="item.id"
-            class="security-vial-item"
-          >
-
-            <q-checkbox
-              :model-value="isSecurityItemSelected(item.id)"
-              :label="item.label"
-              @update:model-value="
-                (value) => handleSecurityItemSelection(item.id, value)
-              "
-            />
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <section class="security-section security-section--contacts">
-
-        <div class="section-title">
-
-          <span class="section-number">3</span>
-
-          <span>CONTACTOS DE EMERGENCIA</span>
-
-        </div>
-
-        <p class="section-description">
-          Seleccione los contactos de emergencia disponibles para
-          la actividad.
-        </p>
-
-        <BaseSelect
-          v-model="plan.contactosEmergencia.contactosBase"
-          label="Contactos de emergencia"
-          placeholder="Seleccione uno o varios contactos"
-          :options="contactOptions"
-          option-label="label"
-          option-value="value"
-          multiple
-          size="wizard"
-        />
-
-        <div
-          v-if="selectedContacts.length"
-          class="selected-contacts"
-        >
-
-          <div
-            v-for="contact in selectedContacts"
-            :key="contact._id"
-            class="selected-contact"
-          >
-
-            <div class="selected-contact__info">
-
-              <strong>{{ contact.nombre }}</strong>
-
-              <span>
-                {{ contact.tipo }} · {{ contact.telefono }}
-              </span>
-
-            </div>
-
-            <q-btn
-              flat
-              round
-              dense
-              icon="close"
-              @click="removeContact(contact._id)"
-            />
-
-          </div>
-
-        </div>
-
-        <div class="other-contact-header">
-
-          <q-checkbox
-            v-model="showOtherContact"
-            label="Agregar otro contacto"
-            @update:model-value="handleOtherContactChange"
-          />
-        </div>
-
-        <div
-          v-if="showOtherContact"
-          class="other-contact-form"
-        >
-
-          <BaseInput
-            v-model="plan.contactosEmergencia.otro.nombreEntidad"
-            label="Nombre de la entidad"
-            placeholder="Nombre de la entidad"
-            required
-            size="wizard"
-            :rules="[requiredRule]"
-          />
-
-          <BaseInput
-            v-model="plan.contactosEmergencia.otro.telefono"
-            label="Teléfono"
-            placeholder="Número de contacto"
-            required
-            size="wizard"
-            :rules="[requiredRule]"
-          />
-
-          <BaseInput
-            v-model="plan.contactosEmergencia.otro.ciudad"
-            label="Ciudad"
-            placeholder="Ciudad"
-            required
-            size="wizard"
-            :rules="[requiredRule]"
-          />
-
-          <BaseTextarea
-            v-model="plan.contactosEmergencia.otro.descripcion"
-            label="Descripción"
-            placeholder="Información adicional del contacto..."
-            maxlength="300"
-            required
-            size="wizard"
-            :rules="[requiredRule]"
-          />
-
-        </div>
-
-      </section>
-
-    </div>
-
-  </section>
+    </section>
 
 </template>
+
 
 <script setup>
 
@@ -252,351 +248,542 @@ import { computed, ref } from 'vue'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
-import BaseTextarea from 'src/components/forms/BaseTextarea.vue'
+import BaseDataCard from 'src/components/base/BaseDataCard.vue'
+import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
+import CrudActions from 'src/components/actions/CrudActions.vue'
+
+import ContactosDialog from 'src/views/dialogs/ContactosDialog.vue'
 
 import { EPP_MOCK } from 'src/mocks/modules/epp.mock'
 import { CONTACTOS_MOCK } from 'src/mocks/modules/contactos.mock'
+
 import { SECURITY_VIAL_ITEMS } from 'src/constants/system/security.constants'
 
+
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true,
-  },
+    modelValue: {
+        type: Object,
+        required: true,
+    },
 })
 
 const emit = defineEmits([
-  'update:modelValue',
+    'update:modelValue',
 ])
 
 const plan = props.modelValue
 
-const showOtherContact = ref(
-  hasOtherContactData(),
-)
+function initializeSecurityVialItems() {
+
+    if (!plan.seguridadVial) {
+        plan.seguridadVial = {
+            items: [],
+        }
+    }
+
+    if (!Array.isArray(plan.seguridadVial.items)) {
+        plan.seguridadVial.items = []
+    }
+
+    const existingItems = plan.seguridadVial.items
+
+    const initializedItems = SECURITY_VIAL_ITEMS.map(item => {
+
+        const existingItem = existingItems.find(
+            securityItem => securityItem.itemId === item.id
+        )
+
+        if (existingItem) {
+            return {
+                itemId: item.id,
+                nombre: item.label,
+                cumple: existingItem.cumple ?? null,
+                observacion: existingItem.observacion ?? '',
+                soporte: existingItem.soporte ?? '',
+            }
+        }
+
+        return {
+            itemId: item.id,
+            nombre: item.label,
+            cumple: null,
+            observacion: '',
+            soporte: '',
+        }
+    })
+
+    plan.seguridadVial.items = initializedItems
+}
+
+initializeSecurityVialItems()
+
+const securityVialColumns = [
+    {
+        key: 'nombre',
+        label: 'ÍTEM DE VERIFICACIÓN',
+    },
+    {
+        key: 'cumple',
+        label: 'ESTADO',
+    },
+    {
+        key: 'observacion',
+        label: 'OBSERVACIÓN',
+    },
+    {
+        key: 'soporte',
+        label: 'SOPORTE (URL)',
+    },
+]
+
+function handleSecurityStatusChange(itemId, value) {
+
+    const item = plan.seguridadVial.items.find(
+        securityItem => securityItem.itemId === itemId
+    )
+
+    if (!item) {
+        return
+    }
+
+    item.cumple = value
+
+    emitPlanUpdate()
+}
+
+function emitPlanUpdate() {
+    emit('update:modelValue', plan)
+}
 
 const eppOptions = computed(() => {
-  return EPP_MOCK.filter(
-    (item) => item.estado === 'Activo',
-  )
+    return EPP_MOCK.filter(
+        item => item.estado === 'Activo'
+    )
 })
 
 function isEppSelected(id) {
-  return plan.epp.includes(id)
+    return plan.epp.includes(id)
 }
 
 function handleEppSelection(id, selected) {
-  if (selected) {
-    if (!plan.epp.includes(id)) {
-      plan.epp.push(id)
-    }
-  } else {
-    const index = plan.epp.indexOf(id)
 
-    if (index !== -1) {
-      plan.epp.splice(index, 1)
-    }
-  }
+    if (selected) {
 
-  emit('update:modelValue', plan)
+        if (!plan.epp.includes(id)) {
+            plan.epp.push(id)
+        }
+
+    } else {
+
+        const index = plan.epp.indexOf(id)
+
+        if (index !== -1) {
+            plan.epp.splice(index, 1)
+        }
+    }
+    emitPlanUpdate()
 }
 
-const securityVialItems = SECURITY_VIAL_ITEMS
+const showAddContactDialog = ref(false)
 
-function isSecurityItemSelected(id) {
-  return plan.seguridadVial.items.includes(id)
+function openAddContactDialog() {
+    showAddContactDialog.value = true
 }
 
-function handleSecurityItemSelection(id, selected) {
-  if (selected) {
-    if (!plan.seguridadVial.items.includes(id)) {
-      plan.seguridadVial.items.push(id)
+function handleAdditionalContactSave(formData) {
+    const nombreEntidad = formData.nombre ?? formData.nombreEntidad ?? ''
+    const descripcion = formData.direccion ?? formData.descripcion ?? ''
+
+    plan.contactosEmergencia.otro = {
+        nombreEntidad: nombreEntidad.trim(),
+        telefono: formData.telefono ?? '',
+        ciudad: formData.ciudad ?? '',
+        descripcion: descripcion.trim(),
     }
-  } else {
-    const index = plan.seguridadVial.items.indexOf(id)
 
-    if (index !== -1) {
-      plan.seguridadVial.items.splice(index, 1)
-    }
-  }
-
-  emit('update:modelValue', plan)
-}
-
-function handleRoadSafetyChange(value) {
-  if (!value) {
-    plan.seguridadVial.items = []
-  }
-
-  emit('update:modelValue', plan)
+    showAddContactDialog.value = false
+    emitPlanUpdate()
 }
 
 const contactOptions = computed(() => {
-  return CONTACTOS_MOCK
-    .filter((contacto) => contacto.estado === 'Activo')
-    .map((contacto) => ({
-      label: `${contacto.tipo} - ${contacto.nombre}`,
-      value: contacto._id,
-    }))
+
+    return CONTACTOS_MOCK
+        .filter(
+            contacto => contacto.estado === 'Activo'
+        )
+        .map(contacto => ({
+            label: `${contacto.tipo} - ${contacto.nombre}`,
+            value: contacto._id,
+        }))
 })
 
 const selectedContacts = computed(() => {
-  return CONTACTOS_MOCK.filter((contacto) =>
-    plan.contactosEmergencia.contactosBase.includes(
-      contacto._id,
-    ),
-  )
+    const baseContacts = CONTACTOS_MOCK.filter(contacto =>
+        plan.contactosEmergencia.contactosBase.includes(
+            contacto._id
+        )
+    )
+
+    const otro = plan.contactosEmergencia?.otro
+
+    if (!otro?.nombreEntidad) {
+        return baseContacts
+    }
+
+    return [
+        ...baseContacts,
+        {
+            _id: 'plan-contacto-adicional',
+            nombre: otro.nombreEntidad,
+            tipo: 'Otro',
+            telefono: otro.telefono,
+            descripcion: otro.descripcion,
+            ciudad: otro.ciudad,
+        },
+    ]
 })
 
 function removeContact(id) {
-  const index =
-    plan.contactosEmergencia.contactosBase.indexOf(id)
 
-  if (index !== -1) {
-    plan.contactosEmergencia.contactosBase.splice(index, 1)
-  }
-
-  emit('update:modelValue', plan)
-}
-
-function hasOtherContactData() {
-  const otro = plan.contactosEmergencia?.otro
-
-  if (!otro) {
-    return false
-  }
-
-  return Boolean(
-    otro.nombreEntidad ||
-      otro.telefono ||
-      otro.descripcion ||
-      otro.ciudad,
-  )
-}
-
-function handleOtherContactChange(value) {
-  if (!value) {
-    plan.contactosEmergencia.otro = {
-      nombreEntidad: '',
-      telefono: '',
-      descripcion: '',
-      ciudad: '',
+    if (id === 'plan-contacto-adicional') {
+        plan.contactosEmergencia.otro = {
+            nombreEntidad: '',
+            telefono: '',
+            descripcion: '',
+            ciudad: '',
+        }
+        emitPlanUpdate()
+        return
     }
-  }
 
-  emit('update:modelValue', plan)
+    const index =
+        plan.contactosEmergencia.contactosBase.indexOf(id)
+
+    if (index !== -1) {
+        plan.contactosEmergencia.contactosBase.splice(index, 1)
+    }
+    emitPlanUpdate()
 }
 
-function requiredRule(value) {
-  return (
-    Boolean(String(value ?? '').trim()) ||
-    'Este campo es obligatorio'
-  )
+function onDeleteContact(id) {
+    removeContact(id)
 }
 
 function validate() {
-  if (!showOtherContact.value) {
+
+    const securityStatusValid =
+        plan.seguridadVial.items.every(
+            item => item.cumple !== null
+        )
+
+    if (!securityStatusValid) {
+        return false
+    }
+
+    const otro = plan.contactosEmergencia?.otro
+
+    if (otro && (
+        otro.nombreEntidad?.trim() ||
+        otro.telefono?.trim() ||
+        otro.ciudad?.trim() ||
+        otro.descripcion?.trim()
+    )) {
+        return Boolean(
+            otro.nombreEntidad?.trim() &&
+            otro.telefono?.trim() &&
+            otro.ciudad?.trim() &&
+            otro.descripcion?.trim()
+        )
+    }
+
     return true
-  }
-
-  const otro = plan.contactosEmergencia.otro
-
-  return Boolean(
-    otro.nombreEntidad?.trim() &&
-      otro.telefono?.trim() &&
-      otro.ciudad?.trim() &&
-      otro.descripcion?.trim(),
-  )
 }
 
 defineExpose({
-  validate,
+    validate,
 })
+
 </script>
 
 <style scoped lang="scss">
 
-.plan-seguridad {
-  width: 100%;
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
+.plan-security {
+    width: 100%;
 }
 
-.section-header {
-  margin-bottom: 18px;
-
-  h2 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 700;
-  }
-}
-
-.security-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
+.plan-security__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 20px;
+    row-gap: 35px;
 }
 
 .security-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid #d8d8d8;
-  border-radius: 6px;
-  background: #fff;
+    min-width: 0;
+    max-height: 420px;
+    overflow: hidden;
 }
 
-.security-section--contacts {
-  grid-column: 1 / -1;
+.security-section--vial {
+    grid-column: 1 / -1;
 }
 
 .section-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  color: $primary;
-}
-
-.section-number {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: $primary;
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.section-description {
-  margin: 0;
-  font-size: 11px;
-  line-height: 1.4;
-  color: #666;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 23px;
+    color: $color-text-primary;
+    font-size: $font-size-2xl;
+    font-weight:700;
+    line-height: 1.2;
+    text-transform: capitalize;
 }
 
 .epp-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 16px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 16px;
+    max-height: 260px;
+    overflow-y: auto;
+    padding-right: 6px;
+    padding-bottom: 10px;
 }
 
 .epp-item {
-  display: flex;
-  align-items: center;
-  min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+    padding: 2px 12px;
+    border: 1px solid $color-border-table;
+    border-radius: 6px;
+    background-color: $color-surface;
+    box-sizing: border-box;
 }
 
-.epp-item__content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.epp-item :deep(.q-checkbox) {
+    --q-size: 16px;
+}
+
+.epp-item :deep(.q-checkbox__inner) {
+    font-size: 16px;
+}
+
+.epp-item :deep(.q-checkbox__svg) {
+    width: 10px;
+    height: 10px;
 }
 
 .epp-item__name {
-  font-size: 11px;
-  font-weight: 600;
+    color: $color-text-primary;
+    font-size: $font-size-xs;
+    font-weight: 400;
+    line-height: 1.2;
 }
 
-.epp-item__category {
-  font-size: 9px;
-  color: #777;
+.security-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 0;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background-color: $color-background-field;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+    line-height: 1.4;
+    box-sizing: border-box;
 }
 
-.selection-counter {
-  font-size: 10px;
-  color: #555;
-}
-
-.field-block {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.field-label {
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.radio-group {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.security-vial-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2px 16px;
-  padding-top: 4px;
-}
-
-.security-vial-item {
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-}
-
-.other-contact-header {
-  margin-top: 4px;
+.security-notice .q-icon {
+    flex-shrink: 0;
+    color: $color-primary;
 }
 
 .selected-contacts {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 8px;
+    max-height: 215px;
+    overflow-y: auto;
+    padding-right: 6px;
 }
 
 .selected-contact {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    min-height: 50px;
+    padding: 4px 8px 4px 4px;
+    border-bottom: 1px solid $color-border-table;
+    line-height: 1.3;
+}
+
+.selected-contact :deep(.crud-actions) {
+    margin-right: 20px;
 }
 
 .selected-contact__info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
 }
 
 .selected-contact__info strong {
-  font-size: 11px;
+    color: $color-text-primary;
+    font-size: $font-size-sm;
+    font-weight: 400;
+    text-transform: uppercase;
 }
 
 .selected-contact__info span {
-  font-size: 10px;
-  color: #666;
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+    font-weight: 400;
+}
+
+.other-contact {
+    margin-top: 6px;
 }
 
 .other-contact-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 18px;
-
-  padding-top: 6px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+    margin-top: 5px;
 }
 
-@media (max-width: 850px) {
-  .security-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .security-section--contacts {
-    grid-column: auto;
-  }
-
-  .epp-list,
-  .security-vial-list,
-  .other-contact-form {
-    grid-template-columns: 1fr;
-  }
+.security-vial-card :deep(.base-data-card__header) {
+    display: none;
 }
+
+.security-vial-row {
+    display: grid;
+    align-items: center;
+    min-height: 50px;
+    border-bottom: 1px solid $color-border-table;
+}
+
+.security-vial-row:last-child {
+    border-bottom: none;
+}
+
+.security-vial-item {
+    min-width: 0;
+    padding: 6px 8px;
+    color: $color-text-primary;
+    font-size: $font-size-xs;
+    font-weight: 500;
+}
+
+.security-vial-status {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    padding: 4px 8px;
+    font-weight: 400;
+}
+
+.security-vial-status :deep(.q-radio) {
+    margin-right: 2px;
+    min-width: 0;
+}
+
+.security-vial-status :deep(.q-radio__inner) {
+    font-size: 16px;
+    width: 0.9em;
+    min-width: 0.9em;
+    height: 0.9em;
+}
+
+.security-vial-status :deep(.q-radio__bg) {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.security-vial-status :deep(.q-radio__label) {
+    font-size: $font-size-xs;
+    white-space: nowrap;
+}
+
+.security-vial-field {
+    min-width: 0;
+    padding: 0 8px;
+}
+
+@media (max-width: 1200px) {
+
+    .plan-security__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .security-section--vial {
+        grid-column: auto;
+    }
+
+    .epp-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 800px) {
+
+    .security-vial-status {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        min-width: 0;
+    }
+
+    .security-vial-status :deep(.q-radio) {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .security-section {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .epp-list,
+    .other-contact-form {
+        grid-template-columns: 1fr;
+    }
+
+    .security-vial-row {
+        min-width: 620px;
+        grid-template-columns: 1.3fr 1.25fr 2fr 2fr;
+        gap: 0;
+        padding: 0;
+    }
+
+    .security-vial-status {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .security-vial-item,
+    .security-vial-status,
+    .security-vial-field {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
 </style>

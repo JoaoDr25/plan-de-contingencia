@@ -34,6 +34,7 @@ const {
     optionValue,
     placeholder,
     hideSelectedValue,
+    selectedText,
     multiple,
     disable,
     readonly,
@@ -72,6 +73,10 @@ const {
     hideSelectedValue: {
         type: Boolean,
         default: false
+    },
+    selectedText: {
+        type: String,
+        default: ''
     },
     multiple: {
         type: Boolean,
@@ -138,6 +143,22 @@ const displayValue = computed(() => {
         return ''
     }
 
+    if (multiple && Array.isArray(modelValue)) {
+        if (!modelValue.length) {
+            return ''
+        }
+
+        if (selectedText) {
+            return selectedText
+        }
+
+        if (placeholder) {
+            return placeholder
+        }
+
+        return label || 'Seleccionado(s)'
+    }
+
     const selectedOption = options.find(option => {
         if (typeof option === 'object') {
             return option[optionValue] === modelValue
@@ -164,6 +185,7 @@ const isEmpty = computed(() => {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 

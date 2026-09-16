@@ -20,3 +20,25 @@ export const SECURITY_VIAL_ITEMS = [
     label: 'Extintor',
   },
 ]
+
+export const SECURITY_VIAL_APPLIES_OPTIONS = [
+    {
+        label: 'Sí',
+        value: true
+    },
+    {
+        label: 'No',
+        value: false
+    }
+]
+
+export const SECURITY_VIAL_COMPLIANCE_OPTIONS = [
+    {
+        label: 'Cumple',
+        value: true
+    },
+    {
+        label: 'No cumple',
+        value: false
+    }
+]

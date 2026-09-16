@@ -78,15 +78,5 @@ export const EPP_MOCK = [
     descripcion: 'Sistema de protección personal para trabajos en alturas.',
     estado: 'Activo',
     fecha: '11/08/2026'
-  },
-  {
-    _id: '66h200000000000000000009',
-    codigo: 9,
-    nombre: 'Bata de Laboratorio',
-    categoria: 'Protección Corporal',
-    nivel: 'Medio',
-    descripcion: 'Protege la ropa y el cuerpo durante prácticas de laboratorio.',
-    estado: 'Activo',
-    fecha: '11/08/2026'
   }
 ]

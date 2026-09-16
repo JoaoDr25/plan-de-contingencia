@@ -1,10 +1,10 @@
 <template>
 
-    <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
+    <BaseDialog v-model="dialog" :title="dialogTitle" :width="`${width}px`">
 
-        <BaseFormGrid :columns="2">
+        <BaseFormGrid :columns="singleColumn ? 1 : 2">
 
-            <BaseFormField v-for="field in CONTACTS_FORM_FIELDS" :key="field.model" :field="field"
+            <BaseFormField v-for="field in visibleFields" :key="field.model" :field="field"
                 v-model="form[field.model]" />
 
         </BaseFormGrid>
@@ -34,7 +34,12 @@ import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue'
 const {
     modelValue,
     mode,
-    contact
+    contact,
+    showStatus,
+    showType,
+    customTitle,
+    singleColumn,
+    width
 } = defineProps({
 
     modelValue: {
@@ -50,6 +55,26 @@ const {
     contact: {
         type: Object,
         default: null
+    },
+    showStatus: {
+        type: Boolean,
+        default: true
+    },
+    showType: {
+        type: Boolean,
+        default: true
+    },
+    customTitle: {
+        type: String,
+        default: ''
+    },
+    singleColumn: {
+        type: Boolean,
+        default: false
+    },
+    width: {
+        type: [Number, String],
+        default: '700px'
     }
 })
 
@@ -76,7 +101,25 @@ const form = reactive({
     estado: 'Activo'
 })
 
+const visibleFields = computed(() => {
+    return CONTACTS_FORM_FIELDS.filter(field => {
+        if (!showStatus && field.model === 'estado') {
+            return false
+        }
+
+        if (!showType && field.model === 'tipo') {
+            return false
+        }
+
+        return true
+    })
+})
+
 const dialogTitle = computed(() => {
+    if (customTitle) {
+        return customTitle
+    }
+
     return mode === 'create'
         ? 'Crear Contacto de Emergencia'
         : 'Actualizar Contacto de Emergencia'
@@ -89,7 +132,7 @@ const saveLabel = computed(() => {
 })
 
 function validateForm() {
-    for (const field of CONTACTS_FORM_FIELDS) {
+    for (const field of visibleFields.value) {
         const rules = field.rules ?? []
         const value = form[field.model]
 

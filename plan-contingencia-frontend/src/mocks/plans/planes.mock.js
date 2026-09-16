@@ -224,7 +224,6 @@ export const PLANES_MOCK = [
         createdAt: '2026-08-20T08:30:00.000Z',
         updatedAt: '2026-08-20T08:30:00.000Z'
     },
-
     {
         _id: '66a100000000000000000002',
         numero: 2,
