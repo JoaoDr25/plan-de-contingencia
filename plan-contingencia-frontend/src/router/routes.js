@@ -171,6 +171,18 @@ const routes = [
           import('src/views/modules/UsuariosPage.vue')
       },
       {
+        path: 'usuarios/:codigo',
+        name: 'usuarios.detail',
+        meta: {
+          title: 'Información del Usuario',
+          icon: 'group',
+          backToPrevious: true,
+          roles: [...USER_ROL, ...ADMIN_ROL, ...ALL_ROL]
+        },
+        component: () =>
+          import('src/views/details/UsuariosDetails.vue')
+      },
+      {
         path: 'aprendices',
         name: 'aprendices.list',
         meta: {

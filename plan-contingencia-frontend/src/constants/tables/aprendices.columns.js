@@ -57,7 +57,6 @@ export const APRENDICES_COLUMNS = [
         field: 'telefono',
         align: 'center',
         sortable: false,
-        maxWidth: '200px',
         ellipsis: true
     },
     {

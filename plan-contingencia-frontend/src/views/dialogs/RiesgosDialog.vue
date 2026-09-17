@@ -5,7 +5,7 @@
         <BaseFormGrid>
 
             <BaseFormField
-                v-for="field in RISK_FORM_FIELDS"
+                v-for="field in riskFormFields"
                 :key="field.model"
                 :field="field"
                 v-model="form[field.model]"
@@ -32,6 +32,7 @@
 import { reactive, computed, watch } from 'vue'
 
 import { RISK_FORM_FIELDS } from 'src/constants/forms/riesgos_form.constants'
+import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
@@ -81,6 +82,22 @@ const form = reactive({
     protocolos: [],
     descripcion: '',
     consecuencia: ''
+})
+
+const riskFormFields = computed(() => {
+    return RISK_FORM_FIELDS.map(field => {
+        if (field.model !== 'protocolos') {
+            return field
+        }
+
+        return {
+            ...field,
+            options: PROTOCOLOS_MOCK.map(protocol => ({
+                label: protocol.tipo,
+                value: protocol._id
+            }))
+        }
+    })
 })
 
 const dialogTitle = computed(() => {

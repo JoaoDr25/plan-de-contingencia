@@ -379,6 +379,57 @@ function goBack() {
     }
 
     .detail-grid {
+    @media (min-width: 721px) and (max-width: 1252px) {
+
+        .detail-card {
+            padding: 14px 16px;
+        }
+
+        .detail-card__header {
+            margin-bottom: 12px;
+        }
+
+        .detail-card__title {
+            gap: 7px;
+            padding-left: 0;
+            font-size: $font-size-md;
+        }
+
+        .detail-card__title :deep(.q-icon) {
+            font-size: 18px;
+            padding-bottom: 3px;
+        }
+
+        .detail-card :deep(.base-detail-item__label) {
+            font-size: 0.68rem;
+        }
+
+        .detail-card :deep(.base-detail-item__value) {
+            font-size: 0.75rem;
+        }
+
+        .detail-card__logo img {
+            width: 110px;
+        }
+
+        .detail-card__body--apprentice {
+            padding: 6px 0;
+        }
+
+        .detail-card__fields,
+        .detail-card__fields--emergency {
+            row-gap: 10px;
+            column-gap: 18px;
+            padding: 6px 0 6px 18px;
+        }
+
+        .detail-card__fields--medical {
+            gap: 10px;
+            padding: 6px 0 6px 18px;
+        }
+
+    }
+
         grid-template-columns: 1fr;
     }
 

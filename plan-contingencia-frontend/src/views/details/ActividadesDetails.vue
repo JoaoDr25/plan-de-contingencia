@@ -17,7 +17,7 @@
         <template #column-right>
 
             <BaseDetailItem class="activity-details__right-offset" label="Peligros Asociados"
-                :value="activity.peligros" />
+                :value="associatedDangers" />
 
             <BaseDetailItem label="Fecha de Creación" :value="activity.fecha" />
 
@@ -55,6 +55,14 @@ const dialog = computed({
     set: value => {
         emit('update:modelValue', value)
     }
+})
+
+const associatedDangers = computed(() => {
+    const count = Array.isArray(props.activity?.peligros)
+        ? props.activity.peligros.length
+        : 0
+
+    return `${count} ${count === 1 ? 'Peligro' : 'Peligros'}`
 })
 
 </script>

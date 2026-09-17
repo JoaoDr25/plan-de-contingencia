@@ -4,7 +4,7 @@
 
         <BaseFormGrid>
 
-            <BaseFormField v-for="field in ACTIVITY_FORM_FIELDS" :key="field.model" :field="field"
+            <BaseFormField v-for="field in activityFormFields" :key="field.model" :field="field"
                 v-model="form[field.model]" />
 
         </BaseFormGrid>
@@ -24,6 +24,7 @@
 import { reactive, computed, watch } from 'vue'
 
 import { ACTIVITY_FORM_FIELDS } from 'src/constants/forms/actividades_form.constants'
+import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
@@ -72,6 +73,22 @@ const form = reactive({
     tipo: null,
     peligros: [],
     descripcion: ''
+})
+
+const activityFormFields = computed(() => {
+    return ACTIVITY_FORM_FIELDS.map(field => {
+        if (field.model !== 'peligros') {
+            return field
+        }
+
+        return {
+            ...field,
+            options: PELIGROS_MOCK.map(danger => ({
+                label: danger.nombre,
+                value: danger._id
+            }))
+        }
+    })
 })
 
 const dialogTitle = computed(() => {

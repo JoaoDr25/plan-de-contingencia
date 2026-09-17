@@ -2,18 +2,22 @@
 
     <BaseDialog v-model="dialog" :title="title" :width="width">
 
-        <div class="base-details">
+        <div class="base-details__scroll">
 
-            <div class="base-details__logo">
-                <img :src="logo" :alt="logoAlt">
-            </div>
+            <div class="base-details">
 
-            <div class="base-details__column">
-                <slot name="column-left" />
-            </div>
+                <div class="base-details__logo">
+                    <img :src="logo" :alt="logoAlt">
+                </div>
 
-            <div class="base-details__column">
-                <slot name="column-right" />
+                <div class="base-details__column">
+                    <slot name="column-left" />
+                </div>
+
+                <div class="base-details__column">
+                    <slot name="column-right" />
+                </div>
+
             </div>
 
         </div>
@@ -81,6 +85,7 @@ function closeDialog() {
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 
 .base-details {
@@ -137,34 +142,14 @@ function closeDialog() {
 
 @media (max-width: 600px) {
 
+    .base-details__scroll {
+        width: 100%;
+        overflow-x: auto;
+        scrollbar-width: thin;
+    }
+
     .base-details {
-        grid-template-columns: 1fr;
-        row-gap: 16px;
-        column-gap: 0;
-        padding: 0 16px;
-        width: 100%;
-    }
-
-    .base-details__logo {
-        height: auto;
-        margin: 0;
-        order: 0;
-    }
-
-    .base-details__column {
-        display: contents;
-    }
-
-    .base-details__column :deep(.base-detail-item) {
-        width: 100%;
-        align-items: center;
-        text-align: center;
-        order: 2;
-    }
-
-    .base-details__column :deep(.status-chip) {
-        order: 1;
-        margin-bottom: 0;
+        min-width: 620px;
     }
 
     .base-details__actions {
@@ -179,4 +164,11 @@ function closeDialog() {
         margin-top: 10px;
     }
 }
+
+// @media (max-width: 400px) {
+
+//     .base-details__logo img {
+//         width: 140px;
+//     }
+// }
 </style>

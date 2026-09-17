@@ -32,6 +32,33 @@
             :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
             :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
+            <template #body-cell-riesgos="props">
+
+                <q-td :props="props">
+
+                    <div class="associated-risks-cell">
+
+                        <span>
+                            {{ getAssociatedRisks(props.row).length }} Riesgos
+                        </span>
+
+                        <button
+                            v-if="getAssociatedRisks(props.row).length"
+                            type="button"
+                            class="associated-risks-cell__action"
+                            :aria-label="`Ver riesgos asociados a ${props.row.nombre}`"
+                            title="Ver riesgos asociados"
+                            @click="viewAssociatedRisks(props.row)"
+                        >
+                            <q-icon name="open_in_new" size="18px" />
+                        </button>
+
+                    </div>
+
+                </q-td>
+
+            </template>
+
             <template #body-cell-opciones="props">
 
                 <q-td :props="props">
@@ -53,6 +80,8 @@
 
         <PeligrosDetails v-model="detailsDanger" :danger="selectedDanger" />
 
+        <PlanesRiesgosDialog v-model="risksDialog" :danger="selectedDangerWithRisks" />
+
     </BasePage>
 
 </template>
@@ -65,6 +94,7 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { PELIGROS_FILTERS } from 'src/constants/filters/peligros.constants'
 import { PELIGROS_COLUMNS } from 'src/constants/tables/peligros.columns'
 import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
+import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
@@ -82,6 +112,7 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 
 import PeligrosDialog from '../dialogs/PeligrosDialog.vue'
 import PeligrosDetails from '../details/PeligrosDetails.vue'
+import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
 
 const sourceRows = ref(PELIGROS_MOCK)
 
@@ -108,9 +139,11 @@ const loading = ref(false)
 
 const dialog = ref(false)
 const detailsDanger = ref(false)
+const risksDialog = ref(false)
 
 const dialogMode = ref('create')
 const selectedDanger = ref(null)
+const selectedDangerWithRisks = ref(null)
 
 const confirmationDialog = ref(false)
 const pendingActionData = ref(null)
@@ -217,6 +250,22 @@ function viewItem(row) {
     detailsDanger.value = true
 }
 
+function getAssociatedRisks(danger) {
+    const selectedIds = Array.isArray(danger.riesgos)
+        ? danger.riesgos
+        : []
+
+    return RIESGOS_MOCK.filter(risk => selectedIds.includes(risk._id))
+}
+
+function viewAssociatedRisks(danger) {
+    selectedDangerWithRisks.value = {
+        ...danger,
+        riesgos: getAssociatedRisks(danger)
+    }
+    risksDialog.value = true
+}
+
 function editItem(row) {
     console.log('Editar Peligro:', row)
     openEditDialog(row)
@@ -229,3 +278,33 @@ function deleteItem(row) {
 }
 
 </script>
+
+<style scoped lang="scss">
+
+@use 'src/css/variables.scss' as *;
+
+.associated-risks-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.associated-risks-cell__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $color-primary;
+    cursor: pointer;
+}
+
+.associated-risks-cell__action:hover {
+    transform: scale(1.08);
+}
+
+</style>

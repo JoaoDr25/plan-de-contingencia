@@ -60,4 +60,28 @@
     align-items: center;
     flex-shrink: 0;
 }
+
+@media (max-width: 650px) {
+
+    .crud-toolbar__bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .crud-toolbar__center {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .crud-toolbar__left {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .crud-toolbar__left :deep(.base-search) {
+        width: min(340px, 100%);
+        max-width: 340px;
+    }
+}
 </style>

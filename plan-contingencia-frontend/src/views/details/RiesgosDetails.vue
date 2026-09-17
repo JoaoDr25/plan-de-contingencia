@@ -16,7 +16,7 @@
 
         <template #column-right>
 
-            <BaseDetailItem class="risk-details__right-offset" label="Protocolos Asociados" :value="risk.protocolos" />
+            <BaseDetailItem class="risk-details__right-offset" label="Protocolos Asociados" :value="associatedProtocols" />
 
             <BaseDetailItem label="Fecha de Creación" :value="risk.fecha" />
 
@@ -54,6 +54,14 @@ const dialog = computed({
     set: value => {
         emit('update:modelValue', value)
     }
+})
+
+const associatedProtocols = computed(() => {
+    const count = Array.isArray(props.risk?.protocolos)
+        ? props.risk.protocolos.length
+        : 0
+
+    return `${count} ${count === 1 ? 'Protocolo' : 'Protocolos'}`
 })
 
 </script>

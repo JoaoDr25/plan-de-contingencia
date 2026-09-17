@@ -51,7 +51,7 @@
 
 <script setup>
 
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -81,6 +81,15 @@ const planForm = ref(createPlanContingenciaModel())
 
 const wizardFormRef = ref(null)
 
+function scrollWizardToTop() {
+  nextTick(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  })
+}
+
 function handleStepNavigation(stepNumber) {
   if (stepNumber === currentStep.value) return
 
@@ -93,6 +102,7 @@ function handleStepNavigation(stepNumber) {
   if (!canNavigate) return
 
   currentStep.value = stepNumber
+  scrollWizardToTop()
 }
 
 async function goToNextStep() {
@@ -109,12 +119,14 @@ async function goToNextStep() {
   }
 
   currentStep.value += 1
+  scrollWizardToTop()
 }
 
 function goToPreviousStep() {
   if (currentStep.value <= 1) return
 
   currentStep.value -= 1
+  scrollWizardToTop()
 }
 
 function handleCancel() {

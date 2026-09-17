@@ -438,6 +438,66 @@ function viewFullPlan() {
     }
 }
 
+@media (min-width: 721px) and (max-width: 1050px) {
+
+    .detail-card {
+        padding: 14px 16px;
+    }
+
+    .detail-card__header {
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .detail-card__title {
+        gap: 7px;
+        padding-left: 0;
+        font-size: $font-size-md;
+    }
+
+    .detail-card__title :deep(.q-icon) {
+        font-size: 18px;
+        padding-bottom: 2px;
+    }
+
+    .detail-card :deep(.base-detail-item__label) {
+        font-size: 0.68rem;
+    }
+
+    .detail-card :deep(.base-detail-item__value) {
+        overflow: hidden;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .detail-card__status {
+        padding-left: 20px;
+    }
+
+    .detail-card__body--plan {
+        grid-template-columns: 100px minmax(0, 1fr);
+        gap: 20px;
+        padding: 6px 0;
+    }
+
+    .detail-card__logo img {
+        width: 110px;
+        margin-left: 0;
+    }
+
+    .detail-card__fields--plan {
+        column-gap: 16px;
+        row-gap: 10px;
+        padding-left: 0;
+    }
+
+    .detail-card__body--revision {
+        padding: 2px 0 6px;
+    }
+
+}
+
 @media (max-width: 720px) {
 
     .detail-card {

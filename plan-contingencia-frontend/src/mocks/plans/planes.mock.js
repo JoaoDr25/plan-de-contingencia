@@ -43,7 +43,23 @@ export const PLANES_MOCK = [
                 categoria: 'Físico',
                 nivel: 'ALTO',
                 consecuencia: 'Contusiones, esguinces o fracturas.',
-                prevencion: 'Mantener superficies secas y utilizar calzado adecuado.'
+                prevencion: 'Mantener superficies secas y utilizar calzado adecuado.',
+                protocolos: [
+                    {
+                        _id: '66e200000000000000000001',
+                        tipo: 'Accidente por Caída',
+                        accion: 'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
+                        responsable: 'Instructor Responsable',
+                        medio: 'Llamada telefónica'
+                    },
+                    {
+                        _id: '66e200000000000000000003',
+                        tipo: 'Emergencia Médica',
+                        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
+                        responsable: 'Instructor Responsable',
+                        medio: 'Línea de Emergencias'
+                    }
+                ]
             },
             {
                 _id: '66d200000000000000000002',
@@ -53,7 +69,16 @@ export const PLANES_MOCK = [
                 categoria: 'Físico',
                 nivel: 'MEDIO',
                 consecuencia: 'Caídas y lesiones musculares.',
-                prevencion: 'Mantener rutas despejadas y señalizadas.'
+                prevencion: 'Mantener rutas despejadas y señalizadas.',
+                protocolos: [
+                    {
+                        _id: '66e200000000000000000001',
+                        tipo: 'Accidente por Caída',
+                        accion: 'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
+                        responsable: 'Instructor Responsable',
+                        medio: 'Llamada telefónica'
+                    }
+                ]
             },
             {
                 _id: '66d200000000000000000003',
@@ -63,7 +88,16 @@ export const PLANES_MOCK = [
                 categoria: 'Físico',
                 nivel: 'MEDIO',
                 consecuencia: 'Disminución temporal de la capacidad auditiva.',
-                prevencion: 'Uso de protección auditiva.'
+                prevencion: 'Uso de protección auditiva.',
+                protocolos: [
+                    {
+                        _id: '66e200000000000000000003',
+                        tipo: 'Emergencia Médica',
+                        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
+                        responsable: 'Instructor Responsable',
+                        medio: 'Línea de Emergencias'
+                    }
+                ]
             },
             {
                 _id: '66d200000000000000000004',
@@ -73,7 +107,16 @@ export const PLANES_MOCK = [
                 categoria: 'Mecánico',
                 nivel: 'MEDIO',
                 consecuencia: 'Heridas y laceraciones.',
-                prevencion: 'Capacitación y uso correcto de herramientas.'
+                prevencion: 'Capacitación y uso correcto de herramientas.',
+                protocolos: [
+                    {
+                        _id: '66e200000000000000000003',
+                        tipo: 'Emergencia Médica',
+                        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
+                        responsable: 'Instructor Responsable',
+                        medio: 'Línea de Emergencias'
+                    }
+                ]
             },
             {
                 _id: '66d200000000000000000005',
@@ -83,7 +126,16 @@ export const PLANES_MOCK = [
                 categoria: 'Físico',
                 nivel: 'ALTO',
                 consecuencia: 'Quemaduras, lesiones graves o muerte.',
-                prevencion: 'Verificar aislamiento y aplicar procedimientos seguros.'
+                prevencion: 'Verificar aislamiento y aplicar procedimientos seguros.',
+                protocolos: [
+                    {
+                        _id: '66e200000000000000000002',
+                        tipo: 'Incendio',
+                        accion: 'Evacuar el área de forma inmediata y notificar al Cuerpo de Bomberos.',
+                        responsable: 'Brigadista de Emergencias',
+                        medio: 'Llamada telefónica'
+                    }
+                ]
             }
         ],
 
@@ -1225,12 +1277,132 @@ export const PLANES_MOCK = [
 
 ]
 
+export const MOCK_ACTIVIDADES_PELIGROS = {
+    '66b200000000000000000001': [
+        {
+            _id: '66c200000000000000000001',
+            nombre: 'Caída a Nivel',
+            categoria: 'Locativo',
+            descripcion: 'Superficies irregulares, húmedas o con obstáculos que pueden ocasionar caídas.',
+            prevencion: 'Mantener superficies secas, rutas despejadas y utilizar calzado adecuado.'
+        },
+        {
+            _id: '66c200000000000000000002',
+            nombre: 'Exposición a Sustancias Químicas',
+            categoria: 'Químico',
+            descripcion: 'Contacto o inhalación de productos químicos durante la práctica.',
+            prevencion: 'Utilizar EPP, revisar las fichas de seguridad y mantener ventilada el área.'
+        }
+    ],
+    '66b200000000000000000002': [
+        {
+            _id: '66c200000000000000000004',
+            nombre: 'Herramientas Cortopunzantes',
+            categoria: 'Mecánico',
+            descripcion: 'Uso de herramientas con filo o punta que pueden causar lesiones.',
+            prevencion: 'Inspeccionar las herramientas y utilizarlas siguiendo el procedimiento seguro.'
+        },
+        {
+            _id: '66c200000000000000000007',
+            nombre: 'Tránsito Vehicular',
+            categoria: 'Seguridad',
+            descripcion: 'Circulación de vehículos durante el desplazamiento y la visita técnica.',
+            prevencion: 'Respetar las zonas señalizadas y mantener distancia de los vehículos.'
+        }
+    ],
+    '66b200000000000000000003': [
+        {
+            _id: '66c200000000000000000003',
+            nombre: 'Radiación Solar',
+            categoria: 'Físico',
+            descripcion: 'Exposición prolongada al sol durante actividades al aire libre.',
+            prevencion: 'Usar protección solar, hidratarse y realizar pausas en lugares cubiertos.'
+        },
+        {
+            _id: '66c200000000000000000005',
+            nombre: 'Contacto con Animales',
+            categoria: 'Biológico',
+            descripcion: 'Posibilidad de mordeduras, picaduras o transmisión de enfermedades.',
+            prevencion: 'Evitar el contacto directo y utilizar elementos de protección personal.'
+        }
+    ],
+    '66b200000000000000000004': [
+        {
+            _id: '66c200000000000000000002',
+            nombre: 'Exposición a Sustancias Químicas',
+            categoria: 'Químico',
+            descripcion: 'Contacto o inhalación de productos químicos durante los ensayos.',
+            prevencion: 'Utilizar EPP y aplicar los procedimientos de almacenamiento y manipulación.'
+        }
+    ],
+    '66b200000000000000000005': [
+        {
+            _id: '66c200000000000000000001',
+            nombre: 'Caída a Nivel',
+            categoria: 'Locativo',
+            descripcion: 'Superficies irregulares, húmedas o con obstáculos en el área de trabajo.',
+            prevencion: 'Señalizar las zonas de riesgo y mantener despejadas las áreas de circulación.'
+        },
+        {
+            _id: '66c200000000000000000004',
+            nombre: 'Herramientas Cortopunzantes',
+            categoria: 'Mecánico',
+            descripcion: 'Uso de herramientas con filo o punta durante la inspección.',
+            prevencion: 'Usar herramientas en buen estado y conservar sus elementos de protección.'
+        }
+    ],
+    '66b200000000000000000006': [
+        {
+            _id: '66c200000000000000000006',
+            nombre: 'Manipulación Manual de Cargas',
+            categoria: 'Ergonómico',
+            descripcion: 'Levantamiento o transporte de equipos que puede generar lesiones musculares.',
+            prevencion: 'Aplicar técnicas de levantamiento y solicitar apoyo para cargas pesadas.'
+        }
+    ],
+    '66b200000000000000000007': [
+        {
+            _id: '66c200000000000000000003',
+            nombre: 'Radiación Solar',
+            categoria: 'Físico',
+            descripcion: 'Exposición prolongada al sol durante el reconocimiento forestal.',
+            prevencion: 'Usar protección solar, ropa adecuada y mantener una hidratación constante.'
+        }
+    ],
+    '66b200000000000000000008': [
+        {
+            _id: '66c200000000000000000007',
+            nombre: 'Tránsito Vehicular',
+            categoria: 'Seguridad',
+            descripcion: 'Circulación de vehículos en las zonas de almacenamiento y distribución.',
+            prevencion: 'Transitar por senderos demarcados y atender la señalización interna.'
+        }
+    ],
+    '66b200000000000000000009': [
+        {
+            _id: '66c200000000000000000004',
+            nombre: 'Herramientas Cortopunzantes',
+            categoria: 'Mecánico',
+            descripcion: 'Uso de herramientas con filo o punta durante el mantenimiento.',
+            prevencion: 'Bloquear los equipos, usar EPP y verificar el estado de las herramientas.'
+        },
+        {
+            _id: '66c200000000000000000006',
+            nombre: 'Manipulación Manual de Cargas',
+            categoria: 'Ergonómico',
+            descripcion: 'Manipulación de piezas y equipos que puede generar lesiones musculares.',
+            prevencion: 'Utilizar ayudas mecánicas y aplicar técnicas seguras de manipulación.'
+        }
+    ]
+}
+
 export const MOCK_APRENDICES = [
     {
         _id: '66g200000000000000000001',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1098765432',
-        nombreCompleto: 'Juan Sebastián Rodríguez',
+        nombre: 'Juan Sebastián',
+        apellido: 'Rodríguez Pérez',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1239,7 +1411,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000002',
         tipo: 'Tarjeta de Identidad',
         numeroDocumento: '1023456789',
-        nombreCompleto: 'María Fernanda López',
+        nombre: 'María Fernanda',
+        apellido: 'López Gómez',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1248,7 +1421,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000003',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1001234567',
-        nombreCompleto: 'Carlos Andrés Martínez',
+        nombre: 'Carlos Andrés',
+        apellido: 'Martínez Torres',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1257,7 +1431,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000004',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1095847362',
-        nombreCompleto: 'Laura Daniela Torres',
+        nombre: 'Laura Daniela',
+        apellido: 'Torres Rojas',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1266,7 +1441,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000005',
         tipo: 'Tarjeta de Identidad',
         numeroDocumento: '1032456712',
-        nombreCompleto: 'Andrés Felipe Morales',
+        nombre: 'Andrés Felipe',
+        apellido: 'Morales Castro',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1275,7 +1451,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000006',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1098234561',
-        nombreCompleto: 'Valentina Castro Silva',
+        nombre: 'Valentina',
+        apellido: 'Silva Hernández',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1284,7 +1461,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000007',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1002345890',
-        nombreCompleto: 'Camilo Eduardo Vargas',
+        nombre: 'Camilo Eduardo',
+        apellido: 'Vargas Ramírez',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1293,7 +1471,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000008',
         tipo: 'Tarjeta de Identidad',
         numeroDocumento: '1035678901',
-        nombreCompleto: 'Sofia Alejandra Ruiz',
+        nombre: 'Sofia Alejandra',
+        apellido: 'Ruiz Mendoza',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1302,7 +1481,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000009',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1098123456',
-        nombreCompleto: 'Mateo Alexander Gómez',
+        nombre: 'Mateo Alexander',
+        apellido: 'Gómez Castillo',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'
@@ -1311,7 +1491,8 @@ export const MOCK_APRENDICES = [
         _id: '66g200000000000000000009',
         tipo: 'Cédula de Ciudadanía',
         numeroDocumento: '1003456789',
-        nombreCompleto: 'Isabella Natalia Mendoza',
+        nombre: 'Isabella Natalia',
+        apellido: 'Mendoza Díaz',
         estado: 'activo',
         ficha: '3174863',
         programaFormacionId: '66a200000000000000000003'

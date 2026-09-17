@@ -8,6 +8,11 @@
 
                 <table class="participants-table">
 
+                    <colgroup>
+                        <col class="participants-table__number-column">
+                        <col span="4" class="participants-table__data-column">
+                    </colgroup>
+
                     <thead>
 
                         <tr>
@@ -24,11 +29,11 @@
                             </th>
 
                             <th>
-                                NOMBRE COMPLETO
+                                NOMBRES
                             </th>
 
-                            <th class="participants-table__status">
-                                ESTADO
+                            <th>
+                                APELLIDOS
                             </th>
                         </tr>
 
@@ -52,20 +57,18 @@
                             </td>
 
                             <td>
-                                {{ participant.nombreCompleto || 'No disponible' }}
+                                {{ getParticipantNames(participant).names }}
                             </td>
 
-                            <td class="participants-table__status">
-
-                                <StatusChip :status="participant.estado" />
-
+                            <td>
+                                {{ getParticipantNames(participant).surnames }}
                             </td>
 
                         </tr>
 
                         <tr v-if="!participants.length">
 
-                            <td colspan="4" class="participants-table__empty">
+                            <td colspan="5" class="participants-table__empty">
                                 No hay aprendices registrados en el plan.
                             </td>
 
@@ -98,7 +101,6 @@ import { computed } from 'vue'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
-import StatusChip from 'src/components/states/StatusChip.vue'
 
 const props = defineProps({
 
@@ -134,6 +136,30 @@ function closeDialog() {
     dialog.value = false
 }
 
+function getParticipantNames(participant) {
+    if (participant.nombre || participant.apellido) {
+        return {
+            names: participant.nombre || 'No disponible',
+            surnames: participant.apellido || 'No disponible'
+        }
+    }
+
+    const fullName = String(participant.nombreCompleto || '').trim()
+    const nameParts = fullName.split(/\s+/).filter(Boolean)
+
+    if (nameParts.length < 3) {
+        return {
+            names: fullName || 'No disponible',
+            surnames: 'No disponible'
+        }
+    }
+
+    return {
+        names: nameParts.slice(0, -2).join(' '),
+        surnames: nameParts.slice(-2).join(' ')
+    }
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -155,7 +181,16 @@ function closeDialog() {
 .participants-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
     font-size: 13px;
+}
+
+.participants-table__number-column {
+    width: 55px;
+}
+
+.participants-table__data-column {
+    width: calc((100% - 55px) / 4);
 }
 
 .participants-table th {
@@ -188,11 +223,6 @@ function closeDialog() {
 
 .participants-table__number {
     width: 55px;
-    text-align: center !important;
-}
-
-.participants-table__status {
-    width: 110px;
     text-align: center !important;
 }
 

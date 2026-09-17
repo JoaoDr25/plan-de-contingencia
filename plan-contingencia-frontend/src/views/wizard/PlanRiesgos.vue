@@ -154,6 +154,10 @@ const emit = defineEmits([
 
 const plan = props.modelValue
 
+if (!Array.isArray(plan.riesgosId)) {
+  plan.riesgosId = []
+}
+
 const riskCardColumns = [
   {
     key: 'riesgo',
@@ -183,7 +187,13 @@ const riskGroups = computed(() => {
   return PELIGROS_MOCK.map((peligro) => ({
     peligro,
     riesgos: RIESGOS_MOCK.filter(
-      (riesgo) => riesgo.peligroId.includes(peligro._id),
+      (riesgo) => {
+        const peligroIds = Array.isArray(riesgo.peligroId)
+          ? riesgo.peligroId
+          : [riesgo.peligroId]
+
+        return peligroIds.includes(peligro._id)
+      },
     ),
   })).filter(
     (group) => group.riesgos.length > 0,
@@ -403,7 +413,7 @@ defineExpose({
 
 .risk-row__name {
   padding: 5px 8px;
-  font-weight: 500;
+  font-weight: 400;
   font-size: clamp(0.7rem, 0.72vw, 0.84rem);
   text-transform: uppercase;
 }

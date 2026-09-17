@@ -64,8 +64,6 @@
             :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
             @cancel="cancelConfirmation" />
 
-        <UsuariosDetails v-model="detailsUser" :user="selectedUser" />
-
     </BasePage>
 
 </template>
@@ -73,6 +71,7 @@
 <script setup>
 
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { USUARIOS_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { USUARIOS_FILTERS } from 'src/constants/filters/usuarios.constants'
@@ -97,10 +96,10 @@ import CrudActions from 'src/components/actions/CrudActions.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import UsuariosDialog from '../dialogs/UsuariosDialog.vue'
-import UsuariosDetails from '../details/UsuariosDetails.vue'
 
 const sourceRows = ref(USUARIOS_MOCK.map(user => ({ ...user })))
 const authStore = useAuthStore()
+const router = useRouter()
 
 const canSyncUsers = computed(() => {
     return String(authStore.role || '').toLowerCase() === ROLES.ADMINISTRADOR
@@ -128,8 +127,6 @@ const loading = ref(false)
 const syncing = ref(false)
 
 const dialog = ref(false)
-const detailsUser = ref(false)
-
 const selectedUser = ref(null)
 
 const confirmationDialog = ref(false)
@@ -202,9 +199,12 @@ function cancelConfirmation() {
 }
 
 function viewItem(row) {
-    console.log('Ver Usuario:', row)
-    selectedUser.value = row
-    detailsUser.value = true
+    router.push({
+        name: 'usuarios.detail',
+        params: {
+            codigo: row.codigo
+        }
+    })
 }
 
 </script>

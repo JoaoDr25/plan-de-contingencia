@@ -40,6 +40,32 @@
 
             </template>
 
+            <template #body-cell-protocolos="props">
+
+                <q-td :props="props">
+                    <div class="associated-protocols-cell">
+
+                        <span>
+                            {{ getAssociatedProtocols(props.row).length }}
+                            {{ getAssociatedProtocols(props.row).length === 1 ? 'Protocolo' : 'Protocolos' }}
+                        </span>
+
+                        <button
+                            v-if="getAssociatedProtocols(props.row).length"
+                            type="button"
+                            class="associated-protocols-cell__action"
+                            :aria-label="`Ver protocolos asociados a ${props.row.riesgo}`"
+                            title="Ver protocolos asociados"
+                            @click="viewAssociatedProtocols(props.row)"
+                        >
+                            <q-icon name="open_in_new" size="18px" />
+                        </button>
+
+                    </div>
+                </q-td>
+
+            </template>
+
             <template #body-cell-opciones="props">
 
                 <q-td :props="props">
@@ -61,6 +87,8 @@
 
         <RiesgosDetails v-model="detailsRisk" :risk="selectedRisk" />
 
+        <PlanesProtocolosDialog v-model="protocolsDialog" :risk="selectedRiskWithProtocols" />
+
     </BasePage>
 
 </template>
@@ -73,6 +101,7 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants'
 import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns'
 import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
+import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { getCurrentDate } from 'src/utils/date.utils'
@@ -91,6 +120,7 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 
 import RiesgosDialog from '../dialogs/RiesgosDialog.vue'
 import RiesgosDetails from '../details/RiesgosDetails.vue'
+import PlanesProtocolosDialog from '../modals/PlanesProtocolosDialog.vue'
 
 const sourceRows = ref(RIESGOS_MOCK)
 
@@ -116,9 +146,11 @@ const loading = ref(false)
 
 const dialog = ref(false)
 const detailsRisk = ref(false)
+const protocolsDialog = ref(false)
 
 const dialogMode = ref('create')
 const selectedRisk = ref(null)
+const selectedRiskWithProtocols = ref(null)
 
 const confirmationDialog = ref(false)
 const pendingActionData = ref(null)
@@ -225,6 +257,22 @@ function viewItem(row) {
     detailsRisk.value = true
 }
 
+function getAssociatedProtocols(risk) {
+    const selectedIds = Array.isArray(risk.protocolos)
+        ? risk.protocolos
+        : []
+
+    return PROTOCOLOS_MOCK.filter(protocol => selectedIds.includes(protocol._id))
+}
+
+function viewAssociatedProtocols(risk) {
+    selectedRiskWithProtocols.value = {
+        ...risk,
+        protocolos: getAssociatedProtocols(risk)
+    }
+    protocolsDialog.value = true
+}
+
 function editItem(row) {
     console.log('Editar Riesgo:', row)
     openEditDialog(row)
@@ -237,3 +285,37 @@ function deleteItem(row) {
 }
 
 </script>
+
+<style scoped lang="scss">
+
+@use 'src/css/variables.scss' as *;
+
+.associated-protocols-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.associated-protocols-cell__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $color-primary;
+    cursor: pointer;
+}
+
+.associated-protocols-cell__action:hover :deep(.q-icon) {
+    transform: scale(1.08);
+}
+
+.associated-protocols-cell__action :deep(.q-icon) {
+    transition: transform 0.2s ease;
+}
+
+</style>

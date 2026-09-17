@@ -65,46 +65,63 @@
 
                 </div>
 
-                <BaseSelect
-                    v-model="plan.contactosEmergencia.contactosBase"
-                    label="Seleccionar contactos de emergencia"
-                    placeholder="Seleccionar contactos de emergencia"
-                    :options="contactOptions"
-                    option-label="label"
-                    option-value="value"
-                    :selected-text="'Seleccionar Contactos de Emergencia'"
-                    multiple
-                    size="wizard"
-                    external-label
-                />
+                <div class="emergency-contacts-card">
 
-                <div
-                    v-if="selectedContacts.length"
-                    class="selected-contacts"
-                >
+                    <div class="emergency-contacts-scroll">
 
-                    <div
-                        v-for="contact in selectedContacts"
-                        :key="contact._id"
-                        class="selected-contact"
-                    >
+                        <div class="emergency-contacts-content">
 
-                        <div class="selected-contact__info">
+                            <BaseSelect
+                                v-model="plan.contactosEmergencia.contactosBase"
+                                label="Seleccionar contactos de emergencia"
+                                placeholder="Seleccionar contactos de emergencia"
+                                :options="contactOptions"
+                                option-label="label"
+                                option-value="value"
+                                :selected-text="'Seleccionar Contactos de Emergencia'"
+                                multiple
+                                size="wizard"
+                                external-label
+                            />
 
-                            <strong>
-                                {{ contact.nombre }}
-                            </strong>
+                            <div
+                                v-if="selectedContacts.length"
+                                class="selected-contacts"
+                            >
 
-                            <span>
-                                {{ contact.tipo }} · {{ contact.telefono }}
-                            </span>
+                                <div
+                                    v-for="contact in selectedContacts"
+                                    :key="contact._id"
+                                    class="selected-contact"
+                                >
+
+                                    <div class="selected-contact__info">
+
+                                        <strong>
+                                            {{ contact.nombre }}
+                                        </strong>
+
+                                        <span>
+                                            {{ contact.tipo }} · {{ contact.telefono }}
+                                        </span>
+
+                                    </div>
+
+                                    <q-btn
+                                        class="contact-remove-button"
+                                        flat
+                                        dense
+                                        icon="close"
+                                        aria-label="Eliminar contacto"
+                                        title="Eliminar contacto"
+                                        @click="onDeleteContact(contact._id)"
+                                    />
+
+                                </div>
+
+                            </div>
 
                         </div>
-
-                        <CrudActions
-                            :actions="['delete']"
-                            @delete="onDeleteContact(contact._id)"
-                        />
 
                     </div>
 
@@ -250,7 +267,6 @@ import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 import BaseDataCard from 'src/components/base/BaseDataCard.vue'
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
-import CrudActions from 'src/components/actions/CrudActions.vue'
 
 import ContactosDialog from 'src/views/dialogs/ContactosDialog.vue'
 
@@ -272,6 +288,26 @@ const emit = defineEmits([
 ])
 
 const plan = props.modelValue
+
+if (!Array.isArray(plan.epp)) {
+    plan.epp = []
+}
+
+if (!plan.contactosEmergencia) {
+    plan.contactosEmergencia = {
+        contactosBase: [],
+        otro: {
+            nombreEntidad: '',
+            telefono: '',
+            ciudad: '',
+            descripcion: '',
+        },
+    }
+}
+
+if (!Array.isArray(plan.contactosEmergencia.contactosBase)) {
+    plan.contactosEmergencia.contactosBase = []
+}
 
 function initializeSecurityVialItems() {
 
@@ -518,7 +554,7 @@ defineExpose({
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px 20px;
-    row-gap: 35px;
+    row-gap: 45px;
 }
 
 .security-section {
@@ -535,7 +571,7 @@ defineExpose({
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 0 0 23px;
+    margin: 0 0 22px;
     color: $color-text-primary;
     font-size: $font-size-2xl;
     font-weight:700;
@@ -549,8 +585,29 @@ defineExpose({
     gap: 10px 16px;
     max-height: 260px;
     overflow-y: auto;
+    scrollbar-gutter: stable;
+    scrollbar-width: auto;
     padding-right: 6px;
     padding-bottom: 10px;
+}
+
+.epp-list::-webkit-scrollbar {
+    width: 10px;
+}
+
+.epp-list::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: $color-background-field;
+}
+
+.epp-list::-webkit-scrollbar-thumb {
+    border: 2px solid $color-background-field;
+    border-radius: 5px;
+    background-color: #5f6368;
+}
+
+.epp-list::-webkit-scrollbar-thumb:hover {
+    background-color: #3f4448;
 }
 
 .epp-item {
@@ -590,8 +647,8 @@ defineExpose({
     align-items: center;
     gap: 8px;
     width: 100%;
-    min-height: 48px;
-    margin-top: 0;
+    min-height: 52px;
+    margin-top: 7px;
     padding: 10px 14px;
     border-radius: 6px;
     background-color: $color-background-field;
@@ -606,12 +663,31 @@ defineExpose({
     color: $color-primary;
 }
 
+.emergency-contacts-card {
+    padding: 14px 12px 10px;
+    border: 1px solid $color-border-table;
+    border-radius: 6px;
+    background-color: $color-surface;
+    box-sizing: border-box;
+}
+
+.emergency-contacts-scroll {
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+}
+
+.emergency-contacts-content {
+    width: 100%;
+    min-width: 0;
+}
+
 .selected-contacts {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-top: 8px;
-    max-height: 215px;
+    margin-top: 5px;
+    max-height: 196px;
     overflow-y: auto;
     padding-right: 6px;
 }
@@ -621,14 +697,20 @@ defineExpose({
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    min-height: 50px;
-    padding: 4px 8px 4px 4px;
+    min-height: 64px;
+    padding: 4px 8px 4px 8px;
     border-bottom: 1px solid $color-border-table;
     line-height: 1.3;
 }
 
-.selected-contact :deep(.crud-actions) {
-    margin-right: 20px;
+.contact-remove-button {
+    margin-right: 0;
+    padding-right: 10px;
+    color: $color-text-secondary;
+}
+
+.contact-remove-button :deep(.q-icon) {
+    font-size: 20px;
 }
 
 .selected-contact__info {
@@ -652,7 +734,7 @@ defineExpose({
 }
 
 .other-contact {
-    margin-top: 6px;
+    margin-top: 13px;
 }
 
 .other-contact-form {
@@ -660,6 +742,17 @@ defineExpose({
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px 16px;
     margin-top: 5px;
+}
+
+@media (max-width: 900px) {
+
+    .emergency-contacts-scroll {
+        scrollbar-width: thin;
+    }
+
+    .emergency-contacts-content {
+        min-width: 620px;
+    }
 }
 
 .security-vial-card :deep(.base-data-card__header) {
@@ -750,6 +843,13 @@ defineExpose({
     .security-vial-status :deep(.q-radio) {
         min-width: 0;
     }
+
+    .security-vial-item,
+    .security-vial-status,
+    .security-vial-field {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 @media (max-width: 900px) {
@@ -781,8 +881,8 @@ defineExpose({
     .security-vial-item,
     .security-vial-status,
     .security-vial-field {
-        padding-left: 12px;
-        padding-right: 12px;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 

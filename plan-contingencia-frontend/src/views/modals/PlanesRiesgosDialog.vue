@@ -29,7 +29,7 @@
                             </th>
 
                             <th>
-                                PREVENCIÓN
+                                DESCRIPCIÓN
                             </th>
 
                         </tr>
@@ -57,7 +57,7 @@
                             </td>
 
                             <td>
-                                {{ risk.prevencion || 'No disponible' }}
+                                {{ risk.descripcion || 'No disponible' }}
                             </td>
 
                         </tr>

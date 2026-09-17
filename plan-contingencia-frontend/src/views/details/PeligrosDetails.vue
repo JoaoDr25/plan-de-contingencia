@@ -16,7 +16,7 @@
 
         <template #column-right>
 
-             <BaseDetailItem  class="danger-details__right-offset" label="Riesgos Asociados" :value="danger.riesgos" />
+             <BaseDetailItem class="danger-details__right-offset" label="Riesgos Asociados" :value="associatedRisks" />
 
             <BaseDetailItem label="Fecha de Creación" :value="danger.fecha" />
 
@@ -54,6 +54,14 @@ const dialog = computed({
     set: value => {
         emit('update:modelValue', value)
     }
+})
+
+const associatedRisks = computed(() => {
+    const count = Array.isArray(props.danger?.riesgos)
+        ? props.danger.riesgos.length
+        : 0
+
+    return `${count} ${count === 1 ? 'Riesgo' : 'Riesgos'}`
 })
 
 </script>

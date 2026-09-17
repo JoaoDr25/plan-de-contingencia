@@ -33,6 +33,33 @@
             :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
             :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
+            <template #body-cell-peligros="props">
+
+                <q-td :props="props">
+                    <div class="associated-dangers-cell">
+
+                        <span>
+                            {{ getAssociatedDangers(props.row).length }}
+                            {{ getAssociatedDangers(props.row).length === 1 ? 'Peligro' : 'Peligros' }}
+                        </span>
+
+                        <button
+                            v-if="getAssociatedDangers(props.row).length"
+                            type="button"
+                            class="associated-dangers-cell__action"
+                            :aria-label="`Ver peligros asociados a ${props.row.nombre}`"
+                            title="Ver peligros asociados"
+                            @click="viewAssociatedDangers(props.row)"
+                        >
+                            <q-icon name="open_in_new" size="18px" />
+                        </button>
+
+                    </div>
+                </q-td>
+                
+
+            </template>
+
             <template #body-cell-opciones="props">
 
                 <q-td :props="props">
@@ -53,6 +80,8 @@
 
         <ActividadesDetails v-model="detailsActivity" :activity="selectedActivity" />
 
+        <PlanesPeligrosDialog v-model="dangersDialog" :activity="selectedActivityWithDangers" />
+
     </BasePage>
 
 </template>
@@ -65,6 +94,7 @@ import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.cons
 import { ACTIVIDADES_FILTERS } from 'src/constants/filters/actividades.constants';
 import { ACTIVIDADES_COLUMNS } from 'src/constants/tables/actividades.columns';
 import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock.js';
+import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js';
 
 import { useCrudTable } from 'src/composables/useCrudTable';
 import { getCurrentDate } from 'src/utils/date.utils';
@@ -82,6 +112,7 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 
 import ActividadesDialog from '../dialogs/ActividadesDialog.vue'
 import ActividadesDetails from '../details/ActividadesDetails.vue'
+import PlanesPeligrosDialog from '../modals/PlanesPeligrosDialog.vue'
 
 const sourceRows = ref(ACTIVIDADES_MOCK);
 
@@ -107,10 +138,12 @@ const loading = ref(false);
 
 const dialog = ref(false)
 const detailsActivity = ref(false)
+const dangersDialog = ref(false)
 
 
 const dialogMode = ref('create')
 const selectedActivity = ref(null)
+const selectedActivityWithDangers = ref(null)
 
 
 const confirmationDialog = ref(false)
@@ -229,6 +262,22 @@ function viewItem(row) {
     detailsActivity.value = true
 }
 
+function getAssociatedDangers(activity) {
+    const selectedIds = Array.isArray(activity.peligros)
+        ? activity.peligros
+        : []
+
+    return PELIGROS_MOCK.filter(danger => selectedIds.includes(danger._id))
+}
+
+function viewAssociatedDangers(activity) {
+    selectedActivityWithDangers.value = {
+        ...activity,
+        peligros: getAssociatedDangers(activity)
+    }
+    dangersDialog.value = true
+}
+
 function editItem(row) {
     console.log('Editar Actividad:', row)
 
@@ -242,3 +291,37 @@ function deleteItem(row) {
 }
 
 </script>
+
+<style scoped lang="scss">
+
+@use 'src/css/variables.scss' as *;
+
+.associated-dangers-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.associated-dangers-cell__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: $color-primary;
+    cursor: pointer;
+}
+
+.associated-dangers-cell__action:hover :deep(.q-icon) {
+    transform: scale(1.08);
+}
+
+.associated-dangers-cell__action :deep(.q-icon) {
+    transition: transform 0.2s ease;
+}
+
+</style>

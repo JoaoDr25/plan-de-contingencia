@@ -28,7 +28,7 @@
 
         </CrudToolbar>
 
-        <BaseTable :rows="paginatedRows" :columns="APRENDICES_COLUMNS" :loading="loading" :current-page="currentPage"
+        <BaseTable class="apprentices-table" :rows="paginatedRows" :columns="APRENDICES_COLUMNS" :loading="loading" :current-page="currentPage"
             :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
             :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
 
@@ -243,3 +243,19 @@ function deleteItem(row) {
 }
 
 </script>
+
+<style scoped lang="scss">
+
+.apprentices-table :deep(.q-table thead th:nth-child(7)),
+.apprentices-table :deep(.q-table tbody td:nth-child(7)) {
+    width: 120px !important;
+    max-width: 120px !important;
+}
+
+.apprentices-table :deep(.q-table thead th:nth-child(8)),
+.apprentices-table :deep(.q-table tbody td:nth-child(8)) {
+    width: 200px !important;
+    max-width: 200px !important;
+}
+
+</style>
