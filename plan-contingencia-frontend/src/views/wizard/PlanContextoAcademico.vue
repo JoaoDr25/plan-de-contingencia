@@ -265,6 +265,26 @@ function handleNoMenores() {
 
   emit('update:modelValue', form)
 }
+
+function validate() {
+  const articulacion = form.articulacionFormativa
+  const hasArticulation = articulacion.proyectoFormativo ||
+    articulacion.visitaEmpresa ||
+    articulacion.investigacion ||
+    articulacion.otroSeleccionado
+
+  if (!hasArticulation) {
+    return false
+  }
+
+  return !articulacion.otroSeleccionado || Boolean(
+    String(articulacion.otro ?? '').trim(),
+  )
+}
+
+defineExpose({
+  validate,
+})
 </script>
 
 <style scoped lang="scss">

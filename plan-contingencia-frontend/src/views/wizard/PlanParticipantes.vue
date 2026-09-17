@@ -15,7 +15,7 @@
         <span>Programa de formación</span>
 
         <div class="program-info__value">
-          <q-icon name="school" />
+          <!-- <q-icon name="school" /> -->
           <strong>{{ programaNombre }}</strong>
         </div>
 
@@ -26,7 +26,7 @@
         <span>Ficha</span>
 
         <div class="program-info__value">
-          <q-icon name="description" />
+          <!-- <q-icon name="description" /> -->
           <strong>{{ ficha }}</strong>
         </div>
 
@@ -37,7 +37,7 @@
         <span>Total Aprendices de la Ficha</span>
 
         <div class="program-info__value">
-          <q-icon name="groups" />
+          <!-- <q-icon name="groups" /> -->
           <strong>{{ filteredAprendices.length }}</strong>
         </div>
 
@@ -145,6 +145,7 @@ import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
+import { notifyWarning } from 'src/utils/notifications.utils'
 
 import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock'
 import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock'
@@ -278,7 +279,12 @@ function clearSelection() {
 }
 
 function validate() {
-  return plan.aprendicesId.length > 0
+  if (!plan.aprendicesId.length) {
+    notifyWarning('Seleccione al menos un aprendiz')
+    return false
+  }
+
+  return true
 }
 
 defineExpose({

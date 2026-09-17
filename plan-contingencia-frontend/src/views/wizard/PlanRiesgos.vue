@@ -15,7 +15,7 @@
         <span>Actividad a realizar</span>
 
         <div class="plan-info__value">
-          <q-icon name="event_note" />
+          <!-- <q-icon name="event_note" /> -->
           <strong>{{ actividadNombre }}</strong>
         </div>
 
@@ -26,7 +26,7 @@
         <span>Lugar de salida</span>
 
         <div class="plan-info__value">
-          <q-icon name="location_on" />
+          <!-- <q-icon name="location_on" /> -->
           <strong>{{ plan.lugarSalida || '—' }}</strong>
         </div>
 
@@ -37,7 +37,7 @@
         <span>Lugar de destino</span>
 
         <div class="plan-info__value">
-          <q-icon name="location_on" />
+          <!-- <q-icon name="location_on" /> -->
           <strong>{{ plan.lugarDestino || '—' }}</strong>
         </div>
 
@@ -138,6 +138,7 @@ import { computed, ref } from 'vue'
 import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
 import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock'
 import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock'
+import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseDataCard from 'src/components/base/BaseDataCard.vue'
 
@@ -199,6 +200,23 @@ const riskGroups = computed(() => {
     (group) => group.riesgos.length > 0,
   )
 })
+
+function restoreSelectedRiskRelations() {
+  const selectedIds = new Set(plan.riesgosId)
+  const relations = new Set()
+
+  riskGroups.value.forEach((group) => {
+    group.riesgos.forEach((riesgo) => {
+      if (selectedIds.has(riesgo._id)) {
+        relations.add(getRelationKey(group.peligro._id, riesgo._id))
+      }
+    })
+  })
+
+  selectedRiskRelations.value = relations
+}
+
+restoreSelectedRiskRelations()
 
 const selectedCount = computed(() => {
   return selectedRiskRelations.value.size
@@ -269,7 +287,12 @@ function clearSelection() {
 
 
 function validate() {
-  return plan.riesgosId.length > 0
+  if (!plan.riesgosId.length) {
+    notifyWarning('Seleccione al menos un riesgo')
+    return false
+  }
+
+  return true
 }
 
 defineExpose({

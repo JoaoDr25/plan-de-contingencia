@@ -272,6 +272,7 @@ import ContactosDialog from 'src/views/dialogs/ContactosDialog.vue'
 
 import { EPP_MOCK } from 'src/mocks/modules/epp.mock'
 import { CONTACTOS_MOCK } from 'src/mocks/modules/contactos.mock'
+import { notifyWarning } from 'src/utils/notifications.utils'
 
 import { SECURITY_VIAL_ITEMS } from 'src/constants/system/security.constants'
 
@@ -513,10 +514,37 @@ function validate() {
         )
 
     if (!securityStatusValid) {
+        notifyWarning('Marque el estado de todos los elementos de seguridad vial')
         return false
     }
 
     const otro = plan.contactosEmergencia?.otro
+
+    const hasBaseContact = plan.contactosEmergencia?.contactosBase?.length > 0
+    const hasCompleteOtherContact = Boolean(
+        otro?.nombreEntidad?.trim() &&
+        otro?.telefono?.trim() &&
+        otro?.ciudad?.trim() &&
+        otro?.descripcion?.trim()
+    )
+    const hasPartialOtherContact = Boolean(
+        otro?.nombreEntidad?.trim() ||
+        otro?.telefono?.trim() ||
+        otro?.ciudad?.trim() ||
+        otro?.descripcion?.trim()
+    )
+
+    if (hasPartialOtherContact && !hasCompleteOtherContact) {
+        notifyWarning('Complete todos los datos del contacto adicional')
+        return false
+    }
+
+    if (!hasBaseContact && !hasCompleteOtherContact) {
+        notifyWarning(
+            'Agregue al menos un contacto de emergencia'
+        )
+        return false
+    }
 
     if (otro && (
         otro.nombreEntidad?.trim() ||

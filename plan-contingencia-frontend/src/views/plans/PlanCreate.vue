@@ -13,13 +13,13 @@
 
       <q-form ref="wizardFormRef" class="wizard-form" @submit.prevent>
 
-        <PlanInformacionGeneral v-if="currentStep === 1" v-model="planForm" />
+        <PlanInformacionGeneral v-if="currentStep === 1" ref="currentStepRef" v-model="planForm" />
 
-        <PlanContextoAcademico v-else-if="currentStep === 2" v-model="planForm" />
+        <PlanContextoAcademico v-else-if="currentStep === 2" ref="currentStepRef" v-model="planForm" />
 
-        <PlanPlanTrabajo v-else-if="currentStep === 3" v-model="planForm" />
+        <PlanPlanTrabajo v-else-if="currentStep === 3" ref="currentStepRef" v-model="planForm" />
 
-        <PlanParticipantes v-else-if="currentStep === 4" v-model="planForm" />
+        <PlanParticipantes v-else-if="currentStep === 4" ref="currentStepRef" v-model="planForm" />
 
         <PlanRiesgos v-else-if="currentStep === 5" ref="currentStepRef" v-model="planForm" />
 
@@ -39,7 +39,8 @@
 
           <PrimaryActionButton v-if="currentStep < TOTAL_STEPS" class="wizard-actions__button" label="Siguiente" size="sm" @click="goToNextStep" />
 
-          <PrimaryActionButton v-else class="wizard-actions__button" label="Generar Plan" size="sm" disable />
+          <PrimaryActionButton v-else class="wizard-actions__button" label="Generar Plan" size="sm"
+            :disable="!canGeneratePlan" @click="generatePlan" />
 
         </div>
 
@@ -51,8 +52,9 @@
 
 <script setup>
 
-import { nextTick, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from 'src/stores/auth.store'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -69,8 +71,11 @@ import PlanRevision from '../wizard/PlanRevision.vue'
 
 import { createPlanContingenciaModel } from 'src/models/planContingencia.model'
 import { PLAN_WIZARD_STEPS } from 'src/constants/plans/planWizard.js'
+import { PLANES_MOCK } from 'src/mocks/plans/planes.mock.js'
+import { notifySuccess } from 'src/utils/notifications.utils'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 const TOTAL_STEPS = PLAN_WIZARD_STEPS.length
 
@@ -79,19 +84,35 @@ const completedSteps = ref([])
 
 const planForm = ref(createPlanContingenciaModel())
 
-const wizardFormRef = ref(null)
-
-function scrollWizardToTop() {
-  nextTick(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  })
+if (authStore.currentUser) {
+  planForm.value.usuarioId = authStore.currentUser._id
+  planForm.value.usuarioNombre = [
+    authStore.currentUser.nombre,
+    authStore.currentUser.apellido
+  ].filter(Boolean).join(' ')
 }
+
+const wizardFormRef = ref(null)
+const currentStepRef = ref(null)
+
+const canGeneratePlan = computed(() => {
+  const requiredStepsCompleted = [1, 2, 3, 4, 5, 6]
+    .every(step => completedSteps.value.includes(step))
+  const revision = planForm.value.revision
+
+  return currentStep.value === TOTAL_STEPS &&
+    requiredStepsCompleted &&
+    revision.validacionInformacion === true &&
+    Boolean(revision.instructor?.firma) &&
+    Boolean(revision.pedagogia?.firma) &&
+    Boolean(revision.sst?.firma) &&
+    Boolean(revision.coordinacion?.firma)
+})
 
 function handleStepNavigation(stepNumber) {
   if (stepNumber === currentStep.value) return
+
+  const previousStep = currentStep.value
 
   const canNavigate =
     stepNumber < currentStep.value ||
@@ -102,15 +123,22 @@ function handleStepNavigation(stepNumber) {
   if (!canNavigate) return
 
   currentStep.value = stepNumber
-  scrollWizardToTop()
+  if (stepNumber < previousStep) {
+    completedSteps.value = completedSteps.value.filter(step => step < stepNumber)
+  }
 }
 
 async function goToNextStep() {
   if (currentStep.value >= TOTAL_STEPS) return
 
-  const isValid = await wizardFormRef.value?.validate()
+  const formIsValid = await wizardFormRef.value?.validate()
+  const stepsWithCustomValidation = [3, 4, 5, 6, 7]
+  const stepValidator = currentStepRef.value?.validate
+  const stepIsValid = stepsWithCustomValidation.includes(currentStep.value)
+    ? typeof stepValidator === 'function' && stepValidator() === true
+    : true
 
-  if (!isValid) {
+  if (!formIsValid || !stepIsValid) {
     return
   }
 
@@ -119,14 +147,39 @@ async function goToNextStep() {
   }
 
   currentStep.value += 1
-  scrollWizardToTop()
 }
 
 function goToPreviousStep() {
   if (currentStep.value <= 1) return
 
   currentStep.value -= 1
-  scrollWizardToTop()
+  completedSteps.value = completedSteps.value.filter(
+    step => step < currentStep.value
+  )
+}
+
+function generatePlan() {
+  if (!canGeneratePlan.value) {
+    return
+  }
+
+  const now = new Date().toISOString()
+  const nextNumber = Math.max(
+    0,
+    ...PLANES_MOCK.map(plan => Number(plan.numero) || 0),
+  ) + 1
+
+  PLANES_MOCK.push({
+    ...JSON.parse(JSON.stringify(planForm.value)),
+    _id: `66a10000000000000000${String(nextNumber).padStart(4, '0')}`,
+    numero: nextNumber,
+    estado: 'en revision',
+    createdAt: now,
+    updatedAt: now,
+  })
+
+  notifySuccess('Plan generado correctamente')
+  router.push({ name: 'planes.list' })
 }
 
 function handleCancel() {

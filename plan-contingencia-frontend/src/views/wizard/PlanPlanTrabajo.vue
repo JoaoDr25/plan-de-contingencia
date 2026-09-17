@@ -138,6 +138,7 @@ import { computed, ref } from 'vue'
 
 import { PLAN_TRABAJO_COLUMNS } from 'src/constants/tables/planTrabajo.columns.js'
 import { useCrudTable } from 'src/composables/useCrudTable'
+import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseTable from 'src/components/tables/BaseTable.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
@@ -316,6 +317,19 @@ function timeToMinutes(value) {
 
   return hours * 60 + minutes
 }
+
+function validate() {
+  if (!plan.planTrabajo.length) {
+    notifyWarning('Agregue al menos una actividad')
+    return false
+  }
+
+  return true
+}
+
+defineExpose({
+  validate,
+})
 </script>
 
 <style scoped lang="scss">

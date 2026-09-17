@@ -52,7 +52,7 @@
                 </label>
 
                 <BaseDatePicker id="fecha-salida" v-model="form.fecha" label="Fecha de salida" required external-label
-                    icon-position="append" :rules="[requiredRule]" size="wizard" />
+                    icon-position="append" :min="today" :rules="[requiredRule, dateRule]" size="wizard" />
 
             </div>
 
@@ -167,6 +167,13 @@ import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
 
 import { TIPO_TRANSPORTE_OPTIONS, CLASIFICACION_INFORMACION_OPTIONS } from 'src/constants/system/plan.constant'
 
+const currentDate = new Date()
+const today = [
+    currentDate.getFullYear(),
+    String(currentDate.getMonth() + 1).padStart(2, '0'),
+    String(currentDate.getDate()).padStart(2, '0')
+].join('-')
+
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -209,6 +216,19 @@ function handleProgramaChange(programaId) {
 
 function requiredRule(value) {
     return Boolean(String(value ?? '').trim()) || 'Este campo es obligatorio'
+}
+
+function dateRule(value) {
+    if (!value) {
+        return true
+    }
+
+    const dateParts = String(value).split('/')
+    const normalizedDate = dateParts.length === 3
+        ? `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`
+        : value
+
+    return normalizedDate >= today || 'La fecha de salida no puede ser anterior a hoy'
 }
 
 function returnTimeRule(value) {

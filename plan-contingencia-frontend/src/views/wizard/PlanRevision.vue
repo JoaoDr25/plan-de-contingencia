@@ -630,7 +630,11 @@ function formatTime(value) {
 }
 
 function validate() {
-  return plan.revision.validacionInformacion === true
+  return plan.revision.validacionInformacion === true &&
+    Boolean(instructorSignature.value) &&
+    Boolean(pedagogiaSignature.value) &&
+    Boolean(sstSignature.value) &&
+    Boolean(coordinacionSignature.value)
 }
 
 defineExpose({
