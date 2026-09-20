@@ -51,14 +51,14 @@ export const APRENDICES_COLUMNS = [
         align: 'left',
         sortable: true
     },
-    {
-        name: 'contacto',
-        label: 'Contacto de Emergencia',
-        field: 'telefono',
-        align: 'center',
-        sortable: false,
-        ellipsis: true
-    },
+    // {
+    //     name: 'contacto',
+    //     label: 'Contacto de Emergencia',
+    //     field: 'telefono',
+    //     align: 'center',
+    //     sortable: false,
+    //     ellipsis: true
+    // },
     {
         name: 'estado',
         label: 'Estado',
