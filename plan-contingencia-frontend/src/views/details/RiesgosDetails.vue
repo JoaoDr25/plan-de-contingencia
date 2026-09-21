@@ -71,11 +71,4 @@ const associatedProtocols = computed(() => {
 .risk-details__right-offset {
     margin-top: 46px;
 }
-
-@media (max-width: 600px) {
-
-    .risk-details__right-offset {
-        margin-top: 0;
-    }
-}
 </style>

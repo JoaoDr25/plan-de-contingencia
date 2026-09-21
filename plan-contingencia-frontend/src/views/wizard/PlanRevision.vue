@@ -16,32 +16,26 @@
           <div>
             <span>Programa:</span>
             <strong>{{ generalSummary.programa }}</strong>
-        </div>
+          </div>
 
           <div>
             <span>Fecha salida:</span>
             <strong>{{ generalSummary.fecha }}</strong>
-        </div>
+          </div>
 
           <div>
             <span>Transporte:</span>
             <strong>{{ generalSummary.transporte }}</strong>
-        </div>
+          </div>
 
           <div>
             <span>Lugar:</span>
             <strong>{{ generalSummary.lugar }}</strong>
           </div>
-        
+
         </div>
 
-        <q-btn
-          unelevated
-          no-caps
-          label="Ver detalle"
-          class="summary-card__button"
-          @click="goToStep(1)"
-        />
+        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(1)" />
 
       </article>
 
@@ -55,18 +49,8 @@
 
             <span>Competencias:</span>
 
-            <q-icon
-              :name="
-                hasValue(plan.contextoAcademico.competencia)
-                  ? 'check_circle'
-                  : 'radio_button_unchecked'
-              "
-              :class="{
-                'is-complete': hasValue(
-                  plan.contextoAcademico.competencia,
-                ),
-              }"
-            />
+            <q-checkbox class="summary-checkbox" :model-value="hasValue(plan.contextoAcademico.competencia)" disable
+              size="sm" dense />
 
           </div>
 
@@ -74,48 +58,22 @@
 
             <span>Resultado de aprendizaje:</span>
 
-            <q-icon
-              :name="
-                hasValue(plan.contextoAcademico.resultadoAprendizaje)
-                  ? 'check_circle'
-                  : 'radio_button_unchecked'
-              "
-              :class="{
-                'is-complete': hasValue(
-                  plan.contextoAcademico.resultadoAprendizaje,
-                ),
-              }"
-            />
+            <q-checkbox class="summary-checkbox" :model-value="hasValue(plan.contextoAcademico.resultadoAprendizaje)"
+              disable size="sm" dense />
           </div>
 
           <div>
 
             <span>Objetivo:</span>
 
-            <q-icon
-              :name="
-                hasValue(plan.contextoAcademico.objetivo)
-                  ? 'check_circle'
-                  : 'radio_button_unchecked'
-              "
-              :class="{
-                'is-complete': hasValue(
-                  plan.contextoAcademico.objetivo,
-                ),
-              }"
-            />
+            <q-checkbox class="summary-checkbox" :model-value="hasValue(plan.contextoAcademico.objetivo)" disable
+              size="sm" dense />
 
           </div>
 
         </div>
 
-        <q-btn
-          unelevated
-          no-caps
-          label="Ver detalle"
-          class="summary-card__button"
-          @click="goToStep(2)"
-        />
+        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(2)" />
 
       </article>
 
@@ -142,13 +100,7 @@
 
         </div>
 
-        <q-btn
-          unelevated
-          no-caps
-          label="Ver detalle"
-          class="summary-card__button"
-          @click="goToStep(3)"
-        />
+        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(3)" />
 
       </article>
 
@@ -160,28 +112,17 @@
 
           <div>
             <span>Aprendices:</span>
-            <strong>{{ plan.aprendicesId.length }}</strong>
+            <strong>{{ participantsSummary.aprendices }}</strong>
           </div>
 
           <div>
-            <span>Hora salida:</span>
-            <strong>{{ formatTime(plan.horaSalida) }}</strong>
-          </div>
-
-          <div>
-            <span>Hora regreso:</span>
-            <strong>{{ formatTime(plan.horaRegreso) }}</strong>
+            <span>Ficha:</span>
+            <strong>{{ participantsSummary.ficha }}</strong>
           </div>
 
         </div>
 
-        <q-btn
-          unelevated
-          no-caps
-          label="Ver detalle"
-          class="summary-card__button"
-          @click="goToStep(4)"
-        />
+        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(4)" />
       </article>
 
       <article class="summary-card">
@@ -212,13 +153,7 @@
 
         </div>
 
-        <q-btn
-          unelevated
-          no-caps
-          label="Ver detalle"
-          class="summary-card__button"
-          @click="goToStep(5)"
-        />
+        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(5)" />
 
       </article>
 
@@ -234,19 +169,18 @@
           </div>
 
           <div>
+            <span>Contactos de emergencia:</span>
+            <strong>{{ emergencyContactsCount }}</strong>
+          </div>
+
+          <div>
             <span>Seguridad vial:</span>
             <strong>{{ roadSafetySummary }}</strong>
           </div>
 
         </div>
 
-        <q-btn
-          unelevated
-          no-caps
-          label="Ver detalle"
-          class="summary-card__button"
-          @click="goToStep(6)"
-        />
+        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(6)" />
 
       </article>
 
@@ -254,9 +188,7 @@
 
     <div class="validation-box">
 
-      <q-checkbox
-        v-model="plan.revision.validacionInformacion"
-      />
+      <q-checkbox v-model="plan.revision.validacionInformacion" size="sm" dense />
 
       <div>
 
@@ -287,12 +219,8 @@
 
         </div>
 
-        <BaseTextarea
-          v-model="plan.observaciones"
-          placeholder="Escribe sus observaciones aquí..."
-          maxlength="1000"
-          size="wizard"
-        />
+        <BaseTextarea v-model="plan.observaciones" placeholder="Escribe sus observaciones aquí..." maxlength="500"
+          counter size="wizard" />
 
       </div>
 
@@ -314,19 +242,11 @@
           <div class="responsible">
             <label>Instructor responsable</label>
 
-            <BaseInput
-              :model-value="instructorName"
-              readonly
-              size="wizard"
-            />
+            <BaseInput :model-value="instructorName" readonly size="wizard" />
 
             <div class="signature">
 
-              <img
-                v-if="instructorSignature"
-                :src="instructorSignature"
-                alt="Firma del instructor"
-              />
+              <img v-if="instructorSignature" :src="instructorSignature" alt="Firma del instructor" />
 
               <span v-else>Sin firma registrada</span>
 
@@ -338,21 +258,11 @@
 
             <label>Responsable Pedagogía</label>
 
-            <BaseSelect
-              v-model="selectedReviewers.pedagogia"
-              :options="pedagogiaOptions"
-              option-label="label"
-              option-value="value"
-              size="wizard"
-               @update:model-value="(value) => updateReviewer('pedagogia', value)"
-            />
+            <BaseSelect v-model="selectedReviewers.pedagogia" :options="pedagogiaOptions" option-label="label"
+              option-value="value" size="wizard" @update:model-value="(value) => updateReviewer('pedagogia', value)" />
 
             <div class="signature">
-              <img
-                v-if="pedagogiaSignature"
-                :src="pedagogiaSignature"
-                alt="Firma de Pedagogía"
-              />
+              <img v-if="pedagogiaSignature" :src="pedagogiaSignature" alt="Firma de Pedagogía" />
 
               <span v-else>Seleccione responsable</span>
             </div>
@@ -362,22 +272,12 @@
 
             <label>Responsable SST</label>
 
-            <BaseSelect
-              v-model="selectedReviewers.sst"
-              :options="sstOptions"
-              option-label="label"
-              option-value="value"
-              size="wizard"
-              @update:model-value="(value) => updateReviewer('sst', value)"
-            />
+            <BaseSelect v-model="selectedReviewers.sst" :options="sstOptions" option-label="label" option-value="value"
+              size="wizard" @update:model-value="(value) => updateReviewer('sst', value)" />
 
             <div class="signature">
 
-              <img
-                v-if="sstSignature"
-                :src="sstSignature"
-                alt="Firma de SST"
-              />
+              <img v-if="sstSignature" :src="sstSignature" alt="Firma de SST" />
 
               <span v-else>Seleccione responsable</span>
 
@@ -389,21 +289,12 @@
 
             <label>Coordinador académico</label>
 
-            <BaseSelect
-              v-model="selectedReviewers.coordinacion"
-              :options="coordinacionOptions"
-              option-label="label"
-              option-value="value"
-              size="wizard"
-              @update:model-value="(value) => updateReviewer('coordinacion', value)"
-            />
+            <BaseSelect v-model="selectedReviewers.coordinacion" :options="coordinacionOptions" option-label="label"
+              option-value="value" size="wizard"
+              @update:model-value="(value) => updateReviewer('coordinacion', value)" />
 
             <div class="signature">
-              <img
-                v-if="coordinacionSignature"
-                :src="coordinacionSignature"
-                alt="Firma de Coordinación"
-              />
+              <img v-if="coordinacionSignature" :src="coordinacionSignature" alt="Firma de Coordinación" />
 
               <span v-else>Seleccione responsable</span>
 
@@ -423,13 +314,14 @@
 
 <script setup>
 
-import { computed, reactive } from 'vue'
+import { computed, reactive, watchEffect } from 'vue'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 import BaseTextarea from 'src/components/forms/BaseTextarea.vue'
 
 import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
+import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock'
 import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock'
 import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock'
 
@@ -470,6 +362,18 @@ const instructorSignature = computed(() => {
   )
 })
 
+watchEffect(() => {
+  if (!currentUser.value) {
+    return
+  }
+
+  plan.revision.instructor = {
+    usuarioId: currentUser.value._id,
+    nombre: instructorName.value,
+    firma: currentUser.value.firma || null,
+  }
+})
+
 const generalSummary = computed(() => {
   const actividad = ACTIVIDADES_MOCK.find(
     (item) => item._id === plan.actividadId,
@@ -490,6 +394,17 @@ const generalSummary = computed(() => {
 
     actividad:
       actividad?.nombre || '—',
+  }
+})
+
+const participantsSummary = computed(() => {
+  const programa = PROGRAMAS_MOCK.find(
+    (item) => item._id === plan.programaFormacionId,
+  )
+
+  return {
+    aprendices: plan.aprendicesId.length,
+    ficha: programa?.ficha || '—',
   }
 })
 
@@ -518,13 +433,20 @@ const riskSummary = computed(() => {
 })
 
 const roadSafetySummary = computed(() => {
-  const total = plan.seguridadVial.items.length
+  const cumplen = plan.seguridadVial.items.filter(
+    (item) => item.cumple === true,
+  ).length
 
-  if (!plan.seguridadVial.aplica) {
-    return 'No aplica'
-  }
+  return `${cumplen}/${SECURITY_VIAL_ITEMS.length} cumplen`
+})
 
-  return `${total}/${SECURITY_VIAL_ITEMS.length} cumplen`
+const emergencyContactsCount = computed(() => {
+  const baseCount = plan.contactosEmergencia?.contactosBase?.length || 0
+
+  const otro = plan.contactosEmergencia?.otro
+  const hasOtro = Boolean(otro?.nombreEntidad?.trim())
+
+  return baseCount + (hasOtro ? 1 : 0)
 })
 
 function getUsersByRole(role) {
@@ -644,161 +566,175 @@ defineExpose({
 
 <style scoped lang="scss">
 
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+@use 'src/css/mixins.scss' as *;
+
 .plan-revision {
   width: 100%;
 }
 
 .section-header {
-  margin-bottom: 10px;
+  margin-bottom: $spacing-sm;
 
   h2 {
     margin: 0;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    margin: 0 0 22px;
   }
 }
 
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
+  gap: $spacing-md;
 }
 
 .summary-card {
-  min-height: 135px;
+  @include card;
+  min-height: 165px;
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  border: 1px solid #d8d8d8;
-  border-radius: 4px;
-  background: #fff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 12%);
+  padding: $spacing-md;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
 }
 
 .summary-card h3 {
-  margin: 0 0 10px;
-  color: $primary;
-  font-size: 10px;
-  font-weight: 700;
+  margin: 0 0 $spacing-sm;
+  color: $color-primary;
+  font-size: $font-size-sm;
+  font-weight: 500;
 }
 
 .summary-data,
 .summary-checks {
+  @include flex-column;
   flex: 1;
-  display: flex;
-  flex-direction: column;
   gap: 5px;
 }
 
 .summary-data div,
 .summary-checks div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-  font-size: 8px;
+  @include flex-between;
+  gap: 0;
+  font-size: $font-size-xs;
 }
 
 .summary-data span,
 .summary-checks span {
-  color: #222;
+  color: $color-text-primary;
+  font-weight: 400;
 }
 
 .summary-data strong {
-  font-weight: 500;
+  font-weight: 300;
   text-align: right;
 }
 
-.summary-checks q-icon {
-  font-size: 13px;
-  color: #b5b5b5;
-}
-
-.summary-checks q-icon.is-complete {
-  color: $primary;
+.summary-checks :deep(.summary-checkbox.disabled) {
+  opacity: 1;
 }
 
 .summary-card__button {
+  align-self: center;
   width: 100%;
-  min-height: 24px;
-  margin-top: 8px;
-  background: $primary;
-  color: white;
-  font-size: 9px;
+  max-width: 170px;
+  min-height: 30px;
+  height: 30px;
+  margin-top: $spacing-md;
+  border-radius: $radius-md;
+  background: $color-primary;
+  color: $color-surface;
+  font-size: $font-size-md;
+  font-weight: 400;
+  letter-spacing: 1.4;
 }
 
 .validation-box {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-top: 10px;
-  padding: 8px 12px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  margin: 20px 0 20px 0;
+  padding: 10px 14px;
   border-radius: 5px;
-  background: #edf5ef;
+  background-color: $color-background-field;
+  color: $color-text-secondary;
+  font-size: $font-size-xs;
+  line-height: 1.4;
+  box-sizing: border-box;
 }
 
 .validation-box strong {
   display: block;
-  color: $primary;
-  font-size: 9px;
+  color: $color-primary;
+  // font-size: 0.71rem;
 }
 
 .validation-box p {
-  margin: 3px 0 0;
-
-  font-size: 9px;
-  line-height: 1.35;
+  color: $color-text-secondary;
+  font-size: $font-size-xs;
+  line-height: $line-height-normal;
 }
 
 .revision-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 14px;
-  margin-top: 10px;
+  gap: $spacing-md;
+  margin-top: $spacing-sm;
 }
 
 .subsection-title {
-  display: flex;
-  flex-direction: column;
+  @include flex-column;
   gap: 3px;
-  margin-bottom: 7px;
+  margin-bottom: $spacing-sm;
 }
 
 .subsection-title strong {
-  font-size: 10px;
+  color: $color-text-primary;
+  font-size: $font-size-md;
 }
 
 .subsection-title span {
-  font-size: 9px;
-  line-height: 1.3;
+  color: $color-text-secondary;
+  font-size: $font-size-xs;
+  line-height: $line-height-normal;
 }
 
 .responsibles-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: $spacing-sm;
+}
+
+.observations-section :deep(.base-textarea .q-field__control) {
+  min-height: 129px !important;
+}
+
+.observations-section :deep(.base-textarea .q-field__native) {
+  min-height: 129px !important;
 }
 
 .responsible {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  @include flex-column;
+  gap: $spacing-xs;
 }
 
 .responsible label {
-  color: $primary;
-  font-size: 8px;
-  font-weight: 600;
+  color: $color-primary;
+  font-size: $font-size-xs;
+  font-weight: 500;
 }
 
 .signature {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #e2e2e2;
-  border-radius: 3px;
-  background: #fff;
+  @include flex-center;
+  height: 70px;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  background: $color-surface;
   overflow: hidden;
 }
 
@@ -809,11 +745,11 @@ defineExpose({
 }
 
 .signature span {
-  color: #888;
-  font-size: 8px;
+  color: $color-text-secondary;
+  font-size: $font-size-xs;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .summary-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -823,7 +759,8 @@ defineExpose({
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1000px) {
+
   .summary-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -833,7 +770,7 @@ defineExpose({
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .summary-grid {
     grid-template-columns: 1fr;
   }

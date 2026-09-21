@@ -101,9 +101,9 @@
                                             {{ contact.nombre }}
                                         </strong>
 
-                                        <span>
+                                        <!-- <span>
                                             {{ contact.tipo }} · {{ contact.telefono }}
-                                        </span>
+                                        </span> -->
 
                                     </div>
 
@@ -582,7 +582,7 @@ defineExpose({
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px 20px;
-    row-gap: 45px;
+    row-gap: 30px;
 }
 
 .security-section {
@@ -611,7 +611,7 @@ defineExpose({
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px 16px;
-    max-height: 260px;
+    max-height: 205px;
     overflow-y: auto;
     scrollbar-gutter: stable;
     scrollbar-width: auto;
@@ -631,11 +631,6 @@ defineExpose({
 .epp-list::-webkit-scrollbar-thumb {
     border: 2px solid $color-background-field;
     border-radius: 5px;
-    background-color: #5f6368;
-}
-
-.epp-list::-webkit-scrollbar-thumb:hover {
-    background-color: #3f4448;
 }
 
 .epp-item {
@@ -714,8 +709,8 @@ defineExpose({
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-top: 5px;
-    max-height: 196px;
+    margin-top: 6px;
+    max-height: 140px;
     overflow-y: auto;
     padding-right: 6px;
 }
@@ -725,7 +720,7 @@ defineExpose({
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    min-height: 64px;
+    min-height: 44px;
     padding: 4px 8px 4px 8px;
     border-bottom: 1px solid $color-border-table;
     line-height: 1.3;
@@ -770,17 +765,6 @@ defineExpose({
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px 16px;
     margin-top: 5px;
-}
-
-@media (max-width: 900px) {
-
-    .emergency-contacts-scroll {
-        scrollbar-width: thin;
-    }
-
-    .emergency-contacts-content {
-        min-width: 620px;
-    }
 }
 
 .security-vial-card :deep(.base-data-card__header) {
@@ -856,6 +840,17 @@ defineExpose({
 
     .epp-list {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+
+    .emergency-contacts-scroll {
+        scrollbar-width: thin;
+    }
+
+    .emergency-contacts-content {
+        min-width: 620px;
     }
 }
 

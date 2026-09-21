@@ -87,6 +87,7 @@ function closeDialog() {
 <style scoped lang="scss">
 
 @use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
 
 .base-details {
     display: grid;
@@ -165,10 +166,38 @@ function closeDialog() {
     }
 }
 
-// @media (max-width: 400px) {
+@media (max-width: 500px) {
 
-//     .base-details__logo img {
-//         width: 140px;
-//     }
-// }
+    .base-details {
+        min-width: 450px;
+        grid-template-columns:
+            minmax(220px, 1.4fr) minmax(150px, 1.12fr);
+    }
+
+    .base-details__logo {
+        display: none;
+    }
+
+    .base-details__logo+.base-details__column {
+        grid-column: 1;
+        margin-left: 0;
+    }
+
+    .base-details__column+.base-details__column {
+        grid-column: 2;
+    }
+
+    :deep(.base-dialog__header) {
+        padding: 10px 15px;
+    }
+
+    :deep(.base-dialog__body) {
+        padding: 8px 16px;
+    }
+
+    :deep(.base-dialog__footer) {
+        padding: 0 16px 12px;
+    }
+}
+
 </style>

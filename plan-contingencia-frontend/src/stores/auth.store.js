@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { login as authenticateUser } from 'src/services/authService'
+import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock'
 
 const AUTH_STORAGE_KEY = 'plan-contingencia.auth'
 
@@ -54,7 +55,10 @@ export const useAuthStore = defineStore('auth', () => {
         }
 
         try {
-            currentUser.value = JSON.parse(storedSession)
+            const storedUser = JSON.parse(storedSession)
+            const freshUser = USUARIOS_MOCK.find(usuario => usuario._id === storedUser?._id)
+
+            currentUser.value = freshUser || storedUser
         } catch {
             logout()
         }

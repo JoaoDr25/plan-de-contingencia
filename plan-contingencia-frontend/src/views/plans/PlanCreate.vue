@@ -40,11 +40,14 @@
           <PrimaryActionButton v-if="currentStep < TOTAL_STEPS" class="wizard-actions__button" label="Siguiente" size="sm" @click="goToNextStep" />
 
           <PrimaryActionButton v-else class="wizard-actions__button" label="Generar Plan" size="sm"
-            :disable="!canGeneratePlan" @click="generatePlan" />
+            :disable="!canGeneratePlan" @click="showGenerateConfirmation = true" />
 
         </div>
 
       </footer>
+
+      <BaseConfirmationDialog v-model="showGenerateConfirmation" title="Generar plan de contingencia"
+        confirm-label="Generar" cancel-label="Cancelar" variant="primary" @confirm="generatePlan" />
 
   </BasePage>
 
@@ -60,6 +63,7 @@ import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 import wizardStepNav from 'src/components/wizard/wizardStepNav.vue'
 import PlanInformacionGeneral from '../wizard/PlanInformacionGeneral.vue'
 import PlanContextoAcademico from '../wizard/PlanContextoAcademico.vue'
@@ -94,6 +98,7 @@ if (authStore.currentUser) {
 
 const wizardFormRef = ref(null)
 const currentStepRef = ref(null)
+const showGenerateConfirmation = ref(false)
 
 const canGeneratePlan = computed(() => {
   const requiredStepsCompleted = [1, 2, 3, 4, 5, 6]
@@ -159,6 +164,8 @@ function goToPreviousStep() {
 }
 
 function generatePlan() {
+  showGenerateConfirmation.value = false
+
   if (!canGeneratePlan.value) {
     return
   }
@@ -169,17 +176,19 @@ function generatePlan() {
     ...PLANES_MOCK.map(plan => Number(plan.numero) || 0),
   ) + 1
 
-  PLANES_MOCK.push({
+  const newPlan = {
     ...JSON.parse(JSON.stringify(planForm.value)),
     _id: `66a10000000000000000${String(nextNumber).padStart(4, '0')}`,
     numero: nextNumber,
     estado: 'en revision',
     createdAt: now,
     updatedAt: now,
-  })
+  }
+
+  PLANES_MOCK.push(newPlan)
 
   notifySuccess('Plan generado correctamente')
-  router.push({ name: 'planes.list' })
+  router.push({ name: 'planes.stage', params: { id: newPlan._id } })
 }
 
 function handleCancel() {

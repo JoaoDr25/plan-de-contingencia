@@ -77,9 +77,15 @@
 
             </div>
 
-            <div class="risk-row__description">
+            <div
+              class="risk-row__description"
+              @mouseenter="onDescriptionHover"
+              @mouseleave="onDescriptionLeave"
+            >
 
-              {{ riesgo.descripcion }}
+              <span class="risk-row__description-text">
+                {{ riesgo.descripcion }}
+              </span>
 
             </div>
 
@@ -175,6 +181,27 @@ const riskCardColumns = [
 ]
 
 const selectedRiskRelations = ref(new Set())
+
+function onDescriptionHover(event) {
+  const container = event.currentTarget
+  const textEl = container.querySelector('.risk-row__description-text')
+
+  const overflow = textEl.scrollWidth - container.clientWidth
+
+  if (overflow <= 0) {
+    return
+  }
+
+  textEl.style.transitionDuration = `${Math.max(1, overflow / 40)}s`
+  textEl.style.setProperty('--marquee-distance', `-${overflow}px`)
+  textEl.classList.add('is-marquee')
+}
+
+function onDescriptionLeave(event) {
+  const textEl = event.currentTarget.querySelector('.risk-row__description-text')
+
+  textEl.classList.remove('is-marquee')
+}
 
 const actividadNombre = computed(() => {
   const actividad = ACTIVIDADES_MOCK.find(
@@ -445,12 +472,24 @@ defineExpose({
   padding: 5px 8px;
   line-height: 1.4;
   font-size: clamp(0.7rem, 0.72vw, 0.84rem);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.risk-row__description-text {
+  display: inline-block;
+  transition: transform 2s linear;
+}
+
+.risk-row__description-text.is-marquee {
+  transform: translateX(var(--marquee-distance, 0));
 }
 
 .risk-row__selection {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
 }
 
 .risk-row__selection :deep(.q-checkbox) {

@@ -78,7 +78,7 @@
 
                 </div>
 
-                <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="goBack" />
+                <PlanDetailsActions :role="activeRole" :plan="planData" @action="handlePlanAction" />
 
             </div>
 
@@ -108,6 +108,7 @@ import BaseDetailItem from 'src/components/forms/BaseDetailItem.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import PlanDetailsActions from 'src/components/actions/PlanDetailsActions.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 import PlanRevision from 'src/views/sections/PlanRevision.vue'
 import logoSena from 'src/assets/logos/logo-sena.png'
@@ -120,6 +121,8 @@ import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notificat
 
 import { formatDate, formatHour } from 'src/utils/date.utils'
 import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
+
+import { useAuthStore } from 'src/stores/auth.store'
 
 import {
     approvePlan,
@@ -146,8 +149,9 @@ const props = defineProps({
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
-const internalRole = ref(ROLES.USUARIO)
+const internalRole = computed(() => authStore.role || ROLES.USUARIO)
 
 const showConfirmation = ref(false)
 const pendingAction = ref(null)
@@ -238,6 +242,18 @@ function confirmPlanAction(payload) {
     showConfirmation.value = false
 }
 
+function handlePlanAction(action) {
+
+    if (PLAN_ACTIONS_CONFIRMATION[action]) {
+        pendingAction.value = action
+        showConfirmation.value = true
+
+        return
+    }
+
+    executePlanAction(action)
+}
+
 function executePlanAction(action, observations = '') {
 
     let updatedPlan = { ...planData.value }
@@ -277,10 +293,6 @@ function executePlanAction(action, observations = '') {
             notifySuccess(notification.successMessage)
         }
     }
-}
-
-function goBack() {
-    router.push({ name: 'planes.list' })
 }
 
 function editPlan() {

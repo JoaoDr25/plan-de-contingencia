@@ -77,6 +77,46 @@
 
       </template>
 
+      <template #body-cell-actividad="props">
+
+        <q-td :props="props" class="marquee-cell">
+
+          <div
+            class="marquee-cell__content"
+            @mouseenter="onMarqueeHover"
+            @mouseleave="onMarqueeLeave"
+          >
+
+            <span class="marquee-cell__text">
+              {{ props.row.actividad }}
+            </span>
+
+          </div>
+
+        </q-td>
+
+      </template>
+
+      <template #body-cell-descripcion="props">
+
+        <q-td :props="props" class="marquee-cell">
+
+          <div
+            class="marquee-cell__content"
+            @mouseenter="onMarqueeHover"
+            @mouseleave="onMarqueeLeave"
+          >
+
+            <span class="marquee-cell__text">
+              {{ props.row.descripcion }}
+            </span>
+
+          </div>
+
+        </q-td>
+
+      </template>
+
       <template #body-cell-duracion="props">
 
         <q-td :props="props">
@@ -167,6 +207,27 @@ const selectedActivity = ref(null)
 const PLAN_TRABAJO_ACTIONS = ['edit', 'delete']
 
 const columns = PLAN_TRABAJO_COLUMNS;
+
+function onMarqueeHover(event) {
+  const container = event.currentTarget
+  const textEl = container.querySelector('.marquee-cell__text')
+
+  const overflow = textEl.scrollWidth - container.clientWidth
+
+  if (overflow <= 0) {
+    return
+  }
+
+  textEl.style.transitionDuration = `${Math.max(1, overflow / 40)}s`
+  textEl.style.setProperty('--marquee-distance', `-${overflow}px`)
+  textEl.classList.add('is-marquee')
+}
+
+function onMarqueeLeave(event) {
+  const textEl = event.currentTarget.querySelector('.marquee-cell__text')
+
+  textEl.classList.remove('is-marquee')
+}
 
 const sourceRows = computed(() => plan.planTrabajo)
 
@@ -339,6 +400,30 @@ defineExpose({
 
 .plan-trabajo {
   width: 100%;
+}
+
+.marquee-cell {
+  max-width: 0;
+}
+
+.plan-trabajo :deep(.base-table__table table) {
+  table-layout: fixed;
+  min-width: 700px;
+}
+
+.marquee-cell__content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.marquee-cell__text {
+  display: inline-block;
+  transition: transform 2s linear;
+}
+
+.marquee-cell__text.is-marquee {
+  transform: translateX(var(--marquee-distance, 0));
 }
 
 .section-header {

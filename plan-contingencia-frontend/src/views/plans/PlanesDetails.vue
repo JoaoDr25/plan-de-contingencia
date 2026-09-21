@@ -65,6 +65,7 @@
 
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from 'src/stores/auth.store'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -101,8 +102,9 @@ import {
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
-const role = ref('coordinacion')
+const role = computed(() => authStore.role || 'usuario')
 
 const showConfirmation = ref(false)
 const pendingAction = ref(null)

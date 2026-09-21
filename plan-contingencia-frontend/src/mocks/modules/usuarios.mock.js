@@ -1,3 +1,5 @@
+const FIRMA_MOCK = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCAxNjAgNjAiPjxwYXRoIGQ9Ik01IDQ1IEMgMjAgMTAsIDM1IDU1LCA1MCAyMCBTIDgwIDUsIDk1IDM1IDEyMCA1MCAxNTUgMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFkMmQ3ZCIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4='
+
 export const USUARIOS_MOCK = [
     {
         _id: '66f200000000000000000001',
@@ -16,7 +18,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 40,
         rol: 'Administrador',
         acceso: '30/07/2026 08:15',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000002',
@@ -35,7 +38,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 32,
         rol: 'usuario',
         acceso: '30/07/2026 07:42',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000003',
@@ -54,7 +58,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 40,
         rol: 'coordinacion',
         acceso: '29/07/2026 16:30',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000004',
@@ -73,7 +78,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 20,
         rol: 'usuario',
         acceso: '30/07/2026 09:05',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000005',
@@ -92,7 +98,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 36,
         rol: 'usuario',
         acceso: '28/07/2026 14:20',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000006',
@@ -111,7 +118,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 40,
         rol: 'sst',
         acceso: '30/07/2026 08:51',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000007',
@@ -130,7 +138,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 32,
         rol: 'usuario',
         acceso: '27/07/2026 10:12',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000008',
@@ -149,7 +158,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 40,
         rol: 'pedagogia',
         acceso: '29/07/2026 11:45',
-        estado: 'Activo'
+        estado: 'Activo',
+        firma: FIRMA_MOCK
     },
     {
         _id: '66f200000000000000000009',
@@ -168,7 +178,8 @@ export const USUARIOS_MOCK = [
         maximoHoras: 24,
         rol: 'usuario',
         acceso: '30/07/2026 09:18',
-        estado: 'Inactivo'
+        estado: 'Inactivo',
+        firma: FIRMA_MOCK
     }
-    
+
 ]
