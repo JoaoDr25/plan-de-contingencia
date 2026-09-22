@@ -1,101 +1,117 @@
 <template>
+  <q-input
+    class="base-time-picker"
+    :class="{
+      'base-time-picker--wizard': size === 'wizard',
+      'base-time-picker--form': size === 'form',
+    }"
+    :style="{ width, maxWidth: '100%' }"
+    :model-value="displayValue"
+    :label="externalLabel ? undefined : label"
+    :placeholder="placeholder"
+    :readonly="readonly"
+    :disable="disable"
+    :rules="rules"
+    :required="required"
+    outlined
+    dense
+    hide-bottom-space
+    @click="openPicker"
+  >
+    <template v-if="iconPosition === 'prepend'" #prepend>
+      <q-icon name="schedule" class="cursor-pointer" @click.stop="openPicker" />
+    </template>
 
-    <q-input class="base-time-picker" :class="{ 'base-time-picker--wizard': size === 'wizard', 'base-time-picker--form': size === 'form' }" :style="{ width, maxWidth: '100%' }" :model-value="displayValue"
-        :label="externalLabel ? undefined : label" :placeholder="placeholder" :readonly="readonly" :disable="disable" :rules="rules"
-        :required="required" outlined dense hide-bottom-space @click="openPicker">
+    <template v-if="iconPosition === 'append'" #append>
+      <q-icon name="schedule" class="cursor-pointer" @click.stop="openPicker" />
+    </template>
 
-        <template v-if="iconPosition === 'prepend'" #prepend>
-
-            <q-icon name="schedule" class="cursor-pointer" @click.stop="openPicker" />
-
-        </template>
-
-        <template v-if="iconPosition === 'append'" #append>
-
-            <q-icon name="schedule" class="cursor-pointer" @click.stop="openPicker" />
-
-        </template>
-
-        <q-popup-proxy ref="popupRef" no-parent-event transition-show="scale" transition-hide="scale"
-            @before-show="syncPickerValue">
-
-            <q-time v-model="pickerValue" mask="HH:mm" format24h now-btn :options="timeOptions"
-                @update:model-value="handleTimeChange" />
-
-        </q-popup-proxy>
-
-    </q-input>
-
+    <q-popup-proxy
+      ref="popupRef"
+      no-parent-event
+      transition-show="scale"
+      transition-hide="scale"
+      @before-show="syncPickerValue"
+    >
+      <q-time
+        v-model="pickerValue"
+        mask="HH:mm"
+        format24h
+        now-btn
+        :options="timeOptions"
+        @update:model-value="handleTimeChange"
+      />
+    </q-popup-proxy>
+  </q-input>
 </template>
 
 <script setup>
-
 import { computed, ref } from 'vue'
 
 const props = defineProps({
-    modelValue: {
-        type: String,
-        default: ''
-    },
+  modelValue: {
+    type: String,
+    default: '',
+  },
 
-    label: {
-        type: String,
-        default: ''
-    },
+  label: {
+    type: String,
+    default: '',
+  },
 
-    placeholder: {
-        type: String,
-        default: '00:00'
-    },
+  placeholder: {
+    type: String,
+    default: '00:00',
+  },
 
-    readonly: {
-        type: Boolean,
-        default: false
-    },
+  readonly: {
+    type: Boolean,
+    default: false,
+  },
 
-    disable: {
-        type: Boolean,
-        default: false
-    },
+  disable: {
+    type: Boolean,
+    default: false,
+  },
 
-    rules: {
-        type: Array,
-        default: () => []
-    },
+  rules: {
+    type: Array,
+    default: () => [],
+  },
 
-    required: {
-        type: Boolean,
-        default: false
-    },
-    externalLabel: {
-        type: Boolean,
-        default: false
-    },
-    iconPosition: {
-        type: String,
-        default: 'prepend',
-        validator: value => ['prepend', 'append'].includes(value)
-    },
-    size: {
-        type: String,
-        default: 'default',
-        validator: value => ['default', 'wizard', 'form'].includes(value)
-    },
+  required: {
+    type: Boolean,
+    default: false,
+  },
+  externalLabel: {
+    type: Boolean,
+    default: false,
+  },
+  iconPosition: {
+    type: String,
+    default: 'prepend',
+    validator: (value) => ['prepend', 'append'].includes(value),
+  },
+  size: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['default', 'wizard', 'form'].includes(value),
+  },
 
-    width: {
-        type: String,
-        default: '260px'
-    },
+  width: {
+    type: String,
+    default: '260px',
+  },
 
-    minTime: {
-        type: String,
-        default: ''
-    },
+  minTime: {
+    type: String,
+    default: '',
+  },
 
-    maxTime: {
-        type: String,
-        default: ''
-    }
+  maxTime: {
+    type: String,
+    default: '',
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -104,186 +120,182 @@ const popupRef = ref(null)
 const pickerValue = ref('')
 
 const displayValue = computed({
-    get() {
-        return formatDisplayTime(props.modelValue)
-    },
+  get() {
+    return formatDisplayTime(props.modelValue)
+  },
 
-    set() {
-        
-    }
+  set() {},
 })
 
 function syncPickerValue() {
-    pickerValue.value = props.modelValue || ''
+  pickerValue.value = props.modelValue || ''
 }
 
 function parseTimeParts(value) {
-    if (!value || !/^\d{2}:\d{2}$/.test(value)) {
-        return null
-    }
+  if (!value || !/^\d{2}:\d{2}$/.test(value)) {
+    return null
+  }
 
-    const [hours, minutes] = value.split(':').map(Number)
+  const [hours, minutes] = value.split(':').map(Number)
 
-    return { hours, minutes }
+  return { hours, minutes }
 }
 
 // Habilita solo las horas/minutos dentro del rango [minTime, maxTime], si se definieron.
 function timeOptions(hr, min) {
-    const min0 = parseTimeParts(props.minTime)
-    const max0 = parseTimeParts(props.maxTime)
+  const min0 = parseTimeParts(props.minTime)
+  const max0 = parseTimeParts(props.maxTime)
 
-    if (!min0 && !max0) {
-        return true
-    }
+  if (!min0 && !max0) {
+    return true
+  }
 
-    const lowerBound = min0 ? min0.hours * 60 + min0.minutes : -Infinity
-    const upperBound = max0 ? max0.hours * 60 + max0.minutes : Infinity
+  const lowerBound = min0 ? min0.hours * 60 + min0.minutes : -Infinity
+  const upperBound = max0 ? max0.hours * 60 + max0.minutes : Infinity
 
-    if (min === undefined) {
-        // Vista de horas: habilita la hora si contiene al menos un minuto dentro del rango.
-        const hourStart = hr * 60
-        const hourEnd = hourStart + 59
+  if (min === undefined) {
+    // Vista de horas: habilita la hora si contiene al menos un minuto dentro del rango.
+    const hourStart = hr * 60
+    const hourEnd = hourStart + 59
 
-        return hourEnd >= lowerBound && hourStart <= upperBound
-    }
+    return hourEnd >= lowerBound && hourStart <= upperBound
+  }
 
-    const current = hr * 60 + min
+  const current = hr * 60 + min
 
-    return current >= lowerBound && current <= upperBound
+  return current >= lowerBound && current <= upperBound
 }
 
 function handleTimeChange(value) {
-    emit('update:modelValue', value)
+  emit('update:modelValue', value)
 }
 
 function openPicker() {
-    if (props.disable) return
+  if (props.disable) return
 
-    syncPickerValue()
-    popupRef.value?.show()
+  syncPickerValue()
+  popupRef.value?.show()
 }
 
 function formatDisplayTime(value) {
-    if (!value || !/^\d{2}:\d{2}$/.test(value)) {
-        return ''
-    }
+  if (!value || !/^\d{2}:\d{2}$/.test(value)) {
+    return ''
+  }
 
-    const [hoursString, minutes] = value.split(':')
-    const hours = Number(hoursString)
+  const [hoursString, minutes] = value.split(':')
+  const hours = Number(hoursString)
 
-    if (hours < 0 || hours > 23) {
-        return ''
-    }
+  if (hours < 0 || hours > 23) {
+    return ''
+  }
 
-    const period = hours >= 12 ? 'p. m.' : 'a. m.'
-    const displayHours = hours % 12 || 12
+  const period = hours >= 12 ? 'p. m.' : 'a. m.'
+  const displayHours = hours % 12 || 12
 
-    return `${String(displayHours).padStart(2, '0')}:${minutes} ${period}`
+  return `${String(displayHours).padStart(2, '0')}:${minutes} ${period}`
 }
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
 .base-time-picker {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 .base-time-picker :deep(.q-field__control) {
-    min-height: 40px;
-    height: 40px;
-    border-radius: 4px;
-    background-color: transparent;
-    cursor: pointer;
+  min-height: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .base-time-picker :deep(.q-field__control:before) {
-    border: 1px solid #d1d5db;
+  border: 1px solid #d1d5db;
 }
 
 .base-time-picker :deep(.q-field__control:hover:before) {
-    border-color: $color-primary;
+  border-color: $color-primary;
 }
 
 .base-time-picker :deep(.q-field__control:after) {
-    display: none;
+  display: none;
 }
 
 .base-time-picker :deep(.q-field__native),
 .base-time-picker :deep(.q-field__label),
 .base-time-picker :deep(.q-field__prepend) {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .base-time-picker--wizard :deep(.q-field__native) {
-    padding: 0 5px;
-    font-size: $font-size-xs;
+  padding: 0 5px;
+  font-size: $font-size-xs;
 }
 
 .base-time-picker--wizard :deep(.q-field__append) {
-    padding: 0 5px 0 0;
-    color: $color-text-secondary;
+  padding: 0 5px 0 0;
+  color: $color-text-secondary;
 }
 
 .base-time-picker--wizard :deep(.q-field__append .q-icon) {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .base-time-picker--form :deep(.q-field__control) {
-    min-height: 50px;
-    height: 50px;
-    border-radius: 4px;
-    background-color: $color-background-field;
+  min-height: 50px;
+  height: 50px;
+  border-radius: 4px;
+  background-color: $color-background-field;
 }
 
 .base-time-picker--form :deep(.q-field__control:before) {
-    border: none;
+  border: none;
 }
 
 .base-time-picker--form :deep(.q-field__control:hover:before) {
-    border: none;
+  border: none;
 }
 
 .base-time-picker--form :deep(.q-field__label) {
-    font-size: $font-size-md;
-    color: $color-text-secondary;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
 }
 
 .base-time-picker--form.q-field--focused :deep(.q-field__label),
 .base-time-picker--form.q-field--float :deep(.q-field__label) {
-    color: $color-primary;
-    font-size: $font-size-md;
-    font-weight: 400;
-    letter-spacing: 1px;
-    padding-left: 2px;
+  color: $color-primary;
+  font-size: $font-size-md;
+  font-weight: 400;
+  letter-spacing: 1px;
+  padding-left: 2px;
 }
 
 .base-time-picker--form:not(.q-field--float) :deep(.q-field__label) {
-    top: 50%;
-    transform: translateY(-50%);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .base-time-picker--form :deep(.q-field__native) {
-    padding-top: 8px;
-    padding-bottom: 0;
-    padding-left: 5px;
-    font-size: $font-size-md;
-    line-height: 30px;
-    color: $color-text-primary;
+  padding-top: 8px;
+  padding-bottom: 0;
+  padding-left: 5px;
+  font-size: $font-size-md;
+  line-height: 30px;
+  color: $color-text-primary;
 }
 
 .base-time-picker--form :deep(.q-field__prepend) {
-    color: $color-text-secondary;
-    opacity: 0.65;
-    padding-left: 2px;
-    padding-top: 6px;
-    padding-right: 10px;
+  color: $color-text-secondary;
+  opacity: 0.65;
+  padding-left: 2px;
+  padding-top: 6px;
+  padding-right: 10px;
 }
 
 .base-time-picker--form :deep(.q-field__prepend .q-icon) {
-    font-size: 21px;
+  font-size: 21px;
 }
 </style>

@@ -1,41 +1,28 @@
 <template>
+  <div class="plan-general-info">
+    <div class="info-item">
+      <span class="info-item__label"> Código del Plan </span>
 
-    <div class="plan-general-info">
+      <span class="info-item__value"> N° {{ plan.numero || 'N/A' }} </span>
+    </div>
 
-        <div class="info-item">
-            <span class="info-item__label">
-                Código del Plan
-            </span>
+    <div class="info-item">
+      <span class="info-item__label"> Programa de Formación </span>
 
-            <span class="info-item__value">
-                N° {{ plan.numero || 'N/A' }}
-            </span>
-        </div>
+      <span class="info-item__value">
+        {{ plan.programaFormacionNombre || 'No disponible' }}
+      </span>
+    </div>
 
+    <div class="info-item">
+      <span class="info-item__label"> Instructor responsable </span>
 
-        <div class="info-item">
-            <span class="info-item__label">
-                Programa de Formación
-            </span>
+      <span class="info-item__value">
+        {{ plan.usuarioNombre || 'No disponible' }}
+      </span>
+    </div>
 
-            <span class="info-item__value">
-                {{ plan.programaFormacionNombre || 'No disponible' }}
-            </span>
-        </div>
-
-
-        <div class="info-item">
-            <span class="info-item__label">
-                Instructor responsable
-            </span>
-
-            <span class="info-item__value">
-                {{ plan.usuarioNombre || 'No disponible' }}
-            </span>
-        </div>
-
-
-        <!-- <div class="info-item">
+    <!-- <div class="info-item">
             <span class="info-item__label">
                 Clasificación de la Información
             </span>
@@ -45,74 +32,55 @@
             </span>
         </div> -->
 
+    <div class="info-item">
+      <span class="info-item__label"> Lugar de Salida </span>
 
-        <div class="info-item">
-            <span class="info-item__label">
-                Lugar de Salida
-            </span>
+      <span class="info-item__value">
+        {{ plan.lugarSalida || 'No disponible' }}
+      </span>
+    </div>
 
-            <span class="info-item__value">
-                {{ plan.lugarSalida || 'No disponible' }}
-            </span>
-        </div>
+    <div class="info-item">
+      <span class="info-item__label"> Lugar de Destino </span>
 
+      <span class="info-item__value">
+        {{ plan.lugarDestino || 'No disponible' }}
+      </span>
+    </div>
 
-        <div class="info-item">
-            <span class="info-item__label">
-                Lugar de Destino
-            </span>
+    <div class="info-item">
+      <span class="info-item__label"> Transporte </span>
 
-            <span class="info-item__value">
-                {{ plan.lugarDestino || 'No disponible' }}
-            </span>
-        </div>
+      <span class="info-item__value">
+        {{ formatTransport(plan.tipoTransporte) }}
+      </span>
+    </div>
 
+    <div class="info-item">
+      <span class="info-item__label"> Actividad </span>
 
-        <div class="info-item">
-            <span class="info-item__label">
-                Transporte
-            </span>
+      <span class="info-item__value">
+        {{ plan.descripcionActividad || 'No disponible' }}
+      </span>
+    </div>
 
-            <span class="info-item__value">
-                {{ formatTransport(plan.tipoTransporte) }}
-            </span>
-        </div>
+    <div class="info-item">
+      <span class="info-item__label"> Fecha de Salida </span>
 
+      <span class="info-item__value">
+        {{ formatDate(plan.fecha) }}
+      </span>
+    </div>
 
-        <div class="info-item">
-            <span class="info-item__label">
-                Actividad
-            </span>
+    <div class="info-item">
+      <span class="info-item__label"> Hora de Salida </span>
 
-            <span class="info-item__value">
-                {{ plan.descripcionActividad || 'No disponible' }}
-            </span>
-        </div>
+      <span class="info-item__value">
+        {{ formatHour(plan.horaSalida) }}
+      </span>
+    </div>
 
-
-        <div class="info-item">
-            <span class="info-item__label">
-                Fecha de Salida
-            </span>
-
-            <span class="info-item__value">
-                {{ formatDate(plan.fecha) }}
-            </span>
-        </div>
-
-
-        <div class="info-item">
-            <span class="info-item__label">
-                Hora de Salida
-            </span>
-
-            <span class="info-item__value">
-                {{ formatHour(plan.horaSalida) }}
-            </span>
-        </div>
-
-
-        <!-- <div class="info-item">
+    <!-- <div class="info-item">
             <span class="info-item__label">
                 Descripción de la Actividad
             </span>
@@ -121,33 +89,27 @@
                 {{ plan.descripcionActividad || 'No registrada' }}
             </span>
         </div> -->
-
-    </div>
-
+  </div>
 </template>
 
 <script setup>
-
 import { formatDate, formatHour } from 'src/utils/date.utils'
 
 defineProps({
-
-    plan: {
-        type: Object,
-        required: true
-    }
+  plan: {
+    type: Object,
+    required: true,
+  },
 })
 
 function formatTransport(value) {
-
-    const transportTypes = {
-        SENA: 'Transporte SENA',
-        EXTERNO: 'Transporte externo',
-        APRENDIZ: 'Transporte del aprendiz'
-    }
-    return transportTypes[value] || 'No disponible'
+  const transportTypes = {
+    SENA: 'Transporte SENA',
+    EXTERNO: 'Transporte externo',
+    APRENDIZ: 'Transporte del aprendiz',
+  }
+  return transportTypes[value] || 'No disponible'
 }
-
 
 // function formatClassification(value) {
 
@@ -158,7 +120,6 @@ function formatTransport(value) {
 //     }
 //     return classifications[value] || 'No disponible'
 // }
-
 </script>
 
 <style scoped lang="scss">
@@ -166,61 +127,58 @@ function formatTransport(value) {
 @use 'src/css/typography.scss' as *;
 
 .plan-general-info {
-    display: grid;
-    grid-template-columns:
-        1.2fr 1fr 1fr;
-    column-gap: 40px;
-    row-gap: 22px;
-    padding-bottom: 8px;
-    width: 100%;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  column-gap: 40px;
+  row-gap: 22px;
+  padding-bottom: 8px;
+  width: 100%;
 }
 
 .info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-    line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  line-height: 1.4;
 }
 
 .info-item__label {
-    font-size: $font-size-xs;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: $color-primary;
-    line-height: 1.2;
+  font-size: $font-size-xs;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: $color-primary;
+  line-height: 1.2;
 }
 
 .info-item__value {
-    font-size: $font-size-md;
-    line-height: 1.4;
-    word-break: break-word;
-    overflow-wrap: break-word;
+  font-size: $font-size-md;
+  line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 1000px) {
-
-    .plan-general-info {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 30px;
-        row-gap: 20px;
-    }
+  .plan-general-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 30px;
+    row-gap: 20px;
+  }
 }
 
 @media (max-width: 600px) {
+  .plan-general-info {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 18px;
+  }
 
-    .plan-general-info {
-        grid-template-columns: 1fr;
-        column-gap: 0;
-        row-gap: 18px;
-    }
+  .info-item__label {
+    font-size: $font-size-xs;
+  }
 
-    .info-item__label {
-        font-size: $font-size-xs;
-    }
-
-    .info-item__value {
-        font-size: $font-size-xs;
-    }
+  .info-item__value {
+    font-size: $font-size-xs;
+  }
 }
 </style>

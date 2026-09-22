@@ -1,70 +1,66 @@
-<template> 
+<template>
+  <BasePage>
+    <CrudHeader title="Planes de Contingencia" :uppercase-title="true" />
 
-    <BasePage>
+    <PlanSectionNav />
 
-        <CrudHeader title="Planes de Contingencia" :uppercase-title="true" />
+    <CrudToolbar>
+      <template #center>
+        <BaseFilterBar class="historico-filter-bar">
+          <BaseSelect
+            v-model="selectedStatus"
+            label="Estado"
+            :options="HISTORICO_STATUS_OPTIONS"
+            size="filter"
+            :show-icon="false"
+          />
 
-        <PlanSectionNav />
+          <BaseDatePicker v-model="dateFrom" label="Fecha desde" size="filter" :max="dateTo" />
 
-        <CrudToolbar>
+          <BaseDatePicker v-model="dateTo" label="Fecha hasta" size="filter" :min="dateFrom" />
 
-            <template #center>
+          <div class="historico-filter-actions">
+            <BaseSearch
+              v-model="searchText"
+              size="filter"
+              placeholder="Buscar por código, programa o actividad..."
+            />
 
-                <BaseFilterBar class="historico-filter-bar">
+            <BaseClearFilters @clear="clearFilters" />
+          </div>
+        </BaseFilterBar>
+      </template>
+    </CrudToolbar>
 
-                    <BaseSelect v-model="selectedStatus" label="Estado" :options="HISTORICO_STATUS_OPTIONS"
-                        size="filter" :show-icon="false" />
+    <BaseTable
+      :rows="paginatedRows"
+      :columns="PLANES_HISTORICO_COLUMNS"
+      :loading="loading"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
+    >
+      <template #body-cell-estado="props">
+        <q-td :props="props">
+          <StatusChip :status="props.value" />
+        </q-td>
+      </template>
 
-                    <BaseDatePicker v-model="dateFrom" label="Fecha desde" size="filter" :max="dateTo" />
-
-                    <BaseDatePicker v-model="dateTo" label="Fecha hasta" size="filter" :min="dateFrom" />
-
-                    <div class="historico-filter-actions">
-
-                        <BaseSearch v-model="searchText" size="filter" placeholder="Buscar por código, programa o actividad..." />
-
-                        <BaseClearFilters @clear="clearFilters" />
-
-                    </div>
-
-                </BaseFilterBar>
-
-            </template>
-
-        </CrudToolbar>
-
-        <BaseTable :rows="paginatedRows" :columns="PLANES_HISTORICO_COLUMNS" :loading="loading"
-            :current-page="currentPage" :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow"
-            :end="endRow" :total="filteredRows.length" @change-page="currentPage = $event"
-            @change-rows-per-page="setRowsPerPage">
-
-            <template #body-cell-estado="props">
-
-                <q-td :props="props">
-
-                    <StatusChip :status="props.value" />
-
-                </q-td>
-
-            </template>
-
-            <template #body-cell-opciones="props">
-
-                <q-td :props="props">
-
-                    <PlanActions :actions="['view']" @view="viewPlan(props.row)" />
-                </q-td>
-
-            </template>
-
-        </BaseTable>
-
-    </BasePage>
-
+      <template #body-cell-opciones="props">
+        <q-td :props="props">
+          <PlanActions :actions="['view']" @view="viewPlan(props.row)" />
+        </q-td>
+      </template>
+    </BaseTable>
+  </BasePage>
 </template>
 
 <script setup>
-
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -94,147 +90,140 @@ const sourceRows = ref(PLANES_HISTORICO_MOCK)
 const loading = ref(false)
 
 const {
-    selectedStatus,
-    dateFrom,
-    dateTo,
-    searchText,
-    currentPage,
-    rowsPerPage,
-    filteredRows,
-    paginatedRows,
-    totalPages,
-    startRow,
-    endRow,
-    setRowsPerPage
+  selectedStatus,
+  dateFrom,
+  dateTo,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow,
+  setRowsPerPage,
 } = usePlanesHistoricoTable({
-    sourceRows,
-    defaultRowsPerPage: 8
+  sourceRows,
+  defaultRowsPerPage: 8,
 })
 
 function viewPlan(row) {
-
-    router.push({
-        name: 'planes.detail',
-        params: {
-            id: row._id
-        }
-    })
+  router.push({
+    name: 'planes.detail',
+    params: {
+      id: row._id,
+    },
+  })
 }
 
 function clearFilters() {
-    selectedStatus.value = 'todos'
-    dateFrom.value = ''
-    dateTo.value = ''
-    searchText.value = ''
+  selectedStatus.value = 'todos'
+  dateFrom.value = ''
+  dateTo.value = ''
+  searchText.value = ''
 }
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
 .historico-filter-bar {
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    max-width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 .historico-filter-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-left: auto;
-    min-width: 0;
-    flex-wrap: nowrap;
-    max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+  max-width: 100%;
 }
 
 .historico-filter-actions :deep(.base-search) {
-    width: 300px;
-    min-width: 200px;
-    max-width: 100%;
-    flex: 0 0 auto;
+  width: 300px;
+  min-width: 200px;
+  max-width: 100%;
+  flex: 0 0 auto;
 }
 
 .historico-filter-actions :deep(.base-clear-filters) {
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-left: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 0;
 }
 
 @media (max-width: 1494px) and (min-width: 601px) {
-
-    .historico-filter-actions {
-        flex: 1 1 auto;
-        justify-content: space-between;
-        margin-left: 0;
-        max-width: calc(100% - 100px);
-    }
+  .historico-filter-actions {
+    flex: 1 1 auto;
+    justify-content: space-between;
+    margin-left: 0;
+    max-width: calc(100% - 100px);
+  }
 }
 
 @media (max-width: 700px) {
-
-    .historico-filter-actions {
-        width: 100%;
-        margin-left: 0;
-        padding-left: 0;
-        padding-top: 6px;
-    }
+  .historico-filter-actions {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
+    padding-top: 6px;
+  }
 }
 
 @media (max-width: 600px) {
+  .historico-filter-bar {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
-    .historico-filter-bar {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+  .historico-filter-bar :deep(.base-select--filter),
+  .historico-filter-bar :deep(.base-date-picker--filter) {
+    width: 240px;
+    min-width: 240px;
+    max-width: 100%;
+  }
 
-    .historico-filter-bar :deep(.base-select--filter),
-    .historico-filter-bar :deep(.base-date-picker--filter) {
-        width: 240px;
-        min-width: 240px;
-        max-width: 100%;
-    }
+  .historico-filter-actions {
+    flex-direction: column;
+    align-items: center;
+    width: 240px;
+    max-width: 100%;
+    margin-left: 0;
+  }
 
-    .historico-filter-actions {
-        flex-direction: column;
-        align-items: center;
-        width: 240px;
-        max-width: 100%;
-        margin-left: 0;
-    }
+  .historico-filter-actions :deep(.base-search) {
+    width: 240px;
+    min-width: 240px;
+    max-width: 100%;
+  }
 
-    .historico-filter-actions :deep(.base-search) {
-        width: 240px;
-        min-width: 240px;
-        max-width: 100%;
-    }
+  .historico-filter-actions :deep(.base-search .q-field) {
+    width: 100%;
+  }
 
-    .historico-filter-actions :deep(.base-search .q-field) {
-        width: 100%;
-    }
-
-    .historico-filter-actions :deep(.base-clear-filters) {
-        align-self: center;
-        margin-left: 0;
-        padding-top: 6px;
-    }
+  .historico-filter-actions :deep(.base-clear-filters) {
+    align-self: center;
+    margin-left: 0;
+    padding-top: 6px;
+  }
 }
 
 @media (max-width: 550px) {
+  .historico-filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+    padding-left: 0;
+  }
 
-    .historico-filter-actions {
-        flex-direction: column;
-        align-items: stretch;
-        padding-left: 0;
-    }
-
-    .historico-filter-actions :deep(.base-clear-filters) {
-        align-self: center;
-    }
+  .historico-filter-actions :deep(.base-clear-filters) {
+    align-self: center;
+  }
 }
 </style>

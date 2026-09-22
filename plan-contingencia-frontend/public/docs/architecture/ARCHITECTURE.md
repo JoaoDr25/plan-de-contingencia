@@ -27,19 +27,19 @@ El frontend busca cumplir los siguientes principios:
 
 # Stack Tecnológico
 
-| Tecnología | Uso |
-|------------|-----|
-| Vue 3 | Framework Frontend |
-| Quasar Framework | Framework UI |
-| Vite | Bundler |
-| Vue Router | Navegación |
-| Pinia | Gestión del estado |
-| Axios | Cliente HTTP |
-| Sass | Preprocesador CSS |
-| ESLint | Calidad del código |
-| Prettier | Formateo |
-| Vitest | Pruebas Unitarias |
-| Vue Test Utils | Testing de Componentes |
+| Tecnología       | Uso                    |
+| ---------------- | ---------------------- |
+| Vue 3            | Framework Frontend     |
+| Quasar Framework | Framework UI           |
+| Vite             | Bundler                |
+| Vue Router       | Navegación             |
+| Pinia            | Gestión del estado     |
+| Axios            | Cliente HTTP           |
+| Sass             | Preprocesador CSS      |
+| ESLint           | Calidad del código     |
+| Prettier         | Formateo               |
+| Vitest           | Pruebas Unitarias      |
+| Vue Test Utils   | Testing de Componentes |
 
 ---
 
@@ -1621,8 +1621,3 @@ BaseDialog
 Esta estructura permite implementar las decisiones visuales comunes una sola vez y reutilizarlas en todos los módulos administrativos.
 
 ---
-
-
-
-
-

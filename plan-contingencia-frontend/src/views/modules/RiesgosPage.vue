@@ -1,100 +1,102 @@
 <template>
+  <BasePage>
+    <CrudHeader title="Riesgos">
+      <template #actions>
+        <PrimaryActionButton
+          label="Crear"
+          icon="add_circle_outline"
+          size="sm"
+          @click="openCreateDialog"
+        />
+      </template>
+    </CrudHeader>
 
-    <BasePage>
+    <CrudToolbar>
+      <template #center>
+        <CrudFilters v-model="selectedFilter" :options="RIESGOS_FILTERS" />
+      </template>
 
-        <CrudHeader title="Riesgos">
+      <template #left>
+        <BaseSearch v-model="searchText" placeholder="Buscar por nombre o nivel..." />
+      </template>
+    </CrudToolbar>
 
-            <template #actions>
+    <BaseTable
+      :rows="paginatedRows"
+      :columns="RIESGOS_COLUMNS"
+      :loading="loading"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
+    >
+      <template #body-cell-nivel="props">
+        <q-td :props="props">
+          <LevelChip :level="props.value" context="riesgo" />
+        </q-td>
+      </template>
 
-                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
+      <template #body-cell-protocolos="props">
+        <q-td :props="props">
+          <div class="associated-protocols-cell">
+            <span>
+              {{ getAssociatedProtocols(props.row).length }}
+              {{ getAssociatedProtocols(props.row).length === 1 ? 'Protocolo' : 'Protocolos' }}
+            </span>
 
-            </template>
+            <button
+              v-if="getAssociatedProtocols(props.row).length"
+              type="button"
+              class="associated-protocols-cell__action"
+              :aria-label="`Ver protocolos asociados a ${props.row.riesgo}`"
+              title="Ver protocolos asociados"
+              @click="viewAssociatedProtocols(props.row)"
+            >
+              <q-icon name="open_in_new" size="18px" />
+            </button>
+          </div>
+        </q-td>
+      </template>
 
-        </CrudHeader>
+      <template #body-cell-opciones="props">
+        <q-td :props="props">
+          <CrudActions
+            :actions="DEFAULT_CRUD_ACTIONS"
+            @view="viewItem(props.row)"
+            @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)"
+          />
+        </q-td>
+      </template>
+    </BaseTable>
 
-        <CrudToolbar>
+    <RiesgosDialog
+      v-model="dialog"
+      :mode="dialogMode"
+      :risk="selectedRisk"
+      @save="handleRiskSave"
+    />
 
-            <template #center>
+    <BaseConfirmationDialog
+      v-model="confirmationDialog"
+      :title="confirmationTitle"
+      :confirm-label="confirmationLabel"
+      :variant="confirmationVariant"
+      @confirm="confirmAction"
+      @cancel="cancelConfirmation"
+    />
 
-                <CrudFilters v-model="selectedFilter" :options="RIESGOS_FILTERS" />
+    <RiesgosDetails v-model="detailsRisk" :risk="selectedRisk" />
 
-            </template>
-
-            <template #left>
-
-                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o nivel..." />
-
-            </template>
-
-        </CrudToolbar>
-
-        <BaseTable :rows="paginatedRows" :columns="RIESGOS_COLUMNS" :loading="loading" :current-page="currentPage"
-            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
-
-            <template #body-cell-nivel="props">
-
-                <q-td :props="props">
-                    <LevelChip :level="props.value" context="riesgo" />
-                </q-td>
-
-            </template>
-
-            <template #body-cell-protocolos="props">
-
-                <q-td :props="props">
-                    <div class="associated-protocols-cell">
-
-                        <span>
-                            {{ getAssociatedProtocols(props.row).length }}
-                            {{ getAssociatedProtocols(props.row).length === 1 ? 'Protocolo' : 'Protocolos' }}
-                        </span>
-
-                        <button
-                            v-if="getAssociatedProtocols(props.row).length"
-                            type="button"
-                            class="associated-protocols-cell__action"
-                            :aria-label="`Ver protocolos asociados a ${props.row.riesgo}`"
-                            title="Ver protocolos asociados"
-                            @click="viewAssociatedProtocols(props.row)"
-                        >
-                            <q-icon name="open_in_new" size="18px" />
-                        </button>
-
-                    </div>
-                </q-td>
-
-            </template>
-
-            <template #body-cell-opciones="props">
-
-                <q-td :props="props">
-
-                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
-                        @delete="deleteItem(props.row)" />
-
-                </q-td>
-
-            </template>
-
-        </BaseTable>
-
-        <RiesgosDialog v-model="dialog" :mode="dialogMode" :risk="selectedRisk" @save="handleRiskSave" />
-
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
-            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
-            @cancel="cancelConfirmation" />
-
-        <RiesgosDetails v-model="detailsRisk" :risk="selectedRisk" />
-
-        <PlanesProtocolosDialog v-model="protocolsDialog" :risk="selectedRiskWithProtocols" />
-
-    </BasePage>
-
+    <PlanesProtocolosDialog v-model="protocolsDialog" :risk="selectedRiskWithProtocols" />
+  </BasePage>
 </template>
 
 <script setup>
-
 import { ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
@@ -125,21 +127,21 @@ import PlanesProtocolosDialog from '../modals/PlanesProtocolosDialog.vue'
 const sourceRows = ref(RIESGOS_MOCK)
 
 const {
-    selectedFilter,
-    searchText,
-    currentPage,
-    rowsPerPage,
-    setRowsPerPage,
-    filteredRows,
-    paginatedRows,
-    totalPages,
-    startRow,
-    endRow
+  selectedFilter,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  setRowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow,
 } = useCrudTable({
-    sourceRows,
-    defaultFilter: 'riesgo',
-    exactSearchField: [],
-    defaultRowsPerPage: 8
+  sourceRows,
+  defaultFilter: 'riesgo',
+  exactSearchField: [],
+  defaultRowsPerPage: 8,
 })
 
 const loading = ref(false)
@@ -156,166 +158,155 @@ const confirmationDialog = ref(false)
 const pendingActionData = ref(null)
 
 const confirmationTitle = computed(() => {
-    const titles = {
-        create: 'Confirmar creación',
-        edit: 'Confirmar actualización',
-        delete: 'Confirmar eliminación'
-    }
-    return titles[dialogMode.value]
+  const titles = {
+    create: 'Confirmar creación',
+    edit: 'Confirmar actualización',
+    delete: 'Confirmar eliminación',
+  }
+  return titles[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
-    const labels = {
-        create: 'Crear',
-        edit: 'Actualizar',
-        delete: 'Eliminar'
-    }
-    return labels[dialogMode.value]
+  const labels = {
+    create: 'Crear',
+    edit: 'Actualizar',
+    delete: 'Eliminar',
+  }
+  return labels[dialogMode.value]
 })
 
 const confirmationVariant = computed(() => {
-    return dialogMode.value === 'delete'
-        ? 'danger'
-        : 'primary'
+  return dialogMode.value === 'delete' ? 'danger' : 'primary'
 })
 
 function openCreateDialog() {
-    dialogMode.value = 'create'
-    selectedRisk.value = null
-    dialog.value = true
+  dialogMode.value = 'create'
+  selectedRisk.value = null
+  dialog.value = true
 }
 
 function openEditDialog(row) {
-    dialogMode.value = 'edit'
-    selectedRisk.value = row
-    dialog.value = true
+  dialogMode.value = 'edit'
+  selectedRisk.value = row
+  dialog.value = true
 }
 
 function handleRiskSave(formData) {
-    pendingActionData.value = formData
-    dialog.value = false
-    confirmationDialog.value = true
+  pendingActionData.value = formData
+  dialog.value = false
+  confirmationDialog.value = true
 }
 
 function createRisk(formData) {
-    sourceRows.value.push({
-        ...formData,
-        fecha: getCurrentDate()
-    })
-    dialog.value = false
+  sourceRows.value.push({
+    ...formData,
+    fecha: getCurrentDate(),
+  })
+  dialog.value = false
 }
 
 function updateRisk(formData) {
-    const index = sourceRows.value.findIndex(
-        row => row === selectedRisk.value
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value[index] = {
-        ...sourceRows.value[index],
-        ...formData
-    }
-    dialog.value = false
+  const index = sourceRows.value.findIndex((row) => row === selectedRisk.value)
+  if (index === -1) {
+    return
+  }
+  sourceRows.value[index] = {
+    ...sourceRows.value[index],
+    ...formData,
+  }
+  dialog.value = false
 }
 
 function deleteRisk(row) {
-    const index = sourceRows.value.findIndex(
-        risk => risk.id === row.id
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value.splice(index, 1)
+  const index = sourceRows.value.findIndex((risk) => risk.id === row.id)
+  if (index === -1) {
+    return
+  }
+  sourceRows.value.splice(index, 1)
 }
 
 function confirmAction() {
-    if (dialogMode.value === 'create') {
-        createRisk(pendingActionData.value)
-        notifySuccess('Riesgo creado correctamente')
-    }
-    if (dialogMode.value === 'edit') {
-        updateRisk(pendingActionData.value)
-        notifySuccess('Riesgo actualizado correctamente')
-    }
-    if (dialogMode.value === 'delete') {
-        deleteRisk(selectedRisk.value)
-        notifySuccess('Riesgo eliminado correctamente')
-    }
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  if (dialogMode.value === 'create') {
+    createRisk(pendingActionData.value)
+    notifySuccess('Riesgo creado correctamente')
+  }
+  if (dialogMode.value === 'edit') {
+    updateRisk(pendingActionData.value)
+    notifySuccess('Riesgo actualizado correctamente')
+  }
+  if (dialogMode.value === 'delete') {
+    deleteRisk(selectedRisk.value)
+    notifySuccess('Riesgo eliminado correctamente')
+  }
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function cancelConfirmation() {
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function viewItem(row) {
-    console.log('Ver Riesgo:', row)
-    selectedRisk.value = row
-    detailsRisk.value = true
+  console.log('Ver Riesgo:', row)
+  selectedRisk.value = row
+  detailsRisk.value = true
 }
 
 function getAssociatedProtocols(risk) {
-    const selectedIds = Array.isArray(risk.protocolos)
-        ? risk.protocolos
-        : []
+  const selectedIds = Array.isArray(risk.protocolos) ? risk.protocolos : []
 
-    return PROTOCOLOS_MOCK.filter(protocol => selectedIds.includes(protocol._id))
+  return PROTOCOLOS_MOCK.filter((protocol) => selectedIds.includes(protocol._id))
 }
 
 function viewAssociatedProtocols(risk) {
-    selectedRiskWithProtocols.value = {
-        ...risk,
-        protocolos: getAssociatedProtocols(risk)
-    }
-    protocolsDialog.value = true
+  selectedRiskWithProtocols.value = {
+    ...risk,
+    protocolos: getAssociatedProtocols(risk),
+  }
+  protocolsDialog.value = true
 }
 
 function editItem(row) {
-    console.log('Editar Riesgo:', row)
-    openEditDialog(row)
+  console.log('Editar Riesgo:', row)
+  openEditDialog(row)
 }
 
 function deleteItem(row) {
-    dialogMode.value = 'delete'
-    selectedRisk.value = row
-    confirmationDialog.value = true
+  dialogMode.value = 'delete'
+  selectedRisk.value = row
+  confirmationDialog.value = true
 }
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 
 .associated-protocols-cell {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .associated-protocols-cell__action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: $color-primary;
-    cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: $color-primary;
+  cursor: pointer;
 }
 
 .associated-protocols-cell__action:hover :deep(.q-icon) {
-    transform: scale(1.08);
+  transform: scale(1.08);
 }
 
 .associated-protocols-cell__action :deep(.q-icon) {
-    transition: transform 0.2s ease;
+  transition: transform 0.2s ease;
 }
-
 </style>

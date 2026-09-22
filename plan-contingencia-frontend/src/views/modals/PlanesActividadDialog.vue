@@ -1,43 +1,34 @@
 <template>
+  <BaseDialog v-model="dialogModel" :title="dialogTitle" width="400px" persistent>
+    <BaseFormGrid>
+      <BaseFormField
+        v-for="field in activityFormFields"
+        :key="field.model"
+        :field="field"
+        v-model="form[field.model]"
+      />
 
-    <BaseDialog v-model="dialogModel" :title="dialogTitle" width="400px" persistent>
+      <BaseFormField :field="PLAN_ACTIVITY_DESCRIPTION_FIELD" v-model="form.descripcion" />
+    </BaseFormGrid>
 
-        <BaseFormGrid>
-
-            <BaseFormField
-                v-for="field in activityFormFields"
-                :key="field.model"
-                :field="field"
-                v-model="form[field.model]"
-            />
-
-            <BaseFormField
-                :field="PLAN_ACTIVITY_DESCRIPTION_FIELD"
-                v-model="form.descripcion"
-            />
-
-        </BaseFormGrid>
-
-        <template #actions>
-
-            <BaseDialogActions
-                class="plan-activity-actions"
-                :save-label="saveLabel"
-                @save="handleSave"
-                @cancel="handleCancel"
-            />
-
-        </template>
-
-    </BaseDialog>
-
+    <template #actions>
+      <BaseDialogActions
+        class="plan-activity-actions"
+        :save-label="saveLabel"
+        @save="handleSave"
+        @cancel="handleCancel"
+      />
+    </template>
+  </BaseDialog>
 </template>
 
 <script setup>
-
 import { computed, reactive, watch } from 'vue'
 
-import { PLAN_ACTIVITY_FORM_FIELDS, PLAN_ACTIVITY_DESCRIPTION_FIELD } from 'src/constants/forms/plan_actividad_form.constants'
+import {
+  PLAN_ACTIVITY_FORM_FIELDS,
+  PLAN_ACTIVITY_DESCRIPTION_FIELD,
+} from 'src/constants/forms/plan_actividad_form.constants'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
@@ -67,10 +58,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'update:modelValue',
-  'save',
-])
+const emit = defineEmits(['update:modelValue', 'save'])
 
 const dialogModel = computed({
   get: () => props.modelValue,
@@ -156,10 +144,7 @@ function endTimeRule(value) {
     return true
   }
 
-  return (
-    fin > inicio ||
-    'La hora de fin debe ser posterior a la hora de inicio'
-  )
+  return fin > inicio || 'La hora de fin debe ser posterior a la hora de inicio'
 }
 
 function rangeRule(value) {
@@ -195,10 +180,7 @@ function timeToMinutes(value) {
   const hours = Number(parts[0])
   const minutes = Number(parts[1])
 
-  if (
-    Number.isNaN(hours) ||
-    Number.isNaN(minutes)
-  ) {
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
     return null
   }
 
@@ -246,10 +228,7 @@ function handleSave() {
 
   const activity = {
     ...form,
-    duracion: calculateDuration(
-      form.horaInicio,
-      form.horaFin,
-    ),
+    duracion: calculateDuration(form.horaInicio, form.horaFin),
   }
 
   emit('save', activity)
@@ -259,15 +238,12 @@ function handleSave() {
 function handleCancel() {
   dialogModel.value = false
 }
-
 </script>
 
 <style scoped lang="scss">
-
 :global(.plan-activity-actions .primary-action-button) {
   width: 115px !important;
   min-width: 115px !important;
   white-space: nowrap;
 }
-
 </style>

@@ -1,28 +1,18 @@
 <template>
   <footer class="app-footer">
-
     <div class="app-footer__content">
-
       {{ SYSTEM_NAME }} - {{ ORGANIZATION }} {{ currentYear }} © Todos los derechos reservados
-
     </div>
-
   </footer>
 </template>
 
 <script setup>
-
-import {
-  SYSTEM_NAME,
-  ORGANIZATION
-} from 'src/constants/system/app.constants'
+import { SYSTEM_NAME, ORGANIZATION } from 'src/constants/system/app.constants'
 
 const currentYear = new Date().getFullYear()
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/mixins.scss' as *;
 @use 'src/css/typography.scss' as *;
@@ -52,6 +42,4 @@ const currentYear = new Date().getFullYear()
     max-height: 45px;
   }
 }
-
-
 </style>

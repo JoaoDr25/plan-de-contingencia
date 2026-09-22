@@ -1,113 +1,114 @@
 export function createPlanContingenciaModel() {
-    return {
-        _id: null,
+  return {
+    _id: null,
 
-        numero: null,
+    numero: null,
 
-        clasificacionInformacion: null,
+    clasificacionInformacion: null,
 
-        programaFormacionId: null,
-        programaFormacionNombre: null,
-        programaFormacionNivel: null,
-        ficha: '',
+    programaFormacionId: null,
+    programaFormacionNombre: null,
+    programaFormacionNivel: null,
+    ficha: '',
 
-        actividadId: null,
-        descripcionActividad: '',
+    actividadId: null,
+    descripcionActividad: '',
 
+    usuarioId: null,
+    usuarioNombre: '',
+
+    fecha: null,
+    horaSalida: null,
+    horaRegreso: null,
+
+    tipoTransporte: null,
+
+    lugarSalida: '',
+    lugarDestino: '',
+    contactoLugar: '',
+
+    riesgosId: [],
+
+    aprendicesId: [],
+
+    contactosEmergencia: {
+      contactosBase: [],
+
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otroSeleccionado: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: '',
+      competencia: '',
+      resultadoAprendizaje: '',
+
+      planeacionPedagogicaLink: '',
+      guiaAprendizajeLink: '',
+      otrosSoportesLink: '',
+      actasComportamientoLink: '',
+
+      consentimientoMenores: true,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: false,
+      items: [],
+    },
+
+    estado: 'borrador',
+
+    observaciones: '',
+
+    revision: {
+      validacionInformacion: false,
+
+      usuario: {
         usuarioId: null,
-        usuarioNombre: '',
+        nombre: '',
+        firma: null,
+      },
 
-        fecha: null,
-        horaSalida: null,
-        horaRegreso: null,
+      pedagogia: {
+        usuarioId: null,
+        nombre: '',
+        firma: null,
+        estado: 'pendiente',
+      },
 
-        tipoTransporte: null,
+      sst: {
+        usuarioId: null,
+        nombre: '',
+        firma: null,
+        estado: 'pendiente',
+      },
 
-        lugarSalida: '',
-        lugarDestino: '',
-        contactoLugar: '',
+      coordinacion: {
+        usuarioId: null,
+        nombre: '',
+        firma: null,
+        estado: 'pendiente',
+      },
+    },
 
-        riesgosId: [],
-
-        aprendicesId: [],
-
-        contactosEmergencia: {
-            contactosBase: [],
-
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otroSeleccionado: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: '',
-            competencia: '',
-            resultadoAprendizaje: '',
-
-            planeacionPedagogicaLink: '',
-            guiaAprendizajeLink: '',
-            otrosSoportesLink: '',
-            actasComportamientoLink: '',
-
-            consentimientoMenores: true,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            items: []
-        },
-
-        estado: 'borrador',
-
-        observaciones: '',
-
-        revision: {
-            validacionInformacion: false,
-
-            instructor: {
-                usuarioId: null,
-                nombre: '',
-                firma: null
-            },
-
-            pedagogia: {
-                usuarioId: null,
-                nombre: '',
-                firma: null,
-                estado: 'pendiente'
-            },
-
-            sst: {
-                usuarioId: null,
-                nombre: '',
-                firma: null,
-                estado: 'pendiente'
-            },
-
-            coordinacion: {
-                usuarioId: null,
-                nombre: '',
-                firma: null,
-                estado: 'pendiente'
-            }
-        },
-
-        createdAt: null,
-        updatedAt: null
-    }
+    createdAt: null,
+    updatedAt: null,
+  }
 }

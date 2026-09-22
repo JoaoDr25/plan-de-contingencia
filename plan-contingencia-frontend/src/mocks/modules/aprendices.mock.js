@@ -15,7 +15,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66g200000000000000000002',
@@ -33,7 +33,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66g200000000000000000003',
@@ -51,7 +51,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Inactivo'
+    estado: 'Inactivo',
   },
   {
     _id: '66g200000000000000000004',
@@ -69,7 +69,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66g200000000000000000005',
@@ -87,7 +87,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66g200000000000000000006',
@@ -105,7 +105,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Inactivo'
+    estado: 'Inactivo',
   },
   {
     _id: '66g200000000000000000007',
@@ -123,7 +123,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66g200000000000000000008',
@@ -141,7 +141,7 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66g200000000000000000009',
@@ -159,6 +159,6 @@ export const APRENDICES_MOCK = [
     contacto: '',
     parentesco: '',
     direccion: '',
-    estado: 'Inactivo'
-  }
+    estado: 'Inactivo',
+  },
 ]

@@ -1,60 +1,84 @@
 <template>
-  
   <BasePage class="plan-create-page">
+    <header class="plan-create-header">
+      <CrudHeader title="Crear Plan de Contingencia" :uppercase-title="true" />
+    </header>
 
-      <header class="plan-create-header">
+    <wizardStepNav
+      :current-step="currentStep"
+      :completed-steps="completedSteps"
+      @update:current-step="handleStepNavigation"
+    />
 
-        <CrudHeader title="Crear Plan de Contingencia" :uppercase-title="true" />
+    <q-form ref="wizardFormRef" class="wizard-form" @submit.prevent>
+      <PlanInformacionGeneral v-if="currentStep === 1" ref="currentStepRef" v-model="planForm" />
 
-      </header>
+      <PlanContextoAcademico
+        v-else-if="currentStep === 2"
+        ref="currentStepRef"
+        v-model="planForm"
+      />
 
-      <wizardStepNav :current-step="currentStep" :completed-steps="completedSteps"
-        @update:current-step="handleStepNavigation" />
+      <PlanPlanTrabajo v-else-if="currentStep === 3" ref="currentStepRef" v-model="planForm" />
 
-      <q-form ref="wizardFormRef" class="wizard-form" @submit.prevent>
+      <PlanParticipantes v-else-if="currentStep === 4" ref="currentStepRef" v-model="planForm" />
 
-        <PlanInformacionGeneral v-if="currentStep === 1" ref="currentStepRef" v-model="planForm" />
+      <PlanRiesgos v-else-if="currentStep === 5" ref="currentStepRef" v-model="planForm" />
 
-        <PlanContextoAcademico v-else-if="currentStep === 2" ref="currentStepRef" v-model="planForm" />
+      <PlanSeguridad v-else-if="currentStep === 6" ref="currentStepRef" v-model="planForm" />
 
-        <PlanPlanTrabajo v-else-if="currentStep === 3" ref="currentStepRef" v-model="planForm" />
+      <PlanRevision
+        v-else-if="currentStep === 7"
+        ref="currentStepRef"
+        v-model="planForm"
+        @go-to-step="handleStepNavigation"
+      />
+    </q-form>
 
-        <PlanParticipantes v-else-if="currentStep === 4" ref="currentStepRef" v-model="planForm" />
+    <footer class="wizard-actions">
+      <SecondaryActionButton label="Cancelar" icon="cancel" size="sm" @click="handleCancel" />
 
-        <PlanRiesgos v-else-if="currentStep === 5" ref="currentStepRef" v-model="planForm" />
+      <div class="wizard-actions__navigation">
+        <SecondaryActionButton
+          v-if="currentStep > 1"
+          class="wizard-actions__button"
+          label="Anterior"
+          icon="arrow_back"
+          size="sm"
+          @click="goToPreviousStep"
+        />
 
-        <PlanSeguridad v-else-if="currentStep === 6" ref="currentStepRef" v-model="planForm" />
+        <PrimaryActionButton
+          v-if="currentStep < TOTAL_STEPS"
+          class="wizard-actions__button"
+          label="Siguiente"
+          size="sm"
+          @click="goToNextStep"
+        />
 
-        <PlanRevision v-else-if="currentStep === 7" ref="currentStepRef" v-model="planForm"
-          @go-to-step="handleStepNavigation" />
+        <PrimaryActionButton
+          v-else
+          class="wizard-actions__button"
+          label="Generar Plan"
+          size="sm"
+          :disable="!canGeneratePlan"
+          @click="showGenerateConfirmation = true"
+        />
+      </div>
+    </footer>
 
-      </q-form>
-
-      <footer class="wizard-actions">
-
-        <SecondaryActionButton label="Cancelar" icon="cancel" size="sm" @click="handleCancel" />
-
-        <div class="wizard-actions__navigation">
-          <SecondaryActionButton v-if="currentStep > 1" class="wizard-actions__button" label="Anterior" icon="arrow_back" size="sm" @click="goToPreviousStep" />
-
-          <PrimaryActionButton v-if="currentStep < TOTAL_STEPS" class="wizard-actions__button" label="Siguiente" size="sm" @click="goToNextStep" />
-
-          <PrimaryActionButton v-else class="wizard-actions__button" label="Generar Plan" size="sm"
-            :disable="!canGeneratePlan" @click="showGenerateConfirmation = true" />
-
-        </div>
-
-      </footer>
-
-      <BaseConfirmationDialog v-model="showGenerateConfirmation" title="Generar plan de contingencia"
-        confirm-label="Generar" cancel-label="Cancelar" variant="primary" @confirm="generatePlan" />
-
+    <BaseConfirmationDialog
+      v-model="showGenerateConfirmation"
+      title="Generar plan de contingencia"
+      confirm-label="Generar"
+      cancel-label="Cancelar"
+      variant="primary"
+      @confirm="generatePlan"
+    />
   </BasePage>
-
 </template>
 
 <script setup>
-
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth.store'
@@ -90,10 +114,9 @@ const planForm = ref(createPlanContingenciaModel())
 
 if (authStore.currentUser) {
   planForm.value.usuarioId = authStore.currentUser._id
-  planForm.value.usuarioNombre = [
-    authStore.currentUser.nombre,
-    authStore.currentUser.apellido
-  ].filter(Boolean).join(' ')
+  planForm.value.usuarioNombre = [authStore.currentUser.nombre, authStore.currentUser.apellido]
+    .filter(Boolean)
+    .join(' ')
 }
 
 const wizardFormRef = ref(null)
@@ -101,17 +124,20 @@ const currentStepRef = ref(null)
 const showGenerateConfirmation = ref(false)
 
 const canGeneratePlan = computed(() => {
-  const requiredStepsCompleted = [1, 2, 3, 4, 5, 6]
-    .every(step => completedSteps.value.includes(step))
+  const requiredStepsCompleted = [1, 2, 3, 4, 5, 6].every((step) =>
+    completedSteps.value.includes(step),
+  )
   const revision = planForm.value.revision
 
-  return currentStep.value === TOTAL_STEPS &&
+  return (
+    currentStep.value === TOTAL_STEPS &&
     requiredStepsCompleted &&
     revision.validacionInformacion === true &&
-    Boolean(revision.instructor?.firma) &&
+    Boolean(revision.usuario?.firma) &&
     Boolean(revision.pedagogia?.firma) &&
     Boolean(revision.sst?.firma) &&
     Boolean(revision.coordinacion?.firma)
+  )
 })
 
 function handleStepNavigation(stepNumber) {
@@ -122,14 +148,13 @@ function handleStepNavigation(stepNumber) {
   const canNavigate =
     stepNumber < currentStep.value ||
     completedSteps.value.includes(stepNumber) ||
-    (stepNumber === currentStep.value + 1 &&
-      completedSteps.value.includes(currentStep.value))
+    (stepNumber === currentStep.value + 1 && completedSteps.value.includes(currentStep.value))
 
   if (!canNavigate) return
 
   currentStep.value = stepNumber
   if (stepNumber < previousStep) {
-    completedSteps.value = completedSteps.value.filter(step => step < stepNumber)
+    completedSteps.value = completedSteps.value.filter((step) => step < stepNumber)
   }
 }
 
@@ -158,9 +183,7 @@ function goToPreviousStep() {
   if (currentStep.value <= 1) return
 
   currentStep.value -= 1
-  completedSteps.value = completedSteps.value.filter(
-    step => step < currentStep.value
-  )
+  completedSteps.value = completedSteps.value.filter((step) => step < currentStep.value)
 }
 
 function generatePlan() {
@@ -171,10 +194,7 @@ function generatePlan() {
   }
 
   const now = new Date().toISOString()
-  const nextNumber = Math.max(
-    0,
-    ...PLANES_MOCK.map(plan => Number(plan.numero) || 0),
-  ) + 1
+  const nextNumber = Math.max(0, ...PLANES_MOCK.map((plan) => Number(plan.numero) || 0)) + 1
 
   const newPlan = {
     ...JSON.parse(JSON.stringify(planForm.value)),
@@ -197,10 +217,8 @@ function handleCancel() {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
-
 
 .plan-create-header {
   margin-bottom: 18px;

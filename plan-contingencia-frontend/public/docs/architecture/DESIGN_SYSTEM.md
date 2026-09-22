@@ -44,26 +44,21 @@ Los archivos principales son:
 
 Define colores, espaciados, radios, sombras y dimensiones globales.
 
-
 **typography.scss
 
 Define la jerarquía tipográfica utilizada en toda la aplicación.
-
 
 **mixins.scss
 
 Contiene mixins reutilizables para evitar repetición de estilos.
 
-
 **utilities.scss
 
 Contiene clases utilitarias utilizadas en múltiples componentes.
 
-
 **components.scss
 
 Agrupa estilos globales reutilizables para componentes institucionales.
-
 
 **quasar.variables.scss
 
@@ -108,7 +103,7 @@ padding: $spacing-md;
 
 Todas las propiedades visuales deberán obtenerse desde el Sistema de Diseño.
 
---- 
+---
 
 ## Sistema Tipográfico
 

@@ -1,80 +1,78 @@
 <template>
-
   <section class="plan-riesgos">
-
     <div class="section-header">
-
       <h2>Riesgos Asociados</h2>
-
     </div>
 
     <div class="plan-info">
-
       <div class="plan-info__item">
-
         <span>Actividad a realizar</span>
 
         <div class="plan-info__value">
           <!-- <q-icon name="event_note" /> -->
           <strong>{{ actividadNombre }}</strong>
         </div>
-
       </div>
 
       <div class="plan-info__item">
-
         <span>Lugar de salida</span>
 
         <div class="plan-info__value">
           <!-- <q-icon name="location_on" /> -->
           <strong>{{ plan.lugarSalida || '—' }}</strong>
         </div>
-
       </div>
 
       <div class="plan-info__item">
-
         <span>Lugar de destino</span>
 
         <div class="plan-info__value">
           <!-- <q-icon name="location_on" /> -->
           <strong>{{ plan.lugarDestino || '—' }}</strong>
         </div>
-
       </div>
-
     </div>
 
     <div class="risks-toolbar">
-
       <div class="risks-toolbar__actions">
+        <q-btn
+          class="risk-action-btn risk-action-btn--select"
+          flat
+          no-caps
+          icon="check_box"
+          label="Seleccionar todos"
+          @click="selectAll"
+        />
 
-        <q-btn class="risk-action-btn risk-action-btn--select" flat no-caps icon="check_box" label="Seleccionar todos" @click="selectAll" />
-
-        <q-btn class="risk-action-btn" flat no-caps icon="clear_all" label="Limpiar selección" @click="clearSelection" />
+        <q-btn
+          class="risk-action-btn"
+          flat
+          no-caps
+          icon="clear_all"
+          label="Limpiar selección"
+          @click="clearSelection"
+        />
       </div>
-
     </div>
 
     <div class="risk-grid">
-
-      <BaseDataCard v-for="group in riskGroups" :key="group.peligro._id" class="risk-card" :title="group.peligro.nombre"
-        :columns="riskCardColumns" :rows="group.riesgos" column-template="38% 52% 10%">
-
+      <BaseDataCard
+        v-for="group in riskGroups"
+        :key="group.peligro._id"
+        class="risk-card"
+        :title="group.peligro.nombre"
+        :columns="riskCardColumns"
+        :rows="group.riesgos"
+        column-template="38% 52% 10%"
+      >
         <template #header-icon>
-
           <q-icon name="expand_more" size="20px" />
-
         </template>
 
         <template #body="{ rows, gridStyle }">
-
           <div v-for="riesgo in rows" :key="riesgo._id" class="risk-row" :style="gridStyle">
-
             <div class="risk-row__name">
-
               {{ riesgo.riesgo }}
-
             </div>
 
             <div
@@ -82,63 +80,38 @@
               @mouseenter="onDescriptionHover"
               @mouseleave="onDescriptionLeave"
             >
-
               <span class="risk-row__description-text">
                 {{ riesgo.descripcion }}
               </span>
-
             </div>
 
             <div class="risk-row__selection">
-
-              <q-checkbox :model-value="isSelected(
-                group.peligro._id,
-                riesgo._id
-              )
-                " @update:model-value="
-                  (value) =>
-                    handleSelection(
-                      group.peligro._id,
-                      riesgo._id,
-                      value
-                    )
-                " />
-
+              <q-checkbox
+                :model-value="isSelected(group.peligro._id, riesgo._id)"
+                @update:model-value="
+                  (value) => handleSelection(group.peligro._id, riesgo._id, value)
+                "
+              />
             </div>
-
           </div>
-
         </template>
 
         <template #empty>
-
-          <div class="risk-empty">
-
-            No hay riesgos asociados a este peligro.
-
-          </div>
-
+          <div class="risk-empty">No hay riesgos asociados a este peligro.</div>
         </template>
-
       </BaseDataCard>
-
     </div>
 
     <div class="selection-summary">
-
       <strong>
         N.º de Riesgos Seleccionados:
         {{ selectedCount }}
       </strong>
-
     </div>
-
   </section>
-
 </template>
 
 <script setup>
-
 import { computed, ref } from 'vue'
 
 import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
@@ -155,9 +128,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'update:modelValue',
-])
+const emit = defineEmits(['update:modelValue'])
 
 const plan = props.modelValue
 
@@ -204,9 +175,7 @@ function onDescriptionLeave(event) {
 }
 
 const actividadNombre = computed(() => {
-  const actividad = ACTIVIDADES_MOCK.find(
-    (item) => item._id === plan.actividadId,
-  )
+  const actividad = ACTIVIDADES_MOCK.find((item) => item._id === plan.actividadId)
 
   return actividad?.nombre || '—'
 })
@@ -214,18 +183,12 @@ const actividadNombre = computed(() => {
 const riskGroups = computed(() => {
   return PELIGROS_MOCK.map((peligro) => ({
     peligro,
-    riesgos: RIESGOS_MOCK.filter(
-      (riesgo) => {
-        const peligroIds = Array.isArray(riesgo.peligroId)
-          ? riesgo.peligroId
-          : [riesgo.peligroId]
+    riesgos: RIESGOS_MOCK.filter((riesgo) => {
+      const peligroIds = Array.isArray(riesgo.peligroId) ? riesgo.peligroId : [riesgo.peligroId]
 
-        return peligroIds.includes(peligro._id)
-      },
-    ),
-  })).filter(
-    (group) => group.riesgos.length > 0,
-  )
+      return peligroIds.includes(peligro._id)
+    }),
+  })).filter((group) => group.riesgos.length > 0)
 })
 
 function restoreSelectedRiskRelations() {
@@ -254,9 +217,7 @@ function getRelationKey(peligroId, riesgoId) {
 }
 
 function isSelected(peligroId, riesgoId) {
-  return selectedRiskRelations.value.has(
-    getRelationKey(peligroId, riesgoId),
-  )
+  return selectedRiskRelations.value.has(getRelationKey(peligroId, riesgoId))
 }
 
 function handleSelection(peligroId, riesgoId, selected) {
@@ -271,9 +232,9 @@ function handleSelection(peligroId, riesgoId, selected) {
   } else {
     selectedRiskRelations.value.delete(relationKey)
 
-    const isSelectedInAnotherDanger = Array.from(
-      selectedRiskRelations.value,
-    ).some((key) => key.endsWith(`:${riesgoId}`))
+    const isSelectedInAnotherDanger = Array.from(selectedRiskRelations.value).some((key) =>
+      key.endsWith(`:${riesgoId}`),
+    )
 
     const index = plan.riesgosId.indexOf(riesgoId)
 
@@ -290,9 +251,7 @@ function selectAll() {
 
   riskGroups.value.forEach((group) => {
     group.riesgos.forEach((riesgo) => {
-      selectedRiskRelations.value.add(
-        getRelationKey(group.peligro._id, riesgo._id),
-      )
+      selectedRiskRelations.value.add(getRelationKey(group.peligro._id, riesgo._id))
 
       if (!allIds.includes(riesgo._id)) {
         allIds.push(riesgo._id)
@@ -312,7 +271,6 @@ function clearSelection() {
   emit('update:modelValue', plan)
 }
 
-
 function validate() {
   if (!plan.riesgosId.length) {
     notifyWarning('Seleccione al menos un riesgo')
@@ -328,7 +286,6 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -358,7 +315,7 @@ defineExpose({
   flex-direction: column;
   gap: 6px;
   padding-bottom: 2px;
-  border-bottom: 1px solid #D1D5DB;
+  border-bottom: 1px solid #d1d5db;
 
   span {
     font-size: $font-size-sm;
@@ -442,7 +399,7 @@ defineExpose({
 }
 
 .risk-card :deep(.base-data-card__title span) {
-  font-size: clamp(0.85rem, 0.70vw, 1.125rem);
+  font-size: clamp(0.85rem, 0.7vw, 1.125rem);
   display: flex;
   align-items: center;
   text-transform: uppercase;
@@ -513,7 +470,6 @@ defineExpose({
 }
 
 @media (max-width: 900px) {
-
   .risk-grid {
     grid-template-columns: 1fr;
   }
@@ -525,11 +481,11 @@ defineExpose({
 
   .plan-info {
     grid-template-columns: 1fr;
-     gap: 14px;
+    gap: 14px;
   }
 
   .plan-info__value {
-  padding-left: 0;
+    padding-left: 0;
   }
 }
 </style>

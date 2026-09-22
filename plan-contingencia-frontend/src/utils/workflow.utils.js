@@ -1,188 +1,200 @@
-import { ROLES } from "src/constants/system/roles.constants"
+import { ROLES } from 'src/constants/system/roles.constants'
+
+const APPROVAL_KEYS_BY_ROLE = {
+  [ROLES.PEDAGOGIA]: 'pedagogia',
+  [ROLES.SST]: 'sst',
+  [ROLES.COORDINACION]: 'coordinacion',
+}
+
+function getApprovalKey(role) {
+  return APPROVAL_KEYS_BY_ROLE[role]
+}
+
+function getReview(plan, role) {
+  const key = getApprovalKey(role)
+
+  return key ? plan?.revision?.[key] : null
+}
+
+function resetReviewStates(revision = {}) {
+  return {
+    ...revision,
+    pedagogia: {
+      ...revision.pedagogia,
+      estado: 'pendiente',
+      fecha: null,
+    },
+    sst: {
+      ...revision.sst,
+      estado: 'pendiente',
+      fecha: null,
+    },
+    coordinacion: {
+      ...revision.coordinacion,
+      estado: 'pendiente',
+      fecha: null,
+    },
+  }
+}
 
 export function canReviewPlan(role, plan) {
-
-    if (!plan) {
-        return false
-    }
-
-    if (plan.estado !== 'en revision') {
-        return false
-    }
-
-    if (
-        role === ROLES.PEDAGOGIA ||
-        role === ROLES.SST
-    ) {
-        return plan.aprobaciones?.[role] !== 'aprobado'
-    }
-
-    if (
-        role === ROLES.COORDINACION
-    ) {
-
-        return (
-            plan.aprobaciones?.pedagogia === 'aprobado' &&
-            plan.aprobaciones?.sst === 'aprobado' &&
-            plan.aprobaciones?.coordinacion !== 'aprobado'
-        )
-    }
+  if (!plan) {
     return false
+  }
+
+  if (plan.estado !== 'en revision') {
+    return false
+  }
+
+  if (role === ROLES.PEDAGOGIA || role === ROLES.SST) {
+    return getReview(plan, role)?.estado !== 'aprobado'
+  }
+
+  if (role === ROLES.COORDINACION) {
+    return (
+      plan.revision?.pedagogia?.estado === 'aprobado' &&
+      plan.revision?.sst?.estado === 'aprobado' &&
+      plan.revision?.coordinacion?.estado !== 'aprobado'
+    )
+  }
+  return false
 }
 
 export function canApprovePlan(role, plan) {
-
-    return canReviewPlan(role, plan)
+  return canReviewPlan(role, plan)
 }
 
 export function canRejectPlan(role, plan) {
-
-    return canReviewPlan(role, plan)
+  return canReviewPlan(role, plan)
 }
 
 export function approvePlan(plan, role) {
+  if (!canApprovePlan(role, plan)) {
+    return plan
+  }
 
-    if (!canApprovePlan(role, plan)) {
-        return plan
-    }
+  const updatedPlan = {
+    ...plan,
+    revision: {
+      ...plan.revision,
+      [getApprovalKey(role)]: {
+        ...getReview(plan, role),
+        estado: 'aprobado',
+        fecha: new Date().toISOString(),
+      },
+    },
+  }
 
-    const updatedPlan = {
-        ...plan,
-        aprobaciones: {
-            ...plan.aprobaciones,
-            [role]: 'aprobado'
-        }
-    }
+  if (
+    updatedPlan.revision.pedagogia?.estado === 'aprobado' &&
+    updatedPlan.revision.sst?.estado === 'aprobado' &&
+    updatedPlan.revision.coordinacion?.estado === 'aprobado'
+  ) {
+    updatedPlan.estado = 'aprobado'
+  }
 
-    if (
-        updatedPlan.aprobaciones.pedagogia === 'aprobado' &&
-        updatedPlan.aprobaciones.sst === 'aprobado' &&
-        updatedPlan.aprobaciones.coordinacion === 'aprobado'
-    ) {
-        updatedPlan.estado = 'aprobado'
-    }
-
-    return updatedPlan
+  return updatedPlan
 }
 
 export function executePlan(plan, role) {
+  if (!plan) {
+    return plan
+  }
 
-    if (!plan) {
-        return plan
-    }
+  if (role !== ROLES.COORDINACION) {
+    return plan
+  }
 
-    if (role !== ROLES.COORDINACION) {
-        return plan
-    }
+  if (plan.estado !== 'aprobado') {
+    return plan
+  }
 
-    if (plan.estado !== 'aprobado') {
-        return plan
-    }
-
-    return {
-        ...plan,
-        estado: 'ejecutado'
-    }
+  return {
+    ...plan,
+    estado: 'ejecutado',
+  }
 }
 
-
 export function cancelPlan(plan, role, observations = '') {
+  if (!plan) {
+    return plan
+  }
 
-    if (!plan) {
-        return plan
-    }
+  if (role !== ROLES.COORDINACION) {
+    return plan
+  }
 
-    if (role !== ROLES.COORDINACION) {
-        return plan
-    }
+  if (plan.estado !== 'aprobado') {
+    return plan
+  }
 
-    if (plan.estado !== 'aprobado') {
-        return plan
-    }
+  let updatedObservaciones = plan.observaciones || ''
 
-    let updatedObservaciones = plan.observaciones || ''
+  if (observations) {
+    const timestamp = new Date().toLocaleDateString('es-CO', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    const roleLabel = role ? ` (${role})` : ''
+    const newObs = `[${timestamp}] Cancelado${roleLabel}: ${observations}`
+    updatedObservaciones = updatedObservaciones ? `${updatedObservaciones}\n${newObs}` : newObs
+  }
 
-    if (observations) {
-        const timestamp = new Date().toLocaleDateString('es-CO', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        })
-        const roleLabel = role ? ` (${role})` : ''
-        const newObs = `[${timestamp}] Cancelado${roleLabel}: ${observations}`
-        updatedObservaciones = updatedObservaciones
-            ? `${updatedObservaciones}\n${newObs}`
-            : newObs
-    }
-
-    return {
-        ...plan,
-        estado: 'cancelado',
-        observaciones: updatedObservaciones
-    }
+  return {
+    ...plan,
+    estado: 'cancelado',
+    observaciones: updatedObservaciones,
+  }
 }
 
 export function rejectPlan(plan, role, observations = '') {
+  if (!canRejectPlan(role, plan)) {
+    return plan
+  }
 
-    if (!canRejectPlan(role, plan)) {
-        return plan
-    }
+  let updatedObservaciones = plan.observaciones || ''
 
-    let updatedObservaciones = plan.observaciones || ''
+  if (observations) {
+    const timestamp = new Date().toLocaleDateString('es-CO', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    const newObs = `[${timestamp}] No Aprobado (${role}): ${observations}`
+    updatedObservaciones = updatedObservaciones ? `${updatedObservaciones}\n${newObs}` : newObs
+  }
 
-    if (observations) {
-        const timestamp = new Date().toLocaleDateString('es-CO', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        })
-        const newObs = `[${timestamp}] No Aprobado (${role}): ${observations}`
-        updatedObservaciones = updatedObservaciones
-            ? `${updatedObservaciones}\n${newObs}`
-            : newObs
-    }
-
-    return {
-        ...plan,
-        estado: 'borrador',
-        observaciones: updatedObservaciones,
-        aprobaciones: {
-            pedagogia: 'pendiente',
-            sst: 'pendiente',
-            coordinacion: 'pendiente'
-        }
-    }
+  return {
+    ...plan,
+    estado: 'borrador',
+    observaciones: updatedObservaciones,
+    revision: resetReviewStates(plan.revision),
+  }
 }
 
 export function sendPlanToEdition(plan, role = '', observations = '') {
+  if (!plan || plan.estado !== 'aprobado') {
+    return plan
+  }
 
-    if (!plan || plan.estado !== 'aprobado') {
-        return plan
-    }
+  let updatedObservaciones = plan.observaciones || ''
 
-    let updatedObservaciones = plan.observaciones || ''
+  if (observations) {
+    const timestamp = new Date().toLocaleDateString('es-CO', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    const roleLabel = role ? ` (${role})` : ''
+    const newObs = `[${timestamp}] Solicitud de Edición${roleLabel}: ${observations}`
+    updatedObservaciones = updatedObservaciones ? `${updatedObservaciones}\n${newObs}` : newObs
+  }
 
-    if (observations) {
-        const timestamp = new Date().toLocaleDateString('es-CO', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        })
-        const roleLabel = role ? ` (${role})` : ''
-        const newObs = `[${timestamp}] Solicitud de Edición${roleLabel}: ${observations}`
-        updatedObservaciones = updatedObservaciones
-            ? `${updatedObservaciones}\n${newObs}`
-            : newObs
-    }
-
-    return {
-        ...plan,
-        estado: 'borrador',
-        observaciones: updatedObservaciones,
-        aprobaciones: {
-            pedagogia: 'pendiente',
-            sst: 'pendiente',
-            coordinacion: 'pendiente'
-        }
-    }
+  return {
+    ...plan,
+    estado: 'borrador',
+    observaciones: updatedObservaciones,
+    revision: resetReviewStates(plan.revision),
+  }
 }

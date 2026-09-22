@@ -1,18 +1,14 @@
 <template>
-
   <section class="plan-revision">
-
     <div class="section-header">
       <h2>Resumen del plan</h2>
     </div>
 
     <div class="summary-grid">
-
       <article class="summary-card">
         <h3>Información general</h3>
 
         <div class="summary-data">
-
           <div>
             <span>Programa:</span>
             <strong>{{ generalSummary.programa }}</strong>
@@ -32,57 +28,71 @@
             <span>Lugar:</span>
             <strong>{{ generalSummary.lugar }}</strong>
           </div>
-
         </div>
 
-        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(1)" />
-
+        <q-btn
+          unelevated
+          no-caps
+          label="Ver detalles"
+          class="summary-card__button"
+          @click="goToStep(1)"
+        />
       </article>
 
       <article class="summary-card">
-
         <h3>Contexto académico</h3>
 
         <div class="summary-checks">
-
           <div>
-
             <span>Competencias:</span>
 
-            <q-checkbox class="summary-checkbox" :model-value="hasValue(plan.contextoAcademico.competencia)" disable
-              size="sm" dense />
-
+            <q-checkbox
+              class="summary-checkbox"
+              :model-value="hasValue(plan.contextoAcademico.competencia)"
+              disable
+              size="sm"
+              dense
+            />
           </div>
 
           <div>
-
             <span>Resultado de aprendizaje:</span>
 
-            <q-checkbox class="summary-checkbox" :model-value="hasValue(plan.contextoAcademico.resultadoAprendizaje)"
-              disable size="sm" dense />
+            <q-checkbox
+              class="summary-checkbox"
+              :model-value="hasValue(plan.contextoAcademico.resultadoAprendizaje)"
+              disable
+              size="sm"
+              dense
+            />
           </div>
 
           <div>
-
             <span>Objetivo:</span>
 
-            <q-checkbox class="summary-checkbox" :model-value="hasValue(plan.contextoAcademico.objetivo)" disable
-              size="sm" dense />
-
+            <q-checkbox
+              class="summary-checkbox"
+              :model-value="hasValue(plan.contextoAcademico.objetivo)"
+              disable
+              size="sm"
+              dense
+            />
           </div>
-
         </div>
 
-        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(2)" />
-
+        <q-btn
+          unelevated
+          no-caps
+          label="Ver detalles"
+          class="summary-card__button"
+          @click="goToStep(2)"
+        />
       </article>
 
       <article class="summary-card">
-
         <h3>Plan de trabajo</h3>
 
         <div class="summary-data">
-
           <div>
             <span>Actividades:</span>
             <strong>{{ plan.planTrabajo.length }}</strong>
@@ -97,19 +107,21 @@
             <span>Hora regreso:</span>
             <strong>{{ formatTime(plan.horaRegreso) }}</strong>
           </div>
-
         </div>
 
-        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(3)" />
-
+        <q-btn
+          unelevated
+          no-caps
+          label="Ver detalles"
+          class="summary-card__button"
+          @click="goToStep(3)"
+        />
       </article>
 
       <article class="summary-card">
-
         <h3>Participantes</h3>
 
         <div class="summary-data">
-
           <div>
             <span>Aprendices:</span>
             <strong>{{ participantsSummary.aprendices }}</strong>
@@ -119,18 +131,21 @@
             <span>Ficha:</span>
             <strong>{{ participantsSummary.ficha }}</strong>
           </div>
-
         </div>
 
-        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(4)" />
+        <q-btn
+          unelevated
+          no-caps
+          label="Ver detalles"
+          class="summary-card__button"
+          @click="goToStep(4)"
+        />
       </article>
 
       <article class="summary-card">
-
         <h3>Riesgos</h3>
 
         <div class="summary-data">
-
           <div>
             <span>Riesgos seleccionados:</span>
             <strong>{{ riskSummary.total }}</strong>
@@ -150,19 +165,21 @@
             <span>Nivel bajo:</span>
             <strong>{{ riskSummary.bajo }}</strong>
           </div>
-
         </div>
 
-        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(5)" />
-
+        <q-btn
+          unelevated
+          no-caps
+          label="Ver detalles"
+          class="summary-card__button"
+          @click="goToStep(5)"
+        />
       </article>
 
       <article class="summary-card">
-
         <h3>Seguridad</h3>
 
         <div class="summary-data">
-
           <div>
             <span>EPP seleccionados:</span>
             <strong>{{ plan.epp.length }}</strong>
@@ -177,89 +194,85 @@
             <span>Seguridad vial:</span>
             <strong>{{ roadSafetySummary }}</strong>
           </div>
-
         </div>
 
-        <q-btn unelevated no-caps label="Ver detalles" class="summary-card__button" @click="goToStep(6)" />
-
+        <q-btn
+          unelevated
+          no-caps
+          label="Ver detalles"
+          class="summary-card__button"
+          @click="goToStep(6)"
+        />
       </article>
-
     </div>
 
     <div class="validation-box">
-
       <q-checkbox v-model="plan.revision.validacionInformacion" size="sm" dense />
 
       <div>
-
         <strong>VALIDAR LA INFORMACIÓN</strong>
 
         <p>
-          Confirme que ha revisado y verificado que toda la
-          información registrada en el plan es correcta y cumple
-          con los requisitos institucionales.
+          Confirme que ha revisado y verificado que toda la información registrada en el plan es
+          correcta y cumple con los requisitos institucionales.
         </p>
-
       </div>
-
     </div>
 
     <div class="revision-grid">
-
       <div class="observations-section">
-
         <div class="subsection-title">
-
           <strong>OBSERVACIONES</strong>
 
           <span>
-            Registre aquí aspectos relevantes que no están cubiertos
-            en otras secciones del plan.
+            Registre aquí aspectos relevantes que no están cubiertos en otras secciones del plan.
           </span>
-
         </div>
 
-        <BaseTextarea v-model="plan.observaciones" placeholder="Escribe sus observaciones aquí..." maxlength="500"
-          counter size="wizard" />
-
+        <BaseTextarea
+          v-model="plan.observaciones"
+          placeholder="Escribe sus observaciones aquí..."
+          maxlength="500"
+          counter
+          size="wizard"
+        />
       </div>
 
       <div class="responsibles-section">
-
         <div class="subsection-title">
-
           <strong>RESPONSABLES Y FIRMAS</strong>
 
-          <span>
-            Confirma la información de los responsables que revisan
-            y aprueban el plan.
-          </span>
-
+          <span> Confirma la información de los responsables que revisan y aprueban el plan. </span>
         </div>
 
         <div class="responsibles-grid">
-
           <div class="responsible">
             <label>Instructor responsable</label>
 
             <BaseInput :model-value="instructorName" readonly size="wizard" />
 
             <div class="signature">
-
-              <img v-if="instructorSignature" :src="instructorSignature" alt="Firma del instructor" />
+              <img
+                v-if="instructorSignature"
+                :src="instructorSignature"
+                alt="Firma del instructor"
+              />
 
               <span v-else>Sin firma registrada</span>
-
             </div>
-
           </div>
 
           <div class="responsible">
-
             <label>Responsable Pedagogía</label>
 
-            <BaseSelect v-model="selectedReviewers.pedagogia" :options="pedagogiaOptions" option-label="label"
-              option-value="value" size="wizard" @update:model-value="(value) => updateReviewer('pedagogia', value)" />
+            <BaseSelect
+              v-model="selectedReviewers.pedagogia"
+              :options="pedagogiaOptions"
+              option-label="label"
+              option-value="value"
+              size="wizard"
+              @update:model-value="(value) => updateReviewer('pedagogia', value)"
+            />
 
             <div class="signature">
               <img v-if="pedagogiaSignature" :src="pedagogiaSignature" alt="Firma de Pedagogía" />
@@ -269,51 +282,53 @@
           </div>
 
           <div class="responsible">
-
             <label>Responsable SST</label>
 
-            <BaseSelect v-model="selectedReviewers.sst" :options="sstOptions" option-label="label" option-value="value"
-              size="wizard" @update:model-value="(value) => updateReviewer('sst', value)" />
+            <BaseSelect
+              v-model="selectedReviewers.sst"
+              :options="sstOptions"
+              option-label="label"
+              option-value="value"
+              size="wizard"
+              @update:model-value="(value) => updateReviewer('sst', value)"
+            />
 
             <div class="signature">
-
               <img v-if="sstSignature" :src="sstSignature" alt="Firma de SST" />
 
               <span v-else>Seleccione responsable</span>
-
             </div>
-
           </div>
 
           <div class="responsible">
-
             <label>Coordinador académico</label>
 
-            <BaseSelect v-model="selectedReviewers.coordinacion" :options="coordinacionOptions" option-label="label"
-              option-value="value" size="wizard"
-              @update:model-value="(value) => updateReviewer('coordinacion', value)" />
+            <BaseSelect
+              v-model="selectedReviewers.coordinacion"
+              :options="coordinacionOptions"
+              option-label="label"
+              option-value="value"
+              size="wizard"
+              @update:model-value="(value) => updateReviewer('coordinacion', value)"
+            />
 
             <div class="signature">
-              <img v-if="coordinacionSignature" :src="coordinacionSignature" alt="Firma de Coordinación" />
+              <img
+                v-if="coordinacionSignature"
+                :src="coordinacionSignature"
+                alt="Firma de Coordinación"
+              />
 
               <span v-else>Seleccione responsable</span>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </section>
-
 </template>
 
 <script setup>
-
 import { computed, reactive, watchEffect } from 'vue'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
@@ -337,10 +352,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'update:modelValue',
-  'go-to-step',
-])
+const emit = defineEmits(['update:modelValue', 'go-to-step'])
 
 const authStore = useAuthStore()
 
@@ -355,11 +367,7 @@ const instructorName = computed(() => {
 })
 
 const instructorSignature = computed(() => {
-  return (
-    currentUser.value?.firma ||
-    plan.revision?.instructor?.firma ||
-    null
-  )
+  return currentUser.value?.firma || plan.revision?.usuario?.firma || null
 })
 
 watchEffect(() => {
@@ -367,7 +375,7 @@ watchEffect(() => {
     return
   }
 
-  plan.revision.instructor = {
+  plan.revision.usuario = {
     usuarioId: currentUser.value._id,
     nombre: instructorName.value,
     firma: currentUser.value.firma || null,
@@ -375,32 +383,23 @@ watchEffect(() => {
 })
 
 const generalSummary = computed(() => {
-  const actividad = ACTIVIDADES_MOCK.find(
-    (item) => item._id === plan.actividadId,
-  )
+  const actividad = ACTIVIDADES_MOCK.find((item) => item._id === plan.actividadId)
 
   return {
-    programa:
-      plan.programaFormacionNombre || '—',
+    programa: plan.programaFormacionNombre || '—',
 
-    fecha:
-      plan.fecha || '00/00/0000',
+    fecha: plan.fecha || '00/00/0000',
 
-    transporte:
-      plan.tipoTransporte || '—',
+    transporte: plan.tipoTransporte || '—',
 
-    lugar:
-      plan.lugarDestino || '—',
+    lugar: plan.lugarDestino || '—',
 
-    actividad:
-      actividad?.nombre || '—',
+    actividad: actividad?.nombre || '—',
   }
 })
 
 const participantsSummary = computed(() => {
-  const programa = PROGRAMAS_MOCK.find(
-    (item) => item._id === plan.programaFormacionId,
-  )
+  const programa = PROGRAMAS_MOCK.find((item) => item._id === plan.programaFormacionId)
 
   return {
     aprendices: plan.aprendicesId.length,
@@ -409,33 +408,27 @@ const participantsSummary = computed(() => {
 })
 
 const selectedRisks = computed(() => {
-  return RIESGOS_MOCK.filter((riesgo) =>
-    plan.riesgosId.includes(riesgo._id),
-  )
+  return RIESGOS_MOCK.filter((riesgo) => plan.riesgosId.includes(riesgo._id))
 })
 
 const riskSummary = computed(() => {
   return {
     total: selectedRisks.value.length,
 
-    alto: selectedRisks.value.filter(
-      (riesgo) => riesgo.nivel === 'Alto',
-    ).length,
+    alto: selectedRisks.value.filter((riesgo) => riesgo.nivel === 'Alto').length,
 
-    medio: selectedRisks.value.filter(
-      (riesgo) => riesgo.nivel === 'Medio',
-    ).length,
+    medio: selectedRisks.value.filter((riesgo) => riesgo.nivel === 'Medio').length,
 
-    bajo: selectedRisks.value.filter(
-      (riesgo) => riesgo.nivel === 'Bajo',
-    ).length,
+    bajo: selectedRisks.value.filter((riesgo) => riesgo.nivel === 'Bajo').length,
   }
 })
 
 const roadSafetySummary = computed(() => {
-  const cumplen = plan.seguridadVial.items.filter(
-    (item) => item.cumple === true,
-  ).length
+  if (!plan.seguridadVial?.aplica) {
+    return 'No aplica'
+  }
+
+  const cumplen = plan.seguridadVial.items.filter((item) => item.cumple === true).length
 
   return `${cumplen}/${SECURITY_VIAL_ITEMS.length} cumplen`
 })
@@ -450,45 +443,30 @@ const emergencyContactsCount = computed(() => {
 })
 
 function getUsersByRole(role) {
-  return USUARIOS_MOCK
-    .filter(
-      (usuario) =>
-        usuario.rol === role &&
-        usuario.estado === 'Activo',
-    )
-    .map((usuario) => ({
+  return USUARIOS_MOCK.filter((usuario) => usuario.rol === role && usuario.estado === 'Activo').map(
+    (usuario) => ({
       label: usuario.nombre,
       value: usuario._id,
-    }))
+    }),
+  )
 }
 
-const pedagogiaOptions = computed(() =>
-  getUsersByRole(ROLES.PEDAGOGIA),
-)
+const pedagogiaOptions = computed(() => getUsersByRole(ROLES.PEDAGOGIA))
 
-const sstOptions = computed(() =>
-  getUsersByRole(ROLES.SST),
-)
+const sstOptions = computed(() => getUsersByRole(ROLES.SST))
 
-const coordinacionOptions = computed(() =>
-  getUsersByRole(ROLES.COORDINACION),
-)
+const coordinacionOptions = computed(() => getUsersByRole(ROLES.COORDINACION))
 
 const selectedReviewers = reactive({
-  pedagogia:
-    plan.revision?.pedagogia?.usuarioId || null,
+  pedagogia: plan.revision?.pedagogia?.usuarioId || null,
 
-  sst:
-    plan.revision?.sst?.usuarioId || null,
+  sst: plan.revision?.sst?.usuarioId || null,
 
-  coordinacion:
-    plan.revision?.coordinacion?.usuarioId || null,
+  coordinacion: plan.revision?.coordinacion?.usuarioId || null,
 })
 
 function updateReviewer(role, userId) {
-  const user = USUARIOS_MOCK.find(
-    (usuario) => usuario._id === userId,
-  )
+  const user = USUARIOS_MOCK.find((usuario) => usuario._id === userId)
 
   if (!user) {
     return
@@ -505,24 +483,15 @@ function updateReviewer(role, userId) {
 }
 
 const pedagogiaSignature = computed(() => {
-  return getReviewerSignature(
-    selectedReviewers.pedagogia,
-    ROLES.PEDAGOGIA,
-  )
+  return getReviewerSignature(selectedReviewers.pedagogia, ROLES.PEDAGOGIA)
 })
 
 const sstSignature = computed(() => {
-  return getReviewerSignature(
-    selectedReviewers.sst,
-    ROLES.SST,
-  )
+  return getReviewerSignature(selectedReviewers.sst, ROLES.SST)
 })
 
 const coordinacionSignature = computed(() => {
-  return getReviewerSignature(
-    selectedReviewers.coordinacion,
-    ROLES.COORDINACION,
-  )
+  return getReviewerSignature(selectedReviewers.coordinacion, ROLES.COORDINACION)
 })
 
 function getReviewerSignature(userId) {
@@ -530,9 +499,7 @@ function getReviewerSignature(userId) {
     return null
   }
 
-  const user = USUARIOS_MOCK.find(
-    (usuario) => usuario._id === userId,
-  )
+  const user = USUARIOS_MOCK.find((usuario) => usuario._id === userId)
 
   return user?.firma || null
 }
@@ -542,9 +509,7 @@ function goToStep(step) {
 }
 
 function hasValue(value) {
-  return Boolean(
-    String(value ?? '').trim(),
-  )
+  return Boolean(String(value ?? '').trim())
 }
 
 function formatTime(value) {
@@ -552,11 +517,13 @@ function formatTime(value) {
 }
 
 function validate() {
-  return plan.revision.validacionInformacion === true &&
+  return (
+    plan.revision.validacionInformacion === true &&
     Boolean(instructorSignature.value) &&
     Boolean(pedagogiaSignature.value) &&
     Boolean(sstSignature.value) &&
     Boolean(coordinacionSignature.value)
+  )
 }
 
 defineExpose({
@@ -565,7 +532,6 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 @use 'src/css/mixins.scss' as *;
@@ -760,7 +726,6 @@ defineExpose({
 }
 
 @media (max-width: 1000px) {
-
   .summary-grid {
     grid-template-columns: 1fr 1fr;
   }

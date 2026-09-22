@@ -1,57 +1,44 @@
 <template>
-
-    <BaseChip :label="formattedLabel" :color="chip.color" :text-color="chip.textColor" compact />
-
+  <BaseChip :label="formattedLabel" :color="chip.color" :text-color="chip.textColor" compact />
 </template>
 
 <script setup>
-
 import { computed } from 'vue'
 
 import BaseChip from '../states/BaseChip.vue'
 import { LEVEL_MAP } from 'src/constants/states/level.constants.js'
 
 const props = defineProps({
-
-    level: {
-        type: String,
-        required: true
-    },
-    context: {
-        type: String,
-        default: 'riesgo',
-        validator: value => [
-            'riesgo',
-            'epp'
-        ].includes(value)
-    }
+  level: {
+    type: String,
+    required: true,
+  },
+  context: {
+    type: String,
+    default: 'riesgo',
+    validator: (value) => ['riesgo', 'epp'].includes(value),
+  },
 })
 
 const normalizedLevel = computed(() => {
-    return props.level
-        .trim()
-        .toLowerCase()
+  return props.level.trim().toLowerCase()
 })
 
 const chip = computed(() => {
-
-    return (
-        LEVEL_MAP[props.context]?.[normalizedLevel.value] ||
-        {
-            color: '#757575',
-            textColor: '#FFFFFF'
-        }
-    )
+  return (
+    LEVEL_MAP[props.context]?.[normalizedLevel.value] || {
+      color: '#757575',
+      textColor: '#FFFFFF',
+    }
+  )
 })
 
 const formattedLabel = computed(() => {
-
-    return props.level
-        .trim()
-        .toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ')
+  return props.level
+    .trim()
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 })
-
 </script>

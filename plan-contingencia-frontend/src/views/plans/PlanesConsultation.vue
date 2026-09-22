@@ -1,82 +1,95 @@
 <template>
+  <BasePage>
+    <CrudHeader title="Planes de Contingencia" :uppercase-title="true" />
 
-    <BasePage>
+    <PlanSectionNav />
 
-        <CrudHeader title="Planes de Contingencia" :uppercase-title="true" />
+    <CrudToolbar>
+      <template #center>
+        <BaseFilterBar class="consulta-filter-bar">
+          <BaseSearch
+            v-model="codigoPlan"
+            size="filter"
+            label="Código del plan"
+            placeholder="Ej. PC-2024-0001"
+          />
 
-        <PlanSectionNav />
+          <BaseSearch
+            v-model="ficha"
+            size="filter"
+            label="Ficha"
+            placeholder="Buscar por ficha..."
+          />
 
-        <CrudToolbar>
+          <BaseSearch
+            v-model="programaFormacion"
+            size="filter"
+            label="Programa de Formación"
+            placeholder="Buscar programa..."
+          />
 
-            <template #center>
+          <BaseSearch
+            v-model="actividad"
+            size="filter"
+            label="Actividad"
+            placeholder="Buscar actividad..."
+          />
 
-                <BaseFilterBar class="consulta-filter-bar">
+          <BaseSearch
+            v-model="instructor"
+            size="filter"
+            label="Instructor"
+            placeholder="Buscar instructor..."
+          />
 
-                    <BaseSearch v-model="codigoPlan" size="filter" label="Código del plan"
-                        placeholder="Ej. PC-2024-0001" />
+          <BaseSelect
+            v-model="selectedStatus"
+            label="Estado"
+            :options="PLAN_STATUS_OPTIONS"
+            size="filter"
+            :show-icon="false"
+          />
 
-                    <BaseSearch v-model="ficha" size="filter" label="Ficha" placeholder="Buscar por ficha..." />
+          <BaseDatePicker v-model="dateFrom" label="Fecha desde" size="filter" :max="dateTo" />
 
-                    <BaseSearch v-model="programaFormacion" size="filter" label="Programa de Formación"
-                        placeholder="Buscar programa..." />
+          <BaseDatePicker v-model="dateTo" label="Fecha hasta" size="filter" :min="dateFrom" />
 
-                    <BaseSearch v-model="actividad" size="filter" label="Actividad" placeholder="Buscar actividad..." />
+          <div class="consulta-filter-actions">
+            <BaseClearFilters align-right @clear="clearFilters" />
+          </div>
+        </BaseFilterBar>
+      </template>
+    </CrudToolbar>
 
-                    <BaseSearch v-model="instructor" size="filter" label="Instructor"
-                        placeholder="Buscar instructor..." />
+    <BaseTable
+      :rows="paginatedRows"
+      :columns="PLANES_CONSULTA_COLUMNS"
+      :loading="loading"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
+    >
+      <template #body-cell-estado="props">
+        <q-td :props="props">
+          <StatusChip :status="props.value" />
+        </q-td>
+      </template>
 
-                    <BaseSelect v-model="selectedStatus" label="Estado" :options="PLAN_STATUS_OPTIONS" size="filter"
-                        :show-icon="false" />
-
-                    <BaseDatePicker v-model="dateFrom" label="Fecha desde" size="filter" :max="dateTo" />
-
-                    <BaseDatePicker v-model="dateTo" label="Fecha hasta" size="filter" :min="dateFrom" />
-
-                    <div class="consulta-filter-actions">
-
-                        <BaseClearFilters align-right @clear="clearFilters" />
-
-                    </div>
-
-                </BaseFilterBar>
-
-            </template>
-
-        </CrudToolbar>
-
-        <BaseTable :rows="paginatedRows" :columns="PLANES_CONSULTA_COLUMNS" :loading="loading"
-            :current-page="currentPage" :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow"
-            :end="endRow" :total="filteredRows.length" @change-page="currentPage = $event"
-            @change-rows-per-page="setRowsPerPage">
-
-            <template #body-cell-estado="props">
-
-                <q-td :props="props">
-
-                    <StatusChip :status="props.value" />
-
-                </q-td>
-
-            </template>
-
-            <template #body-cell-opciones="props">
-
-                <q-td :props="props">
-
-                    <PlanActions :actions="['view']" @view="viewPlan(props.row)" />
-
-                </q-td>
-
-            </template>
-
-        </BaseTable>
-
-    </BasePage>
-
+      <template #body-cell-opciones="props">
+        <q-td :props="props">
+          <PlanActions :actions="['view']" @view="viewPlan(props.row)" />
+        </q-td>
+      </template>
+    </BaseTable>
+  </BasePage>
 </template>
 
 <script setup>
-
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -106,48 +119,46 @@ const sourceRows = ref(PLANES_CONSULTA_MOCK)
 const loading = ref(false)
 
 const {
-    codigoPlan,
-    ficha,
-    programaFormacion,
-    actividad,
-    instructor,
-    selectedStatus,
-    dateFrom,
-    dateTo,
-    currentPage,
-    rowsPerPage,
-    filteredRows,
-    paginatedRows,
-    totalPages,
-    startRow,
-    endRow,
-    setRowsPerPage
+  codigoPlan,
+  ficha,
+  programaFormacion,
+  actividad,
+  instructor,
+  selectedStatus,
+  dateFrom,
+  dateTo,
+  currentPage,
+  rowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow,
+  setRowsPerPage,
 } = usePlanesConsultaTable({
-    sourceRows,
-    defaultRowsPerPage: 8
+  sourceRows,
+  defaultRowsPerPage: 8,
 })
 
 function viewPlan(row) {
-
-    router.push({
-        name: 'planes.detail',
-        params: {
-            id: row._id
-        }
-    })
+  router.push({
+    name: 'planes.detail',
+    params: {
+      id: row._id,
+    },
+  })
 }
 
 function clearFilters() {
-    codigoPlan.value = ''
-    ficha.value = ''
-    programaFormacion.value = ''
-    actividad.value = ''
-    instructor.value = ''
-    selectedStatus.value = 'todos'
-    dateFrom.value = ''
-    dateTo.value = ''
+  codigoPlan.value = ''
+  ficha.value = ''
+  programaFormacion.value = ''
+  actividad.value = ''
+  instructor.value = ''
+  selectedStatus.value = 'todos'
+  dateFrom.value = ''
+  dateTo.value = ''
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -155,117 +166,114 @@ function clearFilters() {
 @use 'src/css/typography.scss' as *;
 
 .consulta-filter-bar {
-    justify-content: flex-start;
-    align-items: center;
-    column-gap: 19px;
-    max-width: 100%;
-    flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: 19px;
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 
 .consulta-filter-bar :deep(.base-search) {
-    width: 260px;
+  width: 260px;
 }
 
 .consulta-filter-bar :deep(.base-search .q-field) {
-    font-size: $font-size-xs;
+  font-size: $font-size-xs;
 }
 
 .consulta-filter-bar :deep(.base-search .q-field__native),
 .consulta-filter-bar :deep(.base-search .q-field__input) {
-    font-size: $font-size-xs;
-    padding-top: 12px;
-    padding-left: 2px;
+  font-size: $font-size-xs;
+  padding-top: 12px;
+  padding-left: 2px;
 }
 
 .consulta-filter-bar :deep(.base-search input::placeholder) {
-    font-size: $font-size-xs;
+  font-size: $font-size-xs;
 }
 
 .consulta-filter-bar :deep(.base-search .q-field__label) {
-    font-size: $font-size-xs;
-    line-height: 20px;
+  font-size: $font-size-xs;
+  line-height: 20px;
 }
 
 .consulta-filter-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-left: auto;
-    min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  min-width: 0;
 }
 
 .consulta-filter-bar :deep(.base-clear-filters) {
-        padding-top: 6px;
-    }
+  padding-top: 6px;
+}
 
 @media (max-width: 1100px) {
+  .consulta-filter-bar {
+    justify-content: flex-start;
+  }
 
-    .consulta-filter-bar {
-        justify-content: flex-start;
-    }
-
-    .consulta-filter-bar :deep(.base-clear-filters) {
-        padding-top: 6px;
-    }
+  .consulta-filter-bar :deep(.base-clear-filters) {
+    padding-top: 6px;
+  }
 }
 
 @media (max-width: 791px) {
+  .consulta-filter-bar {
+    justify-content: center;
+  }
 
-    .consulta-filter-bar {
-        justify-content: center;
-    }
+  .consulta-filter-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+    padding-top: 6px;
+    order: 10;
+  }
 
-    .consulta-filter-actions {
-        width: 100%;
-        margin-left: 0;
-        justify-content: center;
-        padding-top: 6px;
-        order: 10;
-    }
-
-    .consulta-filter-bar :deep(.base-clear-filters) {
-        display: inline-flex;
-        justify-content: center;
-        padding-top: 6px;
-        margin: 0 auto;
-    }
+  .consulta-filter-bar :deep(.base-clear-filters) {
+    display: inline-flex;
+    justify-content: center;
+    padding-top: 6px;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 600px) {
+  .consulta-filter-bar {
+    align-items: center;
+    justify-content: center;
+  }
 
-    .consulta-filter-bar {
-        align-items: center;
-        justify-content: center;
-    }
+  .consulta-filter-bar :deep(.base-search) {
+    width: 240px;
+    min-width: 240px;
+    max-width: 100%;
+  }
 
-    .consulta-filter-bar :deep(.base-search) {
-        width: 240px;
-        min-width: 240px;
-        max-width: 100%;
-    }
+  .consulta-filter-bar :deep(.base-search .q-field) {
+    width: 100%;
+  }
 
-    .consulta-filter-bar :deep(.base-search .q-field) {
-        width: 100%;
-    }
+  .consulta-filter-bar :deep(.base-select--filter),
+  .consulta-filter-bar :deep(.base-date-picker--filter) {
+    width: 240px;
+    min-width: 240px;
+    max-width: 100%;
+  }
 
-    .consulta-filter-bar :deep(.base-select--filter),
-    .consulta-filter-bar :deep(.base-date-picker--filter) {
-        width: 240px;
-        min-width: 240px;
-        max-width: 100%;
-    }
+  .consulta-filter-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+  }
 
-    .consulta-filter-actions {
-        width: 100%;
-        margin-left: 0;
-        justify-content: center;
-    }
-
-    .consulta-filter-bar :deep(.base-clear-filters) {
-      display: inline-flex;
-        justify-content: center;
-        padding-top: 6px;
-        margin: 0 auto;
-    }
+  .consulta-filter-bar :deep(.base-clear-filters) {
+    display: inline-flex;
+    justify-content: center;
+    padding-top: 6px;
+    margin: 0 auto;
+  }
 }
 </style>

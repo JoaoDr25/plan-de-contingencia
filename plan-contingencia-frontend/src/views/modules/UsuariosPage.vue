@@ -1,75 +1,78 @@
 <template>
+  <BasePage>
+    <CrudHeader title="Usuarios">
+      <template #actions>
+        <div class="usuarios-page__actions-slot">
+          <PrimaryActionButton
+            v-if="canSyncUsers"
+            label="Sincronizar"
+            icon="sync"
+            size="sm"
+            :loading="syncing"
+            :disable="syncing"
+            @click="syncUsers"
+          />
+        </div>
+      </template>
+    </CrudHeader>
 
-    <BasePage>
+    <CrudToolbar>
+      <template #center>
+        <CrudFilters v-model="selectedFilter" :options="USUARIOS_FILTERS" />
+      </template>
 
-        <CrudHeader title="Usuarios">
+      <template #left>
+        <BaseSearch
+          v-model="searchText"
+          placeholder="Buscar por documento, nombre, correo, rol..."
+        />
+      </template>
+    </CrudToolbar>
 
-            <template #actions>
+    <BaseTable
+      :rows="paginatedRows"
+      :columns="USUARIOS_COLUMNS"
+      :loading="loading"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
+    >
+      <template #body-cell-estado="props">
+        <q-td :props="props">
+          <StatusChip :status="props.value" />
+        </q-td>
+      </template>
 
-                <div class="usuarios-page__actions-slot">
-                    <PrimaryActionButton v-if="canSyncUsers" label="Sincronizar" icon="sync" size="sm"
-                        :loading="syncing" :disable="syncing" @click="syncUsers" />
-                </div>
+      <template #body-cell-opciones="props">
+        <q-td :props="props">
+          <CrudActions
+            :actions="USUARIOS_ACTIONS"
+            @view="viewItem(props.row)"
+            @edit="openEditDialog(props.row)"
+          />
+        </q-td>
+      </template>
+    </BaseTable>
 
-            </template>
+    <UsuariosDialog v-model="dialog" :user="selectedUser" @save="handleUserSave" />
 
-        </CrudHeader>
-
-        <CrudToolbar>
-
-            <template #center>
-
-                <CrudFilters v-model="selectedFilter" :options="USUARIOS_FILTERS" />
-
-            </template>
-
-            <template #left>
-
-                <BaseSearch v-model="searchText" placeholder="Buscar por documento, nombre, correo, rol..." />
-
-            </template>
-
-        </CrudToolbar>
-
-        <BaseTable :rows="paginatedRows" :columns="USUARIOS_COLUMNS" :loading="loading" :current-page="currentPage"
-            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
-
-            <template #body-cell-estado="props">
-
-                <q-td :props="props">
-
-                    <StatusChip :status="props.value" />
-
-                </q-td>
-
-            </template>
-
-            <template #body-cell-opciones="props">
-
-                <q-td :props="props">
-
-                    <CrudActions :actions="USUARIOS_ACTIONS" @view="viewItem(props.row)" @edit="openEditDialog(props.row)"
-                         />
-
-                </q-td>
-
-            </template>
-
-        </BaseTable>
-
-        <UsuariosDialog v-model="dialog" :user="selectedUser" @save="handleUserSave" />
-
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
-            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
-            @cancel="cancelConfirmation" />
-
-    </BasePage>
-
+    <BaseConfirmationDialog
+      v-model="confirmationDialog"
+      :title="confirmationTitle"
+      :confirm-label="confirmationLabel"
+      :variant="confirmationVariant"
+      @confirm="confirmAction"
+      @cancel="cancelConfirmation"
+    />
+  </BasePage>
 </template>
 
 <script setup>
-
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -97,30 +100,34 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 
 import UsuariosDialog from '../dialogs/UsuariosDialog.vue'
 
-const sourceRows = ref(USUARIOS_MOCK.map(user => ({ ...user })))
+const sourceRows = ref(USUARIOS_MOCK.map((user) => ({ ...user })))
 const authStore = useAuthStore()
 const router = useRouter()
 
 const canSyncUsers = computed(() => {
-    return String(authStore.role || '').toLowerCase() === ROLES.ADMINISTRADOR
+  return (
+    String(authStore.role || '')
+      .trim()
+      .toUpperCase() === ROLES.ADMINISTRADOR
+  )
 })
 
 const {
-    selectedFilter,
-    searchText,
-    currentPage,
-    rowsPerPage,
-    setRowsPerPage,
-    filteredRows,
-    paginatedRows,
-    totalPages,
-    startRow,
-    endRow
+  selectedFilter,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  setRowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow,
 } = useCrudTable({
-    sourceRows,
-    defaultFilter: 'documento',
-    exactSearchField: 'estado',
-    defaultRowsPerPage: 8
+  sourceRows,
+  defaultFilter: 'documento',
+  exactSearchField: 'estado',
+  defaultRowsPerPage: 8,
 })
 
 const loading = ref(false)
@@ -133,26 +140,25 @@ const confirmationDialog = ref(false)
 const pendingActionData = ref(null)
 
 async function syncUsers() {
+  if (!canSyncUsers.value) {
+    return
+  }
 
-    if (!canSyncUsers.value) {
-        return
+  syncing.value = true
+
+  try {
+    const syncResult = mergeUsersFromRepfora(sourceRows.value, USUARIOS_MOCK)
+    sourceRows.value = syncResult.users
+
+    if (syncResult.added === 0) {
+      notifyWarning('No hay usuarios nuevos para agregar')
+      return
     }
 
-    syncing.value = true
-
-    try {
-        const syncResult = mergeUsersFromRepfora(sourceRows.value, USUARIOS_MOCK)
-        sourceRows.value = syncResult.users
-
-        if (syncResult.added === 0) {
-            notifyWarning('No hay usuarios nuevos para agregar')
-            return
-        }
-
-        notifySuccess(`${syncResult.added} usuario(s) nuevo(s) agregado(s)`)
-    } finally {
-        syncing.value = false
-    }
+    notifySuccess(`${syncResult.added} usuario(s) nuevo(s) agregado(s)`)
+  } finally {
+    syncing.value = false
+  }
 }
 
 const confirmationTitle = 'Confirmar actualización'
@@ -160,59 +166,52 @@ const confirmationLabel = 'Actualizar'
 const confirmationVariant = 'primary'
 
 function openEditDialog(row) {
-    selectedUser.value = row
-    dialog.value = true
+  selectedUser.value = row
+  dialog.value = true
 }
 
 function handleUserSave(formData) {
-    pendingActionData.value = formData
-    dialog.value = false
-    confirmationDialog.value = true
+  pendingActionData.value = formData
+  dialog.value = false
+  confirmationDialog.value = true
 }
 
 function updateUser(formData) {
-
-    const index = sourceRows.value.findIndex(
-        row => row === selectedUser.value
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value[index] = {
-        ...sourceRows.value[index],
-        ...formData
-    }
+  const index = sourceRows.value.findIndex((row) => row === selectedUser.value)
+  if (index === -1) {
+    return
+  }
+  sourceRows.value[index] = {
+    ...sourceRows.value[index],
+    ...formData,
+  }
 }
 
 function confirmAction() {
+  updateUser(pendingActionData.value)
+  notifySuccess('Usuario actualizado correctamente')
 
-    updateUser(pendingActionData.value)
-    notifySuccess('Usuario actualizado correctamente')
-
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function cancelConfirmation() {
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function viewItem(row) {
-    router.push({
-        name: 'usuarios.detail',
-        params: {
-            codigo: row.codigo
-        }
-    })
+  router.push({
+    name: 'usuarios.detail',
+    params: {
+      codigo: row.codigo,
+    },
+  })
 }
-
 </script>
 
 <style scoped lang="scss">
-
 .usuarios-page__actions-slot {
-    min-height: 38px;
+  min-height: 38px;
 }
-
 </style>

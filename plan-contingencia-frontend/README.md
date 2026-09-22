@@ -81,15 +81,15 @@ npm run lint
 
 # Tecnologías
 
-| Tecnología | Uso |
-|------------|-----|
-| Vue 3 | Framework Frontend |
-| Quasar | UI Framework |
-| Pinia | Estado Global |
-| Vue Router | Navegación |
-| Axios | Cliente HTTP |
-| Sass | Estilos |
-| Vitest | Pruebas |
+| Tecnología | Uso                |
+| ---------- | ------------------ |
+| Vue 3      | Framework Frontend |
+| Quasar     | UI Framework       |
+| Pinia      | Estado Global      |
+| Vue Router | Navegación         |
+| Axios      | Cliente HTTP       |
+| Sass       | Estilos            |
+| Vitest     | Pruebas            |
 
 ---
 

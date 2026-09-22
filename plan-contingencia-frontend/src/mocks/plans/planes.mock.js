@@ -1,1500 +1,1455 @@
 export const PLANES_MOCK = [
+  {
+    _id: '66a100000000000000000001',
+    numero: 1,
 
-    {
-        _id: '66a100000000000000000001',
-        numero: 1,
+    clasificacionInformacion: 'publica',
 
-        clasificacionInformacion: 'publica',
+    programaFormacionId: '66a200000000000000000003',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '3174863',
 
-        programaFormacionId: '66a200000000000000000003',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '3174863',
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Visita técnica a unidad productiva agropecuaria.',
 
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Visita técnica a unidad productiva agropecuaria.',
+    usuarioId: '66f200000000000000000002',
+    usuarioNombre: 'Laura Marcela Rojas',
 
-        usuarioId: '66f200000000000000000002',
-        usuarioNombre: 'Laura Marcela Rojas',
+    fecha: '2026-09-15',
+    horaSalida: '07:00',
+    horaRegreso: '16:00',
 
-        fecha: '2026-09-15',
-        horaSalida: '07:00',
-        horaRegreso: '16:00',
+    tipoTransporte: 'SENA',
 
-        tipoTransporte: 'SENA',
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Finca Experimental El Porvenir',
+    contactoLugar: '3105551001',
 
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Finca Experimental El Porvenir',
-        contactoLugar: '3105551001',
-
-        riesgosId: [
-            '66d200000000000000000001',
-            '66d200000000000000000002',
-            '66d200000000000000000003',
-            '66d200000000000000000004',
-            '66d200000000000000000005'
+    riesgosId: [
+      '66d200000000000000000001',
+      '66d200000000000000000002',
+      '66d200000000000000000003',
+      '66d200000000000000000004',
+      '66d200000000000000000005',
+    ],
+    riesgos: [
+      {
+        _id: '66d200000000000000000001',
+        peligroId: '66c200000000000000000001',
+        peligroNombre: 'Caídas al mismo nivel',
+        riesgo: 'Resbalón en superficies húmedas',
+        categoria: 'Físico',
+        nivel: 'ALTO',
+        consecuencia: 'Contusiones, esguinces o fracturas.',
+        prevencion: 'Mantener superficies secas y utilizar calzado adecuado.',
+        protocolos: [
+          {
+            _id: '66e200000000000000000001',
+            tipo: 'Accidente por Caída',
+            accion:
+              'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
+            responsable: 'Instructor Responsable',
+            medio: 'Llamada telefónica',
+          },
+          {
+            _id: '66e200000000000000000003',
+            tipo: 'Emergencia Médica',
+            accion:
+              'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
+            responsable: 'Instructor Responsable',
+            medio: 'Línea de Emergencias',
+          },
         ],
-        riesgos: [
-            {
-                _id: '66d200000000000000000001',
-                peligroId: '66c200000000000000000001',
-                peligroNombre: 'Caídas al mismo nivel',
-                riesgo: 'Resbalón en superficies húmedas',
-                categoria: 'Físico',
-                nivel: 'ALTO',
-                consecuencia: 'Contusiones, esguinces o fracturas.',
-                prevencion: 'Mantener superficies secas y utilizar calzado adecuado.',
-                protocolos: [
-                    {
-                        _id: '66e200000000000000000001',
-                        tipo: 'Accidente por Caída',
-                        accion: 'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
-                        responsable: 'Instructor Responsable',
-                        medio: 'Llamada telefónica'
-                    },
-                    {
-                        _id: '66e200000000000000000003',
-                        tipo: 'Emergencia Médica',
-                        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
-                        responsable: 'Instructor Responsable',
-                        medio: 'Línea de Emergencias'
-                    }
-                ]
-            },
-            {
-                _id: '66d200000000000000000002',
-                peligroId: '66c200000000000000000001',
-                peligroNombre: 'Caídas al mismo nivel',
-                riesgo: 'Tropiezo por obstáculos',
-                categoria: 'Físico',
-                nivel: 'MEDIO',
-                consecuencia: 'Caídas y lesiones musculares.',
-                prevencion: 'Mantener rutas despejadas y señalizadas.',
-                protocolos: [
-                    {
-                        _id: '66e200000000000000000001',
-                        tipo: 'Accidente por Caída',
-                        accion: 'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
-                        responsable: 'Instructor Responsable',
-                        medio: 'Llamada telefónica'
-                    }
-                ]
-            },
-            {
-                _id: '66d200000000000000000003',
-                peligroId: '66c200000000000000000002',
-                peligroNombre: 'Exposición a ruido',
-                riesgo: 'Fatiga auditiva',
-                categoria: 'Físico',
-                nivel: 'MEDIO',
-                consecuencia: 'Disminución temporal de la capacidad auditiva.',
-                prevencion: 'Uso de protección auditiva.',
-                protocolos: [
-                    {
-                        _id: '66e200000000000000000003',
-                        tipo: 'Emergencia Médica',
-                        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
-                        responsable: 'Instructor Responsable',
-                        medio: 'Línea de Emergencias'
-                    }
-                ]
-            },
-            {
-                _id: '66d200000000000000000004',
-                peligroId: '66c200000000000000000003',
-                peligroNombre: 'Manipulación de herramientas',
-                riesgo: 'Cortes por herramientas manuales',
-                categoria: 'Mecánico',
-                nivel: 'MEDIO',
-                consecuencia: 'Heridas y laceraciones.',
-                prevencion: 'Capacitación y uso correcto de herramientas.',
-                protocolos: [
-                    {
-                        _id: '66e200000000000000000003',
-                        tipo: 'Emergencia Médica',
-                        accion: 'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
-                        responsable: 'Instructor Responsable',
-                        medio: 'Línea de Emergencias'
-                    }
-                ]
-            },
-            {
-                _id: '66d200000000000000000005',
-                peligroId: '66c200000000000000000004',
-                peligroNombre: 'Contacto eléctrico',
-                riesgo: 'Descarga eléctrica',
-                categoria: 'Físico',
-                nivel: 'ALTO',
-                consecuencia: 'Quemaduras, lesiones graves o muerte.',
-                prevencion: 'Verificar aislamiento y aplicar procedimientos seguros.',
-                protocolos: [
-                    {
-                        _id: '66e200000000000000000002',
-                        tipo: 'Incendio',
-                        accion: 'Evacuar el área de forma inmediata y notificar al Cuerpo de Bomberos.',
-                        responsable: 'Brigadista de Emergencias',
-                        medio: 'Llamada telefónica'
-                    }
-                ]
-            }
+      },
+      {
+        _id: '66d200000000000000000002',
+        peligroId: '66c200000000000000000001',
+        peligroNombre: 'Caídas al mismo nivel',
+        riesgo: 'Tropiezo por obstáculos',
+        categoria: 'Físico',
+        nivel: 'MEDIO',
+        consecuencia: 'Caídas y lesiones musculares.',
+        prevencion: 'Mantener rutas despejadas y señalizadas.',
+        protocolos: [
+          {
+            _id: '66e200000000000000000001',
+            tipo: 'Accidente por Caída',
+            accion:
+              'Asegurar el área, valorar al lesionado y activar el protocolo de primeros auxilios.',
+            responsable: 'Instructor Responsable',
+            medio: 'Llamada telefónica',
+          },
         ],
-
-        aprendicesId: [
-            '66g200000000000000000001',
-            '66g200000000000000000002',
-            '66g200000000000000000003',
-            '66g200000000000000000004',
-            '66g200000000000000000005',
-            '66g200000000000000000006',
-            '66g200000000000000000007',
-            '66g200000000000000000008',
-            '66g200000000000000000009',
-            '66g200000000000000000009'
+      },
+      {
+        _id: '66d200000000000000000003',
+        peligroId: '66c200000000000000000002',
+        peligroNombre: 'Exposición a ruido',
+        riesgo: 'Fatiga auditiva',
+        categoria: 'Físico',
+        nivel: 'MEDIO',
+        consecuencia: 'Disminución temporal de la capacidad auditiva.',
+        prevencion: 'Uso de protección auditiva.',
+        protocolos: [
+          {
+            _id: '66e200000000000000000003',
+            tipo: 'Emergencia Médica',
+            accion:
+              'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
+            responsable: 'Instructor Responsable',
+            medio: 'Línea de Emergencias',
+          },
         ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000001',
-                '66i200000000000000000002',
-                '66i200000000000000000003'
-            ],
-
-            otro: {
-                nombreEntidad: 'Bomberos Voluntarios',
-                telefono: '607 765 4321',
-                descripcion: '',
-                ciudad: 'Socorro'
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Fortalecer los conocimientos adquiridos sobre producción agropecuaria.',
-            competencia: 'Implementar procesos productivos agropecuarios.',
-            resultadoAprendizaje: 'Reconocer las condiciones necesarias para el desarrollo de procesos productivos.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [
-
-            {
-                horaInicio: '07:00',
-                actividad: 'Visita técnica a la unidad productiva',
-                duracion: '02:00 h',
-                lugar: 'Finca Experimental El Porvenir'
-            },
-
-            {
-                horaInicio: '09:00',
-                actividad: 'Reconocimiento de las áreas productivas',
-                duracion: '01:30 h',
-                lugar: 'Área de producción'
-            },
-
-            {
-                horaInicio: '11:00',
-                actividad: 'Actividad práctica relacionada con el proceso formativo',
-                duracion: '02:00 h',
-                lugar: 'Unidad productiva'
-            },
-
-            {
-                horaInicio: '14:00',
-                actividad: 'Socialización de resultados de la visita',
-                duracion: '01:00 h',
-                lugar: 'Finca Experimental El Porvenir'
-            }
+      },
+      {
+        _id: '66d200000000000000000004',
+        peligroId: '66c200000000000000000003',
+        peligroNombre: 'Manipulación de herramientas',
+        riesgo: 'Cortes por herramientas manuales',
+        categoria: 'Mecánico',
+        nivel: 'MEDIO',
+        consecuencia: 'Heridas y laceraciones.',
+        prevencion: 'Capacitación y uso correcto de herramientas.',
+        protocolos: [
+          {
+            _id: '66e200000000000000000003',
+            tipo: 'Emergencia Médica',
+            accion:
+              'Solicitar asistencia médica y brindar primeros auxilios mientras llega el apoyo.',
+            responsable: 'Instructor Responsable',
+            medio: 'Línea de Emergencias',
+          },
         ],
-
-        epp: [
-            '66h200000000000000000001',
-            '66h200000000000000000002'
+      },
+      {
+        _id: '66d200000000000000000005',
+        peligroId: '66c200000000000000000004',
+        peligroNombre: 'Contacto eléctrico',
+        riesgo: 'Descarga eléctrica',
+        categoria: 'Físico',
+        nivel: 'ALTO',
+        consecuencia: 'Quemaduras, lesiones graves o muerte.',
+        prevencion: 'Verificar aislamiento y aplicar procedimientos seguros.',
+        protocolos: [
+          {
+            _id: '66e200000000000000000002',
+            tipo: 'Incendio',
+            accion: 'Evacuar el área de forma inmediata y notificar al Cuerpo de Bomberos.',
+            responsable: 'Brigadista de Emergencias',
+            medio: 'Llamada telefónica',
+          },
         ],
+      },
+    ],
 
-        seguridadVial: {
-            aplica: true,
+    aprendicesId: [
+      '66g200000000000000000001',
+      '66g200000000000000000002',
+      '66g200000000000000000003',
+      '66g200000000000000000004',
+      '66g200000000000000000005',
+      '66g200000000000000000006',
+      '66g200000000000000000007',
+      '66g200000000000000000008',
+      '66g200000000000000000009',
+    ],
 
-            items: [
-                {
-                    itemId: '1',
-                    nombre: 'Licencia del conductor',
-                    cumple: true,
-                    soporte: 'https://ejemplo.com/licencia-conductor.pdf',
-                    observacion: ''
-                },
-                {
-                    itemId: '2',
-                    nombre: 'SOAT',
-                    cumple: true,
-                    soporte: 'https://ejemplo.com/soat.pdf',
-                    observacion: ''
-                },
-                {
-                    itemId: '3',
-                    nombre: 'Revisión Tecno-mecánica',
-                    cumple: true,
-                    soporte: 'https://ejemplo.com/revision-tecnomecanica.pdf',
-                    observacion: ''
-                },
-                {
-                    itemId: '4',
-                    nombre: 'Botiquín',
-                    cumple: true,
-                    soporte: 'https://ejemplo.com/botiquin.pdf',
-                    observacion: ''
-                },
-                {
-                    itemId: '5',
-                    nombre: 'Extintor',
-                    cumple: true,
-                    soporte: 'https://ejemplo.com/extintor.pdf',
-                    observacion: ''
-                }
-            ]
-        },
-        aprobaciones: {
-            pedagogia: 'aprobado',
-            sst: 'aprobado',
-            coordinacion: 'pendiente'
-        },
+    contactosEmergencia: {
+      contactosBase: [
+        '66i200000000000000000001',
+        '66i200000000000000000002',
+        '66i200000000000000000003',
+      ],
 
-        estado: 'en revision',
-
-        observaciones: '',
-
-        createdAt: '2026-08-20T08:30:00.000Z',
-        updatedAt: '2026-08-20T08:30:00.000Z'
-    },
-    {
-        _id: '66a100000000000000000002',
-        numero: 2,
-
-        clasificacionInformacion: 'publica',
-
-        programaFormacionId: '66a200000000000000000009',
-        programaFormacionNombre: 'Gestión Ambiental',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '2876549',
-        actividadId: '66b200000000000000000003',
-        descripcionActividad: 'Salida académica para reconocimiento ambiental.',
-
-        usuarioId: '66f200000000000000000004',
-        usuarioNombre: 'Diana Carolina Torres',
-
-        fecha: '2026-09-18',
-        horaSalida: '06:30',
-        horaRegreso: '17:00',
-
-        tipoTransporte: 'EXTERNO',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Reserva Natural El Refugio',
-        contactoLugar: '3115552002',
-
-        riesgosId: [
-            '66d200000000000000000003'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000004',
-            '66g200000000000000000005'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000002'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: false,
-            visitaEmpresa: false,
-            investigacion: true,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Reconocer ecosistemas y prácticas de conservación.',
-            competencia: 'Gestionar procesos ambientales.',
-            resultadoAprendizaje: 'Identificar factores ambientales presentes en el territorio.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [
-            '66h200000000000000000003'
-        ],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
-        estado: 'borrador',
-
-        observaciones: '',
-
-        createdAt: '2026-08-21T09:00:00.000Z',
-        updatedAt: '2026-08-21T09:00:00.000Z'
+      otro: {
+        nombreEntidad: 'Bomberos Voluntarios',
+        telefono: '607 765 4321',
+        descripcion: '',
+        ciudad: 'Socorro',
+      },
     },
 
-    {
-        _id: '66a100000000000000000003',
-        numero: 3,
-
-        clasificacionInformacion: 'clasificada',
-
-        programaFormacionId: '66a200000000000000000003',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '3174863',
-
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Práctica de reconocimiento de cultivos.',
-
-        usuarioId: '66f200000000000000000005',
-        usuarioNombre: 'Luis Fernando Ramírez',
-
-        fecha: '2026-09-22',
-        horaSalida: '07:30',
-        horaRegreso: '15:30',
-
-        tipoTransporte: 'APRENDIZ',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Unidad Productiva La Esperanza',
-        contactoLugar: '3125553003',
-
-        riesgosId: [
-            '66d200000000000000000001'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000006'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [],
-            otro: {
-                nombreEntidad: 'Hospital Local',
-                telefono: '6075553003',
-                descripcion: 'Atención de emergencias',
-                ciudad: 'Socorro'
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Aplicar conocimientos relacionados con el establecimiento de cultivos.',
-            competencia: 'Manejar sistemas productivos agropecuarios.',
-            resultadoAprendizaje: 'Aplicar procedimientos básicos de manejo de cultivos.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: false,
-            items: []
-        },
-
-        estado: 'borrador',
-
-        observaciones: '',
-
-        createdAt: '2026-08-21T10:00:00.000Z',
-        updatedAt: '2026-08-21T10:00:00.000Z'
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otro: '',
     },
 
-    {
-        _id: '66a100000000000000000004',
-        numero: 4,
-
-        clasificacionInformacion: 'publica',
-
-        programaFormacionId: '66a200000000000000000003',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '3174863',
-
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Visita técnica de seguimiento a proceso productivo.',
-
-        usuarioId: '66f200000000000000000002',
-        usuarioNombre: 'Laura Marcela Rojas',
-
-        fecha: '2026-09-25',
-        horaSalida: '07:00',
-        horaRegreso: '16:00',
-
-        tipoTransporte: 'SENA',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Granja Experimental SENA',
-        contactoLugar: '3135554004',
-
-        riesgosId: [
-            '66d200000000000000000002'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000007',
-            '66g200000000000000000008'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000001'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: true,
-            investigacion: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Realizar seguimiento al proceso productivo.',
-            competencia: 'Supervisar procesos productivos.',
-            resultadoAprendizaje: 'Evaluar condiciones del proceso productivo.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [
-            '66h200000000000000000001'
-        ],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
-        estado: 'en revision',
-
-        observaciones: '',
-
-        createdAt: '2026-08-21T11:00:00.000Z',
-        updatedAt: '2026-08-22T09:00:00.000Z'
+    contextoAcademico: {
+      objetivo: 'Fortalecer los conocimientos adquiridos sobre producción agropecuaria.',
+      competencia: 'Implementar procesos productivos agropecuarios.',
+      resultadoAprendizaje:
+        'Reconocer las condiciones necesarias para el desarrollo de procesos productivos.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
     },
 
-    {
-        _id: '66a100000000000000000005',
-        numero: 5,
+    planTrabajo: [
+      {
+        horaInicio: '07:00',
+        actividad: 'Visita técnica a la unidad productiva',
+        duracion: '02:00 h',
+        lugar: 'Finca Experimental El Porvenir',
+      },
 
-        clasificacionInformacion: 'publica',
+      {
+        horaInicio: '09:00',
+        actividad: 'Reconocimiento de las áreas productivas',
+        duracion: '01:30 h',
+        lugar: 'Área de producción',
+      },
 
-        programaFormacionId: '66a200000000000000000011',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Técnico',
-        ficha: '2876543',
+      {
+        horaInicio: '11:00',
+        actividad: 'Actividad práctica relacionada con el proceso formativo',
+        duracion: '02:00 h',
+        lugar: 'Unidad productiva',
+      },
 
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Salida académica para reconocimiento de sistemas productivos.',
+      {
+        horaInicio: '14:00',
+        actividad: 'Socialización de resultados de la visita',
+        duracion: '01:00 h',
+        lugar: 'Finca Experimental El Porvenir',
+      },
+    ],
 
-        usuarioId: '66f200000000000000000007',
-        usuarioNombre: 'Miguel Ángel Hernández',
+    epp: ['66h200000000000000000001', '66h200000000000000000002'],
 
-        fecha: '2026-09-28',
-        horaSalida: '06:00',
-        horaRegreso: '18:00',
+    seguridadVial: {
+      aplica: true,
 
-        tipoTransporte: 'EXTERNO',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Finca San Miguel',
-        contactoLugar: '3145555005',
-
-        riesgosId: [
-            '66d200000000000000000001',
-            '66d200000000000000000003'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000009',
-            '66g200000000000000000009'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000002'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
+      items: [
+        {
+          itemId: '1',
+          nombre: 'Licencia del conductor',
+          cumple: true,
+          soporte: 'https://ejemplo.com/licencia-conductor.pdf',
+          observacion: '',
         },
-
-        articulacionFormativa: {
-            proyectoFormativo: false,
-            visitaEmpresa: true,
-            investigacion: false,
-            otro: ''
+        {
+          itemId: '2',
+          nombre: 'SOAT',
+          cumple: true,
+          soporte: 'https://ejemplo.com/soat.pdf',
+          observacion: '',
         },
-
-        contextoAcademico: {
-            objetivo: 'Analizar diferentes sistemas de producción.',
-            competencia: 'Gestionar sistemas productivos.',
-            resultadoAprendizaje: 'Comparar diferentes alternativas de producción.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
+        {
+          itemId: '3',
+          nombre: 'Revisión Tecno-mecánica',
+          cumple: true,
+          soporte: 'https://ejemplo.com/revision-tecnomecanica.pdf',
+          observacion: '',
         },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
+        {
+          itemId: '4',
+          nombre: 'Botiquín',
+          cumple: true,
+          soporte: 'https://ejemplo.com/botiquin.pdf',
+          observacion: '',
         },
-
-        estado: 'en revision',
-
-        observaciones: '',
-
-        createdAt: '2026-08-22T08:00:00.000Z',
-        updatedAt: '2026-08-22T10:00:00.000Z'
+        {
+          itemId: '5',
+          nombre: 'Extintor',
+          cumple: true,
+          soporte: 'https://ejemplo.com/extintor.pdf',
+          observacion: '',
+        },
+      ],
     },
-
-    {
-        _id: '66a100000000000000000006',
-        numero: 6,
-
-        clasificacionInformacion: 'clasificada',
-
-        programaFormacionId: '66a200000000000000000009',
-        programaFormacionNombre: 'Gestión Ambiental',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '2876549',
-
-        actividadId: '66b200000000000000000003',
-        descripcionActividad: 'Actividad de reconocimiento de condiciones ambientales.',
-
-        usuarioId: '66f200000000000000000004',
-        usuarioNombre: 'Diana Carolina Torres',
-
-        fecha: '2026-10-02',
-        horaSalida: '07:00',
-        horaRegreso: '16:30',
-
-        tipoTransporte: 'SENA',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Zona Rural del Socorro',
-        contactoLugar: '3155556006',
-
-        riesgosId: [
-            '66d200000000000000000003'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000002'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000003'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: false,
-            visitaEmpresa: false,
-            investigacion: true,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Identificar condiciones ambientales del territorio.',
-            competencia: 'Evaluar condiciones ambientales.',
-            resultadoAprendizaje: 'Reconocer factores ambientales relevantes.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [
-            '66h200000000000000000003'
-        ],
-
-        seguridadVial: {
-            aplica: false,
-            items: []
-        },
-
-        estado: 'en revision',
-
-        observaciones: '',
-
-        createdAt: '2026-08-22T09:30:00.000Z',
-        updatedAt: '2026-08-23T08:30:00.000Z'
-    },
-
-    {
-        _id: '66a100000000000000000007',
-        numero: 7,
-
-        clasificacionInformacion: 'publica',
-
-        programaFormacionId: '66a200000000000000000003',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '3174863',
-
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Visita técnica a unidad productiva.',
-
-        usuarioId: '66f200000000000000000002',
-        usuarioNombre: 'Laura Marcela Rojas',
-
-        fecha: '2026-08-10',
-        horaSalida: '07:00',
-        horaRegreso: '15:00',
-
-        tipoTransporte: 'SENA',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Granja Experimental SENA',
-        contactoLugar: '3165557007',
-
-        riesgosId: [
-            '66d200000000000000000001'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000003'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000001'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Aplicar conocimientos de producción agropecuaria.',
-            competencia: 'Manejar sistemas productivos agropecuarios.',
-            resultadoAprendizaje: 'Aplicar procedimientos de manejo productivo.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
+    revision: {
+      pedagogia: {
         estado: 'aprobado',
-
-        observaciones: '',
-
-        createdAt: '2026-08-05T08:00:00.000Z',
-        updatedAt: '2026-08-07T14:00:00.000Z'
-    },
-
-    {
-        _id: '66a100000000000000000008',
-        numero: 8,
-
-        clasificacionInformacion: 'publica',
-
-        programaFormacionId: '66a200000000000000000009',
-        programaFormacionNombre: 'Gestión Ambiental',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '2876549',
-
-        actividadId: '66b200000000000000000003',
-        descripcionActividad: 'Visita de observación ambiental.',
-
-        usuarioId: '66f200000000000000000004',
-        usuarioNombre: 'Diana Carolina Torres',
-
-        fecha: '2026-08-12',
-        horaSalida: '06:30',
-        horaRegreso: '17:00',
-
-        tipoTransporte: 'EXTERNO',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Reserva Natural El Refugio',
-        contactoLugar: '3175558008',
-
-        riesgosId: [
-            '66d200000000000000000003'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000004'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000002'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: false,
-            visitaEmpresa: false,
-            investigacion: true,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Observar procesos de conservación ambiental.',
-            competencia: 'Gestionar procesos ambientales.',
-            resultadoAprendizaje: 'Identificar prácticas de conservación.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
+      },
+      sst: {
         estado: 'aprobado',
-
-        observaciones: '',
-
-        createdAt: '2026-08-06T09:00:00.000Z',
-        updatedAt: '2026-08-08T11:00:00.000Z'
+      },
+      coordinacion: {
+        estado: 'pendiente',
+      },
     },
 
-    {
-        _id: '66a100000000000000000009',
-        numero: 9,
+    estado: 'en revision',
 
-        clasificacionInformacion: 'clasificada',
+    observaciones: '',
 
-        programaFormacionId: '66a200000000000000000011',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Técnico',
-        ficha: '2876543',
+    createdAt: '2026-08-20T08:30:00.000Z',
+    updatedAt: '2026-08-20T08:30:00.000Z',
+  },
+  {
+    _id: '66a100000000000000000002',
+    numero: 2,
 
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Visita de seguimiento a proyecto formativo.',
+    clasificacionInformacion: 'publica',
 
-        usuarioId: '66f200000000000000000007',
-        usuarioNombre: 'Miguel Ángel Hernández',
+    programaFormacionId: '66a200000000000000000009',
+    programaFormacionNombre: 'Gestión Ambiental',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '2876549',
+    actividadId: '66b200000000000000000003',
+    descripcionActividad: 'Salida académica para reconocimiento ambiental.',
 
-        fecha: '2026-08-15',
-        horaSalida: '07:30',
-        horaRegreso: '16:00',
+    usuarioId: '66f200000000000000000004',
+    usuarioNombre: 'Diana Carolina Torres',
 
-        tipoTransporte: 'SENA',
+    fecha: '2026-09-18',
+    horaSalida: '06:30',
+    horaRegreso: '17:00',
 
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Unidad Productiva La Esperanza',
-        contactoLugar: '3185559009',
+    tipoTransporte: 'EXTERNO',
 
-        riesgosId: [
-            '66d200000000000000000001'
-        ],
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Reserva Natural El Refugio',
+    contactoLugar: '3115552002',
 
-        aprendicesId: [
-            '66g200000000000000000005'
-        ],
+    riesgosId: ['66d200000000000000000003'],
 
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000001'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
+    aprendicesId: ['66g200000000000000000004', '66g200000000000000000005'],
 
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Realizar seguimiento al proyecto formativo.',
-            competencia: 'Gestionar proyectos productivos.',
-            resultadoAprendizaje: 'Evaluar el desarrollo de actividades productivas.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
-        estado: 'aprobado',
-
-        observaciones: '',
-
-        createdAt: '2026-08-08T08:30:00.000Z',
-        updatedAt: '2026-08-10T12:00:00.000Z'
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000002'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
     },
 
-    {
-        _id: '66a100000000000000000010',
-        numero: 10,
-
-        clasificacionInformacion: 'publica',
-
-        programaFormacionId: '66a200000000000000000003',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '3174863',
-
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Salida técnica de aplicación de conocimientos.',
-
-        usuarioId: '66f200000000000000000002',
-        usuarioNombre: 'Laura Marcela Rojas',
-
-        fecha: '2026-07-20',
-        horaSalida: '07:00',
-        horaRegreso: '16:00',
-
-        tipoTransporte: 'SENA',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Granja Experimental SENA',
-        contactoLugar: '3195551010',
-
-        riesgosId: [
-            '66d200000000000000000001'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000006'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000001'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Aplicar conocimientos adquiridos durante la formación.',
-            competencia: 'Implementar procesos productivos.',
-            resultadoAprendizaje: 'Ejecutar actividades propias del proceso productivo.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
-        estado: 'ejecutado',
-
-        observaciones: 'Plan ejecutado satisfactoriamente.',
-
-        createdAt: '2026-07-10T08:00:00.000Z',
-        updatedAt: '2026-07-20T17:00:00.000Z'
+    articulacionFormativa: {
+      proyectoFormativo: false,
+      visitaEmpresa: false,
+      investigacion: true,
+      otro: '',
     },
 
-    {
-        _id: '66a100000000000000000011',
-        numero: 11,
-
-        clasificacionInformacion: 'publica',
-
-        programaFormacionId: '66a200000000000000000009',
-        programaFormacionNombre: 'Gestión Ambiental',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '2876549',
-
-        actividadId: '66b200000000000000000003',
-        descripcionActividad: 'Salida académica de reconocimiento ambiental.',
-
-        usuarioId: '66f200000000000000000004',
-        usuarioNombre: 'Diana Carolina Torres',
-
-        fecha: '2026-07-25',
-        horaSalida: '06:30',
-        horaRegreso: '17:00',
-
-        tipoTransporte: 'EXTERNO',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Reserva Natural El Refugio',
-        contactoLugar: '3105551111',
-
-        riesgosId: [
-            '66d200000000000000000003'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000007'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [
-                '66i200000000000000000002'
-            ],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: false,
-            visitaEmpresa: false,
-            investigacion: true,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Analizar condiciones ambientales.',
-            competencia: 'Evaluar condiciones ambientales.',
-            resultadoAprendizaje: 'Analizar factores ambientales.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
-        estado: 'ejecutado',
-
-        observaciones: 'Actividad ejecutada sin novedades.',
-
-        createdAt: '2026-07-15T09:00:00.000Z',
-        updatedAt: '2026-07-25T18:00:00.000Z'
+    contextoAcademico: {
+      objetivo: 'Reconocer ecosistemas y prácticas de conservación.',
+      competencia: 'Gestionar procesos ambientales.',
+      resultadoAprendizaje: 'Identificar factores ambientales presentes en el territorio.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
     },
 
-    {
-        _id: '66a100000000000000000012',
-        numero: 12,
+    planTrabajo: [],
 
-        clasificacionInformacion: 'publica',
+    epp: ['66h200000000000000000003'],
 
-        programaFormacionId: '66a200000000000000000011',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Técnico',
-        ficha: '2876543',
-
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Salida técnica cancelada por condiciones externas.',
-
-        usuarioId: '66f200000000000000000007',
-        usuarioNombre: 'Miguel Ángel Hernández',
-
-        fecha: '2026-07-28',
-        horaSalida: '07:00',
-        horaRegreso: '16:00',
-
-        tipoTransporte: 'SENA',
-
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Finca San Miguel',
-        contactoLugar: '3115551212',
-
-        riesgosId: [
-            '66d200000000000000000001'
-        ],
-
-        aprendicesId: [
-            '66g200000000000000000008'
-        ],
-
-        contactosEmergencia: {
-            contactosBase: [],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
-
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otro: ''
-        },
-
-        contextoAcademico: {
-            objetivo: 'Realizar actividad práctica.',
-            competencia: 'Implementar procesos productivos.',
-            resultadoAprendizaje: 'Aplicar procedimientos técnicos.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
-
-        planTrabajo: [],
-
-        epp: [],
-
-        seguridadVial: {
-            aplica: true,
-            items: []
-        },
-
-        estado: 'cancelado',
-
-        observaciones: 'Plan cancelado antes de su ejecución.',
-
-        createdAt: '2026-07-18T08:00:00.000Z',
-        updatedAt: '2026-07-27T15:30:00.000Z'
+    seguridadVial: {
+      aplica: true,
+      items: [],
     },
 
-    {
-        _id: '66a100000000000000000013',
-        numero: 13,
+    estado: 'borrador',
 
-        clasificacionInformacion: 'clasificada',
+    observaciones: '',
 
-        programaFormacionId: '66a200000000000000000003',
-        programaFormacionNombre: 'Producción Agropecuaria',
-        programaFormacionNivel: 'Tecnólogo',
-        ficha: '3174863',
+    createdAt: '2026-08-21T09:00:00.000Z',
+    updatedAt: '2026-08-21T09:00:00.000Z',
+  },
 
-        actividadId: '66b200000000000000000001',
-        descripcionActividad: 'Salida académica cancelada por reprogramación institucional.',
+  {
+    _id: '66a100000000000000000003',
+    numero: 3,
 
-        usuarioId: '66f200000000000000000005',
-        usuarioNombre: 'Luis Fernando Ramírez',
+    clasificacionInformacion: 'clasificada',
 
-        fecha: '2026-08-05',
-        horaSalida: '07:30',
-        horaRegreso: '15:30',
+    programaFormacionId: '66a200000000000000000003',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '3174863',
 
-        tipoTransporte: 'APRENDIZ',
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Práctica de reconocimiento de cultivos.',
 
-        lugarSalida: 'Centro Agroturístico - SENA',
-        lugarDestino: 'Unidad Productiva La Esperanza',
-        contactoLugar: '3125551313',
+    usuarioId: '66f200000000000000000005',
+    usuarioNombre: 'Luis Fernando Ramírez',
 
-        riesgosId: [
-            '66d200000000000000000002'
-        ],
+    fecha: '2026-09-22',
+    horaSalida: '07:30',
+    horaRegreso: '15:30',
 
-        aprendicesId: [
-            '66g200000000000000000009'
-        ],
+    tipoTransporte: 'APRENDIZ',
 
-        contactosEmergencia: {
-            contactosBase: [],
-            otro: {
-                nombreEntidad: '',
-                telefono: '',
-                descripcion: '',
-                ciudad: ''
-            }
-        },
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Unidad Productiva La Esperanza',
+    contactoLugar: '3125553003',
 
-        articulacionFormativa: {
-            proyectoFormativo: true,
-            visitaEmpresa: false,
-            investigacion: false,
-            otro: ''
-        },
+    riesgosId: ['66d200000000000000000001'],
 
-        contextoAcademico: {
-            objetivo: 'Desarrollar actividad práctica.',
-            competencia: 'Manejar procesos productivos.',
-            resultadoAprendizaje: 'Aplicar técnicas de producción.',
-            planeacionPedagogicaLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
-            guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
-            otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
-            actasComportamientoLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
-            consentimientoMenores: false,
-            consentimientoLink: ''
-        },
+    aprendicesId: ['66g200000000000000000006'],
 
-        planTrabajo: [],
+    contactosEmergencia: {
+      contactosBase: [],
+      otro: {
+        nombreEntidad: 'Hospital Local',
+        telefono: '6075553003',
+        descripcion: 'Atención de emergencias',
+        ciudad: 'Socorro',
+      },
+    },
 
-        epp: [],
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otro: '',
+    },
 
-        seguridadVial: {
-            aplica: false,
-            items: []
-        },
+    contextoAcademico: {
+      objetivo: 'Aplicar conocimientos relacionados con el establecimiento de cultivos.',
+      competencia: 'Manejar sistemas productivos agropecuarios.',
+      resultadoAprendizaje: 'Aplicar procedimientos básicos de manejo de cultivos.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
 
-        estado: 'cancelado',
+    planTrabajo: [],
 
-        observaciones: 'Plan cancelado debido a reprogramación de la actividad.',
+    epp: [],
 
-        createdAt: '2026-07-22T10:00:00.000Z',
-        updatedAt: '2026-08-01T09:00:00.000Z'
-    }
+    seguridadVial: {
+      aplica: false,
+      items: [],
+    },
 
+    estado: 'borrador',
+
+    observaciones: '',
+
+    createdAt: '2026-08-21T10:00:00.000Z',
+    updatedAt: '2026-08-21T10:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000004',
+    numero: 4,
+
+    clasificacionInformacion: 'publica',
+
+    programaFormacionId: '66a200000000000000000003',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '3174863',
+
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Visita técnica de seguimiento a proceso productivo.',
+
+    usuarioId: '66f200000000000000000002',
+    usuarioNombre: 'Laura Marcela Rojas',
+
+    fecha: '2026-09-25',
+    horaSalida: '07:00',
+    horaRegreso: '16:00',
+
+    tipoTransporte: 'SENA',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Granja Experimental SENA',
+    contactoLugar: '3135554004',
+
+    riesgosId: ['66d200000000000000000002'],
+
+    aprendicesId: ['66g200000000000000000007', '66g200000000000000000008'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000001'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: true,
+      investigacion: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Realizar seguimiento al proceso productivo.',
+      competencia: 'Supervisar procesos productivos.',
+      resultadoAprendizaje: 'Evaluar condiciones del proceso productivo.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: ['66h200000000000000000001'],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'en revision',
+
+    observaciones: '',
+
+    createdAt: '2026-08-21T11:00:00.000Z',
+    updatedAt: '2026-08-22T09:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000005',
+    numero: 5,
+
+    clasificacionInformacion: 'publica',
+
+    programaFormacionId: '66a200000000000000000011',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Técnico',
+    ficha: '2876543',
+
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Salida académica para reconocimiento de sistemas productivos.',
+
+    usuarioId: '66f200000000000000000007',
+    usuarioNombre: 'Miguel Ángel Hernández',
+
+    fecha: '2026-09-28',
+    horaSalida: '06:00',
+    horaRegreso: '18:00',
+
+    tipoTransporte: 'EXTERNO',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Finca San Miguel',
+    contactoLugar: '3145555005',
+
+    riesgosId: ['66d200000000000000000001', '66d200000000000000000003'],
+
+    aprendicesId: ['66g200000000000000000009', '66g200000000000000000009'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000002'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: false,
+      visitaEmpresa: true,
+      investigacion: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Analizar diferentes sistemas de producción.',
+      competencia: 'Gestionar sistemas productivos.',
+      resultadoAprendizaje: 'Comparar diferentes alternativas de producción.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'en revision',
+
+    observaciones: '',
+
+    createdAt: '2026-08-22T08:00:00.000Z',
+    updatedAt: '2026-08-22T10:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000006',
+    numero: 6,
+
+    clasificacionInformacion: 'clasificada',
+
+    programaFormacionId: '66a200000000000000000009',
+    programaFormacionNombre: 'Gestión Ambiental',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '2876549',
+
+    actividadId: '66b200000000000000000003',
+    descripcionActividad: 'Actividad de reconocimiento de condiciones ambientales.',
+
+    usuarioId: '66f200000000000000000004',
+    usuarioNombre: 'Diana Carolina Torres',
+
+    fecha: '2026-10-02',
+    horaSalida: '07:00',
+    horaRegreso: '16:30',
+
+    tipoTransporte: 'SENA',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Zona Rural del Socorro',
+    contactoLugar: '3155556006',
+
+    riesgosId: ['66d200000000000000000003'],
+
+    aprendicesId: ['66g200000000000000000002'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000003'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: false,
+      visitaEmpresa: false,
+      investigacion: true,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Identificar condiciones ambientales del territorio.',
+      competencia: 'Evaluar condiciones ambientales.',
+      resultadoAprendizaje: 'Reconocer factores ambientales relevantes.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: ['66h200000000000000000003'],
+
+    seguridadVial: {
+      aplica: false,
+      items: [],
+    },
+
+    estado: 'en revision',
+
+    observaciones: '',
+
+    createdAt: '2026-08-22T09:30:00.000Z',
+    updatedAt: '2026-08-23T08:30:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000007',
+    numero: 7,
+
+    clasificacionInformacion: 'publica',
+
+    programaFormacionId: '66a200000000000000000003',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '3174863',
+
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Visita técnica a unidad productiva.',
+
+    usuarioId: '66f200000000000000000002',
+    usuarioNombre: 'Laura Marcela Rojas',
+
+    fecha: '2026-08-10',
+    horaSalida: '07:00',
+    horaRegreso: '15:00',
+
+    tipoTransporte: 'SENA',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Granja Experimental SENA',
+    contactoLugar: '3165557007',
+
+    riesgosId: ['66d200000000000000000001'],
+
+    aprendicesId: ['66g200000000000000000003'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000001'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Aplicar conocimientos de producción agropecuaria.',
+      competencia: 'Manejar sistemas productivos agropecuarios.',
+      resultadoAprendizaje: 'Aplicar procedimientos de manejo productivo.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'aprobado',
+
+    observaciones: '',
+
+    createdAt: '2026-08-05T08:00:00.000Z',
+    updatedAt: '2026-08-07T14:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000008',
+    numero: 8,
+
+    clasificacionInformacion: 'publica',
+
+    programaFormacionId: '66a200000000000000000009',
+    programaFormacionNombre: 'Gestión Ambiental',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '2876549',
+
+    actividadId: '66b200000000000000000003',
+    descripcionActividad: 'Visita de observación ambiental.',
+
+    usuarioId: '66f200000000000000000004',
+    usuarioNombre: 'Diana Carolina Torres',
+
+    fecha: '2026-08-12',
+    horaSalida: '06:30',
+    horaRegreso: '17:00',
+
+    tipoTransporte: 'EXTERNO',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Reserva Natural El Refugio',
+    contactoLugar: '3175558008',
+
+    riesgosId: ['66d200000000000000000003'],
+
+    aprendicesId: ['66g200000000000000000004'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000002'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: false,
+      visitaEmpresa: false,
+      investigacion: true,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Observar procesos de conservación ambiental.',
+      competencia: 'Gestionar procesos ambientales.',
+      resultadoAprendizaje: 'Identificar prácticas de conservación.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'aprobado',
+
+    observaciones: '',
+
+    createdAt: '2026-08-06T09:00:00.000Z',
+    updatedAt: '2026-08-08T11:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000009',
+    numero: 9,
+
+    clasificacionInformacion: 'clasificada',
+
+    programaFormacionId: '66a200000000000000000011',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Técnico',
+    ficha: '2876543',
+
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Visita de seguimiento a proyecto formativo.',
+
+    usuarioId: '66f200000000000000000007',
+    usuarioNombre: 'Miguel Ángel Hernández',
+
+    fecha: '2026-08-15',
+    horaSalida: '07:30',
+    horaRegreso: '16:00',
+
+    tipoTransporte: 'SENA',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Unidad Productiva La Esperanza',
+    contactoLugar: '3185559009',
+
+    riesgosId: ['66d200000000000000000001'],
+
+    aprendicesId: ['66g200000000000000000005'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000001'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Realizar seguimiento al proyecto formativo.',
+      competencia: 'Gestionar proyectos productivos.',
+      resultadoAprendizaje: 'Evaluar el desarrollo de actividades productivas.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'aprobado',
+
+    observaciones: '',
+
+    createdAt: '2026-08-08T08:30:00.000Z',
+    updatedAt: '2026-08-10T12:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000010',
+    numero: 10,
+
+    clasificacionInformacion: 'publica',
+
+    programaFormacionId: '66a200000000000000000003',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '3174863',
+
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Salida técnica de aplicación de conocimientos.',
+
+    usuarioId: '66f200000000000000000002',
+    usuarioNombre: 'Laura Marcela Rojas',
+
+    fecha: '2026-07-20',
+    horaSalida: '07:00',
+    horaRegreso: '16:00',
+
+    tipoTransporte: 'SENA',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Granja Experimental SENA',
+    contactoLugar: '3195551010',
+
+    riesgosId: ['66d200000000000000000001'],
+
+    aprendicesId: ['66g200000000000000000006'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000001'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Aplicar conocimientos adquiridos durante la formación.',
+      competencia: 'Implementar procesos productivos.',
+      resultadoAprendizaje: 'Ejecutar actividades propias del proceso productivo.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'ejecutado',
+
+    observaciones: 'Plan ejecutado satisfactoriamente.',
+
+    createdAt: '2026-07-10T08:00:00.000Z',
+    updatedAt: '2026-07-20T17:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000011',
+    numero: 11,
+
+    clasificacionInformacion: 'publica',
+
+    programaFormacionId: '66a200000000000000000009',
+    programaFormacionNombre: 'Gestión Ambiental',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '2876549',
+
+    actividadId: '66b200000000000000000003',
+    descripcionActividad: 'Salida académica de reconocimiento ambiental.',
+
+    usuarioId: '66f200000000000000000004',
+    usuarioNombre: 'Diana Carolina Torres',
+
+    fecha: '2026-07-25',
+    horaSalida: '06:30',
+    horaRegreso: '17:00',
+
+    tipoTransporte: 'EXTERNO',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Reserva Natural El Refugio',
+    contactoLugar: '3105551111',
+
+    riesgosId: ['66d200000000000000000003'],
+
+    aprendicesId: ['66g200000000000000000007'],
+
+    contactosEmergencia: {
+      contactosBase: ['66i200000000000000000002'],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: false,
+      visitaEmpresa: false,
+      investigacion: true,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Analizar condiciones ambientales.',
+      competencia: 'Evaluar condiciones ambientales.',
+      resultadoAprendizaje: 'Analizar factores ambientales.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'ejecutado',
+
+    observaciones: 'Actividad ejecutada sin novedades.',
+
+    createdAt: '2026-07-15T09:00:00.000Z',
+    updatedAt: '2026-07-25T18:00:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000012',
+    numero: 12,
+
+    clasificacionInformacion: 'publica',
+
+    programaFormacionId: '66a200000000000000000011',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Técnico',
+    ficha: '2876543',
+
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Salida técnica cancelada por condiciones externas.',
+
+    usuarioId: '66f200000000000000000007',
+    usuarioNombre: 'Miguel Ángel Hernández',
+
+    fecha: '2026-07-28',
+    horaSalida: '07:00',
+    horaRegreso: '16:00',
+
+    tipoTransporte: 'SENA',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Finca San Miguel',
+    contactoLugar: '3115551212',
+
+    riesgosId: ['66d200000000000000000001'],
+
+    aprendicesId: ['66g200000000000000000008'],
+
+    contactosEmergencia: {
+      contactosBase: [],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Realizar actividad práctica.',
+      competencia: 'Implementar procesos productivos.',
+      resultadoAprendizaje: 'Aplicar procedimientos técnicos.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: true,
+      items: [],
+    },
+
+    estado: 'cancelado',
+
+    observaciones: 'Plan cancelado antes de su ejecución.',
+
+    createdAt: '2026-07-18T08:00:00.000Z',
+    updatedAt: '2026-07-27T15:30:00.000Z',
+  },
+
+  {
+    _id: '66a100000000000000000013',
+    numero: 13,
+
+    clasificacionInformacion: 'clasificada',
+
+    programaFormacionId: '66a200000000000000000003',
+    programaFormacionNombre: 'Producción Agropecuaria',
+    programaFormacionNivel: 'Tecnólogo',
+    ficha: '3174863',
+
+    actividadId: '66b200000000000000000001',
+    descripcionActividad: 'Salida académica cancelada por reprogramación institucional.',
+
+    usuarioId: '66f200000000000000000005',
+    usuarioNombre: 'Luis Fernando Ramírez',
+
+    fecha: '2026-08-05',
+    horaSalida: '07:30',
+    horaRegreso: '15:30',
+
+    tipoTransporte: 'APRENDIZ',
+
+    lugarSalida: 'Centro Agroturístico - SENA',
+    lugarDestino: 'Unidad Productiva La Esperanza',
+    contactoLugar: '3125551313',
+
+    riesgosId: ['66d200000000000000000002'],
+
+    aprendicesId: ['66g200000000000000000009'],
+
+    contactosEmergencia: {
+      contactosBase: [],
+      otro: {
+        nombreEntidad: '',
+        telefono: '',
+        descripcion: '',
+        ciudad: '',
+      },
+    },
+
+    articulacionFormativa: {
+      proyectoFormativo: true,
+      visitaEmpresa: false,
+      investigacion: false,
+      otro: '',
+    },
+
+    contextoAcademico: {
+      objetivo: 'Desarrollar actividad práctica.',
+      competencia: 'Manejar procesos productivos.',
+      resultadoAprendizaje: 'Aplicar técnicas de producción.',
+      planeacionPedagogicaLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-planeacion-pedagogica.pdf',
+      guiaAprendizajeLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-guia-aprendizaje.pdf',
+      otrosSoportesLink: 'https://www.sena.edu.co/es-co/Documents/ejemplo-otro-soporte.pdf',
+      actasComportamientoLink:
+        'https://www.sena.edu.co/es-co/Documents/ejemplo-acta-comportamiento.pdf',
+      consentimientoMenores: false,
+      consentimientoLink: '',
+    },
+
+    planTrabajo: [],
+
+    epp: [],
+
+    seguridadVial: {
+      aplica: false,
+      items: [],
+    },
+
+    estado: 'cancelado',
+
+    observaciones: 'Plan cancelado debido a reprogramación de la actividad.',
+
+    createdAt: '2026-07-22T10:00:00.000Z',
+    updatedAt: '2026-08-01T09:00:00.000Z',
+  },
 ]
 
 export const MOCK_ACTIVIDADES_PELIGROS = {
-    '66b200000000000000000001': [
-        {
-            _id: '66c200000000000000000001',
-            nombre: 'Caída a Nivel',
-            categoria: 'Locativo',
-            descripcion: 'Superficies irregulares, húmedas o con obstáculos que pueden ocasionar caídas.',
-            prevencion: 'Mantener superficies secas, rutas despejadas y utilizar calzado adecuado.'
-        },
-        {
-            _id: '66c200000000000000000002',
-            nombre: 'Exposición a Sustancias Químicas',
-            categoria: 'Químico',
-            descripcion: 'Contacto o inhalación de productos químicos durante la práctica.',
-            prevencion: 'Utilizar EPP, revisar las fichas de seguridad y mantener ventilada el área.'
-        }
-    ],
-    '66b200000000000000000002': [
-        {
-            _id: '66c200000000000000000004',
-            nombre: 'Herramientas Cortopunzantes',
-            categoria: 'Mecánico',
-            descripcion: 'Uso de herramientas con filo o punta que pueden causar lesiones.',
-            prevencion: 'Inspeccionar las herramientas y utilizarlas siguiendo el procedimiento seguro.'
-        },
-        {
-            _id: '66c200000000000000000007',
-            nombre: 'Tránsito Vehicular',
-            categoria: 'Seguridad',
-            descripcion: 'Circulación de vehículos durante el desplazamiento y la visita técnica.',
-            prevencion: 'Respetar las zonas señalizadas y mantener distancia de los vehículos.'
-        }
-    ],
-    '66b200000000000000000003': [
-        {
-            _id: '66c200000000000000000003',
-            nombre: 'Radiación Solar',
-            categoria: 'Físico',
-            descripcion: 'Exposición prolongada al sol durante actividades al aire libre.',
-            prevencion: 'Usar protección solar, hidratarse y realizar pausas en lugares cubiertos.'
-        },
-        {
-            _id: '66c200000000000000000005',
-            nombre: 'Contacto con Animales',
-            categoria: 'Biológico',
-            descripcion: 'Posibilidad de mordeduras, picaduras o transmisión de enfermedades.',
-            prevencion: 'Evitar el contacto directo y utilizar elementos de protección personal.'
-        }
-    ],
-    '66b200000000000000000004': [
-        {
-            _id: '66c200000000000000000002',
-            nombre: 'Exposición a Sustancias Químicas',
-            categoria: 'Químico',
-            descripcion: 'Contacto o inhalación de productos químicos durante los ensayos.',
-            prevencion: 'Utilizar EPP y aplicar los procedimientos de almacenamiento y manipulación.'
-        }
-    ],
-    '66b200000000000000000005': [
-        {
-            _id: '66c200000000000000000001',
-            nombre: 'Caída a Nivel',
-            categoria: 'Locativo',
-            descripcion: 'Superficies irregulares, húmedas o con obstáculos en el área de trabajo.',
-            prevencion: 'Señalizar las zonas de riesgo y mantener despejadas las áreas de circulación.'
-        },
-        {
-            _id: '66c200000000000000000004',
-            nombre: 'Herramientas Cortopunzantes',
-            categoria: 'Mecánico',
-            descripcion: 'Uso de herramientas con filo o punta durante la inspección.',
-            prevencion: 'Usar herramientas en buen estado y conservar sus elementos de protección.'
-        }
-    ],
-    '66b200000000000000000006': [
-        {
-            _id: '66c200000000000000000006',
-            nombre: 'Manipulación Manual de Cargas',
-            categoria: 'Ergonómico',
-            descripcion: 'Levantamiento o transporte de equipos que puede generar lesiones musculares.',
-            prevencion: 'Aplicar técnicas de levantamiento y solicitar apoyo para cargas pesadas.'
-        }
-    ],
-    '66b200000000000000000007': [
-        {
-            _id: '66c200000000000000000003',
-            nombre: 'Radiación Solar',
-            categoria: 'Físico',
-            descripcion: 'Exposición prolongada al sol durante el reconocimiento forestal.',
-            prevencion: 'Usar protección solar, ropa adecuada y mantener una hidratación constante.'
-        }
-    ],
-    '66b200000000000000000008': [
-        {
-            _id: '66c200000000000000000007',
-            nombre: 'Tránsito Vehicular',
-            categoria: 'Seguridad',
-            descripcion: 'Circulación de vehículos en las zonas de almacenamiento y distribución.',
-            prevencion: 'Transitar por senderos demarcados y atender la señalización interna.'
-        }
-    ],
-    '66b200000000000000000009': [
-        {
-            _id: '66c200000000000000000004',
-            nombre: 'Herramientas Cortopunzantes',
-            categoria: 'Mecánico',
-            descripcion: 'Uso de herramientas con filo o punta durante el mantenimiento.',
-            prevencion: 'Bloquear los equipos, usar EPP y verificar el estado de las herramientas.'
-        },
-        {
-            _id: '66c200000000000000000006',
-            nombre: 'Manipulación Manual de Cargas',
-            categoria: 'Ergonómico',
-            descripcion: 'Manipulación de piezas y equipos que puede generar lesiones musculares.',
-            prevencion: 'Utilizar ayudas mecánicas y aplicar técnicas seguras de manipulación.'
-        }
-    ]
+  '66b200000000000000000001': [
+    {
+      _id: '66c200000000000000000001',
+      nombre: 'Caída a Nivel',
+      categoria: 'Locativo',
+      descripcion: 'Superficies irregulares, húmedas o con obstáculos que pueden ocasionar caídas.',
+      prevencion: 'Mantener superficies secas, rutas despejadas y utilizar calzado adecuado.',
+    },
+    {
+      _id: '66c200000000000000000002',
+      nombre: 'Exposición a Sustancias Químicas',
+      categoria: 'Químico',
+      descripcion: 'Contacto o inhalación de productos químicos durante la práctica.',
+      prevencion: 'Utilizar EPP, revisar las fichas de seguridad y mantener ventilada el área.',
+    },
+  ],
+  '66b200000000000000000002': [
+    {
+      _id: '66c200000000000000000004',
+      nombre: 'Herramientas Cortopunzantes',
+      categoria: 'Mecánico',
+      descripcion: 'Uso de herramientas con filo o punta que pueden causar lesiones.',
+      prevencion: 'Inspeccionar las herramientas y utilizarlas siguiendo el procedimiento seguro.',
+    },
+    {
+      _id: '66c200000000000000000007',
+      nombre: 'Tránsito Vehicular',
+      categoria: 'Seguridad',
+      descripcion: 'Circulación de vehículos durante el desplazamiento y la visita técnica.',
+      prevencion: 'Respetar las zonas señalizadas y mantener distancia de los vehículos.',
+    },
+  ],
+  '66b200000000000000000003': [
+    {
+      _id: '66c200000000000000000003',
+      nombre: 'Radiación Solar',
+      categoria: 'Físico',
+      descripcion: 'Exposición prolongada al sol durante actividades al aire libre.',
+      prevencion: 'Usar protección solar, hidratarse y realizar pausas en lugares cubiertos.',
+    },
+    {
+      _id: '66c200000000000000000005',
+      nombre: 'Contacto con Animales',
+      categoria: 'Biológico',
+      descripcion: 'Posibilidad de mordeduras, picaduras o transmisión de enfermedades.',
+      prevencion: 'Evitar el contacto directo y utilizar elementos de protección personal.',
+    },
+  ],
+  '66b200000000000000000004': [
+    {
+      _id: '66c200000000000000000002',
+      nombre: 'Exposición a Sustancias Químicas',
+      categoria: 'Químico',
+      descripcion: 'Contacto o inhalación de productos químicos durante los ensayos.',
+      prevencion: 'Utilizar EPP y aplicar los procedimientos de almacenamiento y manipulación.',
+    },
+  ],
+  '66b200000000000000000005': [
+    {
+      _id: '66c200000000000000000001',
+      nombre: 'Caída a Nivel',
+      categoria: 'Locativo',
+      descripcion: 'Superficies irregulares, húmedas o con obstáculos en el área de trabajo.',
+      prevencion: 'Señalizar las zonas de riesgo y mantener despejadas las áreas de circulación.',
+    },
+    {
+      _id: '66c200000000000000000004',
+      nombre: 'Herramientas Cortopunzantes',
+      categoria: 'Mecánico',
+      descripcion: 'Uso de herramientas con filo o punta durante la inspección.',
+      prevencion: 'Usar herramientas en buen estado y conservar sus elementos de protección.',
+    },
+  ],
+  '66b200000000000000000006': [
+    {
+      _id: '66c200000000000000000006',
+      nombre: 'Manipulación Manual de Cargas',
+      categoria: 'Ergonómico',
+      descripcion: 'Levantamiento o transporte de equipos que puede generar lesiones musculares.',
+      prevencion: 'Aplicar técnicas de levantamiento y solicitar apoyo para cargas pesadas.',
+    },
+  ],
+  '66b200000000000000000007': [
+    {
+      _id: '66c200000000000000000003',
+      nombre: 'Radiación Solar',
+      categoria: 'Físico',
+      descripcion: 'Exposición prolongada al sol durante el reconocimiento forestal.',
+      prevencion: 'Usar protección solar, ropa adecuada y mantener una hidratación constante.',
+    },
+  ],
+  '66b200000000000000000008': [
+    {
+      _id: '66c200000000000000000007',
+      nombre: 'Tránsito Vehicular',
+      categoria: 'Seguridad',
+      descripcion: 'Circulación de vehículos en las zonas de almacenamiento y distribución.',
+      prevencion: 'Transitar por senderos demarcados y atender la señalización interna.',
+    },
+  ],
+  '66b200000000000000000009': [
+    {
+      _id: '66c200000000000000000004',
+      nombre: 'Herramientas Cortopunzantes',
+      categoria: 'Mecánico',
+      descripcion: 'Uso de herramientas con filo o punta durante el mantenimiento.',
+      prevencion: 'Bloquear los equipos, usar EPP y verificar el estado de las herramientas.',
+    },
+    {
+      _id: '66c200000000000000000006',
+      nombre: 'Manipulación Manual de Cargas',
+      categoria: 'Ergonómico',
+      descripcion: 'Manipulación de piezas y equipos que puede generar lesiones musculares.',
+      prevencion: 'Utilizar ayudas mecánicas y aplicar técnicas seguras de manipulación.',
+    },
+  ],
 }
 
 export const MOCK_APRENDICES = [
-    {
-        _id: '66g200000000000000000001',
-        tipo: 'Cédula de Ciudadanía',
-        numeroDocumento: '1098765432',
-        nombre: 'Juan Sebastián',
-        apellido: 'Rodríguez Pérez',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000002',
-        tipo: 'Tarjeta de Identidad',
-        numeroDocumento: '1023456789',
-        nombre: 'María Fernanda',
-        apellido: 'López Gómez',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000003',
-        tipo: 'Cédula de Ciudadanía',
-        numeroDocumento: '1001234567',
-        nombre: 'Carlos Andrés',
-        apellido: 'Martínez Torres',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000004',
-        tipo: 'Cédula de Ciudadanía',
-        numeroDocumento: '1095847362',
-        nombre: 'Laura Daniela',
-        apellido: 'Torres Rojas',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000005',
-        tipo: 'Tarjeta de Identidad',
-        numeroDocumento: '1032456712',
-        nombre: 'Andrés Felipe',
-        apellido: 'Morales Castro',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000006',
-        tipo: 'Cédula de Ciudadanía',
-        numeroDocumento: '1098234561',
-        nombre: 'Valentina',
-        apellido: 'Silva Hernández',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000007',
-        tipo: 'Cédula de Ciudadanía',
-        numeroDocumento: '1002345890',
-        nombre: 'Camilo Eduardo',
-        apellido: 'Vargas Ramírez',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000008',
-        tipo: 'Tarjeta de Identidad',
-        numeroDocumento: '1035678901',
-        nombre: 'Sofia Alejandra',
-        apellido: 'Ruiz Mendoza',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000009',
-        tipo: 'Cédula de Ciudadanía',
-        numeroDocumento: '1098123456',
-        nombre: 'Mateo Alexander',
-        apellido: 'Gómez Castillo',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    },
-    {
-        _id: '66g200000000000000000009',
-        tipo: 'Cédula de Ciudadanía',
-        numeroDocumento: '1003456789',
-        nombre: 'Isabella Natalia',
-        apellido: 'Mendoza Díaz',
-        estado: 'activo',
-        ficha: '3174863',
-        programaFormacionId: '66a200000000000000000003'
-    }
+  {
+    _id: '66g200000000000000000001',
+    tipo: 'Cédula de Ciudadanía',
+    numeroDocumento: '1098765432',
+    nombre: 'Juan Sebastián',
+    apellido: 'Rodríguez Pérez',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000002',
+    tipo: 'Tarjeta de Identidad',
+    numeroDocumento: '1023456789',
+    nombre: 'María Fernanda',
+    apellido: 'López Gómez',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000003',
+    tipo: 'Cédula de Ciudadanía',
+    numeroDocumento: '1001234567',
+    nombre: 'Carlos Andrés',
+    apellido: 'Martínez Torres',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000004',
+    tipo: 'Cédula de Ciudadanía',
+    numeroDocumento: '1095847362',
+    nombre: 'Laura Daniela',
+    apellido: 'Torres Rojas',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000005',
+    tipo: 'Tarjeta de Identidad',
+    numeroDocumento: '1032456712',
+    nombre: 'Andrés Felipe',
+    apellido: 'Morales Castro',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000006',
+    tipo: 'Cédula de Ciudadanía',
+    numeroDocumento: '1098234561',
+    nombre: 'Valentina',
+    apellido: 'Silva Hernández',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000007',
+    tipo: 'Cédula de Ciudadanía',
+    numeroDocumento: '1002345890',
+    nombre: 'Camilo Eduardo',
+    apellido: 'Vargas Ramírez',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000008',
+    tipo: 'Tarjeta de Identidad',
+    numeroDocumento: '1035678901',
+    nombre: 'Sofia Alejandra',
+    apellido: 'Ruiz Mendoza',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000009',
+    tipo: 'Cédula de Ciudadanía',
+    numeroDocumento: '1098123456',
+    nombre: 'Mateo Alexander',
+    apellido: 'Gómez Castillo',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
+  {
+    _id: '66g200000000000000000009',
+    tipo: 'Cédula de Ciudadanía',
+    numeroDocumento: '1003456789',
+    nombre: 'Isabella Natalia',
+    apellido: 'Mendoza Díaz',
+    estado: 'activo',
+    ficha: '3174863',
+    programaFormacionId: '66a200000000000000000003',
+  },
 ]

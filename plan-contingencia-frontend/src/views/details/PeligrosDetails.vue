@@ -1,74 +1,62 @@
 <template>
+  <BaseDetailDialog v-model="dialog" title="Información del Peligro" width="650px">
+    <template #column-left>
+      <BaseDetailItem label="Código" :value="danger.codigo" />
 
-    <BaseDetailDialog v-model="dialog" title="Información del Peligro" width="650px">
+      <BaseDetailItem label="Nombre del Peligro" :value="danger.nombre" />
 
-        <template #column-left>
+      <BaseDetailItem label="Categoría" :value="danger.categoria" />
 
-            <BaseDetailItem label="Código" :value="danger.codigo" />
+      <BaseDetailItem label="Descripción" :value="danger.descripcion" />
+    </template>
 
-            <BaseDetailItem label="Nombre del Peligro" :value="danger.nombre" />
+    <template #column-right>
+      <BaseDetailItem
+        class="danger-details__right-offset"
+        label="Riesgos Asociados"
+        :value="associatedRisks"
+      />
 
-            <BaseDetailItem label="Categoría" :value="danger.categoria" />
-       
-            <BaseDetailItem label="Descripción" :value="danger.descripcion" />
-       
-        </template>
-
-        <template #column-right>
-
-             <BaseDetailItem class="danger-details__right-offset" label="Riesgos Asociados" :value="associatedRisks" />
-
-            <BaseDetailItem label="Fecha de Creación" :value="danger.fecha" />
-
-        </template>
-
-    </BaseDetailDialog>
-
+      <BaseDetailItem label="Fecha de Creación" :value="danger.fecha" />
+    </template>
+  </BaseDetailDialog>
 </template>
 
 <script setup>
-
 import { computed } from 'vue'
 
 import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
 import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
 
 const props = defineProps({
-
-    modelValue: {
-        type: Boolean,
-        required: true
-    },
-    danger: {
-        type: Object,
-        default: null
-    }
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
+  danger: {
+    type: Object,
+    default: null,
+  },
 })
 
-const emit = defineEmits([
-    'update:modelValue'
-])
+const emit = defineEmits(['update:modelValue'])
 
 const dialog = computed({
-    get: () => props.modelValue,
-    set: value => {
-        emit('update:modelValue', value)
-    }
+  get: () => props.modelValue,
+  set: (value) => {
+    emit('update:modelValue', value)
+  },
 })
 
 const associatedRisks = computed(() => {
-    const count = Array.isArray(props.danger?.riesgos)
-        ? props.danger.riesgos.length
-        : 0
+  const count = Array.isArray(props.danger?.riesgos) ? props.danger.riesgos.length : 0
 
-    return `${count} ${count === 1 ? 'Riesgo' : 'Riesgos'}`
+  return `${count} ${count === 1 ? 'Riesgo' : 'Riesgos'}`
 })
-
 </script>
 
 <style scoped>
-
 .danger-details__right-offset {
-    margin-top: 46px;
+  margin-top: 46px;
 }
 </style>

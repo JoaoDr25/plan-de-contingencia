@@ -1,7 +1,7 @@
 export const ROLES = {
-    USUARIO: 'usuario',
-    PEDAGOGIA: 'pedagogia',
-    SST: 'sst',
-    COORDINACION: 'coordinacion',
-    ADMINISTRADOR: 'administrador'
+  CONSULTOR: 'CONSULTOR',
+  PEDAGOGIA: 'PEDAGOGIA',
+  SST: 'SST',
+  COORDINACION: 'COORDINACION',
+  ADMINISTRADOR: 'ADMINISTRADOR',
 }

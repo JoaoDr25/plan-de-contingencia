@@ -1,69 +1,80 @@
 <template>
-
   <section class="plan-participantes">
-
     <div class="section-header">
-
       <h2>Participantes del Plan</h2>
-
     </div>
 
     <div class="program-info">
-
       <div class="program-info__item program-info__item--programa">
-
         <span>Programa de formación</span>
 
         <div class="program-info__value">
           <!-- <q-icon name="school" /> -->
           <strong>{{ programaNombre }}</strong>
         </div>
-
       </div>
 
       <div class="program-info__item">
-
         <span>Ficha</span>
 
         <div class="program-info__value">
           <!-- <q-icon name="description" /> -->
           <strong>{{ ficha }}</strong>
         </div>
-
       </div>
 
       <div class="program-info__item">
-
         <span>Total Aprendices de la Ficha</span>
 
         <div class="program-info__value">
           <!-- <q-icon name="groups" /> -->
           <strong>{{ filteredAprendices.length }}</strong>
         </div>
-
       </div>
-
     </div>
 
     <div class="participants-toolbar">
-
-      <BaseSearch v-model="search" placeholder="Buscar aprendiz por nombre o documento..." icon="search"
-        clearable />
+      <BaseSearch
+        v-model="search"
+        placeholder="Buscar aprendiz por nombre o documento..."
+        icon="search"
+        clearable
+      />
 
       <div class="participants-toolbar__actions">
+        <q-btn
+          class="participant-action-btn participant-action-btn--select"
+          flat
+          no-caps
+          icon="check_box"
+          label="Seleccionar todos"
+          @click="selectAll"
+        />
 
-        <q-btn class="participant-action-btn participant-action-btn--select" flat no-caps icon="check_box" label="Seleccionar todos" @click="selectAll" />
-
-        <q-btn class="participant-action-btn" flat no-caps icon="clear_all" label="Limpiar selección" @click="clearSelection" />
-
+        <q-btn
+          class="participant-action-btn"
+          flat
+          no-caps
+          icon="clear_all"
+          label="Limpiar selección"
+          @click="clearSelection"
+        />
       </div>
-
     </div>
 
-    <BaseTable :rows="paginatedRows" :columns="columns" row-key="numero" :current-page="currentPage"
-      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-      :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
-
+    <BaseTable
+      :rows="paginatedRows"
+      :columns="columns"
+      row-key="numero"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
+    >
       <template #body-cell-nombre="props">
         <q-td :props="props">
           {{ props.row.nombre }}
@@ -102,42 +113,32 @@
 
       <template #body-cell-marcar="props">
         <q-td :props="props">
-          <q-checkbox class="checkbox-selection" :model-value="isSelected(props.row._id)" :disable="props.row.estado !== 'Activo'"
-            @update:model-value="
-              (value) => handleSelection(props.row._id, value)
-            " />
+          <q-checkbox
+            class="checkbox-selection"
+            :model-value="isSelected(props.row._id)"
+            :disable="props.row.estado !== 'Activo'"
+            @update:model-value="(value) => handleSelection(props.row._id, value)"
+          />
         </q-td>
       </template>
 
       <template #no-data>
-
-        <div class="empty-state">
-          No se encontraron aprendices.
-        </div>
-
+        <div class="empty-state">No se encontraron aprendices.</div>
       </template>
 
       <template #footer-left>
-
         <div class="selection-summary">
-
           <strong>
             N.º de Aprendices Seleccionados:
             {{ selectedCount }}
           </strong>
-
         </div>
-
       </template>
-
     </BaseTable>
-
   </section>
-
 </template>
 
 <script setup>
-
 import { computed, ref } from 'vue'
 
 import BaseSearch from 'src/components/forms/BaseSearch.vue'
@@ -151,36 +152,27 @@ import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock'
 import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock'
 import { PLAN_APRENDICES_COLUMNS } from 'src/constants/tables/planAprendices.columns'
 
-
 const props = defineProps({
   modelValue: {
     type: Object,
     required: true,
-  }
+  },
 })
 
-const emit = defineEmits([
-  'update:modelValue',
-])
+const emit = defineEmits(['update:modelValue'])
 
 const plan = props.modelValue
 
 const search = ref('')
 
-const columns = PLAN_APRENDICES_COLUMNS;
+const columns = PLAN_APRENDICES_COLUMNS
 
 const programa = computed(() => {
-  return PROGRAMAS_MOCK.find(
-    (item) => item._id === plan.programaFormacionId,
-  )
+  return PROGRAMAS_MOCK.find((item) => item._id === plan.programaFormacionId)
 })
 
 const programaNombre = computed(() => {
-  return (
-    plan.programaFormacionNombre ||
-    programa.value?.nombre ||
-    '—'
-  )
+  return plan.programaFormacionNombre || programa.value?.nombre || '—'
 })
 
 const ficha = computed(() => {
@@ -192,26 +184,21 @@ const aprendices = computed(() => {
 })
 
 const filteredAprendices = computed(() => {
-  const value = search.value
-    .trim()
-    .toLowerCase()
+  const value = search.value.trim().toLowerCase()
 
   if (!value) {
     return aprendices.value
   }
 
   return aprendices.value.filter((aprendiz) => {
-    const nombre = `${aprendiz.nombre ?? ''} ${aprendiz.apellido ?? ''}`
-      .toLowerCase()
+    const nombre = `${aprendiz.nombre ?? ''} ${aprendiz.apellido ?? ''}`.toLowerCase()
 
     const tipoDocumento = String(aprendiz.tipo ?? '').toLowerCase()
 
     const numeroDocumento = String(aprendiz.documento ?? '').toLowerCase()
 
     return (
-      nombre.includes(value) ||
-      tipoDocumento.includes(value) ||
-      numeroDocumento.includes(value)
+      nombre.includes(value) || tipoDocumento.includes(value) || numeroDocumento.includes(value)
     )
   })
 })
@@ -293,7 +280,6 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -323,7 +309,7 @@ defineExpose({
   flex-direction: column;
   gap: 6px;
   padding-bottom: 2px;
-  border-bottom: 1px solid #D1D5DB;
+  border-bottom: 1px solid #d1d5db;
 
   span {
     font-size: $font-size-sm;
@@ -428,7 +414,7 @@ defineExpose({
   }
 
   .selection-summary {
-  padding-left: 0;
-}
+    padding-left: 0;
+  }
 }
 </style>

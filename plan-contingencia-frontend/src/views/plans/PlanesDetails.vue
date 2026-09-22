@@ -1,20 +1,15 @@
 <template>
-
   <BasePage>
-
     <CrudHeader title="Plan de Contingencia" :uppercase-title="true" />
 
     <div v-if="plan" class="plan-detail">
-
       <div class="plan-detail__header">
         <StatusChip class="plan-detail-status" :status="plan.estado" />
       </div>
 
-
       <PlanSection number="1" title="Información General" icon="description">
         <PlanInformacionGeneral v-if="plan" :plan="plan" />
       </PlanSection>
-
 
       <PlanSection :number="2" title="Contexto Académico" icon="school">
         <PlanContextoAcademico :plan="plan" />
@@ -43,26 +38,29 @@
       <PlanSection :number="8" title="Flujo de Revisión y Aprobación" icon="sync">
         <PlanRevision :plan="plan" />
       </PlanSection>
-
     </div>
 
     <div class="plan-footer">
       <PlanDetailsActions :role="role" :plan="plan" @action="handlePlanAction" />
     </div>
 
-    <BaseConfirmationDialog v-model="showConfirmation" :title="confirmationConfig.title"
-      :confirm-label="confirmationConfig.confirmLabel" :cancel-label="confirmationConfig.cancelLabel"
+    <BaseConfirmationDialog
+      v-model="showConfirmation"
+      :title="confirmationConfig.title"
+      :confirm-label="confirmationConfig.confirmLabel"
+      :cancel-label="confirmationConfig.cancelLabel"
       :variant="confirmationConfig.variant"
-      :show-observations="pendingAction === PLAN_ACTIONS.NO_APROBAR || pendingAction === PLAN_ACTIONS.MANDAR_EDICION || pendingAction === PLAN_ACTIONS.CANCELAR"
-      @confirm="confirmPlanAction" />
-
+      :show-observations="
+        pendingAction === PLAN_ACTIONS.NO_APROBAR ||
+        pendingAction === PLAN_ACTIONS.MANDAR_EDICION ||
+        pendingAction === PLAN_ACTIONS.CANCELAR
+      "
+      @confirm="confirmPlanAction"
+    />
   </BasePage>
-
 </template>
 
-
 <script setup>
-
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth.store'
@@ -88,6 +86,7 @@ import { PLANES_HISTORICO_MOCK } from 'src/mocks/plans/historico.mock.js'
 import { PLAN_ACTIONS } from 'src/constants/plans/planActions'
 import { PLAN_ACTIONS_CONFIRMATION } from 'src/constants/actions/plan_confirmation.constants'
 import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notifications.constants'
+import { ROLES } from 'src/constants/system/roles.constants'
 
 import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
 
@@ -96,15 +95,14 @@ import {
   rejectPlan,
   executePlan,
   cancelPlan,
-  sendPlanToEdition
+  sendPlanToEdition,
 } from 'src/utils/workflow.utils'
-
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-const role = computed(() => authStore.role || 'usuario')
+const role = computed(() => authStore.role || ROLES.CONSULTOR)
 
 const showConfirmation = ref(false)
 const pendingAction = ref(null)
@@ -112,14 +110,13 @@ const pendingAction = ref(null)
 const plan = ref(getPlanById(route.params.id))
 
 function getPlanById(id) {
-
-  const planMock = PLANES_MOCK.find(item => item._id === id)
+  const planMock = PLANES_MOCK.find((item) => item._id === id)
 
   if (planMock) {
     return planMock
   }
 
-  const historicalPlan = PLANES_HISTORICO_MOCK.find(item => item._id === id)
+  const historicalPlan = PLANES_HISTORICO_MOCK.find((item) => item._id === id)
 
   if (!historicalPlan) {
     return PLANES_MOCK[0]
@@ -129,26 +126,23 @@ function getPlanById(id) {
     ...PLANES_MOCK[0],
     ...historicalPlan,
     fecha: historicalPlan.createdAt,
-    fechaCierre: historicalPlan.fechaCierre
+    fechaCierre: historicalPlan.fechaCierre,
   }
 }
 
 const confirmationConfig = computed(() => {
-
   return (
     PLAN_ACTIONS_CONFIRMATION[pendingAction.value] ?? {
       title: 'Confirmar acción',
       confirmLabel: 'Confirmar',
       cancelLabel: 'Cancelar',
-      variant: 'primary'
+      variant: 'primary',
     }
   )
 })
 
 function handlePlanAction(action) {
-
   if (PLAN_ACTIONS_CONFIRMATION[action]) {
-
     pendingAction.value = action
     showConfirmation.value = true
 
@@ -156,7 +150,6 @@ function handlePlanAction(action) {
   }
   executePlanAction(action)
 }
-
 
 function confirmPlanAction(payload) {
   const currentAction = pendingAction.value
@@ -167,51 +160,31 @@ function confirmPlanAction(payload) {
   if (currentAction === PLAN_ACTIONS.APROBAR && plan.value) {
     router.push({
       name: 'planes.stage',
-      params: { id: plan.value._id }
+      params: { id: plan.value._id },
     })
   }
 }
 
-
 function executePlanAction(action, observations = '') {
-
   switch (action) {
     case PLAN_ACTIONS.APROBAR:
-      plan.value = approvePlan(
-        plan.value,
-        role.value
-      )
+      plan.value = approvePlan(plan.value, role.value)
       break
 
     case PLAN_ACTIONS.NO_APROBAR:
-      plan.value = rejectPlan(
-        plan.value,
-        role.value,
-        observations
-      )
+      plan.value = rejectPlan(plan.value, role.value, observations)
       break
 
     case PLAN_ACTIONS.EJECUTAR:
-      plan.value = executePlan(
-        plan.value,
-        role.value
-      )
+      plan.value = executePlan(plan.value, role.value)
       break
 
     case PLAN_ACTIONS.CANCELAR:
-      plan.value = cancelPlan(
-        plan.value,
-        role.value,
-        observations
-      )
+      plan.value = cancelPlan(plan.value, role.value, observations)
       break
 
     case PLAN_ACTIONS.MANDAR_EDICION:
-      plan.value = sendPlanToEdition(
-        plan.value,
-        role.value,
-        observations
-      )
+      plan.value = sendPlanToEdition(plan.value, role.value, observations)
       break
 
     case PLAN_ACTIONS.EDITAR:
@@ -232,13 +205,10 @@ function executePlanAction(action, observations = '') {
       notifySuccess(notification.successMessage)
     }
   }
-
 }
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -276,7 +246,6 @@ function executePlanAction(action, observations = '') {
 }
 
 @media (max-width: 1000px) {
-
   .plan-detail {
     width: 94%;
     margin-top: 32px;
@@ -291,7 +260,6 @@ function executePlanAction(action, observations = '') {
 }
 
 @media (max-width: 700px) {
-
   .plan-detail {
     width: calc(100% - 24px);
     margin: 28px auto 10px;
@@ -313,7 +281,6 @@ function executePlanAction(action, observations = '') {
 }
 
 @media (max-width: 450px) {
-
   .plan-detail {
     width: calc(100%);
     margin-top: 22px;
@@ -326,6 +293,5 @@ function executePlanAction(action, observations = '') {
     align-items: center;
     width: 100%;
   }
-
 }
 </style>

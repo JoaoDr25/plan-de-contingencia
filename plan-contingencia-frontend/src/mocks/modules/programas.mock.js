@@ -8,7 +8,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Tecnólogo',
     centro: 'Centro Agroturístico',
     fecha: '15/01/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000002',
@@ -19,7 +19,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Técnico',
     centro: 'Centro Agroturístico',
     fecha: '22/01/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000003',
@@ -30,7 +30,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Tecnólogo',
     centro: 'Centro Agroturístico',
     fecha: '05/02/2026',
-    estado: 'Inactivo'
+    estado: 'Inactivo',
   },
   {
     _id: '66a200000000000000000004',
@@ -41,7 +41,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Tecnólogo',
     centro: 'Centro Agroturístico',
     fecha: '18/02/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000005',
@@ -52,7 +52,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Tecnólogo',
     centro: 'Centro Agroturístico',
     fecha: '03/03/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000006',
@@ -63,7 +63,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Técnico',
     centro: 'Centro Agroturístico',
     fecha: '14/03/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000007',
@@ -74,7 +74,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Tecnólogo',
     centro: 'Centro Agroturístico',
     fecha: '28/03/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000008',
@@ -85,7 +85,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Técnico',
     centro: 'Centro Agroturístico',
     fecha: '10/04/2026',
-    estado: 'Inactivo'
+    estado: 'Inactivo',
   },
   {
     _id: '66a200000000000000000009',
@@ -96,7 +96,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Tecnólogo',
     centro: 'Centro Agroturístico',
     fecha: '25/04/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000010',
@@ -107,7 +107,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Tecnólogo',
     centro: 'Centro Agroturístico',
     fecha: '28/01/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000011',
@@ -118,7 +118,7 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Técnico',
     centro: 'Centro Agroturístico',
     fecha: '05/04/2026',
-    estado: 'Activo'
+    estado: 'Activo',
   },
   {
     _id: '66a200000000000000000012',
@@ -129,6 +129,6 @@ export const PROGRAMAS_MOCK = [
     nivel: 'Técnico',
     centro: 'Centro Agroturístico',
     fecha: '15/06/2026',
-    estado: 'Activo'
-  }
+    estado: 'Activo',
+  },
 ]

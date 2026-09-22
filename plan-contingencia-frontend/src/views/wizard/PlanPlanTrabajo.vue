@@ -1,57 +1,40 @@
 <template>
-
   <section class="plan-trabajo">
-
     <div class="section-header">
       <h2>Plan de Trabajo</h2>
     </div>
 
     <div class="plan-info">
-
       <div class="plan-info__item">
-
         <span>Fecha de salida</span>
 
         <div class="plan-info__value">
           <q-icon name="event" />
           <strong>{{ formattedDate }}</strong>
         </div>
-
       </div>
 
       <div class="plan-info__item">
-
         <span>Hora de salida</span>
 
         <div class="plan-info__value">
           <q-icon name="schedule" />
           <strong>{{ formattedTime(plan.horaSalida) }}</strong>
         </div>
-
       </div>
 
       <div class="plan-info__item">
-
         <span>Hora de regreso prevista</span>
 
         <div class="plan-info__value">
           <q-icon name="schedule" />
           <strong>{{ formattedTime(plan.horaRegreso) }}</strong>
         </div>
-
       </div>
-
     </div>
 
     <div class="toolbar">
-
-      <PrimaryActionButton
-        label="Agregar"
-        icon="add_circle_outline"
-        size="sm"
-        @click="handleAdd"
-      />
-
+      <PrimaryActionButton label="Agregar" icon="add_circle_outline" size="sm" @click="handleAdd" />
     </div>
 
     <BaseTable
@@ -67,88 +50,57 @@
       @change-page="currentPage = $event"
       @change-rows-per-page="setRowsPerPage"
     >
-
       <template #body-cell-numero="props">
-
         <q-td :props="props">
           {{ props.row.numero }}
-
         </q-td>
-
       </template>
 
       <template #body-cell-actividad="props">
-
         <q-td :props="props" class="marquee-cell">
-
           <div
             class="marquee-cell__content"
             @mouseenter="onMarqueeHover"
             @mouseleave="onMarqueeLeave"
           >
-
             <span class="marquee-cell__text">
               {{ props.row.actividad }}
             </span>
-
           </div>
-
         </q-td>
-
       </template>
 
       <template #body-cell-descripcion="props">
-
         <q-td :props="props" class="marquee-cell">
-
           <div
             class="marquee-cell__content"
             @mouseenter="onMarqueeHover"
             @mouseleave="onMarqueeLeave"
           >
-
             <span class="marquee-cell__text">
               {{ props.row.descripcion }}
             </span>
-
           </div>
-
         </q-td>
-
       </template>
 
       <template #body-cell-duracion="props">
-
-        <q-td :props="props">
-
-          {{ props.row.duracion }} min
-
-        </q-td>
-
+        <q-td :props="props"> {{ props.row.duracion }} min </q-td>
       </template>
 
       <template #body-cell-opciones="props">
-
         <q-td :props="props">
-
           <CrudActions
             :actions="PLAN_TRABAJO_ACTIONS"
             @edit="handleEdit(props.row)"
             @delete="handleDelete(props.row)"
           />
-
         </q-td>
-
       </template>
 
       <template #no-data>
-
-        <div class="empty-state">
-          No hay actividades agregadas al plan de trabajo.
-        </div>
-
+        <div class="empty-state">No hay actividades agregadas al plan de trabajo.</div>
       </template>
-
     </BaseTable>
 
     <PlanesActividadDialog
@@ -167,13 +119,10 @@
       cancel-label="Cancelar"
       @confirm="confirmDelete"
     />
-
   </section>
-
 </template>
 
 <script setup>
-
 import { computed, ref } from 'vue'
 
 import { PLAN_TRABAJO_COLUMNS } from 'src/constants/tables/planTrabajo.columns.js'
@@ -194,9 +143,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits([
-  'update:modelValue',
-])
+const emit = defineEmits(['update:modelValue'])
 
 const plan = props.modelValue
 
@@ -206,7 +153,7 @@ const selectedActivity = ref(null)
 
 const PLAN_TRABAJO_ACTIONS = ['edit', 'delete']
 
-const columns = PLAN_TRABAJO_COLUMNS;
+const columns = PLAN_TRABAJO_COLUMNS
 
 function onMarqueeHover(event) {
   const container = event.currentTarget
@@ -295,11 +242,7 @@ function handleSaveActivity(activity) {
   } else {
     const nextNumber =
       plan.planTrabajo.length > 0
-        ? Math.max(
-            ...plan.planTrabajo.map(
-              (item) => Number(item.numero) || 0,
-            ),
-          ) + 1
+        ? Math.max(...plan.planTrabajo.map((item) => Number(item.numero) || 0)) + 1
         : 1
 
     plan.planTrabajo.push({
@@ -325,9 +268,7 @@ function confirmDelete() {
     return
   }
 
-  const index = plan.planTrabajo.findIndex(
-    (item) => item.numero === selectedActivity.value.numero,
-  )
+  const index = plan.planTrabajo.findIndex((item) => item.numero === selectedActivity.value.numero)
 
   if (index !== -1) {
     plan.planTrabajo.splice(index, 1)
@@ -394,7 +335,6 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -464,7 +404,7 @@ defineExpose({
   align-items: center;
   gap: 8px;
   padding-bottom: 6px;
-  border-bottom: 1px solid #D1D5DB;
+  border-bottom: 1px solid #d1d5db;
   padding-left: 10px;
 
   .q-icon {

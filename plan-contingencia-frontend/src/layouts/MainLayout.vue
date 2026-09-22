@@ -1,6 +1,5 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-
     <AppHeader @toggleDrawer="toggleDrawer" />
 
     <AppDrawer v-model="leftDrawerOpen" @closeDrawer="closeDrawer" />
@@ -19,20 +18,18 @@
         <AppFooter />
       </div>
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
-
-import AppHeader from 'src/components/layout/AppHeader.vue';
-import AppDrawer from 'src/components/layout/AppDrawer.vue';
-import AppFooter from 'src/components/layout/AppFooter.vue';
-import FloatingScrollButtons from 'src/components/base/FloatingScrollButtons.vue';
-import BackButton from 'src/components/actions/BackButton.vue';
+import AppHeader from 'src/components/layout/AppHeader.vue'
+import AppDrawer from 'src/components/layout/AppDrawer.vue'
+import AppFooter from 'src/components/layout/AppFooter.vue'
+import FloatingScrollButtons from 'src/components/base/FloatingScrollButtons.vue'
+import BackButton from 'src/components/actions/BackButton.vue'
 
 const route = useRoute()
 const leftDrawerOpen = ref(false)
@@ -48,11 +45,9 @@ function toggleDrawer() {
 function closeDrawer() {
   leftDrawerOpen.value = false
 }
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 
 .q-page-container {

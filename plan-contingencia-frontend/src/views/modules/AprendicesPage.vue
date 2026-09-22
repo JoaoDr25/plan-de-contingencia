@@ -1,73 +1,80 @@
 <template>
+  <BasePage>
+    <CrudHeader title="Aprendices">
+      <template #actions>
+        <PrimaryActionButton
+          label="Crear"
+          icon="add_circle_outline"
+          size="sm"
+          @click="openCreateDialog"
+        />
+      </template>
+    </CrudHeader>
 
-    <BasePage>
+    <CrudToolbar>
+      <template #center>
+        <CrudFilters v-model="selectedFilter" :options="APRENDICES_FILTERS" />
+      </template>
 
-        <CrudHeader title="Aprendices">
+      <template #left>
+        <BaseSearch
+          v-model="searchText"
+          placeholder="Buscar por documento, nombre, ficha o estado..."
+        />
+      </template>
+    </CrudToolbar>
 
-            <template #actions>
+    <BaseTable
+      class="apprentices-table"
+      :rows="paginatedRows"
+      :columns="APRENDICES_COLUMNS"
+      :loading="loading"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
+    >
+      <template #body-cell-estado="props">
+        <q-td :props="props">
+          <StatusChip :status="props.value" />
+        </q-td>
+      </template>
 
-                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
+      <template #body-cell-opciones="props">
+        <q-td :props="props">
+          <CrudActions
+            :actions="DEFAULT_CRUD_ACTIONS"
+            @view="viewItem(props.row)"
+            @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)"
+          />
+        </q-td>
+      </template>
+    </BaseTable>
 
-            </template>
+    <AprendicesDialog
+      v-model="dialog"
+      :mode="dialogMode"
+      :apprentice="selectedApprentice"
+      @save="handleApprenticeSave"
+    />
 
-        </CrudHeader>
-
-        <CrudToolbar>
-
-            <template #center>
-
-                <CrudFilters v-model="selectedFilter" :options="APRENDICES_FILTERS" />
-
-            </template>
-
-            <template #left>
-
-                <BaseSearch v-model="searchText" placeholder="Buscar por documento, nombre, ficha o estado..." />
-
-            </template>
-
-        </CrudToolbar>
-
-        <BaseTable class="apprentices-table" :rows="paginatedRows" :columns="APRENDICES_COLUMNS" :loading="loading" :current-page="currentPage"
-            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
-
-            <template #body-cell-estado="props">
-
-                <q-td :props="props">
-
-                    <StatusChip :status="props.value" />
-
-                </q-td>
-
-            </template>
-
-            <template #body-cell-opciones="props">
-
-                <q-td :props="props">
-
-                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
-                        @delete="deleteItem(props.row)" />
-
-                </q-td>
-
-            </template>
-
-        </BaseTable>
-
-        <AprendicesDialog v-model="dialog" :mode="dialogMode" :apprentice="selectedApprentice"
-            @save="handleApprenticeSave" />
-
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
-            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
-            @cancel="cancelConfirmation" />
-
-    </BasePage>
-
+    <BaseConfirmationDialog
+      v-model="confirmationDialog"
+      :title="confirmationTitle"
+      :confirm-label="confirmationLabel"
+      :variant="confirmationVariant"
+      @confirm="confirmAction"
+      @cancel="cancelConfirmation"
+    />
+  </BasePage>
 </template>
 
 <script setup>
-
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -93,27 +100,26 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 
 import AprendicesDialog from '../dialogs/AprendicesDialog.vue'
 
-
 const sourceRows = ref(APRENDICES_MOCK)
 
 const router = useRouter()
 
 const {
-    selectedFilter,
-    searchText,
-    currentPage,
-    rowsPerPage,
-    setRowsPerPage,
-    filteredRows,
-    paginatedRows,
-    totalPages,
-    startRow,
-    endRow
+  selectedFilter,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  setRowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow,
 } = useCrudTable({
-    sourceRows,
-    defaultFilter: 'documento',
-    exactSearchField: [],
-    defaultRowsPerPage: 8
+  sourceRows,
+  defaultFilter: 'documento',
+  exactSearchField: [],
+  defaultRowsPerPage: 8,
 })
 
 const loading = ref(false)
@@ -127,135 +133,126 @@ const confirmationDialog = ref(false)
 const pendingActionData = ref(null)
 
 const confirmationTitle = computed(() => {
-    const titles = {
-        create: 'Confirmar creación',
-        edit: 'Confirmar actualización',
-        delete: 'Confirmar eliminación'
-    }
-    return titles[dialogMode.value]
+  const titles = {
+    create: 'Confirmar creación',
+    edit: 'Confirmar actualización',
+    delete: 'Confirmar eliminación',
+  }
+  return titles[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
-    const labels = {
-        create: 'Crear',
-        edit: 'Actualizar',
-        delete: 'Eliminar'
-    }
-    return labels[dialogMode.value]
+  const labels = {
+    create: 'Crear',
+    edit: 'Actualizar',
+    delete: 'Eliminar',
+  }
+  return labels[dialogMode.value]
 })
 
 const confirmationVariant = computed(() => {
-    return dialogMode.value === 'delete'
-        ? 'danger'
-        : 'primary'
+  return dialogMode.value === 'delete' ? 'danger' : 'primary'
 })
 
 function openCreateDialog() {
-    dialogMode.value = 'create'
-    selectedApprentice.value = null
-    dialog.value = true
+  dialogMode.value = 'create'
+  selectedApprentice.value = null
+  dialog.value = true
 }
 
 function openEditDialog(row) {
-    dialogMode.value = 'edit'
-    selectedApprentice.value = row
-    dialog.value = true
+  dialogMode.value = 'edit'
+  selectedApprentice.value = row
+  dialog.value = true
 }
 
 function handleApprenticeSave(formData) {
-    pendingActionData.value = formData
-    dialog.value = false
-    confirmationDialog.value = true
+  pendingActionData.value = formData
+  dialog.value = false
+  confirmationDialog.value = true
 }
 
 function createApprentice(formData) {
-    sourceRows.value.push({
-        ...formData,
-        fecha: getCurrentDate()
-    })
-    dialog.value = false
+  sourceRows.value.push({
+    ...formData,
+    fecha: getCurrentDate(),
+  })
+  dialog.value = false
 }
 
 function updateApprentice(formData) {
-    const index = sourceRows.value.findIndex(
-        row => row === selectedApprentice.value
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value[index] = {
-        ...sourceRows.value[index],
-        ...formData
-    }
-    dialog.value = false
+  const index = sourceRows.value.findIndex((row) => row === selectedApprentice.value)
+  if (index === -1) {
+    return
+  }
+  sourceRows.value[index] = {
+    ...sourceRows.value[index],
+    ...formData,
+  }
+  dialog.value = false
 }
 
 function deleteApprentice(row) {
-    const index = sourceRows.value.findIndex(
-        apprentice => apprentice.id === row.id
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value.splice(index, 1)
+  const index = sourceRows.value.findIndex((apprentice) => apprentice.id === row.id)
+  if (index === -1) {
+    return
+  }
+  sourceRows.value.splice(index, 1)
 }
 
 function confirmAction() {
-    if (dialogMode.value === 'create') {
-        createApprentice(pendingActionData.value)
-        notifySuccess('Aprendiz creado correctamente')
-    }
-    if (dialogMode.value === 'edit') {
-        updateApprentice(pendingActionData.value)
-        notifySuccess('Aprendiz actualizado correctamente')
-    }
-    if (dialogMode.value === 'delete') {
-        deleteApprentice(selectedApprentice.value)
-        notifySuccess('Aprendiz eliminado correctamente')
-    }
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  if (dialogMode.value === 'create') {
+    createApprentice(pendingActionData.value)
+    notifySuccess('Aprendiz creado correctamente')
+  }
+  if (dialogMode.value === 'edit') {
+    updateApprentice(pendingActionData.value)
+    notifySuccess('Aprendiz actualizado correctamente')
+  }
+  if (dialogMode.value === 'delete') {
+    deleteApprentice(selectedApprentice.value)
+    notifySuccess('Aprendiz eliminado correctamente')
+  }
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function cancelConfirmation() {
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function viewItem(row) {
-    router.push({
-        name: 'aprendices.detail',
-        params: {
-            codigo: row.codigo
-        }
-    })
+  router.push({
+    name: 'aprendices.detail',
+    params: {
+      codigo: row.codigo,
+    },
+  })
 }
 
 function editItem(row) {
-    console.log('Editar Aprendiz:', row)
-    openEditDialog(row)
+  console.log('Editar Aprendiz:', row)
+  openEditDialog(row)
 }
 
 function deleteItem(row) {
-    dialogMode.value = 'delete'
-    selectedApprentice.value = row
-    confirmationDialog.value = true
+  dialogMode.value = 'delete'
+  selectedApprentice.value = row
+  confirmationDialog.value = true
 }
-
 </script>
 
 <style scoped lang="scss">
-
 .apprentices-table :deep(.q-table thead th:nth-child(7)),
 .apprentices-table :deep(.q-table tbody td:nth-child(7)) {
-    width: 120px !important;
-    max-width: 120px !important;
+  width: 120px !important;
+  max-width: 120px !important;
 }
 
 .apprentices-table :deep(.q-table thead th:nth-child(8)),
 .apprentices-table :deep(.q-table tbody td:nth-child(8)) {
-    width: 200px !important;
-    max-width: 200px !important;
+  width: 200px !important;
+  max-width: 200px !important;
 }
-
 </style>

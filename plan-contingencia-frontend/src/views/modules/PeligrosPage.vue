@@ -1,93 +1,93 @@
 <template>
+  <BasePage>
+    <CrudHeader title="Peligros">
+      <template #actions>
+        <PrimaryActionButton
+          label="Crear"
+          icon="add_circle_outline"
+          size="sm"
+          @click="openCreateDialog"
+        />
+      </template>
+    </CrudHeader>
 
-    <BasePage>
+    <CrudToolbar>
+      <template #center>
+        <CrudFilters v-model="selectedFilter" :options="PELIGROS_FILTERS" />
+      </template>
 
-        <CrudHeader title="Peligros">
+      <template #left>
+        <BaseSearch v-model="searchText" placeholder="Buscar por nombre o categoría..." />
+      </template>
+    </CrudToolbar>
 
-            <template #actions>
+    <BaseTable
+      :rows="paginatedRows"
+      :columns="PELIGROS_COLUMNS"
+      :loading="loading"
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      :rows-per-page="rowsPerPage"
+      :start="startRow"
+      :end="endRow"
+      :total="filteredRows.length"
+      @change-page="currentPage = $event"
+      @change-rows-per-page="setRowsPerPage"
+    >
+      <template #body-cell-riesgos="props">
+        <q-td :props="props">
+          <div class="associated-risks-cell">
+            <span> {{ getAssociatedRisks(props.row).length }} Riesgos </span>
 
-                <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
+            <button
+              v-if="getAssociatedRisks(props.row).length"
+              type="button"
+              class="associated-risks-cell__action"
+              :aria-label="`Ver riesgos asociados a ${props.row.nombre}`"
+              title="Ver riesgos asociados"
+              @click="viewAssociatedRisks(props.row)"
+            >
+              <q-icon name="open_in_new" size="18px" />
+            </button>
+          </div>
+        </q-td>
+      </template>
 
-            </template>
+      <template #body-cell-opciones="props">
+        <q-td :props="props">
+          <CrudActions
+            :actions="DEFAULT_CRUD_ACTIONS"
+            @view="viewItem(props.row)"
+            @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)"
+          />
+        </q-td>
+      </template>
+    </BaseTable>
 
-        </CrudHeader>
+    <PeligrosDialog
+      v-model="dialog"
+      :mode="dialogMode"
+      :danger="selectedDanger"
+      @save="handleDangerSave"
+    />
 
-        <CrudToolbar>
+    <BaseConfirmationDialog
+      v-model="confirmationDialog"
+      :title="confirmationTitle"
+      :confirm-label="confirmationLabel"
+      :variant="confirmationVariant"
+      @confirm="confirmAction"
+      @cancel="cancelConfirmation"
+    />
 
-            <template #center>
+    <PeligrosDetails v-model="detailsDanger" :danger="selectedDanger" />
 
-                <CrudFilters v-model="selectedFilter" :options="PELIGROS_FILTERS" />
-
-            </template>
-
-            <template #left>
-
-                <BaseSearch v-model="searchText" placeholder="Buscar por nombre o categoría..." />
-
-            </template>
-
-        </CrudToolbar>
-
-        <BaseTable :rows="paginatedRows" :columns="PELIGROS_COLUMNS" :loading="loading" :current-page="currentPage"
-            :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
-            :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
-
-            <template #body-cell-riesgos="props">
-
-                <q-td :props="props">
-
-                    <div class="associated-risks-cell">
-
-                        <span>
-                            {{ getAssociatedRisks(props.row).length }} Riesgos
-                        </span>
-
-                        <button
-                            v-if="getAssociatedRisks(props.row).length"
-                            type="button"
-                            class="associated-risks-cell__action"
-                            :aria-label="`Ver riesgos asociados a ${props.row.nombre}`"
-                            title="Ver riesgos asociados"
-                            @click="viewAssociatedRisks(props.row)"
-                        >
-                            <q-icon name="open_in_new" size="18px" />
-                        </button>
-
-                    </div>
-
-                </q-td>
-
-            </template>
-
-            <template #body-cell-opciones="props">
-
-                <q-td :props="props">
-
-                    <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
-                        @delete="deleteItem(props.row)" />
-
-                </q-td>
-
-            </template>
-
-        </BaseTable>
-
-        <PeligrosDialog v-model="dialog" :mode="dialogMode" :danger="selectedDanger" @save="handleDangerSave" />
-
-        <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle"
-            :confirm-label="confirmationLabel" :variant="confirmationVariant" @confirm="confirmAction"
-            @cancel="cancelConfirmation" />
-
-        <PeligrosDetails v-model="detailsDanger" :danger="selectedDanger" />
-
-        <PlanesRiesgosDialog v-model="risksDialog" :danger="selectedDangerWithRisks" />
-
-    </BasePage>
-
+    <PlanesRiesgosDialog v-model="risksDialog" :danger="selectedDangerWithRisks" />
+  </BasePage>
 </template>
 
 <script setup>
-
 import { ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
@@ -117,23 +117,22 @@ import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
 const sourceRows = ref(PELIGROS_MOCK)
 
 const {
-    selectedFilter,
-    searchText,
-    currentPage,
-    rowsPerPage,
-    setRowsPerPage,
-    filteredRows,
-    paginatedRows,
-    totalPages,
-    startRow,
-    endRow
+  selectedFilter,
+  searchText,
+  currentPage,
+  rowsPerPage,
+  setRowsPerPage,
+  filteredRows,
+  paginatedRows,
+  totalPages,
+  startRow,
+  endRow,
 } = useCrudTable({
-    sourceRows,
-    defaultFilter: 'nombre',
-    exactSearchField: [],
-    defaultRowsPerPage: 8
+  sourceRows,
+  defaultFilter: 'nombre',
+  exactSearchField: [],
+  defaultRowsPerPage: 8,
 })
-
 
 const loading = ref(false)
 
@@ -149,162 +148,151 @@ const confirmationDialog = ref(false)
 const pendingActionData = ref(null)
 
 const confirmationTitle = computed(() => {
-    const titles = {
-        create: 'Confirmar creación',
-        edit: 'Confirmar actualización',
-        delete: 'Confirmar eliminación'
-    }
-    return titles[dialogMode.value]
+  const titles = {
+    create: 'Confirmar creación',
+    edit: 'Confirmar actualización',
+    delete: 'Confirmar eliminación',
+  }
+  return titles[dialogMode.value]
 })
 
 const confirmationLabel = computed(() => {
-    const labels = {
-        create: 'Crear',
-        edit: 'Actualizar',
-        delete: 'Eliminar'
-    }
-    return labels[dialogMode.value]
+  const labels = {
+    create: 'Crear',
+    edit: 'Actualizar',
+    delete: 'Eliminar',
+  }
+  return labels[dialogMode.value]
 })
 
 const confirmationVariant = computed(() => {
-    return dialogMode.value === 'delete'
-        ? 'danger'
-        : 'primary'
+  return dialogMode.value === 'delete' ? 'danger' : 'primary'
 })
 
 function openCreateDialog() {
-    dialogMode.value = 'create'
-    selectedDanger.value = null
-    dialog.value = true
+  dialogMode.value = 'create'
+  selectedDanger.value = null
+  dialog.value = true
 }
 
 function openEditDialog(row) {
-    dialogMode.value = 'edit'
-    selectedDanger.value = row
-    dialog.value = true
+  dialogMode.value = 'edit'
+  selectedDanger.value = row
+  dialog.value = true
 }
 
 function handleDangerSave(formData) {
-    pendingActionData.value = formData
-    dialog.value = false
-    confirmationDialog.value = true
+  pendingActionData.value = formData
+  dialog.value = false
+  confirmationDialog.value = true
 }
 
 function createDanger(formData) {
-    sourceRows.value.push({
-        ...formData,
-        fecha: getCurrentDate()
-    })
-    dialog.value = false
+  sourceRows.value.push({
+    ...formData,
+    fecha: getCurrentDate(),
+  })
+  dialog.value = false
 }
 
 function updateDanger(formData) {
-    const index = sourceRows.value.findIndex(
-        row => row === selectedDanger.value
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value[index] = {
-        ...sourceRows.value[index],
-        ...formData
-    }
-    dialog.value = false
+  const index = sourceRows.value.findIndex((row) => row === selectedDanger.value)
+  if (index === -1) {
+    return
+  }
+  sourceRows.value[index] = {
+    ...sourceRows.value[index],
+    ...formData,
+  }
+  dialog.value = false
 }
 
 function deleteDanger(row) {
-    const index = sourceRows.value.findIndex(
-        danger => danger.id === row.id
-    )
-    if (index === -1) {
-        return
-    }
-    sourceRows.value.splice(index, 1)
+  const index = sourceRows.value.findIndex((danger) => danger.id === row.id)
+  if (index === -1) {
+    return
+  }
+  sourceRows.value.splice(index, 1)
 }
 
 function confirmAction() {
-    if (dialogMode.value === 'create') {
-        createDanger(pendingActionData.value)
-        notifySuccess('Peligro creado correctamente')
-    }
-    if (dialogMode.value === 'edit') {
-        updateDanger(pendingActionData.value)
-        notifySuccess('Peligro actualizado correctamente')
-    }
-    if (dialogMode.value === 'delete') {
-        deleteDanger(selectedDanger.value)
-        notifySuccess('Peligro eliminado correctamente')
-    }
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  if (dialogMode.value === 'create') {
+    createDanger(pendingActionData.value)
+    notifySuccess('Peligro creado correctamente')
+  }
+  if (dialogMode.value === 'edit') {
+    updateDanger(pendingActionData.value)
+    notifySuccess('Peligro actualizado correctamente')
+  }
+  if (dialogMode.value === 'delete') {
+    deleteDanger(selectedDanger.value)
+    notifySuccess('Peligro eliminado correctamente')
+  }
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function cancelConfirmation() {
-    pendingActionData.value = null
-    confirmationDialog.value = false
+  pendingActionData.value = null
+  confirmationDialog.value = false
 }
 
 function viewItem(row) {
-    console.log('Ver Peligro:', row)
-    selectedDanger.value = row
-    detailsDanger.value = true
+  console.log('Ver Peligro:', row)
+  selectedDanger.value = row
+  detailsDanger.value = true
 }
 
 function getAssociatedRisks(danger) {
-    const selectedIds = Array.isArray(danger.riesgos)
-        ? danger.riesgos
-        : []
+  const selectedIds = Array.isArray(danger.riesgos) ? danger.riesgos : []
 
-    return RIESGOS_MOCK.filter(risk => selectedIds.includes(risk._id))
+  return RIESGOS_MOCK.filter((risk) => selectedIds.includes(risk._id))
 }
 
 function viewAssociatedRisks(danger) {
-    selectedDangerWithRisks.value = {
-        ...danger,
-        riesgos: getAssociatedRisks(danger)
-    }
-    risksDialog.value = true
+  selectedDangerWithRisks.value = {
+    ...danger,
+    riesgos: getAssociatedRisks(danger),
+  }
+  risksDialog.value = true
 }
 
 function editItem(row) {
-    console.log('Editar Peligro:', row)
-    openEditDialog(row)
+  console.log('Editar Peligro:', row)
+  openEditDialog(row)
 }
 
 function deleteItem(row) {
-    dialogMode.value = 'delete'
-    selectedDanger.value = row
-    confirmationDialog.value = true
+  dialogMode.value = 'delete'
+  selectedDanger.value = row
+  confirmationDialog.value = true
 }
-
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 
 .associated-risks-cell {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .associated-risks-cell__action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    color: $color-primary;
-    cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: $color-primary;
+  cursor: pointer;
 }
 
 .associated-risks-cell__action:hover {
-    transform: scale(1.08);
+  transform: scale(1.08);
 }
-
 </style>

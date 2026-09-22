@@ -16,7 +16,6 @@
   height: 100%;
 }
 
-
 // DISPLAY
 .d-flex {
   display: flex;
@@ -33,7 +32,6 @@
 .d-none {
   display: none;
 }
-
 
 // FLEXBOX
 .justify-between {
@@ -52,25 +50,22 @@
   flex-direction: column;
 }
 
-
 // ESPACIADOS
 .mt-md {
-    margin-top: $spacing-md;
+  margin-top: $spacing-md;
 }
 
 .mb-md {
-    margin-bottom: $spacing-md;
+  margin-bottom: $spacing-md;
 }
 
 .ml-md {
-    margin-left: $spacing-md;
+  margin-left: $spacing-md;
 }
 
 .mr-md {
-    margin-right: $spacing-md;
+  margin-right: $spacing-md;
 }
-
-
 
 // TEXTO
 .text-center {
@@ -97,42 +92,38 @@
   font-weight: $font-weight-bold;
 }
 
-
 // CURSOR
 .cursor-pointer {
   cursor: pointer;
 }
 
-
 //SOMBRAS
 .shadow-sm {
-    box-shadow: $shadow-sm;
+  box-shadow: $shadow-sm;
 }
 
 .shadow-md {
-    box-shadow: $shadow-md;
+  box-shadow: $shadow-md;
 }
-
 
 // BORDES
 .rounded-sm {
-    border-radius: $radius-sm;
+  border-radius: $radius-sm;
 }
 
 .rounded-md {
-    border-radius: $radius-md;
+  border-radius: $radius-md;
 }
 
 .rounded-lg {
-    border-radius: $radius-lg;
+  border-radius: $radius-lg;
 }
-
 
 // HOVER
 .card-hover {
-    transition: $transition-normal;
+  transition: $transition-normal;
 
-    &:hover {
-        box-shadow: $shadow-md;
-    }
+  &:hover {
+    box-shadow: $shadow-md;
+  }
 }

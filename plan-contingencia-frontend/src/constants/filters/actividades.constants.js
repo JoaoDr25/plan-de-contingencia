@@ -1,11 +1,10 @@
 export const ACTIVIDADES_FILTERS = [
-
-    {
-        label: 'Nombre',
-        value: 'nombre'
-    },
-    {
-        label: 'Tipo',
-        value: 'tipo'
-    }
+  {
+    label: 'Nombre',
+    value: 'nombre',
+  },
+  {
+    label: 'Tipo',
+    value: 'tipo',
+  },
 ]

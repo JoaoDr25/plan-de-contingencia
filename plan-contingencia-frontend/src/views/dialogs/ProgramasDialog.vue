@@ -1,148 +1,129 @@
 <template>
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
+    <BaseFormGrid :columns="2">
+      <BaseFormField
+        v-for="field in PROGRAM_FORM_FIELDS"
+        :key="field.model"
+        :field="field"
+        v-model="form[field.model]"
+      />
+    </BaseFormGrid>
 
-    <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
-
-        <BaseFormGrid :columns="2">
-
-            <BaseFormField v-for="field in PROGRAM_FORM_FIELDS" :key="field.model" :field="field"
-                v-model="form[field.model]" />
-
-        </BaseFormGrid>
-
-        <template #actions>
-
-            <BaseDialogActions :save-label="saveLabel" @save="handleSave" @cancel="closeDialog" />
-
-        </template>
-
-    </BaseDialog>
-
+    <template #actions>
+      <BaseDialogActions :save-label="saveLabel" @save="handleSave" @cancel="closeDialog" />
+    </template>
+  </BaseDialog>
 </template>
 
 <script setup>
+import { reactive, computed, watch } from 'vue'
 
-import { reactive, computed, watch } from 'vue';
+import { PROGRAM_FORM_FIELDS } from 'src/constants/forms/programas_form.constants'
+import { notifyWarning } from 'src/utils/notifications.utils'
 
-import { PROGRAM_FORM_FIELDS } from 'src/constants/forms/programas_form.constants';
-import { notifyWarning } from 'src/utils/notifications.utils';
+import BaseDialog from 'src/components/forms/BaseDialog.vue'
+import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
+import BaseFormField from 'src/components/forms/BaseFormField.vue'
+import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue'
 
-import BaseDialog from 'src/components/forms/BaseDialog.vue';
-import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue';
-import BaseFormField from 'src/components/forms/BaseFormField.vue';
-import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue';
-
-const {
-    modelValue,
-    mode,
-    program
-} = defineProps({
-
-    modelValue: {
-        type: Boolean,
-        required: true
-    },
-    mode: {
-        type: String,
-        default: 'create',
-        validator: value =>
-            ['create', 'edit'].includes(value)
-    },
-    program: {
-        type: Object,
-        default: null
-    }
+const { modelValue, mode, program } = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
+  mode: {
+    type: String,
+    default: 'create',
+    validator: (value) => ['create', 'edit'].includes(value),
+  },
+  program: {
+    type: Object,
+    default: null,
+  },
 })
 
-const emit = defineEmits([
-    'update:modelValue',
-    'save'
-])
+const emit = defineEmits(['update:modelValue', 'save'])
 
 const dialog = computed({
-    get() {
-        return modelValue
-    },
-    set(value) {
-        emit('update:modelValue', value)
-    }
+  get() {
+    return modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  },
 })
 
 const form = reactive({
-    ficha: '',
-    nombre: '',
-    jornada: null,
-    nivel: null,
-    centro: 'Centro Agroturístico',
-    estado: 'Activo'
+  ficha: '',
+  nombre: '',
+  jornada: null,
+  nivel: null,
+  centro: 'Centro Agroturístico',
+  estado: 'Activo',
 })
 
 const dialogTitle = computed(() => {
-    return mode === 'create'
-        ? 'Crear Programa de Formación'
-        : 'Actualizar Programa de Formación'
+  return mode === 'create' ? 'Crear Programa de Formación' : 'Actualizar Programa de Formación'
 })
 
 const saveLabel = computed(() => {
-    return mode === 'edit'
-        ? 'Actualizar'
-        : 'Guardar'
+  return mode === 'edit' ? 'Actualizar' : 'Guardar'
 })
 
 function validateForm() {
-    for (const field of PROGRAM_FORM_FIELDS) {
-        const rules = field.rules ?? []
-        const value = form[field.model]
+  for (const field of PROGRAM_FORM_FIELDS) {
+    const rules = field.rules ?? []
+    const value = form[field.model]
 
-        for (const rule of rules) {
-            const result = rule(value)
-            if (result !== true) {
-                return result
-            }
-        }
+    for (const rule of rules) {
+      const result = rule(value)
+      if (result !== true) {
+        return result
+      }
     }
-    return true
+  }
+  return true
 }
 
 function handleSave() {
-    const validationResult = validateForm()
+  const validationResult = validateForm()
 
-    if (validationResult !== true) {
-        notifyWarning(validationResult)
-        return
-    }
-    console.log('Datos del formulario:', form)
-    emit('save', { ...form })
+  if (validationResult !== true) {
+    notifyWarning(validationResult)
+    return
+  }
+  console.log('Datos del formulario:', form)
+  emit('save', { ...form })
 }
 
 function resetForm(data = {}) {
-    form.ficha = data.ficha ?? ''
-    form.nombre = data.nombre ?? ''
-    form.jornada = data.jornada ?? ''
-    form.nivel = data.nivel ?? ''
-    form.centro = data.centro ?? 'Centro Agroturístico'
-    form.estado = data.estado ?? 'Activo'
+  form.ficha = data.ficha ?? ''
+  form.nombre = data.nombre ?? ''
+  form.jornada = data.jornada ?? ''
+  form.nivel = data.nivel ?? ''
+  form.centro = data.centro ?? 'Centro Agroturístico'
+  form.estado = data.estado ?? 'Activo'
 }
 
 function initializeForm() {
-    if (mode === 'edit' && program) {
-        resetForm(program)
-        return
-    }
-    resetForm()
+  if (mode === 'edit' && program) {
+    resetForm(program)
+    return
+  }
+  resetForm()
 }
 
 watch(
-    () => modelValue,
-    (isOpen) => {
-        if (isOpen) {
-            initializeForm()
-        }
+  () => modelValue,
+  (isOpen) => {
+    if (isOpen) {
+      initializeForm()
     }
+  },
 )
 
 function closeDialog() {
-    resetForm()
-    dialog.value = false
+  resetForm()
+  dialog.value = false
 }
-
 </script>

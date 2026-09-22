@@ -22,23 +22,23 @@ export const SECURITY_VIAL_ITEMS = [
 ]
 
 export const SECURITY_VIAL_APPLIES_OPTIONS = [
-    {
-        label: 'Sí',
-        value: true
-    },
-    {
-        label: 'No',
-        value: false
-    }
+  {
+    label: 'Sí',
+    value: true,
+  },
+  {
+    label: 'No',
+    value: false,
+  },
 ]
 
 export const SECURITY_VIAL_COMPLIANCE_OPTIONS = [
-    {
-        label: 'Cumple',
-        value: true
-    },
-    {
-        label: 'No cumple',
-        value: false
-    }
+  {
+    label: 'Cumple',
+    value: true,
+  },
+  {
+    label: 'No cumple',
+    value: false,
+  },
 ]

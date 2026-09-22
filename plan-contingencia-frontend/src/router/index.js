@@ -38,7 +38,7 @@ export default defineRouter(({ store }) => {
   authStore.hydrate()
 
   Router.beforeEach((to) => {
-    const requiresAuth = to.matched.some(route => route.meta.requiresAuth === true)
+    const requiresAuth = to.matched.some((route) => route.meta.requiresAuth === true)
     const requiredRoles = to.meta.roles || []
 
     if (to.name === 'login' && authStore.isAuthenticated) {
@@ -48,7 +48,7 @@ export default defineRouter(({ store }) => {
     if (requiresAuth && !authStore.isAuthenticated) {
       return {
         name: 'login',
-        query: { redirect: to.fullPath }
+        query: { redirect: to.fullPath },
       }
     }
 

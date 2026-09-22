@@ -1,26 +1,21 @@
 <template>
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="400px">
+    <BaseFormGrid>
+      <BaseFormField
+        v-for="field in activityFormFields"
+        :key="field.model"
+        :field="field"
+        v-model="form[field.model]"
+      />
+    </BaseFormGrid>
 
-    <BaseDialog v-model="dialog" :title="dialogTitle" width="400px">
-
-        <BaseFormGrid>
-
-            <BaseFormField v-for="field in activityFormFields" :key="field.model" :field="field"
-                v-model="form[field.model]" />
-
-        </BaseFormGrid>
-
-        <template #actions>
-
-            <BaseDialogActions :save-label="saveLabel" @save="handleSave" @cancel="closeDialog" />
-
-        </template>
-
-    </BaseDialog>
-
+    <template #actions>
+      <BaseDialogActions :save-label="saveLabel" @save="handleSave" @cancel="closeDialog" />
+    </template>
+  </BaseDialog>
 </template>
 
 <script setup>
-
 import { reactive, computed, watch } from 'vue'
 
 import { ACTIVITY_FORM_FIELDS } from 'src/constants/forms/actividades_form.constants'
@@ -32,132 +27,117 @@ import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
 import BaseFormField from 'src/components/forms/BaseFormField.vue'
 import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue'
 
-const {
-    modelValue,
-    mode,
-    activity
-} = defineProps({
-
-    modelValue: {
-        type: Boolean,
-        required: true
-    },
-    mode: {
-        type: String,
-        default: 'create',
-        validator: value =>
-            ['create', 'edit'].includes(value)
-    },
-    activity: {
-        type: Object,
-        default: null
-    }
+const { modelValue, mode, activity } = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
+  },
+  mode: {
+    type: String,
+    default: 'create',
+    validator: (value) => ['create', 'edit'].includes(value),
+  },
+  activity: {
+    type: Object,
+    default: null,
+  },
 })
 
-const emit = defineEmits([
-    'update:modelValue',
-    'save'
-])
+const emit = defineEmits(['update:modelValue', 'save'])
 
 const dialog = computed({
-    get() {
-        return modelValue
-    },
-    set(value) {
-        emit('update:modelValue', value)
-    }
+  get() {
+    return modelValue
+  },
+  set(value) {
+    emit('update:modelValue', value)
+  },
 })
 
 const form = reactive({
-    nombre: '',
-    tipo: null,
-    peligros: [],
-    descripcion: ''
+  nombre: '',
+  tipo: null,
+  peligros: [],
+  descripcion: '',
 })
 
 const activityFormFields = computed(() => {
-    return ACTIVITY_FORM_FIELDS.map(field => {
-        if (field.model !== 'peligros') {
-            return field
-        }
+  return ACTIVITY_FORM_FIELDS.map((field) => {
+    if (field.model !== 'peligros') {
+      return field
+    }
 
-        return {
-            ...field,
-            options: PELIGROS_MOCK.map(danger => ({
-                label: danger.nombre,
-                value: danger._id
-            }))
-        }
-    })
+    return {
+      ...field,
+      options: PELIGROS_MOCK.map((danger) => ({
+        label: danger.nombre,
+        value: danger._id,
+      })),
+    }
+  })
 })
 
 const dialogTitle = computed(() => {
-    return mode === 'create'
-        ? 'Crear Actividad'
-        : 'Actualizar Actividad'
+  return mode === 'create' ? 'Crear Actividad' : 'Actualizar Actividad'
 })
 
 const saveLabel = computed(() => {
-    return mode === 'edit'
-        ? 'Actualizar'
-        : 'Guardar'
+  return mode === 'edit' ? 'Actualizar' : 'Guardar'
 })
 
 function validateForm() {
-    for (const field of ACTIVITY_FORM_FIELDS) {
-        const rules = field.rules ?? []
-        const value = form[field.model]
+  for (const field of ACTIVITY_FORM_FIELDS) {
+    const rules = field.rules ?? []
+    const value = form[field.model]
 
-        for (const rule of rules) {
-            const result = rule(value)
+    for (const rule of rules) {
+      const result = rule(value)
 
-            if (result !== true) {
-                return result
-            }
-        }
+      if (result !== true) {
+        return result
+      }
     }
-    return true
+  }
+  return true
 }
 
-
 function handleSave() {
-    const validationResult = validateForm()
+  const validationResult = validateForm()
 
-    if (validationResult !== true) {
-        notifyWarning(validationResult)
-        return
-    }
-    console.log('Datos del formulario:', form)
-    emit('save', { ...form })
+  if (validationResult !== true) {
+    notifyWarning(validationResult)
+    return
+  }
+  console.log('Datos del formulario:', form)
+  emit('save', { ...form })
 }
 
 function resetForm(data = {}) {
-    form.nombre = data.nombre ?? ''
-    form.tipo = data.tipo ?? null
-    form.peligros = data.peligros ?? []
-    form.descripcion = data.descripcion ?? ''
+  form.nombre = data.nombre ?? ''
+  form.tipo = data.tipo ?? null
+  form.peligros = data.peligros ?? []
+  form.descripcion = data.descripcion ?? ''
 }
 
 function initializeForm() {
-    if (mode === 'edit' && activity) {
-        resetForm(activity)
-        return
-    }
-    resetForm()
+  if (mode === 'edit' && activity) {
+    resetForm(activity)
+    return
+  }
+  resetForm()
 }
 
 watch(
-    () => modelValue,
-    (isOpen) => {
-        if (isOpen) {
-            initializeForm()
-        }
+  () => modelValue,
+  (isOpen) => {
+    if (isOpen) {
+      initializeForm()
     }
+  },
 )
 
 function closeDialog() {
-    resetForm()
-    dialog.value = false
+  resetForm()
+  dialog.value = false
 }
-
 </script>

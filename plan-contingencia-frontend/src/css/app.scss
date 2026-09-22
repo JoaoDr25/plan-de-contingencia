@@ -5,16 +5,15 @@
 
 html,
 body {
-    font-family: typography.$font-family-base;
-    background-color: variables.$color-background;
-    color: variables.$color-text-primary;
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
+  font-family: typography.$font-family-base;
+  background-color: variables.$color-background;
+  color: variables.$color-text-primary;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
 }
 
-*
-*::before,
+* *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
