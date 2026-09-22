@@ -4,12 +4,27 @@ import riesgoModel from "../models/riesgoModel.js";
 
 const crud = createCrudService(protocoloModel);
 
+const normalizarEstado = (estado) => {
+    if (estado === true) return "Activo";
+    if (estado === false) return "Inactivo";
+    return estado;
+}
+
+const normalizarDatosProtocolo = (data) => {
+    data.tipo = data.tipo ?? data.tipoEmergencia;
+    data.accion = data.accion ?? data.accionInmediata;
+    data.medio = data.medio ?? data.medioComunicacion;
+    data.estado = normalizarEstado(data.estado);
+}
+
 const create = async (data) => {
 
-    const { tipoEmergencia } = data;
+    normalizarDatosProtocolo(data);
+
+    const { tipo } = data;
 
     const protocoloExistente = await protocoloModel.findOne({
-        tipoEmergencia
+        tipo
     });
 
     if (protocoloExistente) {
@@ -24,6 +39,21 @@ const create = async (data) => {
     }
 
     return await crud.create(data);
+}
+
+
+
+const getAll = async (filter = {}) => {
+
+    const normalizedFilter = {
+        ...filter
+    };
+
+    if (Object.hasOwn(normalizedFilter, "estado")) {
+        normalizedFilter.estado = normalizarEstado(normalizedFilter.estado);
+    }
+
+    return await crud.getAll(normalizedFilter);
 }
 
 
@@ -50,13 +80,16 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
-    const { tipoEmergencia } = data;
+    normalizarDatosProtocolo(data);
 
-    const protocoloExistente = await protocoloModel.findOne({
-        tipoEmergencia,
-        _id
-            : { $ne: id }
-    });
+    const { tipo } = data;
+
+    const protocoloExistente = tipo
+        ? await protocoloModel.findOne({
+            tipo,
+            _id: { $ne: id }
+        })
+        : null;
 
     if (protocoloExistente) {
         const error =
@@ -130,6 +163,40 @@ const deleteById = async (id) => {
 //     }).populate("protocolos");
 // }
 
-export default { ...crud, create, getById, updateById, deleteById }
+const cambiarEstadoId = async (id, estado) => {
+
+    const estadoNormalizado = normalizarEstado(estado);
+
+    if (!["Activo", "Inactivo"].includes(estadoNormalizado)) {
+        const error =
+            new Error(
+                "El campo 'estado' es obligatorio y debe ser Activo o Inactivo"
+            );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const cambiarEstado = await crud.update(
+        id,
+        { estado: estadoNormalizado }
+    );
+
+    if (!cambiarEstado) {
+        const error =
+            new Error(
+                "No se puede cambiar el estado"
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    return cambiarEstado;
+}
+
+export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById }
 
 

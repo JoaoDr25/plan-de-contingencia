@@ -54,9 +54,9 @@ const obtenerContactosEmergencia = (plan) => {
 
         html += `
    <tr>
-   <td>${contacto.nombreEntidad}</td>
-   <td>${contacto.tipoContacto}</td>
-   <td>${contacto.telefonoPrincipal}</td>
+    <td>${contacto.nombre || contacto.nombreEntidad}</td>
+    <td>${contacto.tipo || contacto.tipoContacto}</td>
+    <td>${contacto.telefono || contacto.telefonoPrincipal}</td>
    <td>${contacto.ciudad}</td>
    </tr>
    `;
@@ -119,7 +119,17 @@ const obtenerSoportes = (plan) => {
 
     html += `
     <b>Planeación pedagógica:</b><br>
-    ${contexto.objetivoSoporteLink || "No registra"}<br><br>
+    ${contexto.planeacionPedagogicaLink || "No registra"}<br><br>
+    `;
+
+    html += `
+    <b>Guía de aprendizaje:</b><br>
+    ${contexto.guiaAprendizajeLink || "No registra"}<br><br>
+    `;
+
+    html += `
+    <b>Otros soportes:</b><br>
+    ${contexto.otrosSoportesLink || "No registra"}<br><br>
     `;
 
     html += `
@@ -208,9 +218,9 @@ const obtenerEpp = (plan) => {
 
         html += `
          <tr>
-   <td>${elemento.nombreEPP}</td>
+    <td>${elemento.nombre || elemento.nombreEPP}</td>
    <td>${elemento.categoria}</td>
-   <td>${elemento.nivelProteccion}</td>
+    <td>${elemento.nivel || elemento.nivelProteccion}</td>
    <td>${elemento.descripcion}</td>
    </tr>
         `;
@@ -292,15 +302,21 @@ const obtenerRiesgos = (plan) => {
 
     for (const riesgo of riesgos) {
 
+        const peligros = Array.isArray(riesgo.peligroId)
+            ? riesgo.peligroId
+            : [riesgo.peligroId];
+
+        const peligrosValidos = peligros.filter(Boolean);
+
         html += `
                          <tr>
      <td>${numero++}</td>
-     <td>${riesgo.peligroId?.nombre ?? ""}</td>
-     <td>${riesgo.peligroId?.categoria ?? ""}</td>
-     <td>${riesgo.nombre}</td>
-     <td>${riesgo.nivelRiesgo}</td>
+     <td>${peligrosValidos.map(peligro => peligro.nombre).join(", ")}</td>
+     <td>${peligrosValidos.map(peligro => peligro.categoria).join(", ")}</td>
+     <td>${riesgo.riesgo || riesgo.nombre}</td>
+     <td>${riesgo.nivel || riesgo.nivelRiesgo}</td>
      <td>${riesgo.consecuencia}</td>
-     <td>${riesgo.medidasPrevencion}</td>
+     <td>${riesgo.prevencion || riesgo.medidasPrevencion || ""}</td>
       </tr>
             `;
     }
@@ -347,10 +363,10 @@ const obtenerProtocolos = (plan) => {
             html += `
                    <tr>
                     <td>${numero++}</td>
-                    <td>${protocolo.tipoEmergencia}</td>
-                    <td>${protocolo.accionInmediata}</td>
+                    <td>${protocolo.tipo || protocolo.tipoEmergencia}</td>
+                    <td>${protocolo.accion || protocolo.accionInmediata}</td>
                     <td>${protocolo.responsable}</td>
-                    <td>${protocolo.medioComunicacion}</td>
+                    <td>${protocolo.medio || protocolo.medioComunicacion}</td>
                 </tr>
                 `;
         }

@@ -63,7 +63,7 @@ export const cambiarEstadoContactoEmergenciaId = async (req, res, next) => {
         const cambiarEstado = await contactoEmergenciaService.cambiarEstadoId(req.params.id, estado);
 
         res.status(200).json({
-            mensaje: `Contacto de emergencia ${estado ? "activado" : "desactivado"} exitosamente`,
+            mensaje: `Contacto de emergencia ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
             contacto: cambiarEstado
         });
     } catch (error) {

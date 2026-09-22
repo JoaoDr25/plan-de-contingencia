@@ -4,7 +4,8 @@ import { generarNumero } from "../utils/generarNumero.js";
 const peligroSchema = new mongoose.Schema ({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
     },
     nombre: {
         type: String,
@@ -15,7 +16,7 @@ const peligroSchema = new mongoose.Schema ({
     categoria: {
         type: String,
         required: true,
-        enum: ["Físico", "Químico", "Biológico", "Mecánico", "Psicosocial", "Ergonómico", "Locativo"],
+        enum: ["Físico", "Químico", "Biológico", "Mecánico", "Psicosocial", "Ergonómico", "Locativo", "Seguridad", "Natural"],
     },
     descripcion: {
         type: String,
@@ -29,7 +30,9 @@ const peligroSchema = new mongoose.Schema ({
             }
         ]
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 peligroSchema.pre("save", async function(next){

@@ -62,7 +62,7 @@ export const cambiarEstadoEppId = async (req, res, next) => {
         const cambiarEstado = await eppService.cambiarEstadoId(req.params.id, estado);
 
         res.status(200).json({
-            mensaje: `Elemento de protección personal (EPP) ${estado ? "activado" : "desactivado"} exitosamente`,
+            mensaje: `Elemento de protección personal (EPP) ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
             elemento: cambiarEstado
         });
     } catch (error) {

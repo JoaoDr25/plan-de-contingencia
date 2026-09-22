@@ -4,7 +4,8 @@ import { generarNumero } from "../utils/generarNumero.js";
 const programaFormacionSchema = new mongoose.Schema ({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
     },
     nombre: {
         type: String,
@@ -17,22 +18,33 @@ const programaFormacionSchema = new mongoose.Schema ({
         unique: true,
         trim: true
     },
-    nivelFormacion: {
+    jornada: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        enum: ["Mañana", "Tarde", "Noche"]
     },
-    centroFormacion: {
+    nivel: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        alias: "nivelFormacion"
+    },
+    centro: {
+        type: String,
+        required: true,
+        trim: true,
+        alias: "centroFormacion"
     },
     estado: {
-        type: Boolean,
-        default: true
+        type: String,
+        enum: ["Activo", "Inactivo"],
+        default: "Activo"
     },
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 programaFormacionSchema.pre("save", async function(next){

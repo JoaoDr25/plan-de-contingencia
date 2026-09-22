@@ -3,8 +3,22 @@ import programaFormacionModel from "../models/programaFormacionModel.js";
 
 const crud = createCrudService(programaFormacionModel);
 
+const normalizarEstado = (estado) => {
+    if (estado === true) return "Activo";
+    if (estado === false) return "Inactivo";
+    return estado;
+}
+
+const normalizarDatosPrograma = (data) => {
+    data.nivel = data.nivel ?? data.nivelFormacion;
+    data.centro = data.centro ?? data.centroFormacion;
+    data.estado = normalizarEstado(data.estado);
+}
+
 
 const create = async (data) => {
+
+    normalizarDatosPrograma(data);
 
     const { ficha } = data;
 
@@ -24,6 +38,21 @@ const create = async (data) => {
     }
 
     return await crud.create(data);
+}
+
+
+
+const getAll = async (filter = {}) => {
+
+    const normalizedFilter = {
+        ...filter
+    };
+
+    if (Object.hasOwn(normalizedFilter, "estado")) {
+        normalizedFilter.estado = normalizarEstado(normalizedFilter.estado);
+    }
+
+    return await crud.getAll(normalizedFilter);
 }
 
 
@@ -49,6 +78,8 @@ const getById = async (id) => {
 
 
 const updateById = async (id, data) => {
+
+    normalizarDatosPrograma(data);
 
     const { ficha } = data;
 
@@ -91,10 +122,12 @@ const updateById = async (id, data) => {
 
 const cambiarEstadoId = async (id, estado) => {
 
-      if (typeof estado !== "boolean") {
+        const estadoNormalizado = normalizarEstado(estado);
+
+            if (!["Activo", "Inactivo"].includes(estadoNormalizado)) {
         const error =
         new Error(
-            "El campo 'estado' es obligatorio y debe ser un valor booleano"
+                        "El campo 'estado' es obligatorio y debe ser Activo o Inactivo"
         );
 
         error.statusCode = 400;
@@ -104,7 +137,7 @@ const cambiarEstadoId = async (id, estado) => {
 
     const cambiarEstado = await crud.update( 
         id, 
-        { estado }
+        { estado: estadoNormalizado }
     );
 
     if (!cambiarEstado) {
@@ -142,5 +175,5 @@ const deleteById = async (id) => {
 }
 
 
-export default { ...crud, create, getById, updateById, cambiarEstadoId, deleteById };
+export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };
 

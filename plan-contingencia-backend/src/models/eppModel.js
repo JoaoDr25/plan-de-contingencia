@@ -4,22 +4,25 @@ import { generarNumero } from "../utils/generarNumero.js";
 const elementosProteccionPersonalSchema = new mongoose.Schema ({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
     },
-    nombreEPP: {
+    nombre: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        alias: "nombreEPP"
     },
     categoria: {
         type: String,  //Pendiente clasificar
         required: true,
         trim: true
     },
-    nivelProteccion: {
+    nivel: {
         type: String,
         required: true,
-        enum: ["BAJO", "MEDIO", "ALTO"]
+        alias: "nivelProteccion",
+        enum: ["Bajo", "Medio", "Alto", "BAJO", "MEDIO", "ALTO"]
     },
     descripcion: {
         type: String,
@@ -27,11 +30,14 @@ const elementosProteccionPersonalSchema = new mongoose.Schema ({
         trim: true
     },
     estado: {
-        type: Boolean,
-        required: true,
+        type: String,
+        enum: ["Activo", "Inactivo"],
+        default: "Activo"
     },
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 elementosProteccionPersonalSchema.pre("save", async function(next){

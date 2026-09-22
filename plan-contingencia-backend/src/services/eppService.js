@@ -3,12 +3,38 @@ import eppModel from "../models/eppModel.js"
 
 const crud = createCrudService(eppModel);
 
+const normalizarEstado = (estado) => {
+    if (estado === true) return "Activo";
+    if (estado === false) return "Inactivo";
+    return estado;
+}
+
+const normalizarNivel = (nivel) => {
+    if (!nivel) return nivel;
+
+    const niveles = {
+        BAJO: "Bajo",
+        MEDIO: "Medio",
+        ALTO: "Alto"
+    };
+
+    return niveles[nivel] ?? nivel;
+}
+
+const normalizarDatosEpp = (data) => {
+    data.nombre = data.nombre ?? data.nombreEPP;
+    data.nivel = normalizarNivel(data.nivel ?? data.nivelProteccion);
+    data.estado = normalizarEstado(data.estado);
+}
+
 const create = async (data) => {
 
-    const { nombreEPP } = data;
+    normalizarDatosEpp(data);
+
+    const { nombre } = data;
 
     const eppExistente = await eppModel.findOne({
-        nombreEPP
+        nombre
     });
 
     if (eppExistente) {
@@ -23,6 +49,21 @@ const create = async (data) => {
     }
 
     return await crud.create(data);
+}
+
+
+
+const getAll = async (filter = {}) => {
+
+    const normalizedFilter = {
+        ...filter
+    };
+
+    if (Object.hasOwn(normalizedFilter, "estado")) {
+        normalizedFilter.estado = normalizarEstado(normalizedFilter.estado);
+    }
+
+    return await crud.getAll(normalizedFilter);
 }
 
 
@@ -49,10 +90,12 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
-    const { nombreEPP } = data;
+    normalizarDatosEpp(data);
+
+    const { nombre } = data;
 
     const eppExistente = await eppModel.findOne({
-        nombreEPP,
+        nombre,
         _id: { $ne: id }
     });
 
@@ -90,10 +133,12 @@ const updateById = async (id, data) => {
 
 const cambiarEstadoId = async (id, estado) => {
 
-        if (typeof estado !== "boolean") {
+        const estadoNormalizado = normalizarEstado(estado);
+
+        if (!["Activo", "Inactivo"].includes(estadoNormalizado)) {
             const error =
             new Error(
-                "El campo 'estado' es obligatorio y debe ser un valor booleano"
+                "El campo 'estado' es obligatorio y debe ser Activo o Inactivo"
             );
 
             error.statusCode = 400;
@@ -103,7 +148,7 @@ const cambiarEstadoId = async (id, estado) => {
 
         const cambiarEstado = await crud.update(
             id,
-            { estado }
+            { estado: estadoNormalizado }
         );
 
         if (!cambiarEstado) {
@@ -140,4 +185,4 @@ const deleteById = async (id) => {
     return eliminarEppId;
 } 
 
-export default { ...crud, create, getById, updateById, cambiarEstadoId, deleteById };
+export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };

@@ -3,9 +3,48 @@ import usuarioModel from "../models/usuarioModel.js";
 
 const crud = createCrudService(usuarioModel);
 
+const normalizarEstado = (estado) => {
+    if (estado === true) return "Activo";
+    if (estado === false) return "Inactivo";
+    return estado;
+}
+
+const normalizarRol = (rol) => {
+    if (!rol) return rol;
+
+    const roles = {
+        administrador: "ADMINISTRADOR",
+        instructor: "CONSULTOR",
+        usuario: "CONSULTOR",
+        consultor: "CONSULTOR",
+        pedagogia: "PEDAGOGIA",
+        sst: "SST",
+        coordinacion: "COORDINACION",
+        Administrador: "ADMINISTRADOR",
+        Instructor: "CONSULTOR",
+        Usuario: "CONSULTOR",
+        Consultor: "CONSULTOR",
+        Pedagogía: "PEDAGOGIA",
+        Pedagogia: "PEDAGOGIA",
+        Coordinación: "COORDINACION",
+        Coordinacion: "COORDINACION"
+    };
+
+    return roles[rol] ?? String(rol).trim().toUpperCase();
+}
+
+const normalizarDatosUsuario = (data) => {
+    data.correo = data.correo ?? data.correoInstitucional;
+    data.centro = data.centro ?? data.centroFormacion;
+    data.rol = normalizarRol(data.rol ?? data.rolAsignado);
+    data.estado = normalizarEstado(data.estado);
+}
+
 const create = async (data) => {
 
-    const { documento, correoInstitucional } = data;
+    normalizarDatosUsuario(data);
+
+    const { documento, correo } = data;
 
     const usuarioExistente = await usuarioModel.findOne({
         documento
@@ -23,7 +62,7 @@ const create = async (data) => {
     }
 
     const correoExistente = await usuarioModel.findOne({
-        correoInstitucional
+        correo
     });
 
     if (correoExistente) {
@@ -38,6 +77,30 @@ const create = async (data) => {
     }
 
     return await crud.create(data);
+}
+
+
+
+const getAll = async (filter = {}) => {
+
+    const normalizedFilter = {
+        ...filter
+    };
+
+    if (Object.hasOwn(normalizedFilter, "estado")) {
+        normalizedFilter.estado = normalizarEstado(normalizedFilter.estado);
+    }
+
+    if (Object.hasOwn(normalizedFilter, "rol")) {
+        normalizedFilter.rol = normalizarRol(normalizedFilter.rol);
+    }
+
+    if (Object.hasOwn(normalizedFilter, "rolAsignado")) {
+        normalizedFilter.rol = normalizarRol(normalizedFilter.rolAsignado);
+        delete normalizedFilter.rolAsignado;
+    }
+
+    return await crud.getAll(normalizedFilter);
 }
 
 
@@ -64,17 +127,39 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
-    const { documento, correoInstitucional } = data;
+    normalizarDatosUsuario(data);
 
-    const usuarioExistente = await usuarioModel.findOne({
-        documento,
-        _id: { $ne: id }
-    });
+    const { documento, correo } = data;
+
+    const usuarioExistente = documento
+        ? await usuarioModel.findOne({
+            documento,
+            _id: { $ne: id }
+        })
+        : null;
 
     if (usuarioExistente) {
         const error =
         new Error(
             "No se puede actualizar: ya existe otro usuario con ese número de documento"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const correoExistente = correo
+        ? await usuarioModel.findOne({
+            correo,
+            _id: { $ne: id }
+        })
+        : null;
+
+    if (correoExistente) {
+        const error =
+        new Error(
+            "No se puede actualizar: Ya existe un usuario con ese correo institucional"
         );
 
         error.statusCode = 400;
@@ -98,17 +183,6 @@ const updateById = async (id, data) => {
         throw error;
     }
 
-    const correoExistente = await usuarioModel.findOne({
-        correoInstitucional
-    });
-
-    if (correoExistente) {
-        const error =
-        new Error(
-            "No se puede actualizar: Ya existe un usuario con ese correo institucional"
-        )
-    }
-
     return actualizarUsuarioId;
 }
 
@@ -116,10 +190,12 @@ const updateById = async (id, data) => {
 
 const cambiarEstadoId = async (id, estado) => {
 
-        if (typeof estado !== "boolean") {
+        const estadoNormalizado = normalizarEstado(estado);
+
+        if (!["Activo", "Inactivo"].includes(estadoNormalizado)) {
             const error =
             new Error(
-                "El campo 'estado' es obligatorio y debe ser un valor booleano"
+                "El campo 'estado' es obligatorio y debe ser Activo o Inactivo"
             );
 
             error.statusCode = 400;
@@ -129,7 +205,7 @@ const cambiarEstadoId = async (id, estado) => {
 
         const cambiarEstado = await crud.update(
             id,
-            { estado }
+            { estado: estadoNormalizado }
         );
 
         if (!cambiarEstado) {
@@ -166,6 +242,6 @@ const deleteById = async (id)  => {
     return eliminarUsuarioId;
 }
 
-export default { ...crud, create, getById, updateById, cambiarEstadoId, deleteById };
+export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };
 
 

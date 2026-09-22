@@ -4,19 +4,28 @@ import { generarNumero } from "../utils/generarNumero.js";
 const contactosEmergenciaSchema = new mongoose.Schema ({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
     },
-    nombreEntidad: {
+    nombre: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        alias: "nombreEntidad"
     },
-    tipoContacto: {
+    tipo: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        alias: "tipoContacto"
     },
-    telefonoPrincipal: {
+    telefono: {
+        type: String,
+        required: true,
+        trim: true,
+        alias: "telefonoPrincipal"
+    },
+    direccion: {
         type: String,
         required: true,
         trim: true
@@ -27,11 +36,14 @@ const contactosEmergenciaSchema = new mongoose.Schema ({
         trim: true
     },
     estado: {
-        type: Boolean,
-        required: true,
+        type: String,
+        enum: ["Activo", "Inactivo"],
+        default: "Activo"
     },
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 contactosEmergenciaSchema.pre("save", async function(next){

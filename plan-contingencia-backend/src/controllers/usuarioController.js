@@ -62,7 +62,7 @@ export const cambiarEstadoUsuarioId = async (req, res, next) => {
         const cambiarEstado = await usuarioService.cambiarEstadoId(req.params.id, estado);
 
         res.status(200).json({
-            mensaje: `Usuario ${estado ? "activado" : "desactivado"} exitosamente`,
+            mensaje: `Usuario ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
             usuario: cambiarEstado
         });
     } catch (error) {

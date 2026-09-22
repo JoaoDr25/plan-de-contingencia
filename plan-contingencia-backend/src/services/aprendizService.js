@@ -4,6 +4,41 @@ import programaFormacionModel from "../models/programaFormacionModel.js";
 
 const crud = createCrudService(aprendizModel);
 
+const normalizarEstado = (estado) => {
+    if (estado === true) return "Activo";
+    if (estado === false) return "Inactivo";
+    return estado;
+}
+
+const resolverProgramaFormacion = async (data) => {
+    const programa = data.programaFormacionId
+        ? await programaFormacionModel.findById(data.programaFormacionId)
+        : await programaFormacionModel.findOne({ ficha: data.ficha });
+
+    if (!programa) {
+        const error =
+        new Error(
+            "Programa de formación no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    data.programaFormacionId = programa._id;
+    data.programa = programa.nombre;
+    data.ficha = programa.ficha;
+}
+
+const normalizarDatosAprendiz = async (data) => {
+    data.estado = normalizarEstado(data.estado);
+
+    if (data.programaFormacionId || data.ficha) {
+        await resolverProgramaFormacion(data);
+    }
+}
+
 const create = async (data) => {
 
     const { documento } = data;
@@ -23,29 +58,33 @@ const create = async (data) => {
         throw error;
     }
 
-    const programa = await programaFormacionModel.findById(data.ficha);
-
-    if (!programa) {
-        const error =
-        new Error(
-            "Programa de formación no encontrado"
-        );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
-
-    data.programaFormacion = programa.nombre;
+    await normalizarDatosAprendiz(data);
 
     return await crud.create(data);
 }
 
 
 
+const getAll = async (filter = {}) => {
+
+    const normalizedFilter = {
+        ...filter
+    };
+
+    if (Object.hasOwn(normalizedFilter, "estado")) {
+        normalizedFilter.estado = normalizarEstado(normalizedFilter.estado);
+    }
+
+    return await crud.getAll(normalizedFilter)
+        .populate("programaFormacionId", "nombre ficha nivel nivelFormacion");
+}
+
+
+
 const getById = async (id) => {
 
-    const obtenerAprendizId = await crud.getById(id);
+    const obtenerAprendizId = await crud.getById(id)
+        .populate("programaFormacionId", "nombre ficha nivel nivelFormacion");
 
     if (!obtenerAprendizId) {
         const error =
@@ -83,20 +122,7 @@ const updateById = async (id, data) => {
         throw error;
     }
 
-    const programa = await programaFormacionModel.findById(data.ficha);
-
-    if (!programa) {
-        const error =
-        new Error(
-            "Programa de formación no encontrado"
-        );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
-
-    data.programaFormacion = programa.nombre;
+    await normalizarDatosAprendiz(data);
 
     const actualizarAprendizId = await crud.update(
         id,
@@ -121,10 +147,12 @@ const updateById = async (id, data) => {
 
 const cambiarEstadoId = async (id, estado) => {
 
-    if (typeof estado !== "boolean") {
+    const estadoNormalizado = normalizarEstado(estado);
+
+    if (!["Activo", "Inactivo"].includes(estadoNormalizado)) {
         const error =
         new Error(
-            "El campo 'estado' es obligatorio y debe ser un valor booleano"
+            "El campo 'estado' es obligatorio y debe ser Activo o Inactivo"
         );
 
         error.statusCode = 400;
@@ -134,7 +162,7 @@ const cambiarEstadoId = async (id, estado) => {
 
     const cambiarEstado = await crud.update( 
         id, 
-        { estado }
+        { estado: estadoNormalizado }
     );
 
     if (!cambiarEstado) {
@@ -172,7 +200,7 @@ const deleteById = async (id) => {
 }
 
 
-export default { ...crud, create, getById, updateById, cambiarEstadoId, deleteById };
+export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };
 
 
 

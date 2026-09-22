@@ -16,11 +16,11 @@ export const calcularCamposFaltantes = (plan) => {
     if (!plan.tipoTransporte) camposFaltantes.push("tipoTransporte");
 
     const articulacion = plan?.articulacionFormativa;
-    if (!articulacion || (!articulacion.proyectoFormativo && !articulacion.visitaEmpresa && !articulacion.investigacion && !articulacion.otro?.trim())) {
+    if (!articulacion || (!articulacion.proyectoFormativo && !articulacion.visitaEmpresa && !articulacion.investigacion && (!articulacion.otroSeleccionado || !articulacion.otro?.trim()))) {
         camposFaltantes.push("articulacionFormativa (Debe seleccionar al menos una opción o especificar en 'otro')");
     }
 
-    if (!plan.contactosEmergencia?.contactosBase?.length && !plan.contactosEmergencia?.otro.nombreEntidad) {
+    if (!plan.contactosEmergencia?.contactosBase?.length && !plan.contactosEmergencia?.otro?.nombreEntidad) {
         camposFaltantes.push("contactosEmergencia")
     }
 
@@ -33,8 +33,14 @@ export const calcularCamposFaltantes = (plan) => {
     if (!plan?.contextoAcademico?.resultadoAprendizaje?.trim()) {
         camposFaltantes.push("contextoAcademico.resultadoAprendizaje");
     }
-    if (!plan?.contextoAcademico?.objetivoSoporteLink) {
-        camposFaltantes.push("contextoAcademico.objetivoSoporteLink");
+    if (!plan?.contextoAcademico?.planeacionPedagogicaLink) {
+        camposFaltantes.push("contextoAcademico.planeacionPedagogicaLink");
+    }
+    if (!plan?.contextoAcademico?.guiaAprendizajeLink) {
+        camposFaltantes.push("contextoAcademico.guiaAprendizajeLink");
+    }
+    if (!plan?.contextoAcademico?.otrosSoportesLink) {
+        camposFaltantes.push("contextoAcademico.otrosSoportesLink");
     }
     if (!plan?.contextoAcademico?.actasComportamientoLink) {
         camposFaltantes.push("contextoAcademico.actasComportamientoLink")

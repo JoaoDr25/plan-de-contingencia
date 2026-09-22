@@ -4,7 +4,8 @@ import { generarNumero } from "../utils/generarNumero.js";
 const actividadSchema = new mongoose.Schema({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
     },
     nombre: {
         type: String,
@@ -16,10 +17,20 @@ const actividadSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    tipoActividad: {
+    tipo: {
         type: String,
         required: true,
-        enum: ["Académico", "Técnico", "Cultural", "Deportivo", "Administrativo"],
+        alias: "tipoActividad",
+        enum: [
+            "Visita Técnica",
+            "Recorrido de Campo",
+            "Capacitación Externa",
+            "Inspección de Seguridad",
+            "Encuentro Empresarial",
+            "Práctica Académica",
+            "Salida Ambiental",
+            "Trabajo de Campo"
+        ],
     },
     peligros: [
         {
@@ -28,7 +39,9 @@ const actividadSchema = new mongoose.Schema({
         }
     ]
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 actividadSchema.pre("save", async function (next) {

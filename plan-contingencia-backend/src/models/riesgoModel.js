@@ -4,18 +4,21 @@ import { generarNumero } from "../utils/generarNumero.js";
 const riesgosSchema = new mongoose.Schema({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
     },
-    nombre: {
+    riesgo: {
         type: String,
         required: true,
         unique: true,
-        trim: true
+        trim: true,
+        alias: "nombre"
     },
-    nivelRiesgo: {
+    nivel: {
         type: String,
         required: true,
-        enum: ['BAJO', 'MEDIO', 'ALTO']
+        alias: "nivelRiesgo",
+        enum: ["Bajo", "Medio", "Alto", "BAJO", "MEDIO", "ALTO"]
     },
     descripcion: {
         type: String,
@@ -26,16 +29,17 @@ const riesgosSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    medidasPrevencion: {
+    prevencion: {
         type: String,
-        required: true,
-        trim: true
+        trim: true,
+        alias: "medidasPrevencion"
     },
-    peligroId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Peligro",
-        required: true
-    },
+    peligroId: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Peligro"
+        }
+    ],
     protocolos: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -43,7 +47,9 @@ const riesgosSchema = new mongoose.Schema({
         }
     ]
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 riesgosSchema.pre("save", async function(next){

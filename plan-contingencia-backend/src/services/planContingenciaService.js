@@ -85,6 +85,8 @@ const create = async (data) => {
     }
 
     data.programaFormacionNombre = programa.nombre;
+    data.programaFormacionNivel = programa.nivel ?? programa.nivelFormacion;
+    data.ficha = programa.ficha;
 
     const actividad = await actividadModel.findById(actividadId);
 
@@ -112,7 +114,7 @@ const create = async (data) => {
         throw error;
     }
 
-    if (!usuario.estado) {
+    if (usuario.estado !== "Activo") {
         const error =
             new Error(
                 "No se puede crear el plan porque el usuario se encuentra inactivo"
@@ -133,7 +135,7 @@ const create = async (data) => {
 const getAll = async () => {
 
     const listarPlanesId = await crud.getAll()
-        .populate("programaFormacionId", "nombre ficha")
+        .populate("programaFormacionId", "nombre ficha nivel nivelFormacion")
         .populate("actividadId", "nombre categoria")
         .populate("riesgosId");
 
@@ -145,8 +147,8 @@ const getAll = async () => {
 const getById = async (id) => {
 
     const obtenerPlanId = await crud.getById(id)
-        .populate("programaFormacionId", "nombre ficha")
-        .populate("actividadId", "nombre tipoActividad")
+        .populate("programaFormacionId", "nombre ficha nivel nivelFormacion")
+        .populate("actividadId", "nombre tipo")
         .populate("riesgosId");
 
     if (!obtenerPlanId) {
@@ -193,6 +195,8 @@ const updateById = async (id, data) => {
         }
 
         data.programaFormacionNombre = programa.nombre;
+        data.programaFormacionNivel = programa.nivel ?? programa.nivelFormacion;
+        data.ficha = programa.ficha;
 
     }
 
@@ -228,7 +232,7 @@ const updateById = async (id, data) => {
             throw error;
         }
 
-        if (!usuario.estado) {
+        if (usuario.estado !== "Activo") {
             const error =
                 new Error(
                     "No se puede actualizar el plan porque el usuario se encuentra inactivo"
@@ -304,6 +308,39 @@ const cambiarEstadoId = async (id, estado) => {
     await plan.save();
 
     return plan;
+}
+
+
+
+const deleteById = async (id) => {
+
+    const plan = await obtenerPlanFunction(id);
+
+    if (plan.estado !== "borrador") {
+        const error =
+            new Error(
+                "Solo se pueden eliminar planes en estado borrador"
+            );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const eliminarPlanId = await crud.delete(id);
+
+    if (!eliminarPlanId) {
+        const error =
+            new Error(
+                "Plan de contingencia no encontrado"
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    return eliminarPlanId;
 }
 
 
@@ -781,7 +818,7 @@ const seleccionarEppId = async (id, epp) => {
             throw error;
         }
 
-        if (!elemento.estado) {
+        if (elemento.estado !== "Activo") {
             const error =
                 new Error(
                     `El elemento ${elemento.nombre} se encuentra inactivo`
@@ -806,9 +843,12 @@ const registrarSeguridadVialId = async (id, seguridadVial) => {
 
     await regresarABorradorSiAplica(plan);
 
+    const aplica = plan.tipoTransporte !== "APRENDIZ";
+    const items = seguridadVial.seguridadVial?.items ?? [];
+
     if (
-        seguridadVial.seguridadVial.aplica &&
-        !Array.isArray(seguridadVial.seguridadVial.items)
+        aplica &&
+        !Array.isArray(items)
     ) {
         const error =
             new Error(
@@ -820,7 +860,7 @@ const registrarSeguridadVialId = async (id, seguridadVial) => {
         throw error;
     }
 
-    for (const item of seguridadVial.seguridadVial.items) {
+    for (const item of items) {
 
         const itemValido = SEGURIDAD_VIAL_ITEMS.some(
             catalogo => catalogo.itemId === item.itemId
@@ -850,7 +890,10 @@ const registrarSeguridadVialId = async (id, seguridadVial) => {
     }
 
     return await crud.update(id, {
-        seguridadVial: seguridadVial.seguridadVial
+        seguridadVial: {
+            aplica,
+            items
+        }
     });
 }
 
@@ -893,6 +936,7 @@ const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
         proyectoFormativo,
         visitaEmpresa,
         investigacion,
+        otroSeleccionado,
         otro
     } = articulacionFormativa;
 
@@ -900,7 +944,7 @@ const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
         !proyectoFormativo &&
         !visitaEmpresa &&
         !investigacion &&
-        !otro?.trim()
+        (!otroSeleccionado || !otro?.trim())
     ) {
         const error =
             new Error(
@@ -988,6 +1032,7 @@ export default {
     getById,
     updateById,
     cambiarEstadoId,
+    deleteById,
     generarPlanId,
     generarPdfId,
     asociarRiesgosId,

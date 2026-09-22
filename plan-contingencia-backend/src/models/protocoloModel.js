@@ -4,35 +4,42 @@ import { generarNumero } from "../utils/generarNumero.js";
 const protocoloSchema = new mongoose.Schema({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
     },
-    tipoEmergencia: {
+    tipo: {
         type: String,
         required: true,
         unique: true,
-        trim: true
+        trim: true,
+        alias: "tipoEmergencia"
     },
-    accionInmediata: {
+    accion: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        alias: "accionInmediata"
     },
     responsable: {
         type: String,
         required: true,
         trim: true
     },
-    medioComunicacion: {
+    medio: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        alias: "medioComunicacion"
     },
     estado: {
-        type: Boolean,
-        required: true
+        type: String,
+        enum: ["Activo", "Inactivo"],
+        default: "Activo"
     }
 },{
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 protocoloSchema.pre("save", async function(next){

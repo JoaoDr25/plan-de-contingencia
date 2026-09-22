@@ -62,7 +62,7 @@ export const cambiarEstadoProgramaId = async (req, res, next) => {
         const cambiarEstado = await programaFormacionService.cambiarEstadoId( req.params.id, estado );
    
         res.status(200).json({
-            mensaje: `Programa de formación ${estado ? "activado" : "desactivado"} exitosamente`,
+            mensaje: `Programa de formación ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
             programa: cambiarEstado
         });
     } catch (error) {

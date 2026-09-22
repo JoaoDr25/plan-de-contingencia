@@ -75,6 +75,20 @@ export const cambiarEstadoPlanId = async (req, res, next) => {
 };
 
 
+export const eliminarPlanId = async (req, res, next) => {
+    try {
+        const eliminar = await planContingenciaService.deleteById(req.params.id);
+
+        res.status(200).json({
+            mensaje: "Plan de contingencia eliminado exitosamente",
+            plan: eliminar
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 export const generarPlan = async (req, res, next) => {
     try {
         const generar = await planContingenciaService.generarPlanId(req.params.id);

@@ -4,7 +4,22 @@ import { generarNumero } from "../utils/generarNumero.js";
 const aprendizSchema = new mongoose.Schema ({
     numero: {
         type: Number,
-        unique: true
+        unique: true,
+        alias: "codigo"
+    },
+    tipo: {
+        type: String,
+        required: true,
+        trim: true,
+        enum: [
+            "CC",
+            "TI",
+            "CE",
+            "Cédula de Ciudadanía",
+            "Tarjeta de Identidad",
+            "Cédula de Extranjería",
+            "Pasaporte"
+        ]
     },
     nombre: {
         type: String,
@@ -22,36 +37,62 @@ const aprendizSchema = new mongoose.Schema ({
         unique: true,
         trim: true
     },
-    programaFormacion: {
+    programa: {
+        type: String,
+        required: true,
+        trim: true,
+        alias: "programaFormacion"
+    },
+    programaFormacionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ProgramaFormacion",
+        required: true
+    },
+    ficha: {
         type: String,
         required: true,
         trim: true
     },
-    ficha: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "programaFormacion",
-        required: true
+    telefono: {
+        type: String,
+        required: true,
+        trim: true,
+        alias: "contactoEmergencia"
     },
     eps: {
         type: String,
         required: true,
         trim: true
     },
-    contactoEmergencia: {
+    tipoSangre: {
         type: String,
-        required: true,
         trim: true
     },
     condicionesMedicas: {
         type: String,
         trim: true
     },
+    contacto: {
+        type: String,
+        trim: true
+    },
+    parentesco: {
+        type: String,
+        trim: true
+    },
+    direccion: {
+        type: String,
+        trim: true
+    },
     estado: {
-        type: Boolean,
-        required: true,
+        type: String,
+        enum: ["Activo", "Inactivo"],
+        default: "Activo"
     },
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 aprendizSchema.pre("save", async function(next){

@@ -16,11 +16,11 @@ export const crearProtocolo = async (req, res, next) => {
 
 export const listarProtocolos = async (req, res, next) => {
     try {
-        const listar = await protocoloService.getAll();
+        const listar = await protocoloService.getAll({ estado: true });
 
         return res.status(200).json({
-            mensaje: "Lista de protocolos obtenidos exitosamente",
-            protocolo: listar
+            mensaje: "Lista de protocolos activos obtenidos exitosamente",
+            protocolos: listar
         });
     } catch (error) {
       next(error);
@@ -63,6 +63,22 @@ export const eliminarProtocoloId = async (req, res, next) => {
         return res.status(200).json({
             mensaje: "Protocolo eliminado exitosamente",
             protocolo: eliminar
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+export const cambiarEstadoProtocoloId = async (req, res, next) => {
+    try {
+        const { estado } = req.body;
+
+        const cambiarEstado = await protocoloService.cambiarEstadoId(req.params.id, estado);
+
+        return res.status(200).json({
+            mensaje: `Protocolo ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
+            protocolo: cambiarEstado
         });
     } catch (error) {
         next(error);

@@ -3,12 +3,27 @@ import contactoEmergenciaModel from "../models/contactoEmergenciaModel.js";
 
 const crud = createCrudService(contactoEmergenciaModel)
 
+const normalizarEstado = (estado) => {
+    if (estado === true) return "Activo";
+    if (estado === false) return "Inactivo";
+    return estado;
+}
+
+const normalizarDatosContacto = (data) => {
+    data.nombre = data.nombre ?? data.nombreEntidad;
+    data.tipo = data.tipo ?? data.tipoContacto;
+    data.telefono = data.telefono ?? data.telefonoPrincipal;
+    data.estado = normalizarEstado(data.estado);
+}
+
 const create = async (data) => {
 
-    const { nombreEntidad } = data;
+    normalizarDatosContacto(data);
+
+    const nombre = data.nombre ?? data.nombreEntidad;
 
     const contactoEmergenciaExistente = await contactoEmergenciaModel.findOne({
-        nombreEntidad
+        nombre
     });
 
     if (contactoEmergenciaExistente) {
@@ -23,6 +38,21 @@ const create = async (data) => {
     }
 
     return await crud.create(data);
+}
+
+
+
+const getAll = async (filter = {}) => {
+
+    const normalizedFilter = {
+        ...filter
+    };
+
+    if (Object.hasOwn(normalizedFilter, "estado")) {
+        normalizedFilter.estado = normalizarEstado(normalizedFilter.estado);
+    }
+
+    return await crud.getAll(normalizedFilter);
 }
 
 
@@ -48,11 +78,13 @@ const getById = async (id) => {
 
 
 const updateById = async (id, data) => {
+
+    normalizarDatosContacto(data);
     
-    const { nombreEntidad } = data;
+    const nombre = data.nombre ?? data.nombreEntidad;
 
     const contactoEmergenciaExistente = await contactoEmergenciaModel.findOne({
-        nombreEntidad,
+        nombre,
         _id: { $ne: id }
     });
 
@@ -90,10 +122,12 @@ const updateById = async (id, data) => {
 
 const cambiarEstadoId = async (id, estado) => {
 
-    if (typeof estado !== "boolean") {
+    const estadoNormalizado = normalizarEstado(estado);
+
+    if (!["Activo", "Inactivo"].includes(estadoNormalizado)) {
         const error = 
         new Error(
-            "El campo 'estado' es obligatorio y debe ser un valor booleano"
+            "El campo 'estado' es obligatorio y debe ser Activo o Inactivo"
         );
 
         error.statusCode = 400;
@@ -103,7 +137,7 @@ const cambiarEstadoId = async (id, estado) => {
 
     const cambiarEstado = await crud.update(
         id, 
-        {estado}
+        { estado: estadoNormalizado }
     );
 
     if (!cambiarEstado) {
@@ -138,4 +172,4 @@ const deleteById = async (id) => {
     return eliminarContactoEmergenciaId;
 }
 
-export default { ...crud, create, getById, updateById, cambiarEstadoId, deleteById };
+export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };

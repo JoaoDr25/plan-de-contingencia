@@ -2,43 +2,43 @@ import { ROLES } from '../constants/roles.js'
 
 export const mockAuth = (req, res, next) => {
 
-    const rol = req.headers['x-role'] || ROLES.INSTRUCTOR;
+    const rol = req.headers['x-role'] || ROLES.CONSULTOR;
 
     const usuariosMock = {
-        ADMINISTRADOR: {
+        [ROLES.ADMINISTRADOR]: {
             id: 'admin123',
             nombre: 'Administrador Demo',
-            rol: 'ADMINISTRADOR'
+            rol: ROLES.ADMINISTRADOR
         },
 
-        INSTRUCTOR: {
+        [ROLES.CONSULTOR]: {
             id: 'user123',
-            nombre: 'Instructor Demo',
-            rol: 'INSTRUCTOR'
+            nombre: 'Consultor Demo',
+            rol: ROLES.CONSULTOR
         },
 
-        PEDAGOGIA: {
+        [ROLES.PEDAGOGIA]: {
             id: 'pedago123',
             nombre: 'Pedagogía Dema',
-            rol: 'PEDAGOGIA'
+            rol: ROLES.PEDAGOGIA
         },
 
-        SST: {
+        [ROLES.SST]: {
             id: 'sst123',
             nombre: 'SST Demo',
-            rol: 'SST'
+            rol: ROLES.SST
         },
 
-        COORDINACION: {
+        [ROLES.COORDINACION]: {
             id: 'coordin123',
             nombre: 'Coordinación Demo',
-            rol: 'COORDINACION'
+            rol: ROLES.COORDINACION
         },
     };
 
     req.user =
         usuariosMock[rol] ||
-        usuariosMock.INSTRUCTOR;
+        usuariosMock[ROLES.CONSULTOR];
 
     next();
 };

@@ -4,7 +4,13 @@ import { generarNumero } from "../utils/generarNumero.js";
 const urlValidator = {
     validator: function (v) {
         if (!v) return true;
-        return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(v);
+        try {
+            const url = new URL(v);
+
+            return ["http:", "https:"].includes(url.protocol);
+        } catch {
+            return false;
+        }
     },
     message: props => `${props.value} no es una URL válida!`
 };
@@ -26,6 +32,14 @@ const planContingenciaSchema = new mongoose.Schema({
         required: true
     },
     programaFormacionNombre: {
+        type: String,
+        trim: true
+    },
+    programaFormacionNivel: {
+        type: String,
+        trim: true
+    },
+    ficha: {
         type: String,
         trim: true
     },
@@ -128,12 +142,19 @@ const planContingenciaSchema = new mongoose.Schema({
     articulacionFormativa: {
         proyectoFormativo: {
             type: Boolean,
+            default: true
         },
         visitaEmpresa: {
             type: Boolean,
+            default: false
         },
         investigacion: {
             type: Boolean,
+            default: false
+        },
+        otroSeleccionado: {
+            type: Boolean,
+            default: false
         },
         otro: {
             type: String,
@@ -182,7 +203,8 @@ const planContingenciaSchema = new mongoose.Schema({
         },
 
         consentimientoMenores: {
-            type: Boolean
+            type: Boolean,
+            default: true
         },
 
         consentimientoLink: {
@@ -262,44 +284,69 @@ const planContingenciaSchema = new mongoose.Schema({
         default: "borrador"
     },
     revision: {
+        validacionInformacion: {
+            type: Boolean,
+            default: false
+        },
+
         usuario: {
-            usuarioId: ObjectId,
+            usuarioId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Usuario"
+            },
             nombre: String,
             firma: String
         },
 
         pedagogia: {
-            usuarioId: ObjectId,
+            usuarioId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Usuario"
+            },
             nombre: String,
             firma: String,
             estado: {
                 type: String,
-                enum: ['pendiente', 'aprobado', 'no aprobado']
+                enum: ["pendiente", "aprobado", "no aprobado"],
+                default: "pendiente"
             },
             fecha: Date
         },
-
+        
         sst: {
-            usuarioId: ObjectId,
+            usuarioId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Usuario"
+            },
             nombre: String,
             firma: String,
             estado: {
                 type: String,
-                enum: ['pendiente', 'aprobado', 'no aprobado']
+                enum: ["pendiente", "aprobado", "no aprobado"],
+                default: "pendiente"
             },
             fecha: Date
         },
 
         coordinacion: {
-            usuarioId: ObjectId,
+            usuarioId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Usuario"
+            },
             nombre: String,
             firma: String,
             estado: {
                 type: String,
-                enum: ['pendiente', 'aprobado', 'no aprobado']
+                enum: ["pendiente", "aprobado", "no aprobado"],
+                default: "pendiente"
             },
             fecha: Date
         }
+    },
+
+    observaciones: {
+        type: String,
+        trim: true
     }
 }, {
     timestamps: true

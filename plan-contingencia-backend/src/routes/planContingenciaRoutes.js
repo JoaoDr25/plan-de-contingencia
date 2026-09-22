@@ -5,6 +5,7 @@ import {
     obtenerPlanId,
     actualizarPlanId,
     cambiarEstadoPlanId,
+    eliminarPlanId,
     generarPlan,
     generarPdf,
     asociarRiesgosPlan,
@@ -31,6 +32,7 @@ router.get('/planes', listarPlanes);
 router.post('/planes', validarCuerpoNoVacio, crearPlan);
 router.get('/planes/:id', validarObjectId, obtenerPlanId);
 router.put('/planes/:id', [validarObjectId, validarCuerpoNoVacio], actualizarPlanId);
+router.delete('/planes/:id', validarObjectId, eliminarPlanId);
 
 router.patch('/planes/:id/estado', [validarObjectId, validarCuerpoNoVacio, validarEstadoPlan], cambiarEstadoPlanId);
 router.post('/planes/:id/generar', validarObjectId, generarPlan);

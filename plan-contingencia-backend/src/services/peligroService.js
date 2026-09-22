@@ -4,6 +4,28 @@ import riesgoModel from "../models/riesgoModel.js";
 
 const crud = createCrudService(peligroModel);
 
+const validarRiesgos = async (riesgos) => {
+
+    if (!riesgos?.length) {
+        return;
+    }
+
+    const encontrados = await riesgoModel.find({
+        _id: { $in: riesgos }
+    });
+
+    if (encontrados.length !== riesgos.length) {
+        const error =
+            new Error(
+                "Uno o varios riesgos no existen"
+            );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+}
+
 const create = async (data) => {
 
     const {
@@ -25,6 +47,8 @@ const create = async (data) => {
 
         throw error;
     }
+
+    await validarRiesgos(riesgos);
 
     return await crud.create(data);
 }
@@ -82,6 +106,8 @@ const updateById = async (id, data) => {
         throw error;
     }
 
+    await validarRiesgos(riesgos);
+
     const actualizarPeligroId = await crud.update(
         id,
         data
@@ -135,27 +161,5 @@ const deleteById = async (id) => {
 
     return eliminarPeligroId;
 }
-
-
-
-// const obtenerRiesgoPeligro = async (id) => {
-
-//     const obtenerAsociacionRiesgoPeligroId = await crud.getById(id);
-
-//     if (!obtenerAsociacionRiesgoPeligroId) {
-//         const error = 
-//         new Error(
-//             "Peligro no encontrado"
-//         );
-
-//         error.statusCode = 404;
-
-//         throw error;
-//     }
-
-//     return await riesgoModel.find({
-//         peligroId: id
-//     });
-// }
 
 export default { ...crud, create, getAll, getById, updateById, deleteById };

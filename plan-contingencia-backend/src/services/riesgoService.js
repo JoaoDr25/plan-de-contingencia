@@ -5,6 +5,40 @@ import peligroModel from '../models/peligroModel.js';
 
 const crud = createCrudService(riesgoModel);
 
+const normalizarNivel = (nivel) => {
+    if (!nivel) return nivel;
+
+    const niveles = {
+        BAJO: "Bajo",
+        MEDIO: "Medio",
+        ALTO: "Alto"
+    };
+
+    return niveles[nivel] ?? nivel;
+}
+
+const normalizarDatosRiesgo = (data) => {
+    if (data.riesgo || data.nombre) {
+        data.riesgo = data.riesgo ?? data.nombre;
+    }
+
+    if (data.nivel || data.nivelRiesgo) {
+        data.nivel = normalizarNivel(data.nivel ?? data.nivelRiesgo);
+    }
+
+    if (data.prevencion || data.medidasPrevencion) {
+        data.prevencion = data.prevencion ?? data.medidasPrevencion;
+    }
+
+    if (data.peligroId && !Array.isArray(data.peligroId)) {
+        data.peligroId = [data.peligroId];
+    }
+
+    if (data.peligroId?.length) {
+        data.peligroId = [...new Set(data.peligroId)];
+    }
+}
+
 const validarRelaciones = async (data) => {
 
     const {
@@ -12,15 +46,17 @@ const validarRelaciones = async (data) => {
         protocolos
     } = data;
 
-    if (peligroId) {
+    if (peligroId?.length) {
 
-        const peligro =
-            await peligroModel.findById(peligroId);
+        const peligros =
+            await peligroModel.find({
+                _id: { $in: peligroId }
+            });
 
-        if (!peligro) {
+        if (peligros.length !== peligroId.length) {
             const error =
                 new Error(
-                    "El peligro seleccionado no existe"
+                    "Uno o más peligros seleccionados no existen"
                 );
 
             error.statusCode = 404;
@@ -60,14 +96,14 @@ const validarRelaciones = async (data) => {
 
 const create = async (data) => {
 
+    normalizarDatosRiesgo(data);
+
     const {
-        nombre,
-        peligroId,
-        protocolos = []
+        riesgo
     } = data;
 
     const riesgoExistente = await riesgoModel.findOne({
-        nombre
+        riesgo
     });
 
     if (riesgoExistente) {
@@ -81,19 +117,6 @@ const create = async (data) => {
         throw error;
     }
 
-    const peligro = await peligroModel.findById(peligroId);
-
-    if (!peligro) {
-        const error =
-            new Error(
-                "No se encontró el peligro asociado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
-    }
-
     await validarRelaciones(data);
 
     return await crud.create(data);
@@ -102,7 +125,9 @@ const create = async (data) => {
 
 
 const getAll = async () => {
-    return await crud.getAll().populate("protocolos");
+    return await crud.getAll()
+        .populate("peligroId")
+        .populate("protocolos");
 }
 
 
@@ -110,7 +135,8 @@ const getAll = async () => {
 const getById = async (id) => {
 
     const obtenerRiesgoId = await crud.getById(id)
-    .populate("protocolos");
+        .populate("peligroId")
+        .populate("protocolos");
 
     if (!obtenerRiesgoId) {
         const error =
@@ -130,16 +156,18 @@ const getById = async (id) => {
 
 const updateById = async (id, data) => {
 
+    normalizarDatosRiesgo(data);
+
     const {
-        nombre,
-        peligroId,
-        protocolos = []
+        riesgo
     } = data;
 
-    const riesgoExistente = await riesgoModel.findOne({
-        nombre,
-        _id: { $ne: id }
-    });
+    const riesgoExistente = riesgo
+        ? await riesgoModel.findOne({
+            riesgo,
+            _id: { $ne: id }
+        })
+        : null;
 
     if (riesgoExistente) {
         const error =
@@ -192,118 +220,5 @@ const deleteById = async (id) => {
 
     return eliminarRiesgoId;
 }
-
-
-
-// const asociarProtocoloRiesgo = async (id, protocoloId) => {
-
-//     const riesgoId = await crud.getById(id);
-
-//     if (!riesgoId) {
-//         const error =
-//             new Error(
-//                 "Riesgo no encontrado"
-//             );
-
-//         error.statusCode = 404;
-
-//         throw error;
-//     }
-
-//     return await riesgoModel.findByIdAndUpdate(
-//         id,
-//         {
-//             $addToSet: {
-//                 protocolos: {
-//                     $each: protocolos
-//                 }
-//             }
-//         },
-//         {
-//             new: true
-//         }
-//     ).populate("protocolos");
-// };
-
-
-
-// const obtenerProtocoloRiesgo = async (id) => {
-
-//     const riesgoId = await riesgoModel.findById(id)
-//         .populate("protocolos");
-
-//     if (!riesgoId) {
-//         const error =
-//             new Error(
-//                 "Riesgo no encontrado"
-//             );
-
-//         error.statusCode = 404;
-
-//         throw error;
-//     }
-
-//     return riesgoId.protocolos;
-// }
-
-
-
-// const eliminarProtocoloRiesgo = async (id, protocoloId) => {
-
-//     const riesgoId = await crud.getById(id);
-
-//     if (!riesgoId) {
-//         const error =
-//             new Error(
-//                 "Riesgo no encontrado"
-//             );
-
-//         error.statusCode = 404;
-
-//         throw error;
-//     }
-
-//     const protocolo = await protocoloModel.findById(protocoloId);
-
-//     if (!protocolo) {
-//         const error =
-//             new Error(
-//                 "Protocolo no encontrado"
-//             );
-
-//         error.statusCode = 404;
-
-//         throw error;
-//     }
-
-//     const asociado = riesgoId.protocolos.some(
-//         protocolo =>
-//             protocolo.toString() === protocoloId
-//     );
-
-//     if (!asociado) {
-//         const error =
-//             new Error(
-//                 "El protocolo no está asociado al riesgo"
-//             );
-
-//         error.statusCode = 400;
-
-//         throw error;
-//     }
-
-//     return await riesgoModel.findByIdAndUpdate(
-//         id,
-//         {
-//             $pull: {
-//                 protocolos:
-//                     protocoloId
-//             }
-//         },
-//         {
-//             new: true
-//         }
-//     ).populate("protocolos");
-// }
 
 export default { ...crud, create, getAll, getById, updateById, deleteById };

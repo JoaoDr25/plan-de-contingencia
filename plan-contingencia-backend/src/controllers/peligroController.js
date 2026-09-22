@@ -68,17 +68,3 @@ export const eliminarPeligroId = async (req, res, next) => {
         next(error);
     }
 };
-
-
-// export const obtenerAsociacionRiesgoPeligro = async (req, res, next) => {
-//     try {
-//         const obtenerAsociacion = await peligroService.obtenerRiesgoPeligro(req.params.id);
-
-//         return res.status(200).json({
-//             mensaje: `Riesgos asociados obtenidos exitosamente`,
-//             asociar: obtenerAsociacion
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// };
