@@ -132,12 +132,29 @@ const create = async (data) => {
 
 
 
-const getAll = async () => {
+const populatePlanQuery = (query) => query
+    .populate("programaFormacionId", "nombre ficha nivel nivelFormacion")
+    .populate("actividadId", "nombre tipo categoria")
+    .populate("aprendicesId")
+    .populate("epp")
+    .populate("contactosEmergencia.contactosBase")
+    .populate({
+        path: "riesgosId",
+        populate: [
+            {
+                path: "peligroId"
+            },
+            {
+                path: "protocolos"
+            }
+        ]
+    });
 
-    const listarPlanesId = await crud.getAll()
-        .populate("programaFormacionId", "nombre ficha nivel nivelFormacion")
-        .populate("actividadId", "nombre categoria")
-        .populate("riesgosId");
+
+
+const getAll = async (filter = {}) => {
+
+    const listarPlanesId = await populatePlanQuery(crud.getAll(filter));
 
     return listarPlanesId;
 }
@@ -146,10 +163,7 @@ const getAll = async () => {
 
 const getById = async (id) => {
 
-    const obtenerPlanId = await crud.getById(id)
-        .populate("programaFormacionId", "nombre ficha nivel nivelFormacion")
-        .populate("actividadId", "nombre tipo")
-        .populate("riesgosId");
+    const obtenerPlanId = await populatePlanQuery(crud.getById(id));
 
     if (!obtenerPlanId) {
         const error =

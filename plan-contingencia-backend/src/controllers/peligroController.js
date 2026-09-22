@@ -1,12 +1,14 @@
 import peligroService from '../services/peligroService.js';
+import { sendSuccess } from '../utils/apiResponse.js';
 
 export const crearPeligro = async (req, res, next) => {
     try {
         const nuevoPeligro = await peligroService.create(req.body);
 
-        return res.status(201).json({
-            mensaje: "Peligro creado exitosamente",
-            peligro: nuevoPeligro
+        return sendSuccess(res, {
+            statusCode: 201,
+            message: "Peligro creado exitosamente",
+            data: nuevoPeligro
         });
     } catch (error) {
        next(error);
@@ -16,11 +18,11 @@ export const crearPeligro = async (req, res, next) => {
 
 export const listarPeligros = async (req, res, next) => {
     try {
-        const listar = await peligroService.getAll();
+        const listar = await peligroService.getAll(req.query);
 
-        return res.status(200).json({
-            mensaje: "Lista de peligros obtenidos exitosamente",
-            peligros: listar
+        return sendSuccess(res, {
+            message: "Lista de peligros obtenidos exitosamente",
+            data: listar
         });
     } catch (error) {
         next(error);
@@ -32,9 +34,9 @@ export const obtenerPeligroId = async (req, res, next) => {
     try {
         const obtenerId = await peligroService.getById(req.params.id)
 
-        return res.status(200).json({
-            mensaje: "Peligro obtenido exitosamente",
-            peligro: obtenerId
+        return sendSuccess(res, {
+            message: "Peligro obtenido exitosamente",
+            data: obtenerId
         });
     } catch (error) {
         next(error);
@@ -46,9 +48,9 @@ export const actualizarPeligroId = async (req, res, next) => {
     try {
         const actualizar = await peligroService.updateById(req.params.id, req.body);
 
-        return res.status(200).json({
-            mensaje: "Peligro actualizado exitosamente",
-            peligro: actualizar
+        return sendSuccess(res, {
+            message: "Peligro actualizado exitosamente",
+            data: actualizar
         });
     } catch (error) {
         next(error);
@@ -60,9 +62,9 @@ export const eliminarPeligroId = async (req, res, next) => {
     try {
         const eliminar = await peligroService.deleteById(req.params.id);
 
-        return res.status(200).json({
-            mensaje: "Peligro eliminado exitosamente",
-            peligro: eliminar
+        return sendSuccess(res, {
+            message: "Peligro eliminado exitosamente",
+            data: eliminar
         });
     } catch (error) {
         next(error);

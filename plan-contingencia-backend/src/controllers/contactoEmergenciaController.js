@@ -1,12 +1,14 @@
 import contactoEmergenciaService from "../services/contactoEmergenciaService.js";
+import { sendSuccess } from "../utils/apiResponse.js";
 
 export const crearContactoEmergencia = async (req, res, next) => {
     try {
         const nuevoContacto = await contactoEmergenciaService.create(req.body);
 
-        res.status(201).json({
-            mensaje: "Contacto de emergencia creado correctamente",
-            contacto: nuevoContacto
+        sendSuccess(res, {
+            statusCode: 201,
+            message: "Contacto de emergencia creado correctamente",
+            data: nuevoContacto
         });
     } catch (error) {
         next(error);
@@ -16,11 +18,11 @@ export const crearContactoEmergencia = async (req, res, next) => {
 
 export const listarContactosEmergencia = async (req,res, next) => {
     try {
-        const listar = await contactoEmergenciaService.getAll({ estado: true });
+        const listar = await contactoEmergenciaService.getAll(req.query);
 
-         res.status(200).json({
-            mensaje: "Contactos de emergencia activos obtenidos exitosamente",
-            contactos: listar
+         sendSuccess(res, {
+            message: "Contactos de emergencia obtenidos exitosamente",
+            data: listar
         });
     } catch (error) {
         next(error);
@@ -32,9 +34,9 @@ export const obtenerContactoEmergenciaId = async (req, res, next) => {
     try {
         const obtenerId = await contactoEmergenciaService.getById(req.params.id);
 
-         res.status(200).json({
-            mensaje: "Contacto de emergencia obtenido exitosamente",
-            contacto: obtenerId
+            sendSuccess(res, {
+                message: "Contacto de emergencia obtenido exitosamente",
+                data: obtenerId
         });
     } catch (error) {
        next(error);
@@ -46,9 +48,9 @@ export const actualizarContactoEmergenciaId = async (req, res, next) => {
     try {
         const actualizar = await contactoEmergenciaService.updateById(req.params.id, req.body);
 
-        res.status(200).json({
-            mensaje: "Contacto de emergencia actualizado correctamente",
-            contacto: actualizar
+        sendSuccess(res, {
+            message: "Contacto de emergencia actualizado correctamente",
+            data: actualizar
         });
     } catch (error) {
        next(error);
@@ -62,9 +64,9 @@ export const cambiarEstadoContactoEmergenciaId = async (req, res, next) => {
 
         const cambiarEstado = await contactoEmergenciaService.cambiarEstadoId(req.params.id, estado);
 
-        res.status(200).json({
-            mensaje: `Contacto de emergencia ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
-            contacto: cambiarEstado
+        sendSuccess(res, {
+            message: `Contacto de emergencia ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
+            data: cambiarEstado
         });
     } catch (error) {
         next(error);
@@ -76,9 +78,9 @@ export const eliminarContactoEmergenciaId = async (req, res, next) => {
     try {
         const eliminar = await contactoEmergenciaService.deleteById(req.params.id);
 
-        res.status(200).json({
-            mensaje: "Contacto de emergencia eliminado exitosamente",
-            contacto: eliminar
+        sendSuccess(res, {
+            message: "Contacto de emergencia eliminado exitosamente",
+            data: eliminar
         });
     } catch (error) {
         next(error);

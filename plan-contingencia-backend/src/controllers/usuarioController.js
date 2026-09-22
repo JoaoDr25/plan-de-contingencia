@@ -1,12 +1,14 @@
 import usuarioService from "../services/usuarioService.js";
+import { sendSuccess } from "../utils/apiResponse.js";
 
 export const crearUsuario = async (req, res, next) => {
     try {
         const nuevoUsuario = await usuarioService.create(req.body);
 
-         res.status(201).json({
-            mensaje: "Usuario creado correctamente",
-            usuario: nuevoUsuario
+            sendSuccess(res, {
+                statusCode: 201,
+                message: "Usuario creado correctamente",
+                data: nuevoUsuario
         });
     } catch (error) {
         next(error);
@@ -16,11 +18,11 @@ export const crearUsuario = async (req, res, next) => {
 
 export const listarUsuario = async (req, res, next) => {
     try {
-        const listar = await usuarioService.getAll();
+        const listar = await usuarioService.getAll(req.query);
 
-         res.status(200).json({
-            mensaje: "Usuarios obtenidos exitosamente",
-            usuarios: listar
+         sendSuccess(res, {
+            message: "Usuarios obtenidos exitosamente",
+            data: listar
         });
     } catch (error) {
          next(error);
@@ -32,9 +34,9 @@ export const obtenerUsuarioId = async (req, res, next) => {
     try {
         const obtenerId = await usuarioService.getById(req.params.id);
 
-          res.status(200).json({
-            mensaje: "Usuario obtenido exitosamente",
-            usuario: obtenerId
+                    sendSuccess(res, {
+                        message: "Usuario obtenido exitosamente",
+                        data: obtenerId
         });
     } catch (error) {
         next(error);
@@ -46,9 +48,9 @@ export const actualizarUsuarioId = async (req, res, next) => {
     try {
         const actualizar = await usuarioService.updateById(req.params.id, req.body);
 
-         res.status(200).json({
-            mensaje: "Usuario actualizado correctamente",
-            usuario: actualizar
+            sendSuccess(res, {
+                message: "Usuario actualizado correctamente",
+                data: actualizar
         });
     } catch (error) {
         next(error);
@@ -61,9 +63,9 @@ export const cambiarEstadoUsuarioId = async (req, res, next) => {
         const { estado } = req.body;
         const cambiarEstado = await usuarioService.cambiarEstadoId(req.params.id, estado);
 
-        res.status(200).json({
-            mensaje: `Usuario ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
-            usuario: cambiarEstado
+        sendSuccess(res, {
+            message: `Usuario ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
+            data: cambiarEstado
         });
     } catch (error) {
         next(error);
@@ -75,9 +77,9 @@ export const eliminarUsuarioId = async (req, res, next) => {
     try {
         const eliminar = await usuarioService.deleteById(req.params.id);
 
-        res.status(200).json({
-            mensaje: "Usuario eliminado exitosamente",
-            usuario: eliminar
+        sendSuccess(res, {
+            message: "Usuario eliminado exitosamente",
+            data: eliminar
         });
     } catch (error) {
          next(error);

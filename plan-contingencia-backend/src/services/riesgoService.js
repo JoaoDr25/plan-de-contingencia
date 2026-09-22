@@ -124,8 +124,8 @@ const create = async (data) => {
 
 
 
-const getAll = async () => {
-    return await crud.getAll()
+const getAll = async (filter = {}) => {
+    return await crud.getAll(filter)
         .populate("peligroId")
         .populate("protocolos");
 }

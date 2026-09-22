@@ -1,12 +1,14 @@
 import aprendizService from "../services/aprendizService.js";
+import { sendSuccess } from "../utils/apiResponse.js";
 
 export const crearAprendiz = async (req, res, next) => {
     try {
         const nuevoAprendiz = await aprendizService.create(req.body);
 
-        res.status(201).json({
-            mensaje: "Aprendiz creado correctamente",
-            aprendiz: nuevoAprendiz
+        sendSuccess(res, {
+            statusCode: 201,
+            message: "Aprendiz creado correctamente",
+            data: nuevoAprendiz
         });
     } catch (error) {
        next(error);
@@ -16,11 +18,11 @@ export const crearAprendiz = async (req, res, next) => {
 
 export const listarAprendiz = async (req, res, next) => {
     try {
-        const listar = await aprendizService.getAll({ estado: true }); //Actualmente solo activos, pendiente crear filtros
+        const listar = await aprendizService.getAll(req.query);
 
-        res.status(200).json({
-            mensaje: "Aprendices activos obtenidos exitosamente",
-            aprendiz: listar
+        sendSuccess(res, {
+            message: "Aprendices obtenidos exitosamente",
+            data: listar
         });
     } catch (error) {
        next(error);
@@ -32,9 +34,9 @@ export const obtenerAprendizId = async (req, res, next) => {
     try {
         const obtenerId = await aprendizService.getById( req.params.id );
 
-        res.status(200).json({
-            mensaje: "Aprendiz obtenido exitosamente",
-            aprendiz: obtenerId
+        sendSuccess(res, {
+            message: "Aprendiz obtenido exitosamente",
+            data: obtenerId
         });
     } catch (error) {
        next(error);
@@ -46,9 +48,9 @@ export const actualizarAprendizId = async (req, res, next) => {
     try {
         const actualizar = await aprendizService.updateById( req.params.id, req.body );
 
-        res.status(200).json({
-            mensaje: "Aprendiz actualizado correctamente",
-            aprendiz: actualizar
+        sendSuccess(res, {
+            message: "Aprendiz actualizado correctamente",
+            data: actualizar
         });
     } catch (error) {
         next(error);
@@ -62,9 +64,9 @@ export const cambiarEstadoAprendizId = async (req, res, next) => {
 
         const cambiarEstado = await aprendizService.cambiarEstadoId( req.params.id, estado );
 
-        res.status(200).json({
-            mensaje: `Aprendiz ${estado ? "activado" : "desactivado"} exitosamente`,
-            aprendiz: cambiarEstado
+        sendSuccess(res, {
+            message: `Aprendiz ${cambiarEstado.estado === "Activo" ? "activado" : "desactivado"} exitosamente`,
+            data: cambiarEstado
         });
     } catch (error) {
         next(error);
@@ -76,9 +78,9 @@ export const eliminarAprendizId = async (req, res, next) => {
     try {
         const eliminar = await aprendizService.deleteById( req.params.id );
 
-        res.status(200).json({
-            mensaje: "Aprendiz eliminado exitosamente",
-            aprendiz: eliminar
+        sendSuccess(res, {
+            message: "Aprendiz eliminado exitosamente",
+            data: eliminar
         });
     } catch (error) {
         next(error);

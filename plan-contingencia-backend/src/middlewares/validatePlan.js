@@ -3,7 +3,10 @@ import PlanContingencia from "../models/planContingenciaModel.js";
 export const validarCuerpoNoVacio = (req, res, next) => {
     try {
         if (!req.body || Object.keys(req.body).length === 0) {
-            return res.status(400).json({ mensaje: "El cuerpo de la petición no puede estar vacío" });
+            return res.status(400).json({
+                success: false,
+                message: "El cuerpo de la petición no puede estar vacío"
+            });
         }
         next();
 
@@ -27,13 +30,15 @@ export const validarEstadoPlan = async (req, res, next) => {
 
         if (!nuevoEstado) {
             return res.status(400).json({
-                mensaje: "Debe enviar el campo 'estado'"
+                success: false,
+                message: "Debe enviar el campo 'estado'"
             });
         }
 
         if (nuevoEstado && !estadosValidos.includes(nuevoEstado)) {
             return res.status(400).json({
-                mensaje: `El estado '${nuevoEstado}' no es válido. Estados permitidos: ${estadosValidos.join(", ")}`
+                success: false,
+                message: `El estado '${nuevoEstado}' no es válido. Estados permitidos: ${estadosValidos.join(", ")}`
             })
         }
 
@@ -41,7 +46,8 @@ export const validarEstadoPlan = async (req, res, next) => {
 
         if (!planExistente) {
             return res.status(404).json({
-                mensaje: "Plan de contingencia no encontrado para validar la transición de estado"
+                success: false,
+                message: "Plan de contingencia no encontrado para validar la transición de estado"
             })
         }
 
@@ -69,7 +75,8 @@ export const validarEstadoPlan = async (req, res, next) => {
         if (!transicionesPermitidas[estadoActual].includes(nuevoEstado)
         ) {
             return res.status(400).json({
-                mensaje:
+                success: false,
+                message:
                 `No se permite cambiar de '${estadoActual}' a '${nuevoEstado}' `
             });
         }

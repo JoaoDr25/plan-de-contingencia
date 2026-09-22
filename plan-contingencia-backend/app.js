@@ -46,7 +46,10 @@ app.use('/api',
 );
 
 app.use((req, res) => {
-    res.status(404).json({error: 'Ruta no encontrada'});
+    res.status(404).json({
+        success: false,
+        message: 'Ruta no encontrada'
+    });
 });
 
 app.use(errorHandler); //Middleware de manejo de errores del servidor

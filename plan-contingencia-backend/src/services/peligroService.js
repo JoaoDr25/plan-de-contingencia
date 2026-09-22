@@ -55,9 +55,9 @@ const create = async (data) => {
 
 
 
-const getAll = async () => {
+const getAll = async (filter = {}) => {
 
-    return await crud.getAll().populate("riesgos");
+    return await crud.getAll(filter).populate("riesgos");
 }
 
 
