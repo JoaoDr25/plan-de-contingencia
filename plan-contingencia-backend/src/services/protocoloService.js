@@ -37,7 +37,6 @@ const create = async (data) => {
 
         throw error;
     }
-
     return await crud.create(data);
 }
 
@@ -125,6 +124,21 @@ const updateById = async (id, data) => {
 
 const deleteById = async (id) => {
 
+    const riesgosAsociados = await riesgoModel.findOne({
+        protocolos: id
+    });
+
+    if (riesgosAsociados) {
+        const error =
+            new Error(
+                "No se puede eliminar el protocolo porque tiene riesgos asociados"
+            );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
     const eliminarProtocoloId = await crud.delete(id);
 
     if (!eliminarProtocoloId) {
@@ -142,26 +156,6 @@ const deleteById = async (id) => {
 }
 
 
-
-// const obtenerRiesgoProtocolo = async (id) => {
-
-//     const protocolo = await crud.getById(id)
-
-//     if (!protocolo) {
-//         const error =
-//             new Error(
-//                 "Protocolo no encontrado"
-//             );
-
-//         error.statusCode = 404;
-
-//         throw error;
-//     }
-
-//     return await riesgoModel.find({
-//         protocolos: id
-//     }).populate("protocolos");
-// }
 
 const cambiarEstadoId = async (id, estado) => {
 

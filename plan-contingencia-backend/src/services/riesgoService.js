@@ -93,13 +93,55 @@ const validarRelaciones = async (data) => {
 }
 
 
+const sincronizarPeligros = async (riesgoId, nuevosPeligros = [], antiguosPeligros = []) => {
+
+    const nuevos = nuevosPeligros.map(id => id.toString());
+    const antiguos = antiguosPeligros.map(id => id.toString());
+
+    const peligrosAEliminar = antiguos.filter(
+        id => !nuevos.includes(id)
+    );
+
+    const peligrosAAgregar = nuevos.filter(
+        id => !antiguos.includes(id)
+    );
+
+    if (peligrosAEliminar.length) {
+        await peligroModel.updateMany(
+            {
+                _id: { $in: peligrosAEliminar }
+            },
+            {
+                $pull: {
+                    riesgos: riesgoId
+                }
+            }
+        );
+    }
+
+    if (peligrosAAgregar.length) {
+        await peligroModel.updateMany(
+            {
+                _id: { $in: peligrosAAgregar }
+            },
+            {
+                $addToSet: {
+                    riesgos: riesgoId
+                }
+            }
+        );
+    }
+};
+
+
 
 const create = async (data) => {
 
     normalizarDatosRiesgo(data);
 
     const {
-        riesgo
+        riesgo,
+        peligroId = []
     } = data;
 
     const riesgoExistente = await riesgoModel.findOne({
@@ -119,7 +161,14 @@ const create = async (data) => {
 
     await validarRelaciones(data);
 
-    return await crud.create(data);
+    const nuevoRiesgo = await crud.create(data);
+
+    await sincronizarPeligros(
+        nuevoRiesgo._id,
+        peligroId
+    );
+
+    return nuevoRiesgo;
 }
 
 
@@ -162,6 +211,19 @@ const updateById = async (id, data) => {
         riesgo
     } = data;
 
+    const riesgoActual = await riesgoModel.findById(id);
+
+    if (!riesgoActual) {
+        const error =
+            new Error(
+                "Riesgo no encontrado"
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
     const riesgoExistente = riesgo
         ? await riesgoModel.findOne({
             riesgo,
@@ -187,7 +249,29 @@ const updateById = async (id, data) => {
         data
     );
 
-    if (!actualizarRiesgoId) {
+    if (
+        Object.prototype.hasOwnProperty.call(
+            data,
+            "peligroId"
+        )
+    ) {
+        await sincronizarPeligros(
+            id,
+            data.peligroId ?? [],
+            riesgoActual.peligroId ?? []
+        );
+    }
+
+    return actualizarRiesgoId;
+}
+
+
+
+const deleteById = async (id) => {
+
+    const riesgoActual = await riesgoModel.findById(id);
+
+    if (!riesgoActual) {
         const error =
             new Error(
                 "Riesgo no encontrado"
@@ -197,13 +281,6 @@ const updateById = async (id, data) => {
 
         throw error;
     }
-
-    return actualizarRiesgoId;
-}
-
-
-
-const deleteById = async (id) => {
 
     const eliminarRiesgoId = await crud.delete(id);
 
@@ -217,6 +294,12 @@ const deleteById = async (id) => {
 
         throw error;
     }
+
+    await sincronizarPeligros(
+        id,
+        [],
+        riesgoActual.peligroId ?? []
+    );
 
     return eliminarRiesgoId;
 }

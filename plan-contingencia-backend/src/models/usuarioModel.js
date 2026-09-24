@@ -107,7 +107,7 @@ const usuarioSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 });
 
-usuarioSchema.pre("save", async function(next){
+usuarioSchema.pre("save", async function(){
 
     if (!this.numero) {
         this.numero =

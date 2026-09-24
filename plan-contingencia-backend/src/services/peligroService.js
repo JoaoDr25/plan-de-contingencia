@@ -26,6 +26,42 @@ const validarRiesgos = async (riesgos) => {
     }
 }
 
+
+
+const sincronizarRiesgos = async (
+    peligroId,
+    nuevosRiesgos = [],
+    antiguosRiesgos = []
+) => {
+
+    const nuevos = nuevosRiesgos.map(String);
+    const antiguos = antiguosRiesgos.map(String);
+
+    const riesgosAEliminar = antiguos.filter(
+        (id) => !nuevos.includes(id)
+    );
+
+    const riesgosAAgregar = nuevos.filter(
+        (id) => !antiguos.includes(id)
+    );
+
+    if (riesgosAEliminar.length) {
+        await riesgoModel.updateMany(
+            { _id: { $in: riesgosAEliminar } },
+            { $pull: { peligroId: peligroId } }
+        );
+    }
+
+    if (riesgosAAgregar.length) {
+        await riesgoModel.updateMany(
+            { _id: { $in: riesgosAAgregar } },
+            { $addToSet: { peligroId: peligroId } }
+        );
+    }
+};
+
+
+
 const create = async (data) => {
 
     const {
@@ -50,7 +86,14 @@ const create = async (data) => {
 
     await validarRiesgos(riesgos);
 
-    return await crud.create(data);
+    const nuevoPeligro = await crud.create(data);
+
+    await sincronizarRiesgos(
+        nuevoPeligro._id,
+        riesgos
+    );
+
+    return nuevoPeligro;
 }
 
 
@@ -90,6 +133,19 @@ const updateById = async (id, data) => {
         riesgos = []
     } = data;
 
+    const peligroActual = await peligroModel.findById(id);
+
+    if (!peligroActual) {
+        const error =
+            new Error(
+                "Peligro no encontrado"
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
     const peligroExistente = await peligroModel.findOne({
         nombre,
         _id: { $ne: id }
@@ -106,22 +162,31 @@ const updateById = async (id, data) => {
         throw error;
     }
 
-    await validarRiesgos(riesgos);
+    if (
+        Object.prototype.hasOwnProperty.call(
+            data,
+            "riesgos"
+        )
+    ) {
+        await validarRiesgos(data.riesgos ?? []);
+    }
 
     const actualizarPeligroId = await crud.update(
         id,
         data
     );
 
-    if (!actualizarPeligroId) {
-        const error =
-            new Error(
-                "Peligro no encontrado"
-            );
-
-        error.statusCode = 404;
-
-        throw error;
+    if (
+        Object.prototype.hasOwnProperty.call(
+            data,
+            "riesgos"
+        )
+    ) {
+        await sincronizarRiesgos(
+            id,
+            data.riesgos ?? [],
+            peligroActual.riesgos ?? []
+        );
     }
 
     return actualizarPeligroId;
