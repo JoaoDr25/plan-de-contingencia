@@ -29,7 +29,13 @@
           </div>
         </div>
 
-        <div v-else class="detail-card__empty">No se encontró información del usuario.</div>
+        <div v-else-if="loading" class="detail-card__empty">
+          Cargando información del usuario...
+        </div>
+
+        <div v-else class="detail-card__empty">
+          No se encontró información del usuario.
+        </div>
       </section>
 
       <section class="detail-card detail-card--work">
@@ -41,7 +47,7 @@
         </div>
 
         <div class="detail-card__fields detail-card__fields--work">
-          <BaseDetailItem label="Rol Asignado" :value="userData?.rol || 'No registrado'" />
+          <BaseDetailItem label="Rol Asignado" :value="userData?.rol || 'No asignado'" />
 
           <BaseDetailItem
             label="Centro de Formación"
@@ -86,58 +92,94 @@
             :value="userData?.correoPersonal || 'No registrado'"
           />
 
-          <BaseDetailItem label="Teléfono" :value="userData?.telefono || 'No registrado'" />
+          <BaseDetailItem
+            label="Teléfono"
+            :value="userData?.telefono || 'No registrado'"
+          />
 
-          <BaseDetailItem label="Último Acceso" :value="userData?.acceso || 'No registrado'" />
+          <BaseDetailItem
+            label="Último Acceso"
+            :value="userData?.acceso || 'No registrado'"
+          />
         </div>
       </section>
 
       <div class="user-detail__actions">
-        <SecondaryActionButton label="Volver" icon="arrow_back" size="sm" @click="goBack" />
+        <SecondaryActionButton
+          label="Volver"
+          icon="arrow_back"
+          size="sm"
+          @click="goBack"
+        />
       </div>
     </div>
   </BasePage>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock.js'
+import usuarioService from 'src/services/usuarioService.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import BaseDetailItem from 'src/components/forms/BaseDetailItem.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
+
 import logoSena from 'src/assets/logos/logo-sena.png'
 
 const route = useRoute()
 const router = useRouter()
 
-const userData = computed(() => {
-  return USUARIOS_MOCK.find((user) => String(user.codigo) === String(route.params.codigo)) ?? null
-})
+const userData = ref(null)
+const loading = ref(false)
 
 const fullName = computed(() => {
   if (!userData.value) {
     return 'No registrado'
   }
 
-  return `${userData.value.nombre} ${userData.value.apellido}`
+  return `${userData.value.nombre ?? ''} ${userData.value.apellido ?? ''}`.trim() || 'No registrado'
 })
 
 const maxHours = computed(() => {
-  return userData.value?.maximoHoras ? `${userData.value.maximoHoras} horas` : 'No registrado'
+  return userData.value?.maximoHoras
+    ? `${userData.value.maximoHoras} horas`
+    : 'No registrado'
 })
+
+async function loadUser() {
+  loading.value = true
+
+  try {
+    const usuarios = await usuarioService.getUsuarios()
+
+    userData.value =
+      usuarios.find(
+        (user) => String(user.codigo) === String(route.params.codigo),
+      ) ?? null
+  } catch (error) {
+    console.error('Error al cargar usuario:', error)
+    userData.value = null
+  } finally {
+    loading.value = false
+  }
+}
 
 function goBack() {
   router.push({
     name: 'usuarios.list',
   })
 }
+
+onMounted(() => {
+  loadUser()
+})
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 

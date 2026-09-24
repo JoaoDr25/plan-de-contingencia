@@ -142,11 +142,14 @@ function clearFirma() {
 const formFields = computed(() => {
   return USER_FORM_FIELDS.map((field) => {
     const isConfigurableField = ['rol', 'estado'].includes(field.model)
+    const isRoleField = field.model === 'rol'
+    const isDisabled =
+      !isConfigurableField || !canEditConfiguration.value || (isRoleField && isOwnUser.value)
 
     return {
       ...field,
-      readonly: !isConfigurableField || !canEditConfiguration.value,
-      disable: isConfigurableField && !canEditConfiguration.value,
+      readonly: isDisabled,
+      disable: isConfigurableField && isDisabled,
     }
   })
 })

@@ -169,8 +169,8 @@ export const USER_FORM_FIELDS = [
         value: 'PEDAGOGIA',
       },
     ],
-    required: true,
-    rules: [required],
+    required: false,
+    rules: [],
   },
   {
     component: BaseSelect,

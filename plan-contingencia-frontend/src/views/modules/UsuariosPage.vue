@@ -73,19 +73,21 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { USUARIOS_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { USUARIOS_FILTERS } from 'src/constants/filters/usuarios.constants'
 import { USUARIOS_COLUMNS } from 'src/constants/tables/usuarios.columns'
-
-import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock.js'
+// import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock.js'
 import { ROLES } from 'src/constants/system/roles.constants'
+
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { mergeUsersFromRepfora } from 'src/utils/userSync.utils'
 import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils.js'
 import { useAuthStore } from 'src/stores/auth.store'
+
+import usuarioService from 'src/services/usuarioService.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -97,12 +99,21 @@ import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
-
 import UsuariosDialog from '../dialogs/UsuariosDialog.vue'
 
-const sourceRows = ref(USUARIOS_MOCK.map((user) => ({ ...user })))
+const sourceRows = ref([])
+
 const authStore = useAuthStore()
 const router = useRouter()
+
+const loading = ref(false)
+const syncing = ref(false)
+
+const dialog = ref(false)
+const selectedUser = ref(null)
+
+const confirmationDialog = ref(false)
+const pendingActionData = ref(null)
 
 const canSyncUsers = computed(() => {
   return (
@@ -130,14 +141,23 @@ const {
   defaultRowsPerPage: 8,
 })
 
-const loading = ref(false)
-const syncing = ref(false)
+async function loadUsuarios() {
+  loading.value = true
 
-const dialog = ref(false)
-const selectedUser = ref(null)
+  try {
+    const usuarios = await usuarioService.getUsuarios()
 
-const confirmationDialog = ref(false)
-const pendingActionData = ref(null)
+    sourceRows.value = usuarios
+  } catch (error) {
+    console.error('Error al cargar usuarios:', error)
+
+    sourceRows.value = []
+
+    notifyWarning('No fue posible cargar los usuarios')
+  } finally {
+    loading.value = false
+  }
+}
 
 async function syncUsers() {
   if (!canSyncUsers.value) {
@@ -147,7 +167,13 @@ async function syncUsers() {
   syncing.value = true
 
   try {
-    const syncResult = mergeUsersFromRepfora(sourceRows.value, USUARIOS_MOCK)
+    const usuariosRepfora = await usuarioService.getUsuarios()
+
+    const syncResult = mergeUsersFromRepfora(
+      sourceRows.value,
+      usuariosRepfora,
+    )
+
     sourceRows.value = syncResult.users
 
     if (syncResult.added === 0) {
@@ -155,7 +181,13 @@ async function syncUsers() {
       return
     }
 
-    notifySuccess(`${syncResult.added} usuario(s) nuevo(s) agregado(s)`)
+    notifySuccess(
+      `${syncResult.added} usuario(s) nuevo(s) agregado(s)`,
+    )
+  } catch (error) {
+    console.error('Error al sincronizar usuarios:', error)
+
+    notifyWarning('No fue posible sincronizar los usuarios')
   } finally {
     syncing.value = false
   }
@@ -176,23 +208,44 @@ function handleUserSave(formData) {
   confirmationDialog.value = true
 }
 
-function updateUser(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedUser.value)
-  if (index === -1) {
-    return
+async function updateUser(formData) {
+  if (!selectedUser.value) {
+    throw new Error('No hay usuario seleccionado')
   }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
+  const id = selectedUser.value._id || selectedUser.value.id
+
+  if (!id) {
+    throw new Error('El usuario no tiene identificador')
   }
+  const updatedUser = await usuarioService.updateUsuario(id, formData)
+
+  const index = sourceRows.value.findIndex(
+    (row) => (row._id || row.id) === id,
+  )
+
+  if (index !== -1) {
+    sourceRows.value[index] = updatedUser
+  }
+  return updatedUser
 }
 
-function confirmAction() {
-  updateUser(pendingActionData.value)
-  notifySuccess('Usuario actualizado correctamente')
+async function confirmAction() {
+  if (!pendingActionData.value) {
+    return
+  }
+  try {
+    await updateUser(pendingActionData.value)
 
-  pendingActionData.value = null
-  confirmationDialog.value = false
+    notifySuccess('Usuario actualizado correctamente')
+
+    pendingActionData.value = null
+    confirmationDialog.value = false
+    selectedUser.value = null
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error)
+
+    notifyWarning('No fue posible actualizar el usuario')
+  }
 }
 
 function cancelConfirmation() {
@@ -208,9 +261,14 @@ function viewItem(row) {
     },
   })
 }
+
+onMounted(() => {
+  loadUsuarios()
+})
 </script>
 
 <style scoped lang="scss">
+
 .usuarios-page__actions-slot {
   min-height: 38px;
 }

@@ -1,8 +1,19 @@
-import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock'
+import usuarioService from 'src/services/usuarioService.js'
 
-export function login(documento, correo) {
-  const user = USUARIOS_MOCK.find((usuario) => {
-    return usuario.documento === documento && usuario.correo.toLowerCase() === correo.toLowerCase()
+export async function login(documento, correo) {
+  let usuarios = []
+
+  try {
+    usuarios = await usuarioService.getUsuarios({ documento })
+  } catch {
+    return {
+      success: false,
+      message: 'No fue posible validar las credenciales, intente nuevamente',
+    }
+  }
+
+  const user = usuarios.find((usuario) => {
+    return usuario.correo?.toLowerCase() === correo.toLowerCase()
   })
 
   if (!user) {

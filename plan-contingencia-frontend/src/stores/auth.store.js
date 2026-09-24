@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { login as authenticateUser } from 'src/services/authService'
-import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock'
+import usuarioService from 'src/services/usuarioService.js'
 
 const AUTH_STORAGE_KEY = 'plan-contingencia.auth'
 
@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
   })
 
   async function login(documento, correo) {
-    const result = authenticateUser(documento, correo)
+    const result = await authenticateUser(documento, correo)
 
     if (!result.success) {
       return result
@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  function hydrate() {
+  async function hydrate() {
     if (typeof window === 'undefined') {
       return
     }
@@ -56,9 +56,12 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       const storedUser = JSON.parse(storedSession)
-      const freshUser = USUARIOS_MOCK.find((usuario) => usuario._id === storedUser?._id)
+      currentUser.value = storedUser
 
-      currentUser.value = freshUser || storedUser
+      if (storedUser?._id) {
+        currentUser.value = await usuarioService.getUsuarioById(storedUser._id)
+        persistSession()
+      }
     } catch {
       logout()
     }
