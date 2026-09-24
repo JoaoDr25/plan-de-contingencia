@@ -98,15 +98,16 @@ const updateById = async (id, data) => {
     });
 
     if (actividadExistente) {
-        const error =
-            new Error(
-                "No se puede actualizar: ya existe otra actividad con ese nombre"
-            );
+        const error = new Error(
+            "No se puede actualizar: ya existe otra actividad con ese nombre"
+        );
 
         error.statusCode = 400;
 
         throw error;
     }
+
+    await validarPeligros(peligros);
 
     const actualizarActividadId = await crud.update(
         id,
@@ -114,20 +115,17 @@ const updateById = async (id, data) => {
     );
 
     if (!actualizarActividadId) {
-        const error =
-            new Error(
-                "Actividad no encontrada"
-            );
+        const error = new Error(
+            "Actividad no encontrada"
+        );
 
         error.statusCode = 404;
 
         throw error;
     }
 
-    await validarPeligros(peligros);
-
     return actualizarActividadId;
-}
+};
 
 
 
