@@ -116,7 +116,8 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import ActividadesDialog from '../dialogs/ActividadesDialog.vue'
 import ActividadesDetails from '../details/ActividadesDetails.vue'
 import PlanesPeligrosDialog from '../modals/PlanesPeligrosDialog.vue'
-import actividadesService from 'src/services/actividadesService.js'
+
+import actividadesService from 'src/services/actividadService.js'
 
 const sourceRows = ref([])
 

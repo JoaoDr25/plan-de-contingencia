@@ -18,7 +18,7 @@ import { ACTIVITY_FORM_FIELDS } from 'src/constants/forms/actividades_form.const
 // import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
 import { notifyWarning, notifyError } from 'src/utils/notifications.utils'
 
-import peligrosService from 'src/services/peligrosServices.js'
+import peligrosService from 'src/services/peligroService.js'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'

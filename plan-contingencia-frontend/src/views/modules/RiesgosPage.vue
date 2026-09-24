@@ -97,17 +97,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { RIESGOS_FILTERS } from 'src/constants/filters/riesgos.constants'
 import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns'
-import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
-import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
+// import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
+// import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
-import { notifySuccess } from 'src/utils/notifications.utils.js'
+// import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -124,7 +124,9 @@ import RiesgosDialog from '../dialogs/RiesgosDialog.vue'
 import RiesgosDetails from '../details/RiesgosDetails.vue'
 import PlanesProtocolosDialog from '../modals/PlanesProtocolosDialog.vue'
 
-const sourceRows = ref(RIESGOS_MOCK)
+import riesgoService from 'src/services/riesgoService.js'
+
+const sourceRows = ref([])
 
 const {
   selectedFilter,
@@ -145,6 +147,23 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadRiesgos() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await riesgoService.getRiesgos()
+  } catch (error) {
+    console.error('Error al cargar riesgos:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible cargar los riesgos'
+    )
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 const detailsRisk = ref(false)
@@ -197,49 +216,94 @@ function handleRiskSave(formData) {
   confirmationDialog.value = true
 }
 
-function createRisk(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(),
-  })
-  dialog.value = false
+async function createRisk(formData) {
+  try {
+    await riesgoService.createRiesgo(formData)
+
+    await loadRiesgos()
+
+    return true
+  } catch (error) {
+    console.error('Error al crear riesgo:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible crear el riesgo'
+    )
+    return false
+  }
 }
 
-function updateRisk(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedRisk.value)
-  if (index === -1) {
-    return
+async function updateRisk(formData) {
+  try {
+    await riesgoService.updateRiesgo(
+      selectedRisk.value.id,
+      formData
+    )
+
+    await loadRiesgos()
+
+    return true
+  } catch (error) {
+    console.error('Error al actualizar riesgo:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible actualizar el riesgo'
+    )
+    return false
   }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
-  }
-  dialog.value = false
 }
 
-function deleteRisk(row) {
-  const index = sourceRows.value.findIndex((risk) => risk.id === row.id)
-  if (index === -1) {
-    return
+async function deleteRisk(row) {
+  try {
+    await riesgoService.deleteRiesgo(row.id)
+
+    await loadRiesgos()
+
+    return true
+  } catch (error) {
+    console.error('Error al eliminar riesgo:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible eliminar el riesgo'
+    )
+    return false
   }
-  sourceRows.value.splice(index, 1)
 }
 
-function confirmAction() {
+async function confirmAction() {
+  let success = false
+
   if (dialogMode.value === 'create') {
-    createRisk(pendingActionData.value)
-    notifySuccess('Riesgo creado correctamente')
+    success = await createRisk(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Riesgo creado correctamente')
+    }
   }
+
   if (dialogMode.value === 'edit') {
-    updateRisk(pendingActionData.value)
-    notifySuccess('Riesgo actualizado correctamente')
+    success = await updateRisk(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Riesgo actualizado correctamente')
+    }
   }
+
   if (dialogMode.value === 'delete') {
-    deleteRisk(selectedRisk.value)
-    notifySuccess('Riesgo eliminado correctamente')
+    success = await deleteRisk(selectedRisk.value)
+
+    if (success) {
+      notifySuccess('Riesgo eliminado correctamente')
+    }
   }
-  pendingActionData.value = null
-  confirmationDialog.value = false
+
+  if (success) {
+    pendingActionData.value = null
+    confirmationDialog.value = false
+  }
 }
 
 function cancelConfirmation() {
@@ -254,9 +318,9 @@ function viewItem(row) {
 }
 
 function getAssociatedProtocols(risk) {
-  const selectedIds = Array.isArray(risk.protocolos) ? risk.protocolos : []
-
-  return PROTOCOLOS_MOCK.filter((protocol) => selectedIds.includes(protocol._id))
+  return Array.isArray(risk?.protocolos)
+    ? risk.protocolos
+    : []
 }
 
 function viewAssociatedProtocols(risk) {
@@ -277,9 +341,15 @@ function deleteItem(row) {
   selectedRisk.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadRiesgos()
+})
+
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 
 .associated-protocols-cell {

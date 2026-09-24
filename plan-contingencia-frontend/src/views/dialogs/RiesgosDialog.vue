@@ -16,11 +16,13 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch } from 'vue'
+import { reactive, computed, watch, ref } from 'vue'
 
 import { RISK_FORM_FIELDS } from 'src/constants/forms/riesgos_form.constants'
-import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
+// import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 import { notifyWarning } from 'src/utils/notifications.utils'
+
+import protocoloService from 'src/services/protocoloService'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
@@ -62,6 +64,24 @@ const form = reactive({
   consecuencia: '',
 })
 
+const protocolos = ref([])
+const loadingProtocolos = ref(false)
+
+async function loadProtocolos() {
+  try {
+    loadingProtocolos.value = true
+
+    const data = await protocoloService.getProtocolos()
+
+    protocolos.value = data
+  } catch (error) {
+    console.error('Error al cargar protocolos:', error)
+    protocolos.value = []
+  } finally {
+    loadingProtocolos.value = false
+  }
+}
+
 const riskFormFields = computed(() => {
   return RISK_FORM_FIELDS.map((field) => {
     if (field.model !== 'protocolos') {
@@ -70,7 +90,7 @@ const riskFormFields = computed(() => {
 
     return {
       ...field,
-      options: PROTOCOLOS_MOCK.map((protocol) => ({
+      options: protocolos.value.map((protocol) => ({
         label: protocol.tipo,
         value: protocol._id,
       })),
@@ -109,14 +129,21 @@ function handleSave() {
     notifyWarning(validationResult)
     return
   }
-  console.log('Datos del formulario:', form)
   emit('save', { ...form })
 }
 
 function resetForm(data = {}) {
   form.riesgo = data.riesgo ?? ''
   form.nivel = data.nivel ?? null
-  form.protocolos = data.protocolos ?? []
+
+  form.protocolos = Array.isArray(data.protocolos)
+    ? data.protocolos.map((protocol) =>
+        typeof protocol === 'object'
+          ? protocol._id
+          : protocol
+      )
+    : []
+
   form.descripcion = data.descripcion ?? ''
   form.consecuencia = data.consecuencia ?? ''
 }
@@ -131,9 +158,10 @@ function initializeForm() {
 
 watch(
   () => modelValue,
-  (isOpen) => {
+  async (isOpen) => {
     if (isOpen) {
       initializeForm()
+      await loadProtocolos()
     }
   },
 )

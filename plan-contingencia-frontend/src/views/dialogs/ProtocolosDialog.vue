@@ -92,7 +92,6 @@ function handleSave() {
     notifyWarning(validationResult)
     return
   }
-  console.log('Datos del formulario:', form)
   emit('save', { ...form })
 }
 

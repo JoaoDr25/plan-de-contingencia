@@ -16,11 +16,12 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch } from 'vue'
+import { reactive, computed, watch, ref, onMounted } from 'vue'
 
 import { DANGER_FORM_FIELDS } from 'src/constants/forms/peligros_form.constants'
-import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
 import { notifyWarning } from 'src/utils/notifications.utils'
+
+import riesgosService from 'src/services/riesgoService.js'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
@@ -61,6 +62,18 @@ const form = reactive({
   descripcion: '',
 })
 
+const availableRisks = ref([])
+
+async function loadAvailableRisks() {
+  try {
+    availableRisks.value = await riesgosService.getRiesgos()
+  } catch (error) {
+    console.error('Error al cargar los riesgos disponibles:', error)
+  }
+}
+
+onMounted(loadAvailableRisks)
+
 const dangerFormFields = computed(() => {
   return DANGER_FORM_FIELDS.map((field) => {
     if (field.model !== 'riesgos') {
@@ -69,9 +82,9 @@ const dangerFormFields = computed(() => {
 
     return {
       ...field,
-      options: RIESGOS_MOCK.map((risk) => ({
+      options: availableRisks.value.map((risk) => ({
         label: risk.riesgo,
-        value: risk._id,
+        value: risk._id ?? risk.id,
       })),
     }
   })

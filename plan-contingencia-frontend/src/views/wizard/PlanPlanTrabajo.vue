@@ -335,6 +335,7 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 

@@ -113,7 +113,8 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import PeligrosDialog from '../dialogs/PeligrosDialog.vue'
 import PeligrosDetails from '../details/PeligrosDetails.vue'
 import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
-import peligrosService from 'src/services/peligrosServices.js'
+
+import peligrosService from 'src/services/peligroService.js'
 
 const sourceRows = ref([])
 

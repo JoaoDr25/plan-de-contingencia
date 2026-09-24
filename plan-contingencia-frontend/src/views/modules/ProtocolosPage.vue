@@ -73,15 +73,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { PROTOCOLOS_FILTERS } from 'src/constants/filters/protocolos.constants'
 import { PROTOCOLOS_COLUMNS } from 'src/constants/tables/protocolos.columns'
-import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
+// import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
+// import { getCurrentDate } from 'src/utils/date.utils'
 import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -98,7 +98,9 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import ProtocolosDialog from '../dialogs/ProtocolosDialog.vue'
 import ProtocolosDetails from '../details/ProtocolosDetails.vue'
 
-const sourceRows = ref(PROTOCOLOS_MOCK)
+import protocolosService from 'src/services/protocoloService.js'
+
+const sourceRows = ref([])
 
 const {
   selectedFilter,
@@ -119,6 +121,18 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadProtocolos() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await protocolosService.getProtocolos()
+  } catch (error) {
+    console.error('Error al cargar protocolos:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 const detailsProtocol = ref(false)
@@ -169,47 +183,70 @@ function handleProtocolSave(formData) {
   confirmationDialog.value = true
 }
 
-function createProtocol(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(),
-  })
-  dialog.value = false
-}
+async function createProtocol(formData) {
+  try {
+    const nuevoProtocolo = await protocolosService.createProtocolo(formData)
 
-function updateProtocol(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedProtocol.value)
-  if (index === -1) {
-    return
-  }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
-  }
-  dialog.value = false
-}
+    sourceRows.value.push(nuevoProtocolo)
 
-function deleteProtocol(row) {
-  const index = sourceRows.value.findIndex((protocol) => protocol.id === row.id)
-  if (index === -1) {
-    return
-  }
-  sourceRows.value.splice(index, 1)
-}
-
-function confirmAction() {
-  if (dialogMode.value === 'create') {
-    createProtocol(pendingActionData.value)
     notifySuccess('Protocolo creado correctamente')
+  } catch (error) {
+    console.error('Error al crear protocolo:', error)
   }
-  if (dialogMode.value === 'edit') {
-    updateProtocol(pendingActionData.value)
+}
+
+async function updateProtocol(formData) {
+  try {
+    const protocoloActualizado = await protocolosService.updateProtocolo(
+      selectedProtocol.value._id,
+      formData,
+    )
+    const index = sourceRows.value.findIndex(
+      (row) => row._id === selectedProtocol.value._id,
+    )
+    if (index === -1) {
+      return
+    }
+    sourceRows.value[index] = protocoloActualizado
+
     notifySuccess('Protocolo actualizado correctamente')
+  } catch (error) {
+    console.error('Error al actualizar protocolo:', error)
   }
-  if (dialogMode.value === 'delete') {
-    deleteProtocol(selectedProtocol.value)
+}
+
+async function deleteProtocol(row) {
+  try {
+    await protocolosService.deleteProtocolo(row._id)
+
+    const index = sourceRows.value.findIndex(
+      (protocol) => protocol._id === row._id,
+    )
+
+    if (index === -1) {
+      return
+    }
+    sourceRows.value.splice(index, 1)
+
     notifySuccess('Protocolo eliminado correctamente')
+  } catch (error) {
+    console.error('Error al eliminar protocolo:', error)
   }
+}
+
+async function confirmAction() {
+  if (dialogMode.value === 'create') {
+    await createProtocol(pendingActionData.value)
+  }
+
+  if (dialogMode.value === 'edit') {
+    await updateProtocol(pendingActionData.value)
+  }
+
+  if (dialogMode.value === 'delete') {
+    await deleteProtocol(selectedProtocol.value)
+  }
+
   pendingActionData.value = null
   confirmationDialog.value = false
 }
@@ -235,4 +272,8 @@ function deleteItem(row) {
   selectedProtocol.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadProtocolos()
+})
 </script>
