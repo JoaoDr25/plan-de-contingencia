@@ -76,15 +76,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { PROGRAMAS_FILTERS } from 'src/constants/filters/programas.constants'
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns'
-import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock.js'
+// import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils.js'
+// import { getCurrentDate } from 'src/utils/date.utils.js'
 import { notifySuccess } from 'src/utils/notifications.utils.js'
 import { notifyError } from 'src/utils/notifications.utils.js'
 
@@ -101,8 +101,9 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 
 import ProgramasDialog from '../dialogs/ProgramasDialog.vue'
 import ProgramasDetails from '../details/ProgramasDetails.vue'
+import programaService from 'src/services/programasService.js'
 
-const sourceRows = ref(PROGRAMAS_MOCK)
+const sourceRows = ref([])
 
 const {
   selectedFilter,
@@ -123,6 +124,20 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadProgramas() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await programaService.getProgramas()
+  } catch (error) {
+    console.error('Error al cargar programas:', error)
+
+    notifyError('No fue posible cargar los programas de formación')
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 const detailsProgram = ref(false)
@@ -173,47 +188,87 @@ function handleProgramSave(formData) {
   confirmationDialog.value = true
 }
 
-function createProgram(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(), //fecha temporal
-  })
-  dialog.value = false
+async function createProgram(formData) {
+  try {
+    await programaService.createPrograma(formData)
+    await loadProgramas()
+
+    dialog.value = false
+return true
+  } catch (error) {
+    console.error('Error al crear programa:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible crear el programa'
+    )
+    return false
+  }
 }
 
-function updateProgram(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedProgram.value)
-  if (index === -1) {
-    return
+async function updateProgram(formData) {
+  try {
+    await programaService.updatePrograma(
+      selectedProgram.value.id,
+      formData
+    )
+    await loadProgramas()
+
+    dialog.value = false
+    
+    return true
+  } catch (error) {
+    console.error('Error al actualizar programa:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible actualizar el programa'
+    )
+    return false
   }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
-  }
-  dialog.value = false
 }
 
-function deleteProgram(row) {
-  const index = sourceRows.value.findIndex((program) => program.id === row.id)
-  if (index === -1) {
-    notifyError('No fue posible eliminar el programa') //Futura implementación
-    return
+async function deleteProgram(row) {
+  try {
+    await programaService.deletePrograma(row.id)
+
+    await loadProgramas()
+
+    return true
+  } catch (error) {
+    console.error('Error al eliminar programa:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible eliminar el programa'
+    )
+    return false
   }
-  sourceRows.value.splice(index, 1)
 }
 
-function confirmAction() {
+async function confirmAction() {
+  let success = false
+
   if (dialogMode.value === 'create') {
-    createProgram(pendingActionData.value)
-    notifySuccess('Programa creado correctamente')
+    success = await createProgram(pendingActionData.value)
+    
+    if (success) {
+      notifySuccess('Programa creado correctamente')
+    }
   }
   if (dialogMode.value === 'edit') {
-    updateProgram(pendingActionData.value)
-    notifySuccess('Programa actualizado correctamente')
+    success = await updateProgram(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Programa actualizado correctamente')
+    }
   }
   if (dialogMode.value === 'delete') {
-    deleteProgram(selectedProgram.value)
-    notifySuccess('Programa eliminado correctamente')
+    success = await deleteProgram(selectedProgram.value)
+
+    if (success) {
+      notifySuccess('Programa eliminado correctamente')
+    }
   }
   pendingActionData.value = null
   confirmationDialog.value = false
@@ -240,4 +295,8 @@ function deleteItem(row) {
   selectedProgram.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadProgramas()
+})
 </script>

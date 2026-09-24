@@ -91,17 +91,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { ACTIVIDADES_FILTERS } from 'src/constants/filters/actividades.constants'
 import { ACTIVIDADES_COLUMNS } from 'src/constants/tables/actividades.columns'
-import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock.js'
-import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
+// import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock.js'
+// import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
-import { notifySuccess } from 'src/utils/notifications.utils.js'
+// import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -116,8 +116,9 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import ActividadesDialog from '../dialogs/ActividadesDialog.vue'
 import ActividadesDetails from '../details/ActividadesDetails.vue'
 import PlanesPeligrosDialog from '../modals/PlanesPeligrosDialog.vue'
+import actividadesService from 'src/services/actividadesService.js'
 
-const sourceRows = ref(ACTIVIDADES_MOCK)
+const sourceRows = ref([])
 
 const {
   selectedFilter,
@@ -138,6 +139,23 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadActividades() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await actividadesService.getActividades()
+  } catch (error) {
+    console.error('Error al cargar actividades:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible cargar las actividades'
+    )
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 const detailsActivity = ref(false)
@@ -192,52 +210,91 @@ function handleActivitySave(formData) {
   confirmationDialog.value = true
 }
 
-function createActivity(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(),
-  })
+async function createActivity(formData) {
+  try {
+    await actividadesService.createActividad(formData)
 
-  dialog.value = false
+    await loadActividades()
+
+    dialog.value = false
+
+    return true
+  } catch (error) {
+    console.error('Error al crear actividad:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible crear la actividad'
+    )
+    return false
+  }
 }
 
-function updateActivity(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedActivity.value)
+async function updateActivity(formData) {
+  try {
+    await actividadesService.updateActividad(
+      selectedActivity.value.id,
+      formData
+    )
+    await loadActividades()
 
-  if (index === -1) {
-    return
+    dialog.value = false
+
+    return true
+  } catch (error) {
+    console.error('Error al actualizar actividad:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible actualizar la actividad'
+    )
+    return false
   }
-
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
-  }
-
-  dialog.value = false
 }
 
-function deleteActivity(row) {
-  const index = sourceRows.value.findIndex((activity) => activity.id === row.id)
+async function deleteActivity(row) {
+  try {
+    await actividadesService.deleteActividad(row.id)
 
-  if (index === -1) {
-    return
+    await loadActividades()
+
+    return true
+  } catch (error) {
+    console.error('Error al eliminar actividad:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible eliminar la actividad'
+    )
+    return false
   }
-
-  sourceRows.value.splice(index, 1)
 }
 
-function confirmAction() {
+async function confirmAction() {
+  let success = false
+
   if (dialogMode.value === 'create') {
-    createActivity(pendingActionData.value)
-    notifySuccess('Actividad creada correctamente')
+    success = await createActivity(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Actividad creada correctamente')
+    }
   }
+
   if (dialogMode.value === 'edit') {
-    updateActivity(pendingActionData.value)
-    notifySuccess('Actividad actualizada correctamente')
+    success = await updateActivity(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Actividad actualizada correctamente')
+    }
   }
+
   if (dialogMode.value === 'delete') {
-    deleteActivity(selectedActivity.value)
-    notifySuccess('Actividad eliminada correctamente')
+    success = await deleteActivity(selectedActivity.value)
+
+    if (success) {
+      notifySuccess('Actividad eliminada correctamente')
+    }
   }
   pendingActionData.value = null
   confirmationDialog.value = false
@@ -256,9 +313,14 @@ function viewItem(row) {
 }
 
 function getAssociatedDangers(activity) {
-  const selectedIds = Array.isArray(activity.peligros) ? activity.peligros : []
+  if (Array.isArray(activity?.peligrosDetalle)) {
+    return activity.peligrosDetalle
+  }
 
-  return PELIGROS_MOCK.filter((danger) => selectedIds.includes(danger._id))
+  if (Array.isArray(activity?.peligros)) {
+    return activity.peligros
+  }
+  return []
 }
 
 function viewAssociatedDangers(activity) {
@@ -266,6 +328,7 @@ function viewAssociatedDangers(activity) {
     ...activity,
     peligros: getAssociatedDangers(activity),
   }
+
   dangersDialog.value = true
 }
 
@@ -280,6 +343,10 @@ function deleteItem(row) {
   selectedActivity.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadActividades()
+})
 </script>
 
 <style scoped lang="scss">

@@ -17,13 +17,15 @@
         :value="associatedRisks"
       />
 
-      <BaseDetailItem label="Fecha de Creación" :value="danger.fecha" />
+      <BaseDetailItem label="Fecha de Creación" :value="formattedCreatedAt" />
     </template>
   </BaseDetailDialog>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+
+import { formatDate } from 'src/utils/date.utils'
 
 import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
 import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
@@ -52,6 +54,18 @@ const associatedRisks = computed(() => {
   const count = Array.isArray(props.danger?.riesgos) ? props.danger.riesgos.length : 0
 
   return `${count} ${count === 1 ? 'Riesgo' : 'Riesgos'}`
+})
+
+const formattedCreatedAt = computed(() => {
+  const createdAt = props.danger?.createdAt || props.danger?.fecha
+
+  if (!createdAt) {
+    return 'No disponible'
+  }
+
+  const formatted = formatDate(createdAt)
+
+  return formatted || 'No disponible'
 })
 </script>
 

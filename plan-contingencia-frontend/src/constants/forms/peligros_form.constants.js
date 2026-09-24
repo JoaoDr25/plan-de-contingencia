@@ -36,6 +36,10 @@ export const DANGER_FORM_FIELDS = [
         label: 'Mecánico',
         value: 'Mecánico',
       },
+        {
+        label: 'Psicosocial',
+        value: 'Psicosocial',
+      },
       {
         label: 'Biológico',
         value: 'Biológico',

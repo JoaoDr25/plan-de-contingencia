@@ -1,12 +1,8 @@
 <template>
   <BaseDialog v-model="dialog" :title="dialogTitle" width="400px">
     <BaseFormGrid>
-      <BaseFormField
-        v-for="field in activityFormFields"
-        :key="field.model"
-        :field="field"
-        v-model="form[field.model]"
-      />
+      <BaseFormField v-for="field in activityFormFields" :key="field.model" :field="field"
+        v-model="form[field.model]" />
     </BaseFormGrid>
 
     <template #actions>
@@ -16,11 +12,13 @@
 </template>
 
 <script setup>
-import { reactive, computed, watch } from 'vue'
+import { reactive, computed, watch, ref } from 'vue'
 
 import { ACTIVITY_FORM_FIELDS } from 'src/constants/forms/actividades_form.constants'
-import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
-import { notifyWarning } from 'src/utils/notifications.utils'
+// import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
+import { notifyWarning, notifyError } from 'src/utils/notifications.utils'
+
+import peligrosService from 'src/services/peligrosServices.js'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
@@ -61,6 +59,8 @@ const form = reactive({
   descripcion: '',
 })
 
+const dangers = ref([])
+
 const activityFormFields = computed(() => {
   return ACTIVITY_FORM_FIELDS.map((field) => {
     if (field.model !== 'peligros') {
@@ -69,7 +69,7 @@ const activityFormFields = computed(() => {
 
     return {
       ...field,
-      options: PELIGROS_MOCK.map((danger) => ({
+      options: dangers.value.map((danger) => ({
         label: danger.nombre,
         value: danger._id,
       })),
@@ -84,6 +84,20 @@ const dialogTitle = computed(() => {
 const saveLabel = computed(() => {
   return mode === 'edit' ? 'Actualizar' : 'Guardar'
 })
+
+async function loadPeligros() {
+  try {
+    dangers.value = await peligrosService.getPeligros()
+  } catch (error) {
+    console.error('Error al cargar peligros:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+        'No fue posible cargar los peligros'
+    )
+    dangers.value = []
+  }
+}
 
 function validateForm() {
   for (const field of ACTIVITY_FORM_FIELDS) {
@@ -115,7 +129,14 @@ function handleSave() {
 function resetForm(data = {}) {
   form.nombre = data.nombre ?? ''
   form.tipo = data.tipo ?? null
-  form.peligros = data.peligros ?? []
+
+  form.peligros = Array.isArray(data.peligrosDetalle)
+    ? data.peligrosDetalle.map((danger) => danger._id)
+    : Array.isArray(data.peligros)
+      ? data.peligros.map((danger) =>
+        typeof danger === 'object' ? danger._id : danger
+      )
+      : []
   form.descripcion = data.descripcion ?? ''
 }
 
@@ -129,8 +150,9 @@ function initializeForm() {
 
 watch(
   () => modelValue,
-  (isOpen) => {
+  async (isOpen) => {
     if (isOpen) {
+      await loadPeligros()
       initializeForm()
     }
   },

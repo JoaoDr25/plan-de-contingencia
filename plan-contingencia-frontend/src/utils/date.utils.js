@@ -67,3 +67,5 @@ export function formatHour(value) {
 
   return `${String(formattedHours).padStart(2, '0')}:${minutes} ${period}`
 }
+
+

@@ -5,7 +5,7 @@
 
       <BaseDetailItem label="Nombre de la Actividad" :value="activity.nombre" />
 
-      <BaseDetailItem label="Tipo de Salida" :value="activity.tipo" />
+      <BaseDetailItem label="Tipo de Salida" :value="activity.tipoActividad" />
 
       <BaseDetailItem label="Descripción" :value="activity.descripcion" />
     </template>
@@ -17,7 +17,7 @@
         :value="associatedDangers"
       />
 
-      <BaseDetailItem label="Fecha de Creación" :value="activity.fecha" />
+      <BaseDetailItem label="Fecha de Creación" :value="formattedCreatedAt" />
     </template>
   </BaseDetailDialog>
 </template>
@@ -52,6 +52,26 @@ const associatedDangers = computed(() => {
   const count = Array.isArray(props.activity?.peligros) ? props.activity.peligros.length : 0
 
   return `${count} ${count === 1 ? 'Peligro' : 'Peligros'}`
+})
+
+const formattedCreatedAt = computed(() => {
+  const createdAt = props.activity?.createdAt
+
+  if (!createdAt) {
+    return 'No disponible'
+  }
+
+  const date = new Date(createdAt)
+
+  if (Number.isNaN(date.getTime())) {
+    return 'No disponible'
+  }
+
+  const day = String(date.getUTCDate()).padStart(2, '0')
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0')
+  const year = date.getUTCFullYear()
+
+  return `${day}/${month}/${year}`
 })
 </script>
 

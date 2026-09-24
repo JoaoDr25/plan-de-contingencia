@@ -88,17 +88,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { PELIGROS_FILTERS } from 'src/constants/filters/peligros.constants'
 import { PELIGROS_COLUMNS } from 'src/constants/tables/peligros.columns'
-import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
-import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
+// import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
+// import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
-import { notifySuccess } from 'src/utils/notifications.utils.js'
+// import { getCurrentDate } from 'src/utils/date.utils'
+import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -113,8 +113,9 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import PeligrosDialog from '../dialogs/PeligrosDialog.vue'
 import PeligrosDetails from '../details/PeligrosDetails.vue'
 import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
+import peligrosService from 'src/services/peligrosServices.js'
 
-const sourceRows = ref(PELIGROS_MOCK)
+const sourceRows = ref([])
 
 const {
   selectedFilter,
@@ -135,6 +136,23 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadPeligros() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await peligrosService.getPeligros()
+  } catch (error) {
+    console.error('Error al cargar peligros:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible cargar los peligros'
+    )
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 const detailsDanger = ref(false)
@@ -187,47 +205,91 @@ function handleDangerSave(formData) {
   confirmationDialog.value = true
 }
 
-function createDanger(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(),
-  })
-  dialog.value = false
+async function createDanger(formData) {
+  try {
+    await peligrosService.createPeligro(formData)
+
+    await loadPeligros()
+
+    return true
+  } catch (error) {
+    console.error('Error al crear peligro:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible crear el peligro'
+    )
+    return false
+  }
 }
 
-function updateDanger(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedDanger.value)
-  if (index === -1) {
-    return
+async function updateDanger(formData) {
+  try {
+    await peligrosService.updatePeligro(
+      selectedDanger.value.id,
+      formData
+    )
+    await loadPeligros()
+
+    dialog.value = false
+
+    return true
+  } catch (error) {
+    console.error('Error al actualizar el peligro:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible actualizar el peligro'
+    )
+    return false
   }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
-  }
-  dialog.value = false
 }
 
-function deleteDanger(row) {
-  const index = sourceRows.value.findIndex((danger) => danger.id === row.id)
-  if (index === -1) {
-    return
+async function deleteDanger(row) {
+  try {
+    await peligrosService.deletePeligro(row.id)
+
+    await loadPeligros()
+
+    return true
+  } catch (error) {
+    console.error('Error al eliminar peligro:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible eliminar el peligro'
+    )
+    return false
   }
-  sourceRows.value.splice(index, 1)
 }
 
-function confirmAction() {
+async function confirmAction() {
+  let success = false
+
   if (dialogMode.value === 'create') {
-    createDanger(pendingActionData.value)
-    notifySuccess('Peligro creado correctamente')
+    success = await createDanger(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Peligro creado correctamente')
+    }
   }
+
   if (dialogMode.value === 'edit') {
-    updateDanger(pendingActionData.value)
-    notifySuccess('Peligro actualizado correctamente')
+    success = await updateDanger(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Peligro actualizado correctamente')
+    }
   }
+
   if (dialogMode.value === 'delete') {
-    deleteDanger(selectedDanger.value)
-    notifySuccess('Peligro eliminado correctamente')
+    success = await deleteDanger(selectedDanger.value)
+
+    if (success) {
+      notifySuccess('Peligro eliminado correctamente')
+    }
   }
+
   pendingActionData.value = null
   confirmationDialog.value = false
 }
@@ -239,14 +301,28 @@ function cancelConfirmation() {
 
 function viewItem(row) {
   console.log('Ver Peligro:', row)
+
   selectedDanger.value = row
   detailsDanger.value = true
 }
 
 function getAssociatedRisks(danger) {
-  const selectedIds = Array.isArray(danger.riesgos) ? danger.riesgos : []
+  const rawRisks = danger?.riesgosDetalle ?? danger?.riesgos ?? []
 
-  return RIESGOS_MOCK.filter((risk) => selectedIds.includes(risk._id))
+  if (!Array.isArray(rawRisks)) {
+    return []
+  }
+
+  return rawRisks
+    .filter((risk) => risk && typeof risk === 'object')
+    .map((risk) => ({
+      ...risk,
+      riesgo: risk.riesgo ?? risk.nombre ?? 'Riesgo no identificado',
+      nombre: risk.nombre ?? risk.riesgo ?? 'Riesgo no identificado',
+      nivel: risk.nivel ?? risk.nivelRiesgo ?? 'No disponible',
+      descripcion: risk.descripcion ?? 'No disponible',
+      consecuencia: risk.consecuencia ?? 'No disponible',
+    }))
 }
 
 function viewAssociatedRisks(danger) {
@@ -254,6 +330,7 @@ function viewAssociatedRisks(danger) {
     ...danger,
     riesgos: getAssociatedRisks(danger),
   }
+
   risksDialog.value = true
 }
 
@@ -267,9 +344,14 @@ function deleteItem(row) {
   selectedDanger.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadPeligros()
+})
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 
 .associated-risks-cell {
