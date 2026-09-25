@@ -1,4 +1,4 @@
-import api from './api'
+import api from '../api'
 import { formatDate } from 'src/utils/date.utils'
 
 const mapPrograma = (programa) => {

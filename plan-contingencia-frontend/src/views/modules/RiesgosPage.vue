@@ -105,8 +105,8 @@ import { RIESGOS_COLUMNS } from 'src/constants/tables/riesgos.columns'
 // import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
 // import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 
-import { useCrudTable } from 'src/composables/useCrudTable'
 // import { getCurrentDate } from 'src/utils/date.utils'
+import { useCrudTable } from 'src/composables/useCrudTable'
 import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -124,7 +124,7 @@ import RiesgosDialog from '../dialogs/RiesgosDialog.vue'
 import RiesgosDetails from '../details/RiesgosDetails.vue'
 import PlanesProtocolosDialog from '../modals/PlanesProtocolosDialog.vue'
 
-import riesgoService from 'src/services/riesgoService.js'
+import riesgoService from 'src/services/modules/riesgoService.js'
 
 const sourceRows = ref([])
 

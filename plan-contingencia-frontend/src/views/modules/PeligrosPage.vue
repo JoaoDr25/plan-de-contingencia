@@ -96,8 +96,8 @@ import { PELIGROS_COLUMNS } from 'src/constants/tables/peligros.columns'
 // import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
 // import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock.js'
 
-import { useCrudTable } from 'src/composables/useCrudTable'
 // import { getCurrentDate } from 'src/utils/date.utils'
+import { useCrudTable } from 'src/composables/useCrudTable'
 import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -114,7 +114,7 @@ import PeligrosDialog from '../dialogs/PeligrosDialog.vue'
 import PeligrosDetails from '../details/PeligrosDetails.vue'
 import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
 
-import peligrosService from 'src/services/peligroService.js'
+import peligrosService from 'src/services/modules/peligroService.js'
 
 const sourceRows = ref([])
 

@@ -2,12 +2,7 @@
   <BasePage>
     <CrudHeader title="Contactos de Emergencia">
       <template #actions>
-        <PrimaryActionButton
-          label="Crear"
-          icon="add_circle_outline"
-          size="sm"
-          @click="openCreateDialog"
-        />
+        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
       </template>
     </CrudHeader>
 
@@ -17,26 +12,13 @@
       </template>
 
       <template #left>
-        <BaseSearch
-          v-model="searchText"
-          placeholder="Buscar por tipo de contacto, nombre, estado..."
-        />
+        <BaseSearch v-model="searchText" placeholder="Buscar por tipo de contacto, nombre, estado..." />
       </template>
     </CrudToolbar>
 
-    <BaseTable
-      :rows="paginatedRows"
-      :columns="CONTACTOS_COLUMNS"
-      :loading="loading"
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      :rows-per-page="rowsPerPage"
-      :start="startRow"
-      :end="endRow"
-      :total="filteredRows.length"
-      @change-rows-per-page="setRowsPerPage"
-      @change-page="currentPage = $event"
-    >
+    <BaseTable :rows="paginatedRows" :columns="CONTACTOS_COLUMNS" :loading="loading" :current-page="currentPage"
+      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+      :total="filteredRows.length" @change-rows-per-page="setRowsPerPage" @change-page="currentPage = $event">
       <template #body-cell-estado="props">
         <q-td :props="props">
           <StatusChip :status="props.value" />
@@ -45,47 +27,32 @@
 
       <template #body-cell-opciones="props">
         <q-td :props="props">
-          <CrudActions
-            :actions="DEFAULT_CRUD_ACTIONS"
-            @view="viewItem(props.row)"
-            @edit="editItem(props.row)"
-            @delete="deleteItem(props.row)"
-          />
+          <CrudActions :actions="DEFAULT_CRUD_ACTIONS" @view="viewItem(props.row)" @edit="editItem(props.row)"
+            @delete="deleteItem(props.row)" />
         </q-td>
       </template>
     </BaseTable>
 
-    <ContactosDialog
-      v-model="dialog"
-      :mode="dialogMode"
-      :contact="selectedContact"
-      @save="handleContactSave"
-    />
+    <ContactosDialog v-model="dialog" :mode="dialogMode" :contact="selectedContact" @save="handleContactSave" />
 
-    <BaseConfirmationDialog
-      v-model="confirmationDialog"
-      :title="confirmationTitle"
-      :confirm-label="confirmationLabel"
-      :variant="confirmationVariant"
-      @confirm="confirmAction"
-      @cancel="cancelConfirmation"
-    />
+    <BaseConfirmationDialog v-model="confirmationDialog" :title="confirmationTitle" :confirm-label="confirmationLabel"
+      :variant="confirmationVariant" @confirm="confirmAction" @cancel="cancelConfirmation" />
 
     <ContactosDetails v-model="detailsContact" :contact="selectedContact" />
   </BasePage>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { CONTACTOS_FILTERS } from 'src/constants/filters/contactos.constants'
 import { CONTACTOS_COLUMNS } from 'src/constants/tables/contactos.columns'
-import { CONTACTOS_MOCK } from 'src/mocks/modules/contactos.mock.js'
+// import { CONTACTOS_MOCK } from 'src/mocks/modules/contactos.mock.js'
 
+// import { getCurrentDate } from 'src/utils/date.utils'
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
-import { notifySuccess } from 'src/utils/notifications.utils.js'
+import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -101,7 +68,9 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import ContactosDialog from '../dialogs/ContactosDialog.vue'
 import ContactosDetails from '../details/ContactosDetails.vue'
 
-const sourceRows = ref(CONTACTOS_MOCK)
+import contactoService from 'src/services/modules/contactoService.js'
+
+const sourceRows = ref([])
 
 const {
   selectedFilter,
@@ -122,6 +91,21 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadContactos() {
+  loading.value = true
+
+  try {
+    const response = await contactoService.getContactos()
+
+    sourceRows.value = response.data ?? []
+  } catch (error) {
+    console.error('Error al cargar contactos de emergencia:', error)
+    notifyError('Error al cargar los contactos de emergencia')
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 const detailsContact = ref(false)
@@ -172,46 +156,96 @@ function handleContactSave(formData) {
   confirmationDialog.value = true
 }
 
-function createContact(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(),
-  })
-  dialog.value = false
+async function createContact(formData) {
+  try {
+    const response = await contactoService.createContacto(formData)
+
+    if (response.data) {
+      sourceRows.value.push(response.data)
+    }
+
+    dialog.value = false
+    return true
+  } catch (error) {
+    console.error('Error al crear contacto de emergencia:', error)
+    notifyError('Error al crear el contacto de emergencia')
+    return false
+  }
 }
 
-function updateContact(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedContact.value)
-  if (index === -1) {
-    return
+async function updateContact(formData) {
+  const id = selectedContact.value?.id
+
+  if (!id) {
+    return false
   }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
+
+  try {
+    const response = await contactoService.updateContacto(id, formData)
+
+    const updatedContact = response.data
+
+    if (!updatedContact) {
+      return false
+    }
+    const index = sourceRows.value.findIndex((row) => row.id === id)
+
+    if (index !== -1) {
+      sourceRows.value[index] = updatedContact
+    }
+    selectedContact.value = updatedContact
+    dialog.value = false
+    return true
+  } catch (error) {
+    console.error('Error al actualizar contacto de emergencia:', error)
+    notifyError('Error al actualizar el contacto de emergencia')
+    return false
   }
-  dialog.value = false
 }
 
-function deleteContact(row) {
-  const index = sourceRows.value.findIndex((contact) => contact.id === row.id)
-  if (index === -1) {
-    return
+async function deleteContact(row) {
+  const id = row?.id
+
+  if (!id) {
+    return false
   }
-  sourceRows.value.splice(index, 1)
+
+  try {
+    await contactoService.deleteContacto(id)
+
+    const index = sourceRows.value.findIndex((contact) => contact.id === id)
+
+    if (index !== -1) {
+      sourceRows.value.splice(index, 1)
+    }
+    return true
+  } catch (error) {
+    console.error('Error al eliminar contacto de emergencia:', error)
+    notifyError('Error al eliminar el contacto de emergencia')
+    return false
+  }
 }
 
-function confirmAction() {
+async function confirmAction() {
   if (dialogMode.value === 'create') {
-    createContact(pendingActionData.value)
-    notifySuccess('Contacto creado correctamente')
+    const success = await createContact(pendingActionData.value)
+    if (success) {
+      notifySuccess('Contacto creado correctamente')
+    }
   }
+
   if (dialogMode.value === 'edit') {
-    updateContact(pendingActionData.value)
-    notifySuccess('Contacto actualizado correctamente')
+    const success = await updateContact(pendingActionData.value)
+    if (success) {
+      notifySuccess('Contacto actualizado correctamente')
+    }
   }
+
   if (dialogMode.value === 'delete') {
-    deleteContact(selectedContact.value)
-    notifySuccess('Contacto eliminado correctamente')
+    const success = await deleteContact(selectedContact.value)
+    if (success) {
+      notifySuccess('Contacto eliminado correctamente')
+    }
   }
   pendingActionData.value = null
   confirmationDialog.value = false
@@ -238,4 +272,8 @@ function deleteItem(row) {
   selectedContact.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadContactos()
+})
 </script>

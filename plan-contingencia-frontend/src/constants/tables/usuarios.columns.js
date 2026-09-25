@@ -1,3 +1,5 @@
+import { formatDate } from 'src/utils/date.utils'
+
 export const USUARIOS_COLUMNS = [
   {
     name: 'index',
@@ -50,6 +52,7 @@ export const USUARIOS_COLUMNS = [
     maxWidth: '140px',
     field: 'acceso',
     align: 'center',
+    format: (value) => (value ? formatDate(value) : 'No Registrado'),
   },
   {
     name: 'estado',

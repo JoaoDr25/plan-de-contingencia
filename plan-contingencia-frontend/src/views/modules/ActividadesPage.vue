@@ -99,8 +99,8 @@ import { ACTIVIDADES_COLUMNS } from 'src/constants/tables/actividades.columns'
 // import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock.js'
 // import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
 
-import { useCrudTable } from 'src/composables/useCrudTable'
 // import { getCurrentDate } from 'src/utils/date.utils'
+import { useCrudTable } from 'src/composables/useCrudTable'
 import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -117,7 +117,7 @@ import ActividadesDialog from '../dialogs/ActividadesDialog.vue'
 import ActividadesDetails from '../details/ActividadesDetails.vue'
 import PlanesPeligrosDialog from '../modals/PlanesPeligrosDialog.vue'
 
-import actividadesService from 'src/services/actividadService.js'
+import actividadesService from 'src/services/modules/actividadService.js'
 
 const sourceRows = ref([])
 

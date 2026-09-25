@@ -84,10 +84,12 @@ import { ROLES } from 'src/constants/system/roles.constants'
 
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { mergeUsersFromRepfora } from 'src/utils/userSync.utils'
-import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils.js'
+import {
+  notifySuccess,
+  notifyWarning,
+  notifyError,
+} from 'src/utils/notifications.utils.js'
 import { useAuthStore } from 'src/stores/auth.store'
-
-import usuarioService from 'src/services/usuarioService.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -99,7 +101,9 @@ import BaseTable from 'src/components/tables/BaseTable.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
 import CrudActions from 'src/components/actions/CrudActions.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
+
 import UsuariosDialog from '../dialogs/UsuariosDialog.vue'
+import usuarioService from 'src/services/modules/usuarioService.js'
 
 const sourceRows = ref([])
 
@@ -153,7 +157,7 @@ async function loadUsuarios() {
 
     sourceRows.value = []
 
-    notifyWarning('No fue posible cargar los usuarios')
+    notifyError('No fue posible cargar los usuarios')
   } finally {
     loading.value = false
   }
@@ -187,7 +191,7 @@ async function syncUsers() {
   } catch (error) {
     console.error('Error al sincronizar usuarios:', error)
 
-    notifyWarning('No fue posible sincronizar los usuarios')
+    notifyError('No fue posible sincronizar los usuarios')
   } finally {
     syncing.value = false
   }
@@ -244,7 +248,7 @@ async function confirmAction() {
   } catch (error) {
     console.error('Error al actualizar usuario:', error)
 
-    notifyWarning('No fue posible actualizar el usuario')
+    notifyError('No fue posible actualizar el usuario')
   }
 }
 
@@ -254,10 +258,12 @@ function cancelConfirmation() {
 }
 
 function viewItem(row) {
+  const userId = row.id ?? row._id
+
   router.push({
     name: 'usuarios.detail',
     params: {
-      codigo: row.codigo,
+      id: userId,
     },
   })
 }

@@ -1,4 +1,4 @@
-import api from './api'
+import api from '../api'
 
 const mapUsuario = (usuario) => {
   return {
@@ -50,6 +50,12 @@ const changeEstadoUsuario = async (id, estado) => {
   return mapUsuario(response.data.data)
 }
 
+const registrarAcceso = async (id) => {
+  const response = await api.patch(`/usuarios/${id}/acceso`)
+
+  return mapUsuario(response.data.data)
+}
+
 const deleteUsuario = async (id) => {
   const response = await api.delete(`/usuarios/${id}`)
 
@@ -62,5 +68,6 @@ export default {
   createUsuario,
   updateUsuario,
   changeEstadoUsuario,
+  registrarAcceso,
   deleteUsuario,
 }

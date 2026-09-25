@@ -83,8 +83,8 @@ import { PROGRAMAS_FILTERS } from 'src/constants/filters/programas.constants'
 import { PROGRAMAS_COLUMNS } from 'src/constants/tables/programas.columns'
 // import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock.js'
 
-import { useCrudTable } from 'src/composables/useCrudTable'
 // import { getCurrentDate } from 'src/utils/date.utils.js'
+import { useCrudTable } from 'src/composables/useCrudTable'
 import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -101,7 +101,7 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import ProgramasDialog from '../dialogs/ProgramasDialog.vue'
 import ProgramasDetails from '../details/ProgramasDetails.vue'
 
-import programaService from 'src/services/programaService.js'
+import programaService from 'src/services/modules/programaService.js'
 
 const sourceRows = ref([])
 

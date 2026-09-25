@@ -1,7 +1,7 @@
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 
-import { required, maxLength, phone } from 'src/validators/form.validator'
+import { required, maxLength } from 'src/validators/form.validator'
 
 export const CONTACTS_FORM_FIELDS = [
   {
@@ -28,12 +28,24 @@ export const CONTACTS_FORM_FIELDS = [
         value: 'Bomberos',
       },
       {
+        label: 'Tránsito',
+        value: 'Tránsito',
+      },
+      {
+        label: 'Ambulancia',
+        value: 'Ambulancia',
+      },
+      {
         label: 'Defensa Civil',
         value: 'Defensa Civil',
       },
       {
         label: 'Cruz Roja',
         value: 'Cruz Roja',
+      },
+        {
+        label: 'Gestión del Riesgo',
+        value: 'Gestión del Riesgo',
       },
       {
         label: 'Otro',
@@ -59,7 +71,7 @@ export const CONTACTS_FORM_FIELDS = [
     // placeholder: 'Ingrese el teléfono principal',
     icon: 'phone',
     required: true,
-    rules: [required, phone],
+    rules: [required, maxLength(20)],
   },
   {
     component: BaseInput,

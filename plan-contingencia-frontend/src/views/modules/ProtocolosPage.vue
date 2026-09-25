@@ -80,9 +80,9 @@ import { PROTOCOLOS_FILTERS } from 'src/constants/filters/protocolos.constants'
 import { PROTOCOLOS_COLUMNS } from 'src/constants/tables/protocolos.columns'
 // import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 
-import { useCrudTable } from 'src/composables/useCrudTable'
 // import { getCurrentDate } from 'src/utils/date.utils'
-import { notifySuccess } from 'src/utils/notifications.utils.js'
+import { useCrudTable } from 'src/composables/useCrudTable'
+import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -98,7 +98,7 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 import ProtocolosDialog from '../dialogs/ProtocolosDialog.vue'
 import ProtocolosDetails from '../details/ProtocolosDetails.vue'
 
-import protocolosService from 'src/services/protocoloService.js'
+import protocolosService from 'src/services/modules/protocoloService.js'
 
 const sourceRows = ref([])
 
@@ -129,6 +129,10 @@ async function loadProtocolos() {
     sourceRows.value = await protocolosService.getProtocolos()
   } catch (error) {
     console.error('Error al cargar protocolos:', error)
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible cargar los protocolos',
+    )
   } finally {
     loading.value = false
   }
@@ -192,6 +196,10 @@ async function createProtocol(formData) {
     notifySuccess('Protocolo creado correctamente')
   } catch (error) {
     console.error('Error al crear protocolo:', error)
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible crear el protocolo',
+    )
   }
 }
 
@@ -212,6 +220,10 @@ async function updateProtocol(formData) {
     notifySuccess('Protocolo actualizado correctamente')
   } catch (error) {
     console.error('Error al actualizar protocolo:', error)
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible actualizar el protocolo',
+    )
   }
 }
 
@@ -231,6 +243,10 @@ async function deleteProtocol(row) {
     notifySuccess('Protocolo eliminado correctamente')
   } catch (error) {
     console.error('Error al eliminar protocolo:', error)
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible eliminar el protocolo',
+    )
   }
 }
 

@@ -26,6 +26,7 @@ import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'
 import BaseFormField from 'src/components/forms/BaseFormField.vue'
 import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue'
 
+
 const { modelValue, mode, contact, showStatus, showType, customTitle, singleColumn, width } =
   defineProps({
     modelValue: {
@@ -132,7 +133,6 @@ function handleSave() {
     notifyWarning(validationResult)
     return
   }
-  console.log('Datos del formulario:', form)
   emit('save', { ...form })
 }
 

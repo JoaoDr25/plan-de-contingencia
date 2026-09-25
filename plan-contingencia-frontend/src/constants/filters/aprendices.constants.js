@@ -7,6 +7,10 @@ export const APRENDICES_FILTERS = [
     label: 'Nombre',
     value: 'nombre',
   },
+    {
+    label: 'Programa',
+    value: 'programa',
+  },
   {
     label: 'Ficha',
     value: 'ficha',

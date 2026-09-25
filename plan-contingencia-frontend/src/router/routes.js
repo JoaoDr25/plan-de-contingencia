@@ -153,7 +153,7 @@ const routes = [
         component: () => import('src/views/modules/UsuariosPage.vue'),
       },
       {
-        path: 'usuarios/:codigo',
+        path: 'usuarios/:id',
         name: 'usuarios.detail',
         meta: {
           title: 'Información del Usuario',
@@ -174,7 +174,7 @@ const routes = [
         component: () => import('src/views/modules/AprendicesPage.vue'),
       },
       {
-        path: 'aprendices/:codigo',
+        path: 'aprendices/:id',
         name: 'aprendices.detail',
         meta: {
           title: 'Información del Aprendiz',

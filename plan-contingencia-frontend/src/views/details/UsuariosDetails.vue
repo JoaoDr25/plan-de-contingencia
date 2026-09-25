@@ -99,7 +99,7 @@
 
           <BaseDetailItem
             label="Último Acceso"
-            :value="userData?.acceso || 'No registrado'"
+            :value="lastAccess"
           />
         </div>
       </section>
@@ -119,8 +119,10 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { formatDate } from 'src/utils/date.utils'
+import { notifyError } from 'src/utils/notifications.utils'
 
-import usuarioService from 'src/services/usuarioService.js'
+import usuarioService from 'src/services/modules/usuarioService.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import BaseDetailItem from 'src/components/forms/BaseDetailItem.vue'
@@ -149,19 +151,22 @@ const maxHours = computed(() => {
     : 'No registrado'
 })
 
+const lastAccess = computed(() => {
+  return userData.value?.acceso ? formatDate(userData.value.acceso) : 'No Registrado'
+})
+
 async function loadUser() {
   loading.value = true
 
   try {
-    const usuarios = await usuarioService.getUsuarios()
-
-    userData.value =
-      usuarios.find(
-        (user) => String(user.codigo) === String(route.params.codigo),
-      ) ?? null
+    userData.value = await usuarioService.getUsuarioById(route.params.id)
   } catch (error) {
     console.error('Error al cargar usuario:', error)
     userData.value = null
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible cargar la información del usuario',
+    )
   } finally {
     loading.value = false
   }
@@ -280,6 +285,8 @@ onMounted(() => {
 .detail-card__fields--access {
   display: flex;
   flex-wrap: wrap;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 16px 32px;
   padding: 10px;
   padding-left: 30px;

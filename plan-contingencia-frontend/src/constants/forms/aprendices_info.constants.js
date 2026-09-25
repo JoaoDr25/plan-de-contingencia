@@ -41,7 +41,7 @@ export const APPRENTICE_INFO_FORM_FIELDS = [
   {
     component: BaseInput,
     model: 'telefono',
-    label: 'Teléfono de Contacto',
+    label: 'Teléfono de Contacto de Emergencia',
     type: 'tel',
     icon: 'phone',
     required: true,

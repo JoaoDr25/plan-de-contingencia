@@ -9,6 +9,11 @@ export const APRENDICES_COLUMNS = [
     name: 'tipo',
     label: 'Tipo Documento',
     field: 'tipo',
+    format: (value) => ({
+      CC: 'Cédula de Ciudadanía',
+      TI: 'Tarjeta de Identidad',
+      CE: 'Cédula de Extranjería',
+    })[value] || value,
     align: 'left',
     sortable: true,
   },

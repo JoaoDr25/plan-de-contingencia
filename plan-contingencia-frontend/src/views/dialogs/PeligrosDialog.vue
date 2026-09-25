@@ -21,7 +21,7 @@ import { reactive, computed, watch, ref, onMounted } from 'vue'
 import { DANGER_FORM_FIELDS } from 'src/constants/forms/peligros_form.constants'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
-import riesgosService from 'src/services/riesgoService.js'
+import riesgosService from 'src/services/modules/riesgoService.js'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'

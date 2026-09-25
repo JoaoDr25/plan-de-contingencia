@@ -19,7 +19,7 @@
       <template #left>
         <BaseSearch
           v-model="searchText"
-          placeholder="Buscar por documento, nombre, ficha o estado..."
+          placeholder="Buscar por documento, nombre, programa, ficha o estado..."
         />
       </template>
     </CrudToolbar>
@@ -75,17 +75,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { APRENDICES_FILTERS } from 'src/constants/filters/aprendices.constants'
 import { APRENDICES_COLUMNS } from 'src/constants/tables/aprendices.columns'
-import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock.js'
+// import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock.js'
 
+// import { getCurrentDate } from 'src/utils/date.utils'
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
-import { notifySuccess } from 'src/utils/notifications.utils.js'
+import { notifySuccess, notifyError } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -99,8 +99,9 @@ import CrudActions from 'src/components/actions/CrudActions.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import AprendicesDialog from '../dialogs/AprendicesDialog.vue'
+import aprendizService from 'src/services/modules/aprendizService.js'
 
-const sourceRows = ref(APRENDICES_MOCK)
+const sourceRows = ref([])
 
 const router = useRouter()
 
@@ -123,6 +124,20 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadAprendices() {
+  loading.value = true
+
+  try {
+    const response = await aprendizService.getAprendices()
+
+    sourceRows.value = response.data ?? []
+  } catch (error) {
+    console.error('Error al cargar aprendices:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 
@@ -172,46 +187,91 @@ function handleApprenticeSave(formData) {
   confirmationDialog.value = true
 }
 
-function createApprentice(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(),
-  })
-  dialog.value = false
+async function createApprentice(formData) {
+  try {
+    await aprendizService.createAprendiz(formData)
+
+    await loadAprendices()
+
+    dialog.value = false
+
+    return true
+  } catch (error) {
+    console.error('Error al crear aprendiz:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible crear el aprendiz'
+    )
+    return false
+  }
 }
 
-function updateApprentice(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedApprentice.value)
-  if (index === -1) {
-    return
+async function updateApprentice(formData) {
+  try {
+    await aprendizService.updateAprendiz(
+      selectedApprentice.value.id,
+      formData
+    )
+    await loadAprendices()
+
+    dialog.value = false
+
+    return true
+  } catch (error) {
+    console.error('Error al actualizar aprendiz:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible actualizar el aprendiz'
+    )
+    return false
   }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
-  }
-  dialog.value = false
 }
 
-function deleteApprentice(row) {
-  const index = sourceRows.value.findIndex((apprentice) => apprentice.id === row.id)
-  if (index === -1) {
-    return
+async function deleteApprentice(row) {
+  try {
+    await aprendizService.deleteAprendiz(row.id)
+
+    await loadAprendices()
+
+    return true
+  } catch (error) {
+    console.error('Error al eliminar aprendiz:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible eliminar el aprendiz'
+    )
+    return false
   }
-  sourceRows.value.splice(index, 1)
 }
 
-function confirmAction() {
+async function confirmAction() {
+  let success = false
+
   if (dialogMode.value === 'create') {
-    createApprentice(pendingActionData.value)
-    notifySuccess('Aprendiz creado correctamente')
+    success = await createApprentice(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Aprendiz creado correctamente')
+    }
   }
+
   if (dialogMode.value === 'edit') {
-    updateApprentice(pendingActionData.value)
-    notifySuccess('Aprendiz actualizado correctamente')
+    success = await updateApprentice(pendingActionData.value)
+
+    if (success) {
+      notifySuccess('Aprendiz actualizado correctamente')
+    }
   }
+
   if (dialogMode.value === 'delete') {
-    deleteApprentice(selectedApprentice.value)
-    notifySuccess('Aprendiz eliminado correctamente')
+    success = await deleteApprentice(selectedApprentice.value)
+
+    if (success) {
+      notifySuccess('Aprendiz eliminado correctamente')
+    }
   }
   pendingActionData.value = null
   confirmationDialog.value = false
@@ -223,10 +283,12 @@ function cancelConfirmation() {
 }
 
 function viewItem(row) {
+  const apprenticeId = row.id ?? row._id
+
   router.push({
     name: 'aprendices.detail',
     params: {
-      codigo: row.codigo,
+      id: apprenticeId,
     },
   })
 }
@@ -241,9 +303,14 @@ function deleteItem(row) {
   selectedApprentice.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadAprendices()
+})
 </script>
 
 <style scoped lang="scss">
+
 .apprentices-table :deep(.q-table thead th:nth-child(7)),
 .apprentices-table :deep(.q-table tbody td:nth-child(7)) {
   width: 120px !important;

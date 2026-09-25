@@ -1,4 +1,4 @@
-import usuarioService from 'src/services/usuarioService.js'
+import usuarioService from 'src/services/modules/usuarioService.js'
 
 export async function login(documento, correo) {
   let usuarios = []

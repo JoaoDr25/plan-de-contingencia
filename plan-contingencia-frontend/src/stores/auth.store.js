@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { login as authenticateUser } from 'src/services/authService'
-import usuarioService from 'src/services/usuarioService.js'
+import { login as authenticateUser } from 'src/services/auth/authService'
+import usuarioService from 'src/services/modules/usuarioService.js'
 
 const AUTH_STORAGE_KEY = 'plan-contingencia.auth'
 
@@ -32,6 +32,15 @@ export const useAuthStore = defineStore('auth', () => {
     currentUser.value = result.user
     persistSession()
 
+    if (result.user?._id) {
+      try {
+        currentUser.value = await usuarioService.registrarAcceso(result.user._id)
+        persistSession()
+      } catch (error) {
+        console.error('No se pudo registrar el último acceso:', error)
+      }
+    }
+
     return result
   }
 
@@ -60,6 +69,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (storedUser?._id) {
         currentUser.value = await usuarioService.getUsuarioById(storedUser._id)
+        currentUser.value = await usuarioService.registrarAcceso(storedUser._id)
         persistSession()
       }
     } catch {

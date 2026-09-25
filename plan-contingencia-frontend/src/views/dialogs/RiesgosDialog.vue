@@ -22,7 +22,7 @@ import { RISK_FORM_FIELDS } from 'src/constants/forms/riesgos_form.constants'
 // import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
-import protocoloService from 'src/services/protocoloService'
+import protocoloService from 'src/services/modules/protocoloService'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'

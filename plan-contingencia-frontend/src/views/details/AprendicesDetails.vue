@@ -9,11 +9,11 @@
           </div>
 
           <div class="detail-card__status">
-            <StatusChip v-if="apprenticeData" :status="apprenticeData.estado" />
+            <StatusChip v-if="hasApprentice" :status="apprenticeData.estado" />
           </div>
         </div>
 
-        <div v-if="apprenticeData" class="detail-card__body detail-card__body--apprentice">
+        <div v-if="hasApprentice" class="detail-card__body detail-card__body--apprentice">
           <div class="detail-card__logo">
             <img :src="logoSena" alt="Logo SENA" />
           </div>
@@ -33,7 +33,9 @@
           </div>
         </div>
 
-        <div v-else class="detail-card__empty">No se encontró información del aprendiz.</div>
+        <div v-else class="detail-card__empty">
+          {{ loading ? 'Cargando información del aprendiz...' : 'No se encontró información del aprendiz.' }}
+        </div>
       </section>
 
       <section class="detail-card detail-card--medical">
@@ -115,20 +117,23 @@
 </template>
 
 <script setup>
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock.js'
+// import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock.js'
+import { notifySuccess, notifyError } from 'src/utils/notifications.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import BaseDetailItem from 'src/components/forms/BaseDetailItem.vue'
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import StatusChip from 'src/components/states/StatusChip.vue'
+import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
 import AprendicesInfoDialog from '../dialogs/AprendicesInfoDialog.vue'
-import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 import logoSena from 'src/assets/logos/logo-sena.png'
+
+import aprendizService from 'src/services/modules/aprendizService.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -138,10 +143,38 @@ const confirmationDialog = ref(false)
 
 const pendingInfoData = ref(null)
 
+const loading = ref(false)
+const loadError = ref(false)
+
 const confirmationTitle = 'Confirmar actualización'
 const confirmationMessage = '¿Está seguro de actualizar la información del aprendiz?'
 const confirmationLabel = 'Actualizar'
 const confirmationVariant = 'primary'
+
+async function loadApprentice() {
+  loading.value = true
+  loadError.value = false
+
+  try {
+    const response = await aprendizService.getAprendizById(route.params.id)
+
+    Object.keys(apprenticeData).forEach((key) => {
+      delete apprenticeData[key]
+    })
+
+    Object.assign(apprenticeData, response.data)
+  } catch (error) {
+    console.error('Error al cargar aprendiz:', error)
+    loadError.value = true
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible cargar la información del aprendiz'
+    )
+  } finally {
+    loading.value = false
+  }
+}
 
 function handleInfoSave(formData) {
   pendingInfoData.value = formData
@@ -149,21 +182,34 @@ function handleInfoSave(formData) {
   confirmationDialog.value = true
 }
 
-function confirmInfoUpdate() {
-  updateApprenticeInfo(pendingInfoData.value)
+async function confirmInfoUpdate() {
+  const success = await updateApprenticeInfo(pendingInfoData.value)
 
-  pendingInfoData.value = null
-  confirmationDialog.value = false
+  if (success) {
+    pendingInfoData.value = null
+    confirmationDialog.value = false
+  }
 }
 
-function updateApprenticeInfo(formData) {
-  Object.assign(apprenticeData, formData)
+async function updateApprenticeInfo(formData) {
+  try {
+    await aprendizService.updateAprendiz(
+      apprenticeData.id,
+      formData,
+    )
+    await loadApprentice()
 
-  const index = APRENDICES_MOCK.findIndex(
-    (item) => String(item.codigo) === String(route.params.codigo),
-  )
-  if (index !== -1) {
-    Object.assign(APRENDICES_MOCK[index], formData)
+    notifySuccess('Información del aprendiz actualizada correctamente')
+
+    return true
+  } catch (error) {
+    console.error('Error al actualizar información del aprendiz:', error)
+
+    notifyError(
+      error.response?.data?.message ||
+      'No fue posible actualizar la información del aprendiz',
+    )
+    return false
   }
 }
 
@@ -172,21 +218,21 @@ function cancelInfoUpdate() {
   confirmationDialog.value = false
 }
 
-const apprentice = computed(() => {
-  return APRENDICES_MOCK.find((item) => String(item.codigo) === String(route.params.codigo)) ?? null
-})
-
 const apprenticeData = reactive({})
 
-if (apprentice.value) {
-  Object.assign(apprenticeData, apprentice.value)
-}
+const apprentice = computed(() => {
+  return Object.keys(apprenticeData).length > 0 ? apprenticeData : null
+})
+
+const hasApprentice = computed(() => {
+  return !loadError.value && apprentice.value !== null
+})
 
 const fullName = computed(() => {
   if (!apprentice.value) {
     return 'No registrado'
   }
-  return `${apprenticeData.nombre} ${apprenticeData.apellido}`
+  return `${apprenticeData.nombre ?? ''} ${apprenticeData.apellido ?? ''}`.trim()
 })
 
 const additionalInfo = computed(() => {
@@ -194,15 +240,6 @@ const additionalInfo = computed(() => {
 })
 
 const emergencyContact = computed(() => {
-  if (!apprentice.value) {
-    return {
-      name: '',
-      phone: '',
-      relationship: '',
-      address: '',
-    }
-  }
-
   return {
     name: apprenticeData.contacto ?? '',
     phone: apprenticeData.telefono ?? '',
@@ -220,9 +257,14 @@ function goBack() {
     name: 'aprendices.list',
   })
 }
+
+onMounted(() => {
+  loadApprentice()
+})
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 

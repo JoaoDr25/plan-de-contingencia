@@ -4,24 +4,14 @@ import BaseSelect from 'src/components/forms/BaseSelect.vue'
 import { required, minLength, maxLength, onlyLetters, phone } from 'src/validators/form.validator'
 
 export const APPRENTICE_FORM_FIELDS = [
-  {
-    component: BaseInput,
-    model: 'ficha',
-    label: 'Ficha',
-    // placeholder: 'Ingrese la ficha',
-    icon: 'badge',
-    required: true,
-    rules: [required, minLength(3), maxLength(10)],
-  },
-  {
+{
     component: BaseSelect,
-    model: 'programa',
+    model: 'programaFormacionId',
     label: 'Programa de Formación',
-    // placeholder: 'Seleccione el programa',
     icon: 'school',
     options: [],
     required: true,
-    rules: [required, minLength(3), maxLength(120), onlyLetters],
+    rules: [required],
   },
   {
     component: BaseInput,
@@ -53,7 +43,7 @@ export const APPRENTICE_FORM_FIELDS = [
   {
     component: BaseInput,
     model: 'telefono',
-    label: 'Contacto de Emergencia',
+    label: 'Telefono de Contacto de Emergencia',
     // placeholder: 'Ingrese el número de contacto',
     icon: 'contact_phone',
     maxlength: 15,
@@ -66,20 +56,6 @@ export const APPRENTICE_FORM_FIELDS = [
     label: 'Tipo de Documento',
     // placeholder: 'Seleccione el tipo de documento',
     icon: 'badge',
-    options: [
-      {
-        label: 'Cédula de Ciudadanía',
-        value: 'CC',
-      },
-      {
-        label: 'Tarjeta de Identidad',
-        value: 'TI',
-      },
-      {
-        label: 'Cédula de Extranjería',
-        value: 'CE',
-      },
-    ],
     required: true,
     rules: [required],
   },
