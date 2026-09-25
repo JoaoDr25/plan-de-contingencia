@@ -69,19 +69,20 @@ const usuarioSchema = new mongoose.Schema({
     },
     rol: {
         type: String,
-        required: true,
         enum: [
             "ADMINISTRADOR",
             "CONSULTOR",
             "PEDAGOGIA",
             "SST",
-            "COORDINACION"
+            "COORDINACION",
+            null
         ],
+        default: null,
         alias: "rolAsignado"
     },
     acceso: {
-        type: String,
-        trim: true
+        type: Date,
+        default: null
     },
     firma: {   
         type: String,

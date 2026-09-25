@@ -73,6 +73,20 @@ export const cambiarEstadoUsuarioId = async (req, res, next) => {
 };
 
 
+export const registrarAccesoUsuarioId = async (req, res, next) => {
+    try {
+        const registrarAcceso = await usuarioService.registrarAcceso(req.params.id);
+
+        sendSuccess(res, {
+            message: "Último acceso registrado exitosamente",
+            data: registrarAcceso
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 export const eliminarUsuarioId = async (req, res, next) => {
     try {
         const eliminar = await usuarioService.deleteById(req.params.id);

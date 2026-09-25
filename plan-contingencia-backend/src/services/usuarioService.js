@@ -224,6 +224,29 @@ const cambiarEstadoId = async (id, estado) => {
 
 
 
+const registrarAcceso = async (id) => {
+
+    const registrarAccesoId = await crud.update(
+        id,
+        { acceso: new Date() }
+    );
+
+    if (!registrarAccesoId) {
+        const error =
+        new Error(
+            "Usuario no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    return registrarAccesoId;
+}
+
+
+
 const deleteById = async (id)  => {
 
     const eliminarUsuarioId = await crud.delete(id);
@@ -242,6 +265,6 @@ const deleteById = async (id)  => {
     return eliminarUsuarioId;
 }
 
-export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };
+export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, registrarAcceso, deleteById };
 
 

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { generarNumero } from "../utils/generarNumero.js";
 
-const aprendizSchema = new mongoose.Schema ({
+const aprendizSchema = new mongoose.Schema({
     numero: {
         type: Number,
         unique: true,
@@ -27,9 +27,9 @@ const aprendizSchema = new mongoose.Schema ({
         trim: true
     },
     apellido: {
-        type:String,
-        required:true,
-        trim:true
+        type: String,
+        required: true,
+        trim: true
     },
     documento: {
         type: String,
@@ -37,28 +37,22 @@ const aprendizSchema = new mongoose.Schema ({
         unique: true,
         trim: true
     },
-    programa: {
-        type: String,
-        required: true,
-        trim: true,
-        alias: "programaFormacion"
-    },
+    // programa: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    //     alias: "programaFormacion"
+    // },
     programaFormacionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ProgramaFormacion",
         required: true
     },
-    ficha: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    telefono: {
-        type: String,
-        required: true,
-        trim: true,
-        alias: "contactoEmergencia"
-    },
+    // ficha: {
+    //     type: String,
+    //     required: true,
+    //     trim: true
+    // },
     eps: {
         type: String,
         required: true,
@@ -75,6 +69,12 @@ const aprendizSchema = new mongoose.Schema ({
     contacto: {
         type: String,
         trim: true
+    },
+    telefono: {
+        type: String,
+        required: true,
+        trim: true,
+        alias: "contactoEmergencia"
     },
     parentesco: {
         type: String,
@@ -95,11 +95,11 @@ const aprendizSchema = new mongoose.Schema ({
     toObject: { virtuals: true }
 });
 
-aprendizSchema.pre("save", async function(next){
+aprendizSchema.pre("save", async function (next) {
 
     if (!this.numero) {
         this.numero =
-        await generarNumero("Aprendiz");
+            await generarNumero("Aprendiz");
     }
 });
 

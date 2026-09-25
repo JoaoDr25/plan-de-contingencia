@@ -4,7 +4,7 @@ export const createCrudService = (model) => ({
         model.create(data),
 
     getAll: (filter = {}) =>
-        model.find(filter),
+        model.find(filter).sort({ numero: 1 }),
 
 
     getById: (id) =>

@@ -5,6 +5,7 @@ import {
     obtenerUsuarioId,
     actualizarUsuarioId,
     cambiarEstadoUsuarioId,
+    registrarAccesoUsuarioId,
     eliminarUsuarioId,
  } from "../controllers/usuarioController.js";
 
@@ -17,6 +18,7 @@ router.get('/usuarios', listarUsuario);
 router.get('/usuarios/:id', validarObjectId, obtenerUsuarioId);
 router.put('/usuarios/:id', validarObjectId, actualizarUsuarioId);
 router.patch('/usuarios/:id/estado', validarObjectId, cambiarEstadoUsuarioId);
+router.patch('/usuarios/:id/acceso', validarObjectId, registrarAccesoUsuarioId);
 router.delete('/usuarios/:id', validarObjectId, eliminarUsuarioId);
 
 export default router;
