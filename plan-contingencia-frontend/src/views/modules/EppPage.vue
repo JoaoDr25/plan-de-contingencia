@@ -77,15 +77,15 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { DEFAULT_CRUD_ACTIONS } from 'src/constants/actions/default_actions.constants.js'
 import { EPP_FILTERS } from 'src/constants/filters/epp.constants'
 import { EPP_COLUMNS } from 'src/constants/tables/epp.columns'
-import { EPP_MOCK } from 'src/mocks/modules/epp.mock.js'
+// import { EPP_MOCK } from 'src/mocks/modules/epp.mock.js'
 
+// import { getCurrentDate } from 'src/utils/date.utils'
 import { useCrudTable } from 'src/composables/useCrudTable'
-import { getCurrentDate } from 'src/utils/date.utils'
 import { notifySuccess } from 'src/utils/notifications.utils.js'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -102,8 +102,9 @@ import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.v
 
 import EppDialog from '../dialogs/EppDialog.vue'
 import EppDetails from '../details/EppDetails.vue'
+import eppService from 'src/services/modules/eppService.js'
 
-const sourceRows = ref(EPP_MOCK)
+const sourceRows = ref([])
 
 const {
   selectedFilter,
@@ -124,6 +125,18 @@ const {
 })
 
 const loading = ref(false)
+
+async function loadEpps() {
+  loading.value = true
+
+  try {
+    const response = await eppService.getEpps()
+
+    sourceRows.value = response.data ?? []
+  } finally {
+    loading.value = false
+  }
+}
 
 const dialog = ref(false)
 const detailsEpp = ref(false)
@@ -174,32 +187,48 @@ function handleEppSave(formData) {
   confirmationDialog.value = true
 }
 
-function createEpp(formData) {
-  sourceRows.value.push({
-    ...formData,
-    fecha: getCurrentDate(),
-  })
-  dialog.value = false
-}
+async function createEpp(formData) {
+  const response = await eppService.createEpp(formData)
 
-function updateEpp(formData) {
-  const index = sourceRows.value.findIndex((row) => row === selectedEpp.value)
-  if (index === -1) {
-    return
-  }
-  sourceRows.value[index] = {
-    ...sourceRows.value[index],
-    ...formData,
+  if (response.data) {
+    sourceRows.value.push(response.data)
   }
   dialog.value = false
 }
 
-function deleteEpp(row) {
-  const index = sourceRows.value.findIndex((epp) => epp.id === row.id)
-  if (index === -1) {
+async function updateEpp(formData) {
+  const id = selectedEpp.value?.id
+
+  if (!id) {
     return
   }
-  sourceRows.value.splice(index, 1)
+  const response = await eppService.updateEpp(id, formData)
+  const updatedEpp = response.data
+
+  if (!updatedEpp) {
+    return
+  }
+  const index = sourceRows.value.findIndex((row) => row.id === id)
+
+  if (index !== -1) {
+    sourceRows.value[index] = updatedEpp
+  }
+  selectedEpp.value = updatedEpp
+  dialog.value = false
+}
+
+async function deleteEpp(row) {
+  const id = row?.id
+
+  if (!id) {
+    return
+  }
+  await eppService.deleteEpp(id)
+  const index = sourceRows.value.findIndex((epp) => epp.id === id)
+
+  if (index !== -1) {
+    sourceRows.value.splice(index, 1)
+  }
 }
 
 function confirmAction() {
@@ -240,4 +269,8 @@ function deleteItem(row) {
   selectedEpp.value = row
   confirmationDialog.value = true
 }
+
+onMounted(() => {
+  loadEpps()
+})
 </script>

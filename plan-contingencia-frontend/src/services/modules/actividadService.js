@@ -1,4 +1,4 @@
-import api from '../api'
+import api from '../auth/api'
 
 const mapActividad = (actividad) => {
   const peligros = Array.isArray(actividad.peligros)

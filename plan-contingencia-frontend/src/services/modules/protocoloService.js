@@ -1,4 +1,4 @@
-import api from '../api.js'
+import api from '../auth/api.js'
 
 const mapProtocolo = (protocolo) => {
   return {
