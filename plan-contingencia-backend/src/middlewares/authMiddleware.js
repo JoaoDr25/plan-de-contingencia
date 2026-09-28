@@ -1,44 +1,55 @@
-import { ROLES } from '../constants/roles.js'
+import jwt from "jsonwebtoken";
 
-export const mockAuth = (req, res, next) => {
+export const autenticarToken = (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
 
-    const rol = req.headers['x-role'] || ROLES.CONSULTOR;
+        if (!authHeader) {
+            return res.status(401).json({
+                success: false,
+                message: "Token de autenticación requerido"
+            });
+        }
 
-    const usuariosMock = {
-        [ROLES.ADMINISTRADOR]: {
-            id: 'admin123',
-            nombre: 'Administrador Demo',
-            rol: ROLES.ADMINISTRADOR
-        },
+        const [tipo, token] = authHeader.split(" ");
 
-        [ROLES.CONSULTOR]: {
-            id: 'user123',
-            nombre: 'Consultor Demo',
-            rol: ROLES.CONSULTOR
-        },
+        if (tipo !== "Bearer" || !token) {
+            return res.status(401).json({
+                success: false,
+                message: "Formato de autenticación inválido"
+            });
+        }
 
-        [ROLES.PEDAGOGIA]: {
-            id: 'pedago123',
-            nombre: 'Pedagogía Dema',
-            rol: ROLES.PEDAGOGIA
-        },
+        const secret = process.env.JWT_SECRET;
 
-        [ROLES.SST]: {
-            id: 'sst123',
-            nombre: 'SST Demo',
-            rol: ROLES.SST
-        },
+        if (!secret) {
+            throw new Error(
+                "JWT_SECRET no está configurado"
+            );
+        }
 
-        [ROLES.COORDINACION]: {
-            id: 'coordin123',
-            nombre: 'Coordinación Demo',
-            rol: ROLES.COORDINACION
-        },
-    };
+        const payload = jwt.verify(token, secret);
 
-    req.user =
-        usuariosMock[rol] ||
-        usuariosMock[ROLES.CONSULTOR];
+        req.usuario = payload;
 
-    next();
+        next();
+
+    } catch (error) {
+
+        if (error.name === "TokenExpiredError") {
+            return res.status(401).json({
+                success: false,
+                message: "El token de autenticación ha expirado"
+            });
+        }
+
+        if (error.name === "JsonWebTokenError") {
+            return res.status(401).json({
+                success: false,
+                message: "El token de autenticación no es válido"
+            });
+        }
+
+        next(error);
+    }
 };

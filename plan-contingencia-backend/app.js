@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import 'dotenv/config'
 import dotenv from 'dotenv'
 
 import { conectarDB } from './src/config/db.js'
@@ -14,8 +15,9 @@ import aprendizRoutes from './src/routes/aprendizRoutes.js'
 import usuarioRoutes from './src/routes/usuarioRoutes.js'
 import contactoEmergenciaRoutes from './src/routes/contactoEmergenciaRoutes.js'
 import eppRoutes from './src/routes/eppRoutes.js'
+import authRoutes from './src/routes/authRoutes.js';
 
-import { mockAuth } from './src/middlewares/authMiddleware.js'
+import { autenticarToken } from './src/middlewares/authMiddleware.js';
 import { errorHandler } from './src/middlewares/errorHandler.js'
 
 dotenv.config();
@@ -30,7 +32,9 @@ app.get('/api', (req, res) => {
     res.send('¡Servidor funcionando!');
 });
 
-app.use(mockAuth); //Autenticación temporal
+app.use('/api', authRoutes);
+
+app.use(autenticarToken);
 
 app.use('/api', 
     planContingenciaRoutes, 
@@ -52,7 +56,7 @@ app.use((req, res) => {
     });
 });
 
-app.use(errorHandler); //Middleware de manejo de errores del servidor
+app.use(errorHandler);
 
 conectarDB();
 

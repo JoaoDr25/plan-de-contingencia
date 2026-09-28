@@ -84,7 +84,7 @@ const usuarioSchema = new mongoose.Schema({
         type: Date,
         default: null
     },
-    firma: {   
+    firma: {
         type: String,
         default: null
     },
@@ -93,7 +93,7 @@ const usuarioSchema = new mongoose.Schema({
         default: null,
         trim: true
     },
-    firmaActualizada: {   
+    firmaActualizada: {
         type: Date,
         default: null
     },
@@ -101,18 +101,36 @@ const usuarioSchema = new mongoose.Schema({
         type: String,
         enum: ["Activo", "Inactivo"],
         default: "Activo"
-    }
+    },
+    // autenticacion: {
+    //     otpHash: {
+    //         type: String,
+    //         default: null
+    //     },
+    //     otpExpira: {
+    //         type: Date,
+    //         default: null
+    //     },
+    //     otpUsado: {
+    //         type: Boolean,
+    //         default: false
+    //     },
+    //     otpIntentos: {
+    //         type: Number,
+    //         default: 0
+    //     }
+    // }
 }, {
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
 
-usuarioSchema.pre("save", async function(){
+usuarioSchema.pre("save", async function () {
 
     if (!this.numero) {
         this.numero =
-        await generarNumero("Usuario");
+            await generarNumero("Usuario");
     }
 });
 

@@ -14,7 +14,7 @@ const elementosProteccionPersonalSchema = new mongoose.Schema ({
         alias: "nombreEPP"
     },
     categoria: {
-        type: String,  //Pendiente clasificar
+        type: String, 
         required: true,
         trim: true
     },
@@ -22,7 +22,7 @@ const elementosProteccionPersonalSchema = new mongoose.Schema ({
         type: String,
         required: true,
         alias: "nivelProteccion",
-        enum: ["Bajo", "Medio", "Alto", "BAJO", "MEDIO", "ALTO"]
+        enum: ["Bajo", "Medio", "Alto"]
     },
     descripcion: {
         type: String,
