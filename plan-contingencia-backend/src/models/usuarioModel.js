@@ -101,25 +101,7 @@ const usuarioSchema = new mongoose.Schema({
         type: String,
         enum: ["Activo", "Inactivo"],
         default: "Activo"
-    },
-    // autenticacion: {
-    //     otpHash: {
-    //         type: String,
-    //         default: null
-    //     },
-    //     otpExpira: {
-    //         type: Date,
-    //         default: null
-    //     },
-    //     otpUsado: {
-    //         type: Boolean,
-    //         default: false
-    //     },
-    //     otpIntentos: {
-    //         type: Number,
-    //         default: 0
-    //     }
-    // }
+    }
 }, {
     timestamps: true,
     toJSON: { virtuals: true },

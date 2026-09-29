@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 
 import usuarioModel from "../models/usuarioModel.js";
 import codigoVerificacionModel from "../models/codigoVerificacionModel.js";
-import { enviarCodigoVerificacion } from "../utils/VerifyEmail.js";
 
+import { enviarCodigoVerificacion } from "../utils/VerifyEmail.js"
 
 const generarCodigo = () => {
     return crypto
@@ -53,7 +53,7 @@ const generarToken = (usuario) => {
 };
 
 
-const login = async (documento, correoInstitucional) => {
+const validarCredenciales = async (documento, correoInstitucional) => {
 
     if (!documento || !correoInstitucional) {
 
@@ -96,6 +96,13 @@ const login = async (documento, correoInstitucional) => {
         throw error;
     }
 
+    return usuario;
+};
+
+
+const login = async (documento, correoInstitucional) => {
+
+    const usuario = await validarCredenciales(documento, correoInstitucional);
 
     await codigoVerificacionModel.deleteMany({
         usuarioId: usuario._id,
@@ -350,6 +357,7 @@ const logout = async () => {
 
 
 export default {
+    validarCredenciales,
     login,
     verificarCodigo,
     obtenerUsuarioAutenticado,

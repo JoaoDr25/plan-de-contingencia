@@ -16,6 +16,23 @@ export const crearUsuario = async (req, res, next) => {
 }
 
 
+export const sincronizarUsuarios = async (req, res, next) => {
+    try {
+
+        const resultado =
+            await usuarioService.sincronizar();
+
+        sendSuccess(res, {
+            message: "Usuarios sincronizados exitosamente",
+            data: resultado
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 export const listarUsuario = async (req, res, next) => {
     try {
         const listar = await usuarioService.getAll(req.query);
@@ -28,6 +45,20 @@ export const listarUsuario = async (req, res, next) => {
          next(error);
     }
 }
+
+
+export const listarRevisores = async (req, res, next) => {
+    try {
+        const revisores = await usuarioService.getRevisores();
+
+        sendSuccess(res, {
+            message: "Revisores obtenidos exitosamente",
+            data: revisores
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 
 export const obtenerUsuarioId = async (req, res, next) => {
@@ -73,6 +104,25 @@ export const cambiarEstadoUsuarioId = async (req, res, next) => {
 };
 
 
+export const cambiarRolUsuarioId = async (req, res, next) => {
+    try {
+        const { rol } = req.body;
+
+        const cambiarRol = await usuarioService.cambiarRolId(
+            req.params.id,
+            rol
+        );
+
+        sendSuccess(res, {
+            message: "Rol del usuario actualizado exitosamente",
+            data: cambiarRol
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 export const registrarAccesoUsuarioId = async (req, res, next) => {
     try {
         const registrarAcceso = await usuarioService.registrarAcceso(req.params.id);
@@ -80,6 +130,28 @@ export const registrarAccesoUsuarioId = async (req, res, next) => {
         sendSuccess(res, {
             message: "Último acceso registrado exitosamente",
             data: registrarAcceso
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const actualizarFirmaUsuarioId = async (req, res, next) => {
+    try {
+        const { firma, firmaNombre } = req.body;
+
+        const actualizarFirma =
+            await usuarioService.actualizarFirma(
+                req.params.id,
+                req.usuario.usuarioId,
+                firma,
+                firmaNombre
+            );
+
+        sendSuccess(res, {
+            message: "Firma del usuario actualizada exitosamente",
+            data: actualizarFirma
         });
     } catch (error) {
         next(error);

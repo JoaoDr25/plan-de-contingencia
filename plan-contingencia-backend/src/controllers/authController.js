@@ -1,6 +1,16 @@
 import authService from "../services/authService.js";
 import { sendSuccess } from "../utils/apiResponse.js";
 
+export const validarCredenciales = async (req, res, next) => {
+    try {
+        const { documento, correoInstitucional } = req.body;
+        await authService.validarCredenciales(documento, correoInstitucional);
+        sendSuccess(res, { message: "Credenciales válidas" });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export const login = async (req, res, next) => {
     try {

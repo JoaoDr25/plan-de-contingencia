@@ -34,7 +34,7 @@ app.get('/api', (req, res) => {
 
 app.use('/api', authRoutes);
 
-app.use(autenticarToken);
+app.use('/api', autenticarToken);
 
 app.use('/api', 
     planContingenciaRoutes, 
