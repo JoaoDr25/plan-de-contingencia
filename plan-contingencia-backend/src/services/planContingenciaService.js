@@ -1,5 +1,9 @@
 import { createCrudService } from '../services/baseCrudService.js'
 import { calcularCamposFaltantes } from "../utils/planValidation.js"
+import { generarDocumentoPdf } from '../utils/pdfGenerator.js'
+
+import { SEGURIDAD_VIAL_ITEMS } from '../constants/seguridadVialItems.js'
+
 import planContingenciaModel from '../models/planContingenciaModel.js'
 import riesgoModel from '../models/riesgoModel.js'
 import aprendizModel from '../models/aprendizModel.js'
@@ -8,9 +12,6 @@ import actividadModel from '../models/actividadModel.js'
 import usuarioModel from '../models/usuarioModel.js'
 import contactosEmergenciaModel from '../models/contactoEmergenciaModel.js'
 import elementosProteccionPersonalModel from '../models/eppModel.js'
-import { SEGURIDAD_VIAL_ITEMS } from '../constants/seguridadVialItems.js'
-import { generarDocumentoPdf } from '../utils/pdfGenerator.js'
-import path from 'path'
 
 const crud = createCrudService(planContingenciaModel);
 
@@ -29,7 +30,6 @@ const obtenerPlanFunction = async (id) => {
 
         throw error;
     }
-
     return plan;
 }
 
@@ -124,7 +124,6 @@ const create = async (data) => {
 
         throw error;
     }
-
     data.usuarioNombre = usuario.nombre;
 
     return await crud.create(data);
@@ -151,8 +150,19 @@ const populatePlanQuery = (query) => query
     });
 
 
+const construirFiltroVisibilidad = (usuario, filter = {}) => {
 
-const getAll = async (filter = {}) => {
+    if (usuario.rol === "CONSULTOR") {
+        return {
+            ...filter,
+            usuarioId: usuario.usuarioId
+        };
+    }
+    return filter;
+};
+
+
+const getAll = async (filter = {}, usuario) => {
 
     const listarPlanesId = await populatePlanQuery(crud.getAll(filter));
 
@@ -161,9 +171,18 @@ const getAll = async (filter = {}) => {
 
 
 
-const getById = async (id) => {
+const getById = async (id, usuario) => {
 
-    const obtenerPlanId = await populatePlanQuery(crud.getById(id));
+    const filtro =
+        construirFiltroVisibilidad(
+            usuario,
+            { _id: id }
+        );
+
+    const obtenerPlanId =
+        await populatePlanQuery(
+            planContingenciaModel.findOne(filtro)
+        );
 
     if (!obtenerPlanId) {
         const error =
@@ -175,7 +194,6 @@ const getById = async (id) => {
 
         throw error;
     }
-
     return obtenerPlanId;
 }
 
@@ -185,144 +203,250 @@ const updateById = async (id, data) => {
 
     const plan = await obtenerPlanFunction(id);
 
-    await regresarABorradorSiAplica(plan)
-
-    const {
-        programaFormacionId,
-        actividadId,
-        usuarioId
-    } = data;
-
-    if (programaFormacionId) {
-
-        const programa = await programaFormacionModel.findById(programaFormacionId);
-
-        if (!programa) {
-            const error =
-                new Error(
-                    "Programa de formación no encontrado"
-                );
-
-            error.statusCode = 404;
-
-            throw error;
-        }
-
-        data.programaFormacionNombre = programa.nombre;
-        data.programaFormacionNivel = programa.nivel ?? programa.nivelFormacion;
-        data.ficha = programa.ficha;
-
-    }
-
-    if (actividadId) {
-
-        const actividad = await actividadModel.findById(actividadId);
-
-        if (!actividad) {
-            const error =
-                new Error(
-                    "Actividad no encontrada"
-                );
-
-            error.statusCode = 404;
-
-            throw error;
-        }
-
-    }
-
-    if (usuarioId) {
-
-        const usuario = await usuarioModel.findById(usuarioId);
-
-        if (!usuario) {
-            const error =
-                new Error(
-                    "Usuario no encontrado"
-                );
-
-            error.statusCode = 404;
-
-            throw error;
-        }
-
-        if (usuario.estado !== "Activo") {
-            const error =
-                new Error(
-                    "No se puede actualizar el plan porque el usuario se encuentra inactivo"
-                )
-
-            error.statusCode = 400;
-
-            throw error;
-        }
-
-        data.usuarioNombre = usuario.nombre;
-
-    }
-
-    const actualizarPlanId = await crud.update(
-        id,
-        data
-    );
-
-    if (!actualizarPlanId) {
-        const error =
-            new Error(
-                "Plan de contingencia no encontrado"
-            );
+    if (!plan) {
+        const error = new Error(
+            "Plan de contingencia no encontrado"
+        );
 
         error.statusCode = 404;
 
         throw error;
     }
 
+    const camposEditables = [
+        "clasificacionInformacion",
+        "programaFormacionId",
+        "actividadId",
+        "descripcionActividad",
+        "fecha",
+        "horaSalida",
+        "horaRegreso",
+        "tipoTransporte",
+        "lugarSalida",
+        "lugarDestino",
+        "contactoLugar",
+        "observaciones"
+    ];
+
+    const datosActualizados = {};
+
+    for (const campo of camposEditables) {
+
+        if (data[campo] !== undefined) {
+            datosActualizados[campo] = data[campo];
+        }
+    }
+
+    if (data.programaFormacionId) {
+
+        const programa =
+            await programaFormacionModel.findById(
+                data.programaFormacionId
+            );
+
+        if (!programa) {
+            const error = new Error(
+                "Programa de formación no encontrado"
+            );
+
+            error.statusCode = 404;
+
+            throw error;
+        }
+
+        datosActualizados.programaFormacionNombre =
+            programa.nombre;
+
+        datosActualizados.programaFormacionNivel =
+            programa.nivel ??
+            programa.nivelFormacion;
+
+        datosActualizados.ficha =
+            programa.ficha;
+    }
+
+    if (data.actividadId) {
+
+        const actividad =
+            await actividadModel.findById(
+                data.actividadId
+            );
+
+        if (!actividad) {
+            const error = new Error(
+                "Actividad no encontrada"
+            );
+
+            error.statusCode = 404;
+
+            throw error;
+        }
+    }
+
+    const actualizarPlanId = await crud.update(
+        id,
+        datosActualizados
+    );
+
+    if (!actualizarPlanId) {
+        const error = new Error(
+            "Plan de contingencia no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
     return actualizarPlanId;
-}
+};
 
 
 
-const cambiarEstadoId = async (id, estado) => {
+const cambiarEstadoId = async (id, nuevoEstado, usuario) => {
 
     const plan = await obtenerPlanFunction(id);
 
+    if (!plan) {
+        const error = new Error(
+            "Plan de contingencia no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    const usuarioActual = await usuarioModel.findById(
+        usuario.usuarioId
+    );
+
+    if (!usuarioActual) {
+        const error = new Error(
+            "Usuario autenticado no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    if (usuarioActual.estado !== "Activo") {
+        const error = new Error(
+            "El usuario se encuentra inactivo"
+        );
+
+        error.statusCode = 403;
+
+        throw error;
+    }
+
     const transicionesPermitidas = {
-        "borrador": [
-            "en revision",
-            "cancelado"
-        ],
+        "borrador": [],
+
         "en revision": [
             "aprobado",
-            "cancelado",
+            "borrador"
         ],
+
         "aprobado": [
             "ejecutado",
             "cancelado",
             "borrador"
         ],
+
         "ejecutado": [],
-        "cancelado": [],
-    }
 
-    const estadoActual = plan.estado;
+        "cancelado": []
+    };
 
-    if (!transicionesPermitidas[estadoActual].includes(estado)) {
-        const error =
-            new Error(
-                `No se permite cambiar de '${estadoActual}' a '${estado}'`
-            );
+    const transiciones =
+        transicionesPermitidas[plan.estado] || [];
 
-        error.statusCode = 400;
+    if (!transiciones.includes(nuevoEstado)) {
+
+        const error = new Error(
+            `No se permite cambiar un plan de ${plan.estado} a ${nuevoEstado}`
+        );
+
+        error.statusCode = 403;
 
         throw error;
     }
 
-    plan.estado = estado;
+    if (
+        plan.estado === "borrador" &&
+        nuevoEstado === "en revision"
+    ) {
+
+        if (
+            plan.usuarioId.toString() !==
+            usuarioActual._id.toString()
+        ) {
+
+            const error = new Error(
+                "Solo el usuario responsable del plan puede enviarlo a revisión"
+            );
+
+            error.statusCode = 403;
+
+            throw error;
+        }
+    }
+
+    if (
+        plan.estado === "en revision" &&
+        nuevoEstado === "aprobado"
+    ) {
+
+        const error = new Error(
+            "El plan solo puede pasar a aprobado cuando las tres revisiones hayan sido aprobadas"
+        );
+
+        error.statusCode = 403;
+
+        throw error;
+    }
+
+    if (
+        plan.estado === "en revision" &&
+        nuevoEstado === "borrador"
+    ) {
+
+        const error = new Error(
+            "Un plan en revisión solo puede volver a borrador mediante el proceso de revisión"
+        );
+
+        error.statusCode = 403;
+
+        throw error;
+    }
+
+    if (
+        plan.estado === "aprobado" &&
+        [
+            "ejecutado",
+            "cancelado",
+            "borrador"
+        ].includes(nuevoEstado)
+    ) {
+
+        if (usuarioActual.rol !== "COORDINACION") {
+
+            const error = new Error(
+                "Solo el rol de Coordinación puede realizar esta acción"
+            );
+
+            error.statusCode = 403;
+
+            throw error;
+        }
+    }
+    plan.estado = nuevoEstado;
 
     await plan.save();
 
     return plan;
-}
+};
 
 
 
@@ -335,7 +459,6 @@ const deleteById = async (id) => {
             new Error(
                 "Solo se pueden eliminar planes en estado borrador"
             );
-
         error.statusCode = 400;
 
         throw error;
@@ -353,7 +476,6 @@ const deleteById = async (id) => {
 
         throw error;
     }
-
     return eliminarPlanId;
 }
 
@@ -365,7 +487,7 @@ const generarPlanId = async (id) => {
         .populate("programaFormacionId")
         .populate("actividadId")
         .populate("riesgosId")
-        .populate("aprendicesId")
+        .populate("aprendicesId");
 
     if (!plan) {
         const error =
@@ -404,12 +526,24 @@ const generarPlanId = async (id) => {
         throw error;
     }
 
+    plan.revision.pedagogia = {
+        estado: "pendiente"
+    };
+
+    plan.revision.sst = {
+        estado: "pendiente"
+    };
+
+    plan.revision.coordinacion = {
+        estado: "pendiente"
+    };
+
     plan.estado = "en revision";
 
     await plan.save();
 
     return plan;
-}
+};
 
 
 
@@ -468,7 +602,6 @@ const generarPdfId = async (id) => {
 
         throw error;
     }
-
     const pdfBuffer = await generarDocumentoPdf(plan);
 
     return pdfBuffer;
@@ -482,16 +615,15 @@ const asociarRiesgosId = async (id, riesgosId) => {
 
     if (!Array.isArray(riesgosId) || riesgosId.length === 0) {
         const error =
-        new Error(
-            "Debe enviar al menos un riesgo"
-        );
-
+            new Error(
+                "Debe enviar al menos un riesgo"
+            );
         error.statusCode = 400;
 
         throw error;
     }
 
-    const riesgos= await riesgoModel.find({
+    const riesgos = await riesgoModel.find({
         _id: { $in: riesgosId }
     });
 
@@ -500,16 +632,15 @@ const asociarRiesgosId = async (id, riesgosId) => {
             new Error(
                 "Uno o mas riesgos no existen"
             );
-
         error.statusCode = 404;
 
         throw error;
     }
 
-    const riesgosAsociados = plan.riesgosId.map( id => id.toString());
+    const riesgosAsociados = plan.riesgosId.map(id => id.toString());
 
     const nuevosRiesgos = riesgosId.filter(
-        id => ! riesgosAsociados.includes(id)
+        id => !riesgosAsociados.includes(id)
     );
 
     if (nuevosRiesgos.length === 0) {
@@ -517,13 +648,10 @@ const asociarRiesgosId = async (id, riesgosId) => {
             new Error(
                 "Todos los riesgos ya se encuentran asociados al plan"
             );
-
         error.statusCode = 400;
 
         throw error;
     }
-
-    await regresarABorradorSiAplica(plan);
 
     plan.riesgosId.push(...nuevosRiesgos);
 
@@ -554,12 +682,10 @@ const obtenerAsociacionRiesgoId = async (id) => {
             new Error(
                 "No se encontró el plan de contingencia"
             );
-
         error.statusCode = 404;
 
         throw error;
     }
-
     return plan.riesgosId;
 }
 
@@ -605,9 +731,9 @@ const asociarAprendicesId = async (id, aprendicesId) => {
 
     if (!Array.isArray(aprendicesId) || aprendicesId.length === 0) {
         const error =
-        new Error(
-            "Debe enviar al menos un aprendiz"
-        );
+            new Error(
+                "Debe enviar al menos un aprendiz"
+            );
 
         error.statusCode = 400;
 
@@ -623,16 +749,15 @@ const asociarAprendicesId = async (id, aprendicesId) => {
             new Error(
                 "Uno o mas aprendices no existen"
             );
-
         error.statusCode = 404;
 
         throw error;
     }
 
-    const aprendicesAsociados = plan.aprendicesId.map( id => id.toString());
+    const aprendicesAsociados = plan.aprendicesId.map(id => id.toString());
 
     const nuevosAprendices = aprendicesId.filter(
-        id => ! aprendicesAsociados.includes(id)
+        id => !aprendicesAsociados.includes(id)
     );
 
     if (nuevosAprendices.length === 0) {
@@ -645,9 +770,7 @@ const asociarAprendicesId = async (id, aprendicesId) => {
 
         throw error;
     }
-
-    await regresarABorradorSiAplica(plan);
-
+    
     plan.aprendicesId.push(...nuevosAprendices);
 
     await plan.save();
@@ -667,12 +790,10 @@ const obtenerAsociacionAprendicesId = async (id) => {
             new Error(
                 "No se encontró el plan de contingencia"
             );
-
         error.statusCode = 404;
 
         throw error;
     }
-
     return plan.aprendicesId;
 }
 
@@ -699,7 +820,6 @@ const eliminarAsociacionAprendicesId = async (id, aprendizId) => {
 
         throw error;
     }
-
     plan.aprendicesId =
         plan.aprendicesId.filter(
             r => r.toString() !== aprendizId
@@ -778,7 +898,6 @@ const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
             throw error;
         }
     }
-
     return await crud.update(id, {
         contactosEmergencia:
             contactosEmergencia.contactosEmergencia
@@ -843,7 +962,6 @@ const seleccionarEppId = async (id, epp) => {
             throw error;
         }
     }
-
     return await crud.update(id, {
         epp: epp.epp
     });
@@ -902,7 +1020,6 @@ const registrarSeguridadVialId = async (id, seguridadVial) => {
             throw error;
         }
     }
-
     return await crud.update(id, {
         seguridadVial: {
             aplica,
@@ -932,7 +1049,6 @@ const registrarContextoAcademicoId = async (id, contextoAcademico) => {
 
         throw error;
     }
-
     return await crud.update(id, {
         contextoAcademico: contextoAcademico
     });
@@ -969,7 +1085,6 @@ const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
 
         throw error;
     }
-
     return await crud.update(id, {
         articulacionFormativa: articulacionFormativa
     });
@@ -1033,11 +1148,251 @@ const registrarPlanTrabajoId = async (id, planTrabajo) => {
             throw error;
         }
     }
-
     return await crud.update(id, {
         planTrabajo: planTrabajo.planTrabajo
     });
 }
+
+
+
+const registrarRevision = async (id, decision, usuario) => {
+
+    const plan = await obtenerPlanFunction(id);
+
+    if (plan.estado !== "en revision") {
+        const error = new Error(
+            "Solo se pueden registrar revisiones de planes en estado en revision"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const rolesRevision = [
+        "PEDAGOGIA",
+        "SST",
+        "COORDINACION"
+    ];
+
+    if (!rolesRevision.includes(usuario.rol)) {
+        const error = new Error(
+            "El usuario no tiene permisos para realizar revisiones"
+        );
+
+        error.statusCode = 403;
+
+        throw error;
+    }
+
+    if (!["aprobado", "no aprobado"].includes(decision)) {
+        const error = new Error(
+            "La decisión de revisión no es válida"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const usuarioActual = await usuarioModel.findById(
+        usuario.usuarioId
+    );
+
+    if (!usuarioActual) {
+        const error = new Error(
+            "Usuario autenticado no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    if (usuarioActual.estado !== "Activo") {
+        const error = new Error(
+            "El usuario se encuentra inactivo"
+        );
+
+        error.statusCode = 403;
+
+        throw error;
+    }
+
+    const campoRevision = {
+        PEDAGOGIA: "pedagogia",
+        SST: "sst",
+        COORDINACION: "coordinacion"
+    }[usuario.rol];
+
+    const revisionActual = plan.revision[campoRevision];
+
+    if (revisionActual.estado !== "pendiente") {
+        const error = new Error(
+            `La revisión de ${campoRevision} ya fue registrada`
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    plan.revision[campoRevision] = {
+        usuarioId: usuarioActual._id,
+        nombre: `${usuarioActual.nombre} ${usuarioActual.apellido}`,
+        firma: usuarioActual.firma,
+        estado: decision,
+        fecha: new Date()
+    };
+
+    if (decision === "no aprobado") {
+
+        plan.estado = "borrador";
+
+        await plan.save();
+
+        return plan;
+    }
+
+    const revisionesAprobadas =
+        plan.revision.pedagogia.estado === "aprobado" &&
+        plan.revision.sst.estado === "aprobado" &&
+        plan.revision.coordinacion.estado === "aprobado";
+
+    if (revisionesAprobadas) {
+        plan.estado = "aprobado";
+    }
+
+    await plan.save();
+
+    return plan;
+};
+
+
+
+const registrarRevisionPlanId = async (
+    id,
+    data,
+    usuario,
+    tipoRevision
+) => {
+
+    const plan = await obtenerPlanFunction(id);
+
+    if (plan.estado !== "en revision") {
+
+        const error = new Error(
+            "Solo se pueden registrar revisiones de planes en estado en revision"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const usuarioActual = await usuarioModel.findById(
+        usuario.usuarioId
+    );
+
+    if (!usuarioActual) {
+
+        const error = new Error(
+            "Usuario autenticado no encontrado"
+        );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    if (usuarioActual.estado !== "Activo") {
+
+        const error = new Error(
+            "El usuario se encuentra inactivo"
+        );
+
+        error.statusCode = 403;
+
+        throw error;
+    }
+
+    const { estado, observaciones } = data;
+
+    const estadosPermitidos = [
+        "aprobado",
+        "no aprobado"
+    ];
+
+    if (!estadosPermitidos.includes(estado)) {
+
+        const error = new Error(
+            "El estado de revisión debe ser 'aprobado' o 'no aprobado'"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    const revisionActual = plan.revision?.[tipoRevision];
+
+    if (!revisionActual) {
+
+        const error = new Error(
+            "La revisión correspondiente al rol no existe"
+        );
+
+        error.statusCode = 500;
+
+        throw error;
+    }
+
+    if (
+        revisionActual.estado === "aprobado" ||
+        revisionActual.estado === "no aprobado"
+    ) {
+        const error = new Error(
+            "El usuario ya registró la revisión correspondiente"
+        );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
+    revisionActual.usuarioId = usuarioActual._id;
+
+    revisionActual.nombre =
+        `${usuarioActual.nombre} ${usuarioActual.apellido}`;
+
+    revisionActual.firma = usuarioActual.firma;
+
+    revisionActual.estado = estado;
+
+    revisionActual.fecha = new Date();
+
+    if (observaciones) {
+        plan.observaciones = observaciones;
+    }
+
+    if (estado === "no aprobado") {
+
+        plan.estado = "borrador";
+
+    } else {
+        const todasAprobadas =
+            plan.revision.sst?.estado === "aprobado" &&
+            plan.revision.pedagogia?.estado === "aprobado" &&
+            plan.revision.coordinacion?.estado === "aprobado";
+
+        if (todasAprobadas) {
+            plan.estado = "aprobado";
+        }
+    }
+    await plan.save();
+
+    return plan;
+};
 
 export default {
     ...crud,
@@ -1060,6 +1415,8 @@ export default {
     registrarSeguridadVialId,
     registrarContextoAcademicoId,
     registrarArticulacionFormativaId,
-    registrarPlanTrabajoId
+    registrarPlanTrabajoId,
+    registrarRevision,
+    registrarRevisionPlanId
 };
 

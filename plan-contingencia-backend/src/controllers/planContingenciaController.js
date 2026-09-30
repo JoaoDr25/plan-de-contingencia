@@ -4,7 +4,7 @@ import { sendSuccess } from '../utils/apiResponse.js';
 export const crearPlan = async (req, res, next) => {
     try {
         const nuevoPlan = await planContingenciaService.create(req.body);
-        
+
         sendSuccess(res, {
             statusCode: 201,
             message: "Plan de contingencia creado exitosamente",
@@ -18,7 +18,10 @@ export const crearPlan = async (req, res, next) => {
 
 export const listarPlanes = async (req, res, next) => {
     try {
-        const listar = await planContingenciaService.getAll(req.query);
+        const listar = await planContingenciaService.getAll(
+            req.query,
+            req.usuario
+        );
 
         sendSuccess(res, {
             message: "Planes de contingencia listados exitosamente",
@@ -32,8 +35,11 @@ export const listarPlanes = async (req, res, next) => {
 
 export const obtenerPlanId = async (req, res, next) => {
     try {
-        const obtenerId = await planContingenciaService.getById(req.params.id);
-
+        const obtenerId =
+            await planContingenciaService.getById(
+                req.params.id,
+                req.usuario
+            );
         sendSuccess(res, {
             message: "Plan de contingencia obtenido exitosamente",
             data: obtenerId
@@ -46,7 +52,11 @@ export const obtenerPlanId = async (req, res, next) => {
 
 export const actualizarPlanId = async (req, res, next) => {
     try {
-        const actualizar = await planContingenciaService.updateById(req.params.id, req.body);
+        const actualizar =
+            await planContingenciaService.updateById(
+                req.params.id,
+                req.body
+            );
 
         sendSuccess(res, {
             message: "Plan actualizado correctamente",
@@ -62,14 +72,18 @@ export const cambiarEstadoPlanId = async (req, res, next) => {
     try {
         const { estado } = req.body;
 
-        const cambiarEstado = await planContingenciaService.cambiarEstadoId(req.params.id, estado)
+        const cambiarEstado = await planContingenciaService.cambiarEstadoId(
+            req.params.id,
+            estado,
+            req.usuario
+        )
 
         sendSuccess(res, {
             message: `Estado actualizado a ${estado} exitosamente`,
             data: cambiarEstado
         });
     } catch (error) {
-      next(error);
+        next(error);
     }
 };
 
@@ -97,14 +111,14 @@ export const generarPlan = async (req, res, next) => {
             data: generar
         });
     } catch (error) {
-       next(error);
+        next(error);
     }
 };
 
 
 export const generarPdf = async (req, res, next) => {
     try {
-        
+
         const pdfBuffer = await planContingenciaService.generarPdfId(req.params.id);
 
         res.setHeader(
@@ -137,7 +151,7 @@ export const asociarRiesgosPlan = async (req, res, next) => {
             data: asociarRiesgo
         });
     } catch (error) {
-       next(error);
+        next(error);
     }
 }
 
@@ -151,7 +165,7 @@ export const obtenerRiesgosPlan = async (req, res, next) => {
             data: obtenerRiesgo
         });
     } catch (error) {
-       next(error);
+        next(error);
     }
 }
 
@@ -165,7 +179,7 @@ export const eliminarRiesgosPlan = async (req, res, next) => {
             data: eliminarRiesgo
         });
     } catch (error) {
-       next(error);
+        next(error);
     }
 }
 
@@ -245,7 +259,7 @@ export const seleccionarEpp = async (req, res, next) => {
 
 export const registrarSeguridadVial = async (req, res, next) => {
     try {
-        const seguridadVial = await planContingenciaService.registrarSeguridadVialId(req.params.id, req. body);
+        const seguridadVial = await planContingenciaService.registrarSeguridadVialId(req.params.id, req.body);
         sendSuccess(res, {
             message: "Seguridad vial registrada correctamente",
             data: seguridadVial
@@ -265,7 +279,7 @@ export const registrarContextoAcademico = async (req, res, next) => {
             data: contextoAcademico
         });
     } catch (error) {
-     next(error);
+        next(error);
     }
 }
 
@@ -279,7 +293,7 @@ export const registrarArticulacionFormativa = async (req, res, next) => {
             data: articulacionFormativa
         });
     } catch (error) {
-      next(error);
+        next(error);
     }
 }
 
@@ -293,6 +307,27 @@ export const registrarPlanTrabajo = async (req, res, next) => {
             data: planTrabajo
         });
     } catch (error) {
-       next(error);
+        next(error);
     }
 }
+
+
+export const registrarRevisionPlan = async (req, res, next) => {
+
+    try {
+        const revision = await planContingenciaService.registrarRevisionPlanId(
+            req.params.id,
+            req.body,
+            req.usuario,
+            req.tipoRevision
+        );
+
+        sendSuccess(res, {
+            message: "Revisión registrada correctamente",
+            data: revision
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};

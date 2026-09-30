@@ -17,4 +17,4 @@ export const autorizarRoles = (...rolesPermitidos) => {
 
         next();
     };
-};
+}; // Middelware actualmente sin uso pero se conserva para posible uso futuro validacion de roles permitidos en las rutas.
