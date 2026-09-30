@@ -1,37 +1,40 @@
-import usuarioService from 'src/services/modules/usuarioService.js'
+import api from './api.js'
+
+export async function validarCredenciales(documento, correo) {
+  try {
+    await api.post('/auth/validar-credenciales', { documento, correoInstitucional: correo })
+    return { success: true }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || 'No fue posible validar las credenciales',
+    }
+  }
+}
 
 export async function login(documento, correo) {
-  let usuarios = []
-
   try {
-    usuarios = await usuarioService.getUsuarios({ documento })
-  } catch {
+    const { data } = await api.post('/auth/login', { documento, correoInstitucional: correo })
+    return { success: true, ...data.data }
+  } catch (error) {
     return {
       success: false,
-      message: 'No fue posible validar las credenciales, intente nuevamente',
+      message:
+        error.response?.data?.message ||
+        'No fue posible validar las credenciales, intente nuevamente',
     }
   }
+}
 
-  const user = usuarios.find((usuario) => {
-    return usuario.correo?.toLowerCase() === correo.toLowerCase()
-  })
-
-  if (!user) {
+export async function verificarCodigo(usuarioId, codigo) {
+  try {
+    const { data } = await api.post('/auth/verificar-codigo', { usuarioId, codigo })
+    return { success: true, ...data.data }
+  } catch (error) {
     return {
       success: false,
-      message: 'Documento o correo institucional incorrecto',
+      message:
+        error.response?.data?.message || 'No fue posible validar el código, intente nuevamente',
     }
-  }
-
-  if (user.estado !== 'Activo') {
-    return {
-      success: false,
-      message: 'El usuario se encuentra inactivo',
-    }
-  }
-
-  return {
-    success: true,
-    user,
   }
 }

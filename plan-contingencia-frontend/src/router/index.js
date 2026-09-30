@@ -35,9 +35,9 @@ export default defineRouter(({ store }) => {
   })
 
   const authStore = useAuthStore(store)
-  authStore.hydrate()
 
-  Router.beforeEach((to) => {
+  Router.beforeEach(async (to) => {
+    await authStore.hydrate()
     const requiresAuth = to.matched.some((route) => route.meta.requiresAuth === true)
     const requiredRoles = to.meta.roles || []
 

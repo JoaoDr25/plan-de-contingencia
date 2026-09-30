@@ -1,7 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { login as authenticateUser } from 'src/services/auth/authService'
-import usuarioService from 'src/services/modules/usuarioService.js'
+import {
+  validarCredenciales as validateCredentials,
+  login as authenticateUser,
+  verificarCodigo as verifyCode,
+} from 'src/services/auth/authService'
+import api from 'src/services/auth/api.js'
 
 const AUTH_STORAGE_KEY = 'plan-contingencia.auth'
 
@@ -13,39 +17,39 @@ function normalizeRole(value) {
 
 export const useAuthStore = defineStore('auth', () => {
   const currentUser = ref(null)
+  const token = ref(null)
+  let hydrated = false
 
   const isAuthenticated = computed(() => {
-    return currentUser.value !== null
+    return currentUser.value !== null && token.value !== null
   })
 
   const role = computed(() => {
     return normalizeRole(currentUser.value?.rol)
   })
 
+  async function validarCredenciales(documento, correo) {
+    return validateCredentials(documento, correo)
+  }
+
   async function login(documento, correo) {
-    const result = await authenticateUser(documento, correo)
+    return authenticateUser(documento, correo)
+  }
 
-    if (!result.success) {
-      return result
+  async function verificarCodigo(usuarioId, codigo) {
+    const result = await verifyCode(usuarioId, codigo)
+    if (result.success) {
+      token.value = result.token
+      currentUser.value = { ...result.usuario, _id: result.usuario.id }
+      hydrated = true
+      persistSession()
     }
-
-    currentUser.value = result.user
-    persistSession()
-
-    if (result.user?._id) {
-      try {
-        currentUser.value = await usuarioService.registrarAcceso(result.user._id)
-        persistSession()
-      } catch (error) {
-        console.error('No se pudo registrar el último acceso:', error)
-      }
-    }
-
     return result
   }
 
   function logout() {
     currentUser.value = null
+    token.value = null
 
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem(AUTH_STORAGE_KEY)
@@ -53,9 +57,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function hydrate() {
-    if (typeof window === 'undefined') {
+    if (hydrated || typeof window === 'undefined') {
       return
     }
+
+    hydrated = true
 
     const storedSession = window.localStorage.getItem(AUTH_STORAGE_KEY)
 
@@ -64,14 +70,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     try {
-      const storedUser = JSON.parse(storedSession)
-      currentUser.value = storedUser
-
-      if (storedUser?._id) {
-        currentUser.value = await usuarioService.getUsuarioById(storedUser._id)
-        currentUser.value = await usuarioService.registrarAcceso(storedUser._id)
-        persistSession()
-      }
+      const stored = JSON.parse(storedSession)
+      if (!stored?.token) throw new Error('Sesión sin token')
+      token.value = stored.token
+      const { data } = await api.get('/auth/me')
+      currentUser.value = data.data
+      persistSession()
     } catch {
       logout()
     }
@@ -79,7 +83,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   function persistSession() {
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser.value))
+      window.localStorage.setItem(
+        AUTH_STORAGE_KEY,
+        JSON.stringify({ token: token.value, user: currentUser.value }),
+      )
     }
   }
 
@@ -91,7 +98,9 @@ export const useAuthStore = defineStore('auth', () => {
     currentUser,
     isAuthenticated,
     role,
+    validarCredenciales,
     login,
+    verificarCodigo,
     logout,
     hydrate,
     hasRole,

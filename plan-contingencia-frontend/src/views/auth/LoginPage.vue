@@ -17,10 +17,17 @@
                 <!-- <p>
                                     Ingrese sus Credenciales Institucionales
                                 </p> -->
-                <p>INGRESE SUS CREDENCIALES INSTITUCIONALES</p>
+                <p v-if="!credentialsValidated">INGRESE SUS CREDENCIALES INSTITUCIONALES</p>
+                <p v-else-if="!pendingUserId">SOLICITE SU CÓDIGO DE VERIFICACIÓN</p>
+                <p v-else>VERIFIQUE SU CÓDIGO</p>
               </div>
 
-              <q-form ref="loginForm" class="login-page__form" @submit.prevent="handleLogin">
+              <q-form
+                v-if="!credentialsValidated"
+                ref="loginForm"
+                class="login-page__form"
+                @submit.prevent="handleLogin"
+              >
                 <BaseInput
                   v-model="form.documento"
                   label="Documento"
@@ -61,6 +68,67 @@
                   />
                 </div>
               </q-form>
+              <div v-else-if="!pendingUserId" class="login-page__form">
+                <p class="login-page__code-message">
+                  Para acceder al módulo de plan de contingencia, genera un código de verificación
+                  que será enviado a tus correos registrados.
+                </p>
+                <div class="login-page__submit">
+                  <PrimaryActionButton
+                    label="ENVIAR CÓDIGO"
+                    size="sm"
+                    :loading="loading"
+                    @click="requestCode"
+                  />
+                </div>
+                <div class="login-page__code-actions">
+                  <q-btn
+                    flat
+                    color="primary"
+                    label="Cambiar credenciales"
+                    :disable="loading"
+                    @click="resetCode"
+                  />
+                </div>
+              </div>
+              <q-form v-else ref="codeForm" class="login-page__form" @submit.prevent="handleVerify">
+                <p class="login-page__code-message">
+                  Para acceder al módulo de plan de contingencia, genera un código de verificación
+                  que será enviado a tus correos registrados.
+                </p>
+                <BaseInput
+                  v-model="codigo"
+                  label="Código de verificación"
+                  type="text"
+                  :maxlength="6"
+                  :disable="loading"
+                  :rules="[(val) => /^\d{6}$/.test(val) || 'Ingresa el código de seis dígitos']"
+                />
+                <div class="login-page__submit">
+                  <PrimaryActionButton
+                    type="submit"
+                    label="VERIFICAR"
+                    size="sm"
+                    :loading="loading"
+                  />
+                </div>
+                <div class="login-page__code-actions">
+                  <q-btn
+                    flat
+                    color="primary"
+                    label="Reenviar código"
+                    :disable="loading"
+                    @click="requestCode"
+                  />
+                  <q-btn
+                    flat
+                    color="primary"
+                    label="Cambiar credenciales"
+                    :disable="loading"
+                    @click="resetCode"
+                  />
+                </div>
+              </q-form>
             </q-card-section>
           </q-card>
         </div>
@@ -84,9 +152,13 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 const loginForm = ref(null)
+const codeForm = ref(null)
 
 const loading = ref(false)
 const focusedField = ref('')
+const credentialsValidated = ref(false)
+const pendingUserId = ref(null)
+const codigo = ref('')
 
 const form = ref({
   documento: '',
@@ -106,15 +178,63 @@ async function handleLogin() {
   }
 
   loading.value = true
-
   try {
-    const result = await authStore.login(form.value.documento.trim(), form.value.correo.trim())
+    const result = await authStore.validarCredenciales(
+      String(form.value.documento).trim(),
+      form.value.correo.trim(),
+    )
+    if (!result.success && result.message === 'Las credenciales proporcionadas no son válidas') {
+      notifyWarning('El documento o correo institucional no coinciden')
+      return
+    }
+    if (!result.success) {
+      notifyError(result.message)
+      return
+    }
+    credentialsValidated.value = true
+  } finally {
+    loading.value = false
+  }
+}
 
-    if (!result.success && result.message === 'Documento o correo institucional incorrecto') {
+async function requestCode() {
+  loading.value = true
+  try {
+    const result = await authStore.login(
+      String(form.value.documento).trim(),
+      form.value.correo.trim(),
+    )
+
+    if (!result.success && result.message === 'Las credenciales proporcionadas no son válidas') {
       notifyWarning('El documento o correo institucional no coinciden')
       return
     }
 
+    if (!result.success) {
+      notifyError(result.message)
+      return
+    }
+
+    pendingUserId.value = result.usuarioId
+    codigo.value = ''
+    notifySuccess('Código de verificación enviado')
+  } finally {
+    loading.value = false
+  }
+}
+
+function resetCode() {
+  credentialsValidated.value = false
+  pendingUserId.value = null
+  codigo.value = ''
+}
+
+async function handleVerify() {
+  if (!(await codeForm.value.validate())) return
+
+  loading.value = true
+  try {
+    const result = await authStore.verificarCodigo(pendingUserId.value, codigo.value.trim())
     if (!result.success) {
       notifyError(result.message)
       return
@@ -200,6 +320,18 @@ async function handleLogin() {
   display: flex;
   justify-content: center;
   padding-top: $spacing-xs;
+}
+
+.login-page__code-message {
+  text-align: center;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+
+.login-page__code-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .login-page__submit :deep(.q-icon.on-left) {
