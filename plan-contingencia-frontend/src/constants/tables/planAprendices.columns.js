@@ -18,6 +18,11 @@ export const PLAN_APRENDICES_COLUMNS = [
     name: 'tipo',
     label: 'Tipo de documento',
     field: 'tipo',
+    format: (value) => ({
+      CC: 'Cédula de Ciudadanía',
+      TI: 'Tarjeta de Identidad',
+      CE: 'Cédula de Extranjería',
+    })[String(value ?? '').trim().toUpperCase()] || value,
     align: 'left',
     sortable: true,
   },

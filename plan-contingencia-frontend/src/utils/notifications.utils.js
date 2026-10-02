@@ -20,10 +20,21 @@ export function notifyWarning(message) {
   })
 }
 
-export function notifyError(message) {
+function getErrorMessage(error) {
+  if (typeof error === 'string') return error
+
+  return (
+    error?.response?.data?.message ||
+    error?.response?.data?.error ||
+    error?.message ||
+    'Ocurrió un error inesperado'
+  )
+}
+
+export function notifyError(error) {
   Notify.create({
     type: 'negative',
-    message,
+    message: getErrorMessage(error),
     icon: false,
     position: 'bottom',
     timeout: 1800,

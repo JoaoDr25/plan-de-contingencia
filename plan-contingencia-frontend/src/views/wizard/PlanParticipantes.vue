@@ -34,47 +34,20 @@
     </div>
 
     <div class="participants-toolbar">
-      <BaseSearch
-        v-model="search"
-        placeholder="Buscar aprendiz por nombre o documento..."
-        icon="search"
-        clearable
-      />
+      <BaseSearch v-model="search" placeholder="Buscar aprendiz por nombre o documento..." icon="search" clearable />
 
       <div class="participants-toolbar__actions">
-        <q-btn
-          class="participant-action-btn participant-action-btn--select"
-          flat
-          no-caps
-          icon="check_box"
-          label="Seleccionar todos"
-          @click="selectAll"
-        />
+        <q-btn class="participant-action-btn participant-action-btn--select" flat no-caps icon="check_box"
+          label="Seleccionar todos" @click="selectAll" />
 
-        <q-btn
-          class="participant-action-btn"
-          flat
-          no-caps
-          icon="clear_all"
-          label="Limpiar selección"
-          @click="clearSelection"
-        />
+        <q-btn class="participant-action-btn" flat no-caps icon="clear_all" label="Limpiar selección"
+          @click="clearSelection" />
       </div>
     </div>
 
-    <BaseTable
-      :rows="paginatedRows"
-      :columns="columns"
-      row-key="numero"
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      :rows-per-page="rowsPerPage"
-      :start="startRow"
-      :end="endRow"
-      :total="filteredRows.length"
-      @change-page="currentPage = $event"
-      @change-rows-per-page="setRowsPerPage"
-    >
+    <BaseTable :rows="paginatedRows" :columns="columns" :loading="loading" row-key="numero" :current-page="currentPage"
+      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+      :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
       <template #body-cell-nombre="props">
         <q-td :props="props">
           {{ props.row.nombre }}
@@ -113,12 +86,9 @@
 
       <template #body-cell-marcar="props">
         <q-td :props="props">
-          <q-checkbox
-            class="checkbox-selection"
-            :model-value="isSelected(props.row._id)"
+          <q-checkbox class="checkbox-selection" :model-value="isSelected(props.row._id)"
             :disable="props.row.estado !== 'Activo'"
-            @update:model-value="(value) => handleSelection(props.row._id, value)"
-          />
+            @update:model-value="(value) => handleSelection(props.row._id, value)" />
         </q-td>
       </template>
 
@@ -139,7 +109,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 
 import BaseSearch from 'src/components/forms/BaseSearch.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'
@@ -148,9 +118,9 @@ import StatusChip from 'src/components/states/StatusChip.vue'
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
-import { APRENDICES_MOCK } from 'src/mocks/modules/aprendices.mock'
-import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock'
 import { PLAN_APRENDICES_COLUMNS } from 'src/constants/tables/planAprendices.columns'
+
+import aprendizService from 'src/services/modules/aprendizService'
 
 const props = defineProps({
   modelValue: {
@@ -167,21 +137,37 @@ const search = ref('')
 
 const columns = PLAN_APRENDICES_COLUMNS
 
-const programa = computed(() => {
-  return PROGRAMAS_MOCK.find((item) => item._id === plan.programaFormacionId)
-})
-
 const programaNombre = computed(() => {
-  return plan.programaFormacionNombre || programa.value?.nombre || '—'
+  return plan.programaFormacionNombre || '—'
 })
 
 const ficha = computed(() => {
-  return programa.value?.ficha || '—'
+  return plan.ficha || '—'
 })
 
-const aprendices = computed(() => {
-  return APRENDICES_MOCK
-})
+const aprendices = ref([])
+const loading = ref(false)
+
+async function loadAprendices() {
+  if (!plan.programaFormacionId) {
+    aprendices.value = []
+    return
+  }
+  loading.value = true
+
+  try {
+    const response = await aprendizService.getAprendices({
+      programaFormacionId: plan.programaFormacionId,
+    })
+
+    aprendices.value = response.data ?? []
+  } catch (error) {
+    console.error(error)
+    aprendices.value = []
+  } finally {
+    loading.value = false
+  }
+}
 
 const filteredAprendices = computed(() => {
   const value = search.value.trim().toLowerCase()
@@ -224,29 +210,33 @@ const selectedCount = computed(() => {
 })
 
 function isSelected(id) {
-  return plan.aprendicesId.includes(id)
+  return plan.aprendicesId.some(
+    (selectedId) => String(selectedId) === String(id),
+  )
 }
 
 function handleSelection(id, selected) {
+  const normalizedId = String(id)
+
   if (selected) {
-    if (!plan.aprendicesId.includes(id)) {
-      plan.aprendicesId.push(id)
+    if (!plan.aprendicesId.some((selectedId) => String(selectedId) === normalizedId)) {
+      plan.aprendicesId.push(normalizedId)
     }
   } else {
-    const index = plan.aprendicesId.indexOf(id)
-
+    const index = plan.aprendicesId.findIndex(
+      (selectedId) => String(selectedId) === normalizedId,
+    )
     if (index !== -1) {
       plan.aprendicesId.splice(index, 1)
     }
   }
-
   emit('update:modelValue', plan)
 }
 
 function selectAll() {
   const activeIds = filteredAprendices.value
     .filter((aprendiz) => aprendiz.estado === 'Activo')
-    .map((aprendiz) => aprendiz._id)
+    .map((aprendiz) => String(aprendiz._id ?? aprendiz.id))
 
   const selectedIds = new Set(plan.aprendicesId)
 
@@ -273,6 +263,10 @@ function validate() {
 
   return true
 }
+
+onMounted(() => {
+  loadAprendices()
+})
 
 defineExpose({
   validate,

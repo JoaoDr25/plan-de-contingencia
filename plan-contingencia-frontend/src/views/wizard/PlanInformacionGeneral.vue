@@ -212,7 +212,7 @@
 </template>
 
 <script setup>
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref, onMounted } from 'vue'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
@@ -220,15 +220,36 @@ import BaseTextarea from 'src/components/forms/BaseTextarea.vue'
 import BaseDatePicker from 'src/components/forms/BaseDatePicker.vue'
 import BaseTimePicker from 'src/components/forms/BaseTimePicker.vue'
 
-import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock'
-import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
+import programaService from 'src/services/modules/programaService'
+import actividadService from 'src/services/modules/actividadService'
 
 import {
   TIPO_TRANSPORTE_OPTIONS,
   CLASIFICACION_INFORMACION_OPTIONS,
 } from 'src/constants/system/plan.constant'
 
+const programas = ref([])
+const actividades = ref([])
+const loadingCatalogos = ref(false)
+
+async function cargarCatalogos() {
+  loadingCatalogos.value = true
+
+  try {
+    const [programasData, actividadesData] = await Promise.all([
+      programaService.getProgramas(),
+      actividadService.getActividades(),
+    ])
+
+    programas.value = programasData
+    actividades.value = actividadesData
+  } finally {
+    loadingCatalogos.value = false
+  }
+}
+
 const currentDate = new Date()
+
 const today = [
   currentDate.getFullYear(),
   String(currentDate.getMonth() + 1).padStart(2, '0'),
@@ -247,21 +268,23 @@ const emit = defineEmits(['update:modelValue'])
 const form = reactive(props.modelValue)
 
 const programaOptions = computed(() => {
-  return PROGRAMAS_MOCK.filter((programa) => programa.estado === 'Activo').map((programa) => ({
-    label: `${programa.nombre} - ${programa.ficha}`,
-    value: programa._id,
-  }))
+  return programas.value
+    .filter((programa) => programa.estado === 'Activo')
+    .map((programa) => ({
+      label: `${programa.nombre} - ${programa.ficha ?? 'Sin ficha'}`,
+      value: programa._id,
+    }))
 })
 
 const actividadOptions = computed(() => {
-  return ACTIVIDADES_MOCK.map((actividad) => ({
+  return actividades.value.map((actividad) => ({
     label: actividad.nombre,
     value: actividad._id,
   }))
 })
 
 function handleProgramaChange(programaId) {
-  const programa = PROGRAMAS_MOCK.find((item) => item._id === programaId)
+  const programa = programas.value.find((item) => item._id === programaId)
 
   form.programaFormacionNombre = programa?.nombre ?? ''
   form.ficha = programa?.ficha ?? ''
@@ -317,6 +340,11 @@ function timeToMinutes(value) {
 
   return hours * 60 + minutes
 }
+
+onMounted(() => {
+  cargarCatalogos()
+})
+
 </script>
 
 <style scoped lang="scss">

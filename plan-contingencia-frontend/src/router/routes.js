@@ -40,7 +40,7 @@ const routes = [
         component: () => import('src/views/plans/PlanesPage.vue'),
       },
       {
-        path: 'planes/crear',
+        path: 'planes/crear/:id?',
         name: 'planes.create',
         meta: {
           title: 'Planes de Contingencia',

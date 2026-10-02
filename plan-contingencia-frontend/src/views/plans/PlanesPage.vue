@@ -7,36 +7,17 @@
     <CrudToolbar>
       <template #center>
         <BaseFilterBar class="planes-page-filter-bar">
-          <BaseSearch
-            v-model="searchText"
-            size="filter"
-            placeholder="Buscar por código, programa o actividad..."
-          />
+          <BaseSearch v-model="searchText" size="filter" placeholder="Buscar por código, programa o actividad..." />
 
-          <BaseSelect
-            v-model="selectedStatus"
-            label="Estado"
-            :options="PLAN_STATUS_OPTIONS"
-            size="filter"
-            :show-icon="false"
-          />
+          <BaseSelect v-model="selectedStatus" label="Estado" :options="PLAN_STATUS_OPTIONS" size="filter"
+            :show-icon="false" />
         </BaseFilterBar>
       </template>
     </CrudToolbar>
 
-    <BaseTable
-      :rows="paginatedRows"
-      :columns="PLANES_COLUMNS"
-      :loading="loading"
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      :rows-per-page="rowsPerPage"
-      :start="startRow"
-      :end="endRow"
-      :total="filteredRows.length"
-      @change-page="currentPage = $event"
-      @change-rows-per-page="setRowsPerPage"
-    >
+    <BaseTable :rows="paginatedRows" :columns="PLANES_COLUMNS" :loading="loading" :current-page="currentPage"
+      :total-pages="totalPages" :rows-per-page="rowsPerPage" :start="startRow" :end="endRow"
+      :total="filteredRows.length" @change-page="currentPage = $event" @change-rows-per-page="setRowsPerPage">
       <template #body-cell-estado="props">
         <q-td :props="props">
           <StatusChip :status="props.value" />
@@ -45,34 +26,24 @@
 
       <template #body-cell-opciones="props">
         <q-td :props="props">
-          <PlanActions
-            :actions="getPlanActions(props.row, authStore.role, authStore.currentUser)"
-            @view="viewPlan(props.row)"
-            @edit="editPlan(props.row)"
-            @delete="deletePlan(props.row)"
-          />
+          <PlanActions :actions="getPlanActions(props.row, authStore.role, authStore.currentUser)"
+            @view="viewPlan(props.row)" @edit="editPlan(props.row)" @delete="deletePlan(props.row)" />
         </q-td>
       </template>
     </BaseTable>
 
-    <BaseConfirmationDialog
-      v-model="showConfirmation"
-      title="Eliminar plan"
-      confirm-label="Eliminar"
-      cancel-label="Cancelar"
-      variant="danger"
-      @confirm="confirmDeletePlan"
-    />
+    <BaseConfirmationDialog v-model="showConfirmation" title="Eliminar plan" confirm-label="Eliminar"
+      cancel-label="Cancelar" variant="danger" @confirm="confirmDeletePlan" />
   </BasePage>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
 import { PLANES_COLUMNS } from 'src/constants/tables/planes.columns'
-import { PLANES_MOCK } from 'src/mocks/plans/planes.mock'
+// import { PLANES_MOCK } from 'src/mocks/plans/planes.mock'
 import { useAuthStore } from 'src/stores/auth.store'
 
 import { usePlansTable } from 'src/composables/usePlanTable'
@@ -91,14 +62,30 @@ import BaseSearch from 'src/components/forms/BaseSearch.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
+import planContingenciaService from 'src/services/plans/planContingenciaService'
+
 const router = useRouter()
 const route = useRoute()
 
-const sourceRows = ref(PLANES_MOCK)
+const sourceRows = ref([])
 
 const authStore = useAuthStore()
 
 const loading = ref(false)
+
+async function loadPlanes() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await planContingenciaService.getPlanes()
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  loadPlanes()
+})
 
 const showConfirmation = ref(false)
 const selectedPlan = ref(null)
@@ -158,18 +145,23 @@ function isEditableDraft(plan) {
   )
 }
 
-function confirmDeletePlan() {
+async function confirmDeletePlan() {
   if (!selectedPlan.value) {
     return
   }
 
-  sourceRows.value = sourceRows.value.filter((plan) => plan._id !== selectedPlan.value._id)
+  await planContingenciaService.deletePlan(selectedPlan.value._id)
+
+  sourceRows.value = sourceRows.value.filter(
+    (plan) => plan._id !== selectedPlan.value._id
+  )
 
   notifySuccess('Plan eliminado correctamente')
 
   selectedPlan.value = null
   showConfirmation.value = false
 }
+
 </script>
 
 <style scoped lang="scss">

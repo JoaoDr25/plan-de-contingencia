@@ -112,14 +112,13 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-
-import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
-import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock'
-import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock'
+import { onMounted, computed, ref } from 'vue'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
 import BaseDataCard from 'src/components/base/BaseDataCard.vue'
+
+import actividadService from 'src/services/modules/actividadService'
+import peligroService from 'src/services/modules/peligroService'
 
 const props = defineProps({
   modelValue: {
@@ -131,6 +130,10 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const plan = props.modelValue
+
+const peligros = ref([])
+const actividad = ref(null)
+const loading = ref(false)
 
 if (!Array.isArray(plan.riesgosId)) {
   plan.riesgosId = []
@@ -175,38 +178,62 @@ function onDescriptionLeave(event) {
 }
 
 const actividadNombre = computed(() => {
-  const actividad = ACTIVIDADES_MOCK.find((item) => item._id === plan.actividadId)
-
-  return actividad?.nombre || '—'
+  return actividad.value?.nombre || '—'
 })
 
 const riskGroups = computed(() => {
-  return PELIGROS_MOCK.map((peligro) => ({
-    peligro,
-    riesgos: RIESGOS_MOCK.filter((riesgo) => {
-      const peligroIds = Array.isArray(riesgo.peligroId) ? riesgo.peligroId : [riesgo.peligroId]
+  return peligros.value
+    .map((peligro) => ({
+      peligro,
+      riesgos: peligro.riesgosDetalle ?? [],
+    }))
+    .filter((group) => group.riesgos.length > 0)
+})
 
-      return peligroIds.includes(peligro._id)
-    }),
-  })).filter((group) => group.riesgos.length > 0)
+async function loadData() {
+  loading.value = true
+
+  try {
+    const [actividadData, peligrosData] = await Promise.all([
+      actividadService.getActividadById(plan.actividadId),
+      peligroService.getPeligros(),
+    ])
+
+    const actividadPeligrosIds = new Set((actividadData.peligrosIds ?? []).map(String))
+
+    actividad.value = actividadData
+    peligros.value = peligrosData.filter((peligro) => actividadPeligrosIds.has(String(peligro._id)))
+
+    restoreSelectedRiskRelations()
+  } catch (error) {
+    console.error('Error cargando información de riesgos:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  loadData()
 })
 
 function restoreSelectedRiskRelations() {
-  const selectedIds = new Set(plan.riesgosId)
+  const selectedIds = new Set(plan.riesgosId.map(String))
   const relations = new Set()
+  const visibleSelectedIds = new Set()
 
   riskGroups.value.forEach((group) => {
     group.riesgos.forEach((riesgo) => {
-      if (selectedIds.has(riesgo._id)) {
+      if (selectedIds.has(String(riesgo._id))) {
         relations.add(getRelationKey(group.peligro._id, riesgo._id))
+        visibleSelectedIds.add(riesgo._id)
       }
     })
   })
 
   selectedRiskRelations.value = relations
+  plan.riesgosId = Array.from(visibleSelectedIds)
+  emit('update:modelValue', plan)
 }
-
-restoreSelectedRiskRelations()
 
 const selectedCount = computed(() => {
   return selectedRiskRelations.value.size

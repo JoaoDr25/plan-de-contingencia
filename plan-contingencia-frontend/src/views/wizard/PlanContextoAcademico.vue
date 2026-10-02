@@ -283,6 +283,7 @@
 </template>
 
 <script setup>
+
 import { reactive } from 'vue'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
@@ -356,9 +357,11 @@ function validate() {
 defineExpose({
   validate,
 })
+
 </script>
 
 <style scoped lang="scss">
+
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
