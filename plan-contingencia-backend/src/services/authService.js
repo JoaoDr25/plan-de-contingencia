@@ -204,20 +204,6 @@ const login = async (documento, correoInstitucional) => {
         });
     }
 
-
-    // if (modoPruebas) {
-    //     console.warn(
-    //         `[AUTH: SOLO PRUEBAS LOCALES] Código de verificación: ${codigo}`
-    //     );
-    // } else {
-    //     await enviarCodigoVerificacion({
-    //         destinatarios,
-    //         nombre: `${usuario.nombre} ${usuario.apellido}`,
-    //         codigo,
-    //         minutosExpiracion
-    //     });
-    // } // Genera código en la terminal, comentar al terminar pruebas.
-
     return {
         requiereVerificacion: true,
         usuarioId: usuario._id,
