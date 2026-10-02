@@ -143,12 +143,14 @@ Sistema de Plan de Contingencia
             "No fue posible enviar el código de verificación"
         );
 
+        console.log("RESEND_API_KEY configurada:", Boolean(apiKey));
+        console.log("RESEND_FROM configurado:", Boolean(remitente));
+
         emailError.statusCode = 500;
 
         throw emailError;
     }
 };
-
 export {
     enviarCodigoVerificacion
 };
