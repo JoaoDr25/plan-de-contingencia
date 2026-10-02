@@ -1,3 +1,25 @@
+# Modo demostracion (despliegues sin servicio de correo)
+
+Render gratuito bloquea los puertos SMTP. Para demostraciones, el backend puede
+usar un codigo fijo solo para cuentas ficticias autorizadas, sin enviar correo:
+
+```env
+AUTH_DEMO_MODE=true
+AUTH_DEMO_CODE=123456
+AUTH_DEMO_ALLOWED_EMAILS=cuenta1@dominio.com,cuenta2@dominio.com
+```
+
+- Solo aplica a los correos institucionales de `AUTH_DEMO_ALLOWED_EMAILS`;
+  las demas cuentas siguen usando el envio por SMTP.
+- El codigo conserva expiracion, limite de intentos y uso unico.
+- Si falta el codigo de 6 digitos o la lista, se usa el envio normal.
+- Configura estas variables en Render (Environment) y vuelve a desplegar.
+- No uses cuentas reales en la lista ni compartas el codigo publicamente.
+
+En produccion real, conectada al sistema externo, establece
+`AUTH_DEMO_MODE=false`. El envio original queda comentado en
+`src/services/authService.js` como referencia.
+
 # Pruebas locales de autenticacion sin envio de correo
 
 Para probar usuarios con correos ficticios, configura estas variables en el

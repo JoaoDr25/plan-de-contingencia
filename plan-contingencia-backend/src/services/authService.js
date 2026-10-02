@@ -4,12 +4,44 @@ import jwt from "jsonwebtoken";
 import usuarioModel from "../models/usuarioModel.js";
 import codigoVerificacionModel from "../models/codigoVerificacionModel.js";
 
-import { enviarCodigoVerificacion } from "../utils/VerifyEmail.js"
+import { enviarCodigoVerificacion } from "../utils/verifyEmail.js"
 
 const generarCodigo = () => {
     return crypto
         .randomInt(100000, 1000000)
         .toString();
+};
+
+
+// MODO DEMOSTRACIÓN: solo para despliegues de prueba sin servicio de correo
+// (por ejemplo, Render gratuito, que bloquea SMTP). Usa un código fijo
+// únicamente para las cuentas listadas en AUTH_DEMO_ALLOWED_EMAILS.
+// En producción real, cuando el sistema esté conectado al servicio externo,
+// establecer AUTH_DEMO_MODE=false o eliminar estas variables.
+const obtenerCodigoDemo = (correo) => {
+
+    if (process.env.AUTH_DEMO_MODE?.trim() !== "true") {
+        return null;
+    }
+
+    const codigoDemo = process.env.AUTH_DEMO_CODE?.trim();
+
+    const correosPermitidos = (process.env.AUTH_DEMO_ALLOWED_EMAILS || "")
+        .split(",")
+        .map((item) => item.trim().toLowerCase())
+        .filter(Boolean);
+
+    if (!/^\d{6}$/.test(codigoDemo || "") || correosPermitidos.length === 0) {
+        console.warn(
+            "[AUTH DEMO] AUTH_DEMO_CODE (6 dígitos) y AUTH_DEMO_ALLOWED_EMAILS son obligatorios; se usa el envío normal"
+        );
+
+        return null;
+    }
+
+    return correosPermitidos.includes(correo.trim().toLowerCase())
+        ? codigoDemo
+        : null;
 };
 
 
@@ -109,7 +141,10 @@ const login = async (documento, correoInstitucional) => {
         usado: false
     });
 
-    const codigo = generarCodigo();
+    // Original (producción real): const codigo = generarCodigo();
+    const codigoDemo = obtenerCodigoDemo(usuario.correo);
+
+    const codigo = codigoDemo || generarCodigo();
 
     const modoPruebas =
         process.env.NODE_ENV === "development" &&
@@ -148,20 +183,17 @@ const login = async (documento, correoInstitucional) => {
         );
     }
 
+    // Original (producción real): enviar siempre por correo.
+    // await enviarCodigoVerificacion({
+    //     destinatarios,
+    //     nombre: `${usuario.nombre} ${usuario.apellido}`,
+    //     codigo,
+    //     minutosExpiracion
+    // });
 
-    // Descomentar al terminar pruebas.
-    /*
-    await enviarCodigoVerificacion({
-        destinatarios,
-        nombre: `${usuario.nombre} ${usuario.apellido}`,
-        codigo,
-        minutosExpiracion
-    });
-    */ 
-
-    if (modoPruebas) {
-        console.warn(
-            `[AUTH: SOLO PRUEBAS LOCALES] Código de verificación: ${codigo}`
+    if (codigoDemo) {
+        console.info(
+            `[AUTH DEMO] Envío de correo omitido para la cuenta de demostración ${usuario.correo}`
         );
     } else {
         await enviarCodigoVerificacion({
@@ -170,7 +202,21 @@ const login = async (documento, correoInstitucional) => {
             codigo,
             minutosExpiracion
         });
-    } // Genera código en la terminal, comentar al terminar pruebas.
+    }
+
+
+    // if (modoPruebas) {
+    //     console.warn(
+    //         `[AUTH: SOLO PRUEBAS LOCALES] Código de verificación: ${codigo}`
+    //     );
+    // } else {
+    //     await enviarCodigoVerificacion({
+    //         destinatarios,
+    //         nombre: `${usuario.nombre} ${usuario.apellido}`,
+    //         codigo,
+    //         minutosExpiracion
+    //     });
+    // } // Genera código en la terminal, comentar al terminar pruebas.
 
     return {
         requiereVerificacion: true,
@@ -179,8 +225,9 @@ const login = async (documento, correoInstitucional) => {
         tieneCorreoPersonal: Boolean(
             usuario.correoPersonal
         ),
-        mensaje:
-            "Se ha enviado un código de verificación a los correos registrados"
+        mensaje: codigoDemo
+            ? "Modo demostración: ingrese el código de demostración asignado"
+            : "Se ha enviado un código de verificación a los correos registrados"
     };
 };
 

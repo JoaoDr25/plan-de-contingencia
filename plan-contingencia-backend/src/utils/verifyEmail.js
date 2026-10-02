@@ -1,4 +1,4 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import "dotenv/config";
 
 const enviarCodigoVerificacion = async ({
@@ -21,12 +21,25 @@ const enviarCodigoVerificacion = async ({
         throw error;
     }
 
-    const apiKey = process.env.RESEND_API_KEY?.trim();
-    const remitente = process.env.RESEND_FROM?.trim();
+    const host = process.env.SMTP_HOST?.trim();
+    const port = Number(process.env.SMTP_PORT);
+    const secure = process.env.SMTP_SECURE?.trim();
+    const user = process.env.SMTP_USER?.trim();
+    const pass = process.env.SMTP_PASSWORD;
+    const remitente = process.env.SMTP_FROM?.trim();
 
-    if (!apiKey || !remitente) {
+    if (
+        !host ||
+        !user ||
+        !pass?.trim() ||
+        !remitente ||
+        !Number.isInteger(port) ||
+        port < 1 ||
+        port > 65535 ||
+        !["true", "false"].includes(secure)
+    ) {
         const error = new Error(
-            "RESEND_API_KEY y RESEND_FROM deben estar configurados para enviar el código de verificación"
+            "Configura SMTP_HOST, SMTP_PORT (1-65535), SMTP_SECURE (true o false), SMTP_USER, SMTP_PASSWORD y SMTP_FROM para enviar el código de verificación"
         );
 
         error.statusCode = 500;
@@ -110,9 +123,17 @@ Sistema de Plan de Contingencia
 
     try {
 
-        const resend = new Resend(apiKey);
+        const transporter = nodemailer.createTransport({
+            host,
+            port,
+            secure: secure === "true",
+            auth: {
+                user,
+                pass
+            }
+        });
 
-        const { data, error } = await resend.emails.send({
+        const resultado = await transporter.sendMail({
             from: remitente,
             to: destinatarios,
             subject: asunto,
@@ -120,17 +141,16 @@ Sistema de Plan de Contingencia
             html
         });
 
-        if (error) {
-            throw new Error(error.message);
-        }
-
-        if (!data?.id) {
+        if (
+            !resultado.accepted?.length ||
+            resultado.rejected?.length
+        ) {
             throw new Error(
-                "Resend no confirmó la aceptación del correo"
+                "El servidor SMTP no aceptó todos los destinatarios del código de verificación"
             );
         }
 
-        return data;
+        return resultado;
 
     } catch (error) {
 
@@ -142,9 +162,6 @@ Sistema de Plan de Contingencia
         const emailError = new Error(
             "No fue posible enviar el código de verificación"
         );
-
-        console.log("RESEND_API_KEY configurada:", Boolean(apiKey));
-        console.log("RESEND_FROM configurado:", Boolean(remitente));
 
         emailError.statusCode = 500;
 
