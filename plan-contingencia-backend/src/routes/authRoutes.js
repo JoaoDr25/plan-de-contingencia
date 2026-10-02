@@ -9,7 +9,6 @@ import {
 } from "../controllers/authController.js";
 
 import { autenticarToken } from "../middlewares/authMiddleware.js";
-import { autorizarRoles } from "../middlewares/roleMiddleware.js";
 
 const router = express.Router();
 

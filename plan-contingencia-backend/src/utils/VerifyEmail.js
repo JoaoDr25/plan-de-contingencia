@@ -1,18 +1,5 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import "dotenv/config";
-
-
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === "true",
-
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD
-    }
-});
-
 
 const enviarCodigoVerificacion = async ({
     destinatarios,
@@ -34,9 +21,21 @@ const enviarCodigoVerificacion = async ({
         throw error;
     }
 
+    const apiKey = process.env.RESEND_API_KEY?.trim();
+    const remitente = process.env.RESEND_FROM?.trim();
+
+    if (!apiKey || !remitente) {
+        const error = new Error(
+            "RESEND_API_KEY y RESEND_FROM deben estar configurados para enviar el código de verificación"
+        );
+
+        error.statusCode = 500;
+
+        throw error;
+    }
+
     const asunto =
         "Código de verificación - Plan de Contingencia";
-
 
     const texto = `
 Hola ${nombre},
@@ -53,7 +52,6 @@ Si no realizaste esta solicitud, puedes ignorar este mensaje.
 
 Sistema de Plan de Contingencia
     `.trim();
-
 
     const html = `
         <div style="
@@ -110,19 +108,29 @@ Sistema de Plan de Contingencia
         </div>
     `;
 
-
     try {
 
-        const resultado =
-            await transporter.sendMail({
-                from: process.env.SMTP_FROM,
-                to: destinatarios,
-                subject: asunto,
-                text: texto,
-                html
-            });
+        const resend = new Resend(apiKey);
 
-        return resultado;
+        const { data, error } = await resend.emails.send({
+            from: remitente,
+            to: destinatarios,
+            subject: asunto,
+            text: texto,
+            html
+        });
+
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        if (!data?.id) {
+            throw new Error(
+                "Resend no confirmó la aceptación del correo"
+            );
+        }
+
+        return data;
 
     } catch (error) {
 
@@ -131,10 +139,9 @@ Sistema de Plan de Contingencia
             error
         );
 
-        const emailError =
-            new Error(
-                "No fue posible enviar el código de verificación"
-            );
+        const emailError = new Error(
+            "No fue posible enviar el código de verificación"
+        );
 
         emailError.statusCode = 500;
 
@@ -142,32 +149,6 @@ Sistema de Plan de Contingencia
     }
 };
 
-
-const verificarConexionEmail = async () => {
-
-    try {
-
-        await transporter.verify();
-
-        console.log(
-            "Servidor SMTP conectado correctamente"
-        );
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "No fue posible conectar con el servidor SMTP:",
-            error
-        );
-
-        return false;
-    }
-};
-
-
 export {
-    enviarCodigoVerificacion,
-    verificarConexionEmail
+    enviarCodigoVerificacion
 };
