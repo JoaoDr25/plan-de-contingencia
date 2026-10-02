@@ -111,6 +111,10 @@ const login = async (documento, correoInstitucional) => {
 
     const codigo = generarCodigo();
 
+    const modoPruebas =
+        process.env.NODE_ENV === "development" &&
+        process.env.AUTH_EMAIL_TEST_MODE === "true"; // Para pruebas con correos falsos
+
     const codigoHash = generarCodigoHash(codigo);
 
     const minutosExpiracion =
@@ -144,12 +148,29 @@ const login = async (documento, correoInstitucional) => {
         );
     }
 
+
+    // Descomentar al terminar pruebas.
+    /*
     await enviarCodigoVerificacion({
         destinatarios,
         nombre: `${usuario.nombre} ${usuario.apellido}`,
         codigo,
         minutosExpiracion
     });
+    */ 
+
+    if (modoPruebas) {
+        console.warn(
+            `[AUTH: SOLO PRUEBAS LOCALES] Código de verificación: ${codigo}`
+        );
+    } else {
+        await enviarCodigoVerificacion({
+            destinatarios,
+            nombre: `${usuario.nombre} ${usuario.apellido}`,
+            codigo,
+            minutosExpiracion
+        });
+    } // Genera código en la terminal, comentar al terminar pruebas.
 
     return {
         requiereVerificacion: true,

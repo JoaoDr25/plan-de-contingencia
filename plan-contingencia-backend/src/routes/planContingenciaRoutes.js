@@ -38,7 +38,7 @@ router.get('/planes', listarPlanes);
 router.post('/planes', validarCuerpoNoVacio, crearPlan);
 router.get('/planes/:id', validarObjectId, obtenerPlanId);
 router.put('/planes/:id', validarObjectId, validarCuerpoNoVacio, validarEdicionPlan, actualizarPlanId);
-router.delete('/planes/:id', validarObjectId, eliminarPlanId);
+router.delete('/planes/:id', validarObjectId, validarEdicionPlan, eliminarPlanId);
 
 router.patch('/planes/:id/estado', validarObjectId, validarCuerpoNoVacio, validarEstadoPlan, autorizarTransicionPlan, cambiarEstadoPlanId);
 router.post('/planes/:id/generar', validarObjectId, validarEdicionPlan, generarPlan);

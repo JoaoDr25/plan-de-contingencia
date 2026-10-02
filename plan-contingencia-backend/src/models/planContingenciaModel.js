@@ -94,11 +94,12 @@ const planContingenciaSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    contactoLugar: {
-        type: String,
-        required: true,
-        trim: true
-    },
+    // Actualmente no hace parte del wizard de creación de planes.
+    // contactoLugar: {
+    //     type: String,
+    //     required: true,
+    //     trim: true
+    // },
     riesgosId: [
         {
             type: mongoose.Schema.Types.ObjectId,

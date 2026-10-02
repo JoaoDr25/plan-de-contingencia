@@ -164,10 +164,16 @@ const construirFiltroVisibilidad = (usuario, filter = {}) => {
 
 const getAll = async (filter = {}, usuario) => {
 
-    const listarPlanesId = await populatePlanQuery(crud.getAll(filter));
+    const filtro =
+        construirFiltroVisibilidad(usuario, filter);
+
+    const listarPlanesId =
+        await populatePlanQuery(
+            crud.getAll(filtro)
+        );
 
     return listarPlanesId;
-}
+};
 
 
 
@@ -623,11 +629,13 @@ const asociarRiesgosId = async (id, riesgosId) => {
         throw error;
     }
 
+    const riesgosUnicos = [...new Set(riesgosId.map(String))];
+
     const riesgos = await riesgoModel.find({
-        _id: { $in: riesgosId }
+        _id: { $in: riesgosUnicos }
     });
 
-    if (riesgos.length !== riesgosId.length) {
+    if (riesgos.length !== riesgosUnicos.length) {
         const error =
             new Error(
                 "Uno o mas riesgos no existen"
@@ -637,23 +645,8 @@ const asociarRiesgosId = async (id, riesgosId) => {
         throw error;
     }
 
-    const riesgosAsociados = plan.riesgosId.map(id => id.toString());
-
-    const nuevosRiesgos = riesgosId.filter(
-        id => !riesgosAsociados.includes(id)
-    );
-
-    if (nuevosRiesgos.length === 0) {
-        const error =
-            new Error(
-                "Todos los riesgos ya se encuentran asociados al plan"
-            );
-        error.statusCode = 400;
-
-        throw error;
-    }
-
-    plan.riesgosId.push(...nuevosRiesgos);
+    // La selección enviada reemplaza a la anterior para permitir editar el plan.
+    plan.riesgosId = riesgosUnicos;
 
     await plan.save();
 
@@ -740,11 +733,13 @@ const asociarAprendicesId = async (id, aprendicesId) => {
         throw error;
     }
 
+    const aprendicesUnicos = [...new Set(aprendicesId.map(String))];
+
     const aprendices = await aprendizModel.find({
-        _id: { $in: aprendicesId }
+        _id: { $in: aprendicesUnicos }
     });
 
-    if (aprendices.length !== aprendicesId.length) {
+    if (aprendices.length !== aprendicesUnicos.length) {
         const error =
             new Error(
                 "Uno o mas aprendices no existen"
@@ -754,24 +749,8 @@ const asociarAprendicesId = async (id, aprendicesId) => {
         throw error;
     }
 
-    const aprendicesAsociados = plan.aprendicesId.map(id => id.toString());
-
-    const nuevosAprendices = aprendicesId.filter(
-        id => !aprendicesAsociados.includes(id)
-    );
-
-    if (nuevosAprendices.length === 0) {
-        const error =
-            new Error(
-                "Todos los aprendices ya se encuentran asociados al plan"
-            );
-
-        error.statusCode = 400;
-
-        throw error;
-    }
-    
-    plan.aprendicesId.push(...nuevosAprendices);
+    // La selección enviada reemplaza a la anterior para permitir editar el plan.
+    plan.aprendicesId = aprendicesUnicos;
 
     await plan.save();
 
