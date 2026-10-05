@@ -5,8 +5,8 @@ usar un codigo fijo solo para cuentas ficticias autorizadas, sin enviar correo:
 
 ```env
 AUTH_DEMO_MODE=true
-AUTH_DEMO_CODE=123456
-AUTH_DEMO_ALLOWED_EMAILS=cuenta1@dominio.com,cuenta2@dominio.com
+AUTH_DEMO_CODE=000000
+AUTH_DEMO_ALLOWED_EMAILS=administrador@soy.sena.edu.co, consultor@soy.sena.edu.co, pedagogia@soy.sena.edu.co, sst@soy.sena.edu.co, coordinacion@soy.sena.edu.co
 ```
 
 - Solo aplica a los correos institucionales de `AUTH_DEMO_ALLOWED_EMAILS`;

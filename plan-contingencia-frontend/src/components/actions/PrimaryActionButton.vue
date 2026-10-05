@@ -1,5 +1,6 @@
 <template>
   <q-btn
+    v-if="!requiresWriteAccess || !readOnlyRole"
     unelevated
     :class="[
       'primary-action-button',
@@ -17,6 +18,10 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useAuthStore } from 'src/stores/auth.store'
+import { ROLES_SOLO_LECTURA } from 'src/constants/system/roles.constants.js'
+
 const { label, icon, size, loading, disable, fullWidth } = defineProps({
   label: {
     type: String,
@@ -43,7 +48,14 @@ const { label, icon, size, loading, disable, fullWidth } = defineProps({
     type: Boolean,
     default: false,
   },
+  requiresWriteAccess: {
+    type: Boolean,
+    default: false,
+  },
 })
+
+const authStore = useAuthStore()
+const readOnlyRole = computed(() => ROLES_SOLO_LECTURA.includes(authStore.role))
 
 const emit = defineEmits(['click'])
 

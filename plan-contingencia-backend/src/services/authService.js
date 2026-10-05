@@ -183,15 +183,11 @@ const login = async (documento, correoInstitucional) => {
         );
     }
 
-    // Original (producción real): enviar siempre por correo.
-    // await enviarCodigoVerificacion({
-    //     destinatarios,
-    //     nombre: `${usuario.nombre} ${usuario.apellido}`,
-    //     codigo,
-    //     minutosExpiracion
-    // });
-
-    if (codigoDemo) {
+    if (modoPruebas) {
+        console.info(
+            `[AUTH: SOLO PRUEBAS LOCALES] Código de verificación para ${usuario.correo}: ${codigo}`
+        );
+    } else if (codigoDemo) {
         console.info(
             `[AUTH DEMO] Envío de correo omitido para la cuenta de demostración ${usuario.correo}`
         );

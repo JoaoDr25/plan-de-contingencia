@@ -18,6 +18,7 @@ import eppRoutes from './src/routes/eppRoutes.js'
 import authRoutes from './src/routes/authRoutes.js';
 
 import { autenticarToken } from './src/middlewares/authMiddleware.js';
+import { bloquearEscrituraRolesSoloLectura } from './src/middlewares/readOnlyRoles.js';
 import { errorHandler } from './src/middlewares/errorHandler.js'
 
 dotenv.config();
@@ -35,6 +36,7 @@ app.get('/api', (req, res) => {
 app.use('/api', authRoutes);
 
 app.use('/api', autenticarToken);
+app.use('/api', bloquearEscrituraRolesSoloLectura);
 
 app.use('/api', 
     planContingenciaRoutes, 

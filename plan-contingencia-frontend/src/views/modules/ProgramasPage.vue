@@ -3,6 +3,7 @@
     <CrudHeader title="Programas de Formación">
       <template #actions>
         <PrimaryActionButton
+          :requires-write-access="true"
           label="Crear"
           icon="add_circle_outline"
           size="sm"
@@ -215,7 +216,7 @@ async function updateProgram(formData) {
     await loadProgramas()
 
     dialog.value = false
-    
+
     return true
   } catch (error) {
     console.error('Error al actualizar programa:', error)
@@ -251,7 +252,7 @@ async function confirmAction() {
 
   if (dialogMode.value === 'create') {
     success = await createProgram(pendingActionData.value)
-    
+
     if (success) {
       notifySuccess('Programa creado correctamente')
     }

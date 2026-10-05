@@ -39,6 +39,10 @@ export function getPlanActions(plan, role, currentUser) {
     .trim()
     .toUpperCase()
 
+  if (currentRole === ROLES.SUBDIRECCION || currentRole === ROLES.BIENESTAR) {
+    return ['view']
+  }
+
   if (status === 'borrador' && isPlanOwner(plan, currentUser)) {
     actions.push('view', 'edit', 'delete')
     return actions
@@ -49,6 +53,8 @@ export function getPlanActions(plan, role, currentUser) {
     currentRole === ROLES.PEDAGOGIA ||
     currentRole === ROLES.SST ||
     currentRole === ROLES.COORDINACION ||
+    currentRole === ROLES.SUBDIRECCION ||
+    currentRole === ROLES.BIENESTAR ||
     currentRole === ROLES.ADMINISTRADOR
   ) {
     actions.push('view')

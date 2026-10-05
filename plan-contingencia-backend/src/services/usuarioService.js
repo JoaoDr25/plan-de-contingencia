@@ -21,6 +21,9 @@ const normalizarRol = (rol) => {
         pedagogia: "PEDAGOGIA",
         sst: "SST",
         coordinacion: "COORDINACION",
+        subdireccion: "SUBDIRECCION",
+        "subdirección": "SUBDIRECCION",
+        bienestar: "BIENESTAR",
         Administrador: "ADMINISTRADOR",
         Instructor: "CONSULTOR",
         Usuario: "CONSULTOR",
@@ -28,7 +31,10 @@ const normalizarRol = (rol) => {
         Pedagogía: "PEDAGOGIA",
         Pedagogia: "PEDAGOGIA",
         Coordinación: "COORDINACION",
-        Coordinacion: "COORDINACION"
+        Coordinacion: "COORDINACION",
+        Subdirección: "SUBDIRECCION",
+        Subdireccion: "SUBDIRECCION",
+        Bienestar: "BIENESTAR"
     };
 
     return roles[rol] ?? String(rol).trim().toUpperCase();
@@ -322,6 +328,8 @@ const cambiarRolId = async (id, rol) => {
         "PEDAGOGIA",
         "SST",
         "COORDINACION",
+        "SUBDIRECCION",
+        "BIENESTAR",
         null
     ];
 

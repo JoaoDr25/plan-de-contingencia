@@ -32,7 +32,13 @@ const canCreatePlan = computed(() => {
 })
 
 const shouldReserveCreateSpace = computed(() => {
-  return [ROLES.SST, ROLES.PEDAGOGIA, ROLES.COORDINACION].includes(authStore.role)
+  return [
+    ROLES.SST,
+    ROLES.PEDAGOGIA,
+    ROLES.COORDINACION,
+    ROLES.SUBDIRECCION,
+    ROLES.BIENESTAR,
+  ].includes(authStore.role)
 })
 
 function goToCreatePlan() {

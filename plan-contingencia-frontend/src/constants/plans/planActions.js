@@ -43,6 +43,18 @@ export const PLAN_DETAIL_ACTIONS = {
     ejecutado: [PLAN_ACTIONS.IMPRIMIR],
     cancelado: [PLAN_ACTIONS.IMPRIMIR],
   },
+
+  [ROLES.SUBDIRECCION]: {
+    aprobado: [PLAN_ACTIONS.IMPRIMIR],
+    ejecutado: [PLAN_ACTIONS.IMPRIMIR],
+    cancelado: [PLAN_ACTIONS.IMPRIMIR],
+  },
+
+  [ROLES.BIENESTAR]: {
+    aprobado: [PLAN_ACTIONS.IMPRIMIR],
+    ejecutado: [PLAN_ACTIONS.IMPRIMIR],
+    cancelado: [PLAN_ACTIONS.IMPRIMIR],
+  },
 }
 
 export function getPlanDetailsActions(role, state) {

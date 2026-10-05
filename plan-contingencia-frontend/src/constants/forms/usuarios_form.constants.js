@@ -168,6 +168,14 @@ export const USER_FORM_FIELDS = [
         label: 'Pedagogía',
         value: 'PEDAGOGIA',
       },
+      {
+        label: 'Subdirección',
+        value: 'SUBDIRECCION',
+      },
+      {
+        label: 'Bienestar',
+        value: 'BIENESTAR',
+      },
     ],
     required: false,
     rules: [],

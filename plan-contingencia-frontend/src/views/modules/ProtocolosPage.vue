@@ -3,6 +3,7 @@
     <CrudHeader title="Protocolos">
       <template #actions>
         <PrimaryActionButton
+          :requires-write-access="true"
           label="Crear"
           icon="add_circle_outline"
           size="sm"
