@@ -43,10 +43,10 @@ export function createPlanContingenciaModel() {
     },
 
     articulacionFormativa: {
-      proyectoFormativo: true,
+      proyectoFormativo: false,
       visitaEmpresa: false,
       investigacion: false,
-      otroSeleccionado: false,
+      otroSeleccionado: true,
       otro: '',
     },
 

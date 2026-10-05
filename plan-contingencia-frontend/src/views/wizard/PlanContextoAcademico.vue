@@ -233,6 +233,7 @@
         <div class="checkbox-list">
           <q-checkbox
             v-model="form.articulacionFormativa.proyectoFormativo"
+            @update:model-value="(value) => seleccionarArticulacion('proyectoFormativo', value)"
             label="Proyecto formativo"
             size="sm"
             dense
@@ -240,6 +241,7 @@
 
           <q-checkbox
             v-model="form.articulacionFormativa.visitaEmpresa"
+            @update:model-value="(value) => seleccionarArticulacion('visitaEmpresa', value)"
             label="Visita a empresa"
             size="sm"
             dense
@@ -247,6 +249,7 @@
 
           <q-checkbox
             v-model="form.articulacionFormativa.investigacion"
+            @update:model-value="(value) => seleccionarArticulacion('investigacion', value)"
             label="Investigación"
             size="sm"
             dense
@@ -254,6 +257,7 @@
 
           <q-checkbox
             v-model="form.articulacionFormativa.otroSeleccionado"
+            @update:model-value="(value) => seleccionarArticulacion('otroSeleccionado', value)"
             label="Otro"
             size="sm"
             dense
@@ -299,6 +303,28 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const form = reactive(props.modelValue)
+
+const opcionesArticulacion = ['proyectoFormativo', 'visitaEmpresa', 'investigacion', 'otroSeleccionado']
+
+function seleccionarArticulacion(opcionSeleccionada, value) {
+  if (value) {
+    opcionesArticulacion.forEach((opcion) => {
+      form.articulacionFormativa[opcion] = opcion === opcionSeleccionada
+    })
+  }
+
+  if (!form.articulacionFormativa.otroSeleccionado) {
+    form.articulacionFormativa.otro = ''
+  }
+
+  emit('update:modelValue', form)
+}
+
+const articulacionInicial = opcionesArticulacion.filter((opcion) => form.articulacionFormativa[opcion])
+
+if (articulacionInicial.length !== 1) {
+  seleccionarArticulacion(articulacionInicial[0] ?? 'otroSeleccionado', true)
+}
 
 function requiredRule(value) {
   return Boolean(String(value ?? '').trim()) || 'Este campo es obligatorio'
