@@ -1,5 +1,6 @@
 import { createCrudService } from "./baseCrudService.js";
 import programaFormacionModel from "../models/programaFormacionModel.js";
+import aprendizModel from "../models/aprendizModel.js";
 
 const crud = createCrudService(programaFormacionModel);
 
@@ -157,6 +158,21 @@ const cambiarEstadoId = async (id, estado) => {
 
 
 const deleteById = async (id) => {
+
+    const aprendicesAsociados = await aprendizModel.findOne({
+        programaFormacionId: id
+    });
+
+    if (aprendicesAsociados) {
+        const error =
+            new Error(
+                "No se puede eliminar el programa de formación porque tiene aprendices asociados"
+            );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
 
     const eliminarProgramaFormacionId = await crud.delete(id);
 

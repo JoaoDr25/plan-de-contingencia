@@ -16,7 +16,7 @@ export const createCrudService = (model) => ({
             id,
             data,
             {
-                new: true,
+                returnDocument: 'after',
                 runValidators: true
             }
         ),

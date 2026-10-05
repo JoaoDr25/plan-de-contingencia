@@ -131,6 +131,30 @@ const updateById = async (id, data) => {
 
 const deleteById = async (id) => {
 
+    const actividadActual = await actividadModel.findById(id);
+
+    if (!actividadActual) {
+        const error =
+            new Error(
+                "Actividad no encontrada"
+            );
+
+        error.statusCode = 404;
+
+        throw error;
+    }
+
+    if (actividadActual.peligros?.length) {
+        const error =
+            new Error(
+                "No se puede eliminar la actividad porque tiene peligros asociados"
+            );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
     const eliminarActividadId = await crud.delete(id);
 
     if (!eliminarActividadId) {

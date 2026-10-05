@@ -282,6 +282,17 @@ const deleteById = async (id) => {
         throw error;
     }
 
+    if (riesgoActual.protocolos?.length) {
+        const error =
+            new Error(
+                "No se puede eliminar el riesgo porque tiene protocolos asociados"
+            );
+
+        error.statusCode = 400;
+
+        throw error;
+    }
+
     const eliminarRiesgoId = await crud.delete(id);
 
     if (!eliminarRiesgoId) {

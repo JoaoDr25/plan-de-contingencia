@@ -4,17 +4,40 @@ import riesgoModel from "../models/riesgoModel.js";
 
 const crud = createCrudService(peligroModel);
 
+const normalizarRiesgosIds = (riesgos = []) => {
+
+    if (!Array.isArray(riesgos)) {
+        return [];
+    }
+
+    return riesgos
+        .map((riesgo) => {
+            if (
+                riesgo &&
+                typeof riesgo === "object"
+            ) {
+                return riesgo._id ?? riesgo.id;
+            }
+
+            return riesgo;
+        })
+        .filter(Boolean)
+        .map(String);
+};
+
 const validarRiesgos = async (riesgos) => {
 
-    if (!riesgos?.length) {
+    const riesgosIds = normalizarRiesgosIds(riesgos);
+
+    if (!riesgosIds.length) {
         return;
     }
 
     const encontrados = await riesgoModel.find({
-        _id: { $in: riesgos }
+        _id: { $in: riesgosIds }
     });
 
-    if (encontrados.length !== riesgos.length) {
+    if (encontrados.length !== riesgosIds.length) {
         const error =
             new Error(
                 "Uno o varios riesgos no existen"
@@ -34,8 +57,8 @@ const sincronizarRiesgos = async (
     antiguosRiesgos = []
 ) => {
 
-    const nuevos = nuevosRiesgos.map(String);
-    const antiguos = antiguosRiesgos.map(String);
+    const nuevos = normalizarRiesgosIds(nuevosRiesgos);
+    const antiguos = normalizarRiesgosIds(antiguosRiesgos);
 
     const riesgosAEliminar = antiguos.filter(
         (id) => !nuevos.includes(id)
@@ -69,6 +92,8 @@ const create = async (data) => {
         riesgos = []
     } = data;
 
+    const riesgosIds = normalizarRiesgosIds(riesgos);
+
     const peligroExistente = await peligroModel.findOne({
         nombre
     });
@@ -84,13 +109,16 @@ const create = async (data) => {
         throw error;
     }
 
-    await validarRiesgos(riesgos);
+    await validarRiesgos(riesgosIds);
 
-    const nuevoPeligro = await crud.create(data);
+    const nuevoPeligro = await crud.create({
+        ...data,
+        riesgos: riesgosIds
+    });
 
     await sincronizarRiesgos(
         nuevoPeligro._id,
-        riesgos
+        riesgosIds
     );
 
     return nuevoPeligro;
@@ -133,6 +161,8 @@ const updateById = async (id, data) => {
         riesgos = []
     } = data;
 
+    const riesgosIds = normalizarRiesgosIds(riesgos);
+
     const peligroActual = await peligroModel.findById(id);
 
     if (!peligroActual) {
@@ -168,12 +198,15 @@ const updateById = async (id, data) => {
             "riesgos"
         )
     ) {
-        await validarRiesgos(data.riesgos ?? []);
+        await validarRiesgos(riesgosIds);
     }
 
     const actualizarPeligroId = await crud.update(
         id,
-        data
+        {
+            ...data,
+            riesgos: riesgosIds
+        }
     );
 
     if (
@@ -184,7 +217,7 @@ const updateById = async (id, data) => {
     ) {
         await sincronizarRiesgos(
             id,
-            data.riesgos ?? [],
+            riesgosIds,
             peligroActual.riesgos ?? []
         );
     }
