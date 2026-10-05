@@ -77,6 +77,6 @@ export const APPRENTICE_INFO_FORM_FIELDS = [
     label: 'Condiciones Médicas',
     type: 'textarea',
     icon: 'medical_information',
-    rules: [maxLength(250)],
+    rules: [maxLength(150)],
   },
 ]

@@ -51,5 +51,5 @@ export const PLAN_ACTIVITY_DESCRIPTION_FIELD = {
   type: 'textarea',
   maxlength: 500,
   required: true,
-  rules: [required, maxLength(500)],
+  rules: [required, maxLength(150)],
 }

@@ -21,6 +21,7 @@ import { reactive, computed, watch, ref } from 'vue'
 import { RISK_FORM_FIELDS } from 'src/constants/forms/riesgos_form.constants'
 // import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 import { notifyWarning } from 'src/utils/notifications.utils'
+import { toSentenceCase } from 'src/utils/text.utils'
 
 import protocoloService from 'src/services/modules/protocoloService'
 
@@ -91,7 +92,7 @@ const riskFormFields = computed(() => {
     return {
       ...field,
       options: protocolos.value.map((protocol) => ({
-        label: protocol.tipo,
+        label: toSentenceCase(protocol.tipo),
         value: protocol._id,
       })),
     }

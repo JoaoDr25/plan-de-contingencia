@@ -10,3 +10,13 @@ export function toTitleCase(value) {
       (match, prefix, letter) => prefix + letter.toUpperCase(),
     )
 }
+
+export function toSentenceCase(value) {
+  if (typeof value !== 'string' || !value.trim()) {
+    return value
+  }
+
+  const normalized = value.trim().toLowerCase()
+
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1)
+}

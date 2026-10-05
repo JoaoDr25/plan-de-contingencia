@@ -5,7 +5,7 @@
 
       <q-select
         :model-value="props.rowsPerPage"
-        :options="[8, 10, 12]"
+        :options="[8, 10, 15]"
         dense
         outlined
         emit-value

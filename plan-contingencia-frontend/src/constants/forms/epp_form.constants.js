@@ -83,7 +83,7 @@ export const EPP_FORM_FIELDS = [
     icon: 'description',
     type: 'textarea',
     required: true,
-    rules: [required, maxLength(250)],
+    rules: [required, maxLength(150)],
   },
   {
     component: BaseSelect,

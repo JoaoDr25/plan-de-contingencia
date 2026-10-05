@@ -117,7 +117,7 @@
         />
       </div>
 
-      <div class="plan-information__field plan-information__field--half">
+      <div class="plan-information__field plan-information__field--third">
         <label class="plan-information__label" for="lugar-salida">
           Lugar de salida <span>*</span>
         </label>
@@ -136,7 +136,7 @@
         />
       </div>
 
-      <div class="plan-information__field plan-information__field--half">
+      <div class="plan-information__field plan-information__field--third">
         <label class="plan-information__label" for="lugar-destino">
           Lugar de destino <span>*</span>
         </label>
@@ -151,6 +151,30 @@
           required
           external-label
           :rules="[requiredRule]"
+          size="wizard"
+        />
+      </div>
+
+      <div class="plan-information__field plan-information__field--third">
+        <label class="plan-information__label" for="contacto-lugar">
+          Contacto lugar <span>*</span>
+        </label>
+
+        <BaseInput
+          id="contacto-lugar"
+          v-model="form.contactoLugar"
+          label="Contacto lugar"
+          placeholder="Escriba el contacto del lugar"
+          type="tel"
+          inputmode="numeric"
+          icon="contact_phone"
+          icon-position="append"
+          required
+          external-label
+          :rules="[
+            requiredRule,
+            (value) => /^\d+$/.test(value) || 'El contacto del lugar debe contener únicamente números',
+          ]"
           size="wizard"
         />
       </div>

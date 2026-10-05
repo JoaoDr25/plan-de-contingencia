@@ -43,10 +43,10 @@ export const RISK_FORM_FIELDS = [
     // placeholder: 'Seleccione los protocolos',
     icon: 'rule',
     options: [8],
-    required: true,
+    required: false,
     multiple: true,
     hideSelectedValue: true,
-    rules: [required],
+    rules: [],
   },
   {
     component: BaseInput,
@@ -56,7 +56,7 @@ export const RISK_FORM_FIELDS = [
     icon: 'description',
     type: 'textarea',
     required: true,
-    rules: [required, maxLength(250)],
+    rules: [required, maxLength(150)],
   },
   {
     component: BaseInput,
@@ -66,6 +66,6 @@ export const RISK_FORM_FIELDS = [
     icon: 'error_outline',
     type: 'textarea',
     required: true,
-    rules: [required, maxLength(250)],
+    rules: [required, maxLength(150)],
   },
 ]

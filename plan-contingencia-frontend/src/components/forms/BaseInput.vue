@@ -208,13 +208,19 @@ const resolvedIcon = computed(() => {
 }
 
 .base-input--textarea :deep(.q-field__control) {
-  min-height: 90px;
-  height: 90px;
+  min-height: 105px;
+  height: 105px;
 }
 
 .base-input--textarea :deep(.q-field__native) {
-  min-height: 55px;
+  min-height: 80px;
+  line-height: 26px;
+  padding-top: 8px;
   resize: none;
+}
+
+.base-input--textarea.q-field--dense.q-field--labeled:not(.base-input--wizard) :deep(.q-field__control-container) {
+  padding-top: 16px !important;
 }
 
 .base-input--textarea:not(.q-field--float) :deep(.q-field__label) {

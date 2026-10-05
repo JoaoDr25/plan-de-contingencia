@@ -17,6 +17,7 @@ import { reactive, computed, watch, ref } from 'vue'
 import { ACTIVITY_FORM_FIELDS } from 'src/constants/forms/actividades_form.constants'
 // import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
 import { notifyWarning, notifyError } from 'src/utils/notifications.utils'
+import { toSentenceCase } from 'src/utils/text.utils'
 
 import peligrosService from 'src/services/modules/peligroService.js'
 
@@ -70,7 +71,7 @@ const activityFormFields = computed(() => {
     return {
       ...field,
       options: dangers.value.map((danger) => ({
-        label: danger.nombre,
+        label: toSentenceCase(danger.nombre),
         value: danger._id,
       })),
     }

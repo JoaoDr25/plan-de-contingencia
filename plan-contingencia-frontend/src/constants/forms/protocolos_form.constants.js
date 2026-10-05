@@ -21,7 +21,7 @@ export const PROTOCOL_FORM_FIELDS = [
     icon: 'flash_on',
     type: 'textarea',
     required: true,
-    rules: [required, maxLength(250)],
+    rules: [required, maxLength(150)],
   },
   {
     component: BaseInput,

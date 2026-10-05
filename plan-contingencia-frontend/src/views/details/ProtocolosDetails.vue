@@ -17,13 +17,15 @@
 
       <BaseDetailItem label="Responsable" :value="protocol.responsable" />
 
-      <BaseDetailItem label="Fecha de Creación" :value="protocol.fecha" />
+      <BaseDetailItem label="Fecha de Creación" :value="formattedCreatedAt" />
     </template>
   </BaseDetailDialog>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+
+import { formatDate } from 'src/utils/date.utils'
 
 import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
 import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
@@ -47,6 +49,18 @@ const dialog = computed({
   set: (value) => {
     emit('update:modelValue', value)
   },
+})
+
+const formattedCreatedAt = computed(() => {
+  const createdAt = props.protocol?.createdAt || props.protocol?.fecha
+
+  if (!createdAt) {
+    return 'No disponible'
+  }
+
+  const formatted = formatDate(createdAt)
+
+  return formatted || 'No disponible'
 })
 </script>
 

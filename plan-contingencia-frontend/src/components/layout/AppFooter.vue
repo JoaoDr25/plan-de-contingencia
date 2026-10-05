@@ -18,7 +18,7 @@ const currentYear = new Date().getFullYear()
 @use 'src/css/typography.scss' as *;
 
 .app-footer {
-  background: $color-background-secondary;
+  background: #e0e0e0;
   border-top: 1px solid $color-border;
 }
 

@@ -127,7 +127,7 @@ const resolvedIcon = computed(() => {
 
 .base-textarea :deep(.q-field__control) {
   border-radius: 5px;
-  min-height: 70px;
+  min-height: 86px;
   background-color: $color-background-field;
 }
 
@@ -146,8 +146,12 @@ const resolvedIcon = computed(() => {
 .base-textarea :deep(.q-field__native) {
   font-size: $font-size-sm;
   color: $color-text-primary;
-  min-height: 90px;
+  min-height: 104px;
   resize: none;
+}
+
+.base-textarea.q-field--dense.q-field--labeled:not(.base-textarea--wizard) :deep(.q-field__control-container) {
+  padding-top: 16px !important;
 }
 
 .base-textarea :deep(.q-field__label) {

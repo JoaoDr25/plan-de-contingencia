@@ -51,10 +51,10 @@ export const ACTIVITY_FORM_FIELDS = [
     // placeholder: 'Seleccione los peligros asociados',
     icon: 'warning',
     options: [1],
-    required: true,
+    required: false,
     multiple: true,
     hideSelectedValue: true,
-    rules: [required],
+    rules: [],
   },
   {
     component: BaseInput,
@@ -64,6 +64,6 @@ export const ACTIVITY_FORM_FIELDS = [
     icon: 'description',
     type: 'textarea',
     required: true,
-    rules: [required, maxLength(500)],
+    rules: [required, maxLength(150)],
   },
 ]

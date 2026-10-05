@@ -27,8 +27,13 @@ const gridStyle = computed(() => ({
 <style scoped>
 .base-form-grid {
   display: grid;
-  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
   gap: var(--grid-gap);
+}
+
+.base-form-grid > * {
+  min-width: 0;
+  width: 100%;
 }
 
 @media (max-width: 768px) {

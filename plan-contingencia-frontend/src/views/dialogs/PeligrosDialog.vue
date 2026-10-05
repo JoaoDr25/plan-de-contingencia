@@ -20,6 +20,7 @@ import { reactive, computed, watch, ref, onMounted } from 'vue'
 
 import { DANGER_FORM_FIELDS } from 'src/constants/forms/peligros_form.constants'
 import { notifyWarning } from 'src/utils/notifications.utils'
+import { toSentenceCase } from 'src/utils/text.utils'
 
 import riesgosService from 'src/services/modules/riesgoService.js'
 
@@ -83,7 +84,7 @@ const dangerFormFields = computed(() => {
     return {
       ...field,
       options: availableRisks.value.map((risk) => ({
-        label: risk.riesgo,
+        label: toSentenceCase(risk.riesgo),
         value: risk._id ?? risk.id,
       })),
     }
@@ -121,14 +122,39 @@ function handleSave() {
     notifyWarning(validationResult)
     return
   }
-  console.log('Datos del formulario:', form)
-  emit('save', { ...form })
+
+  const riesgosIds = Array.isArray(form.riesgos)
+    ? form.riesgos.map((risk) =>
+      typeof risk === 'object'
+        ? (risk._id ?? risk.id)
+        : risk
+    )
+    : []
+
+  emit('save', {
+    ...form,
+    riesgos: riesgosIds.filter(Boolean),
+  })
 }
 
 function resetForm(data = {}) {
   form.nombre = data.nombre ?? ''
   form.categoria = data.categoria ?? null
-  form.riesgos = data.riesgos ?? []
+
+  form.riesgos = Array.isArray(data.riesgosDetalle)
+    ? data.riesgosDetalle.map((risk) =>
+      typeof risk === 'object'
+        ? (risk._id ?? risk.id)
+        : risk
+    )
+    : Array.isArray(data.riesgos)
+      ? data.riesgos.map((risk) =>
+        typeof risk === 'object'
+          ? (risk._id ?? risk.id)
+          : risk
+      )
+      : []
+
   form.descripcion = data.descripcion ?? ''
 }
 

@@ -17,13 +17,15 @@
         :value="associatedProtocols"
       />
 
-      <BaseDetailItem label="Fecha de Creación" :value="risk.fecha" />
+      <BaseDetailItem label="Fecha de Creación" :value="formattedCreatedAt" />
     </template>
   </BaseDetailDialog>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+
+import { formatDate } from 'src/utils/date.utils'
 
 import BaseDetailItem from '../../components/forms/BaseDetailItem.vue'
 import BaseDetailDialog from '../../components/forms/BaseDetailDialog.vue'
@@ -52,6 +54,18 @@ const associatedProtocols = computed(() => {
   const count = Array.isArray(props.risk?.protocolos) ? props.risk.protocolos.length : 0
 
   return `${count} ${count === 1 ? 'Protocolo' : 'Protocolos'}`
+})
+
+const formattedCreatedAt = computed(() => {
+  const createdAt = props.risk?.createdAt || props.risk?.fecha
+
+  if (!createdAt) {
+    return 'No disponible'
+  }
+
+  const formatted = formatDate(createdAt)
+
+  return formatted || 'No disponible'
 })
 </script>
 
