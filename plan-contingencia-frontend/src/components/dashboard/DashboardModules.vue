@@ -19,7 +19,7 @@ import { computed } from 'vue'
 import { useAuthStore } from 'src/stores/auth.store'
 import { useRouter } from 'vue-router'
 import { dashboardModules } from 'src/constants/navigation/dashboard.constants.js'
-import { ROLES } from 'src/constants/system/roles.constants.js'
+import { ROLES, ROLES_SOLO_LECTURA } from 'src/constants/system/roles.constants.js'
 
 import DashboardModuleCard from './DashboardModuleCard.vue'
 
@@ -36,6 +36,10 @@ const visibleModules = computed(() => {
 })
 
 const roleTitle = computed(() => {
+  if (ROLES_SOLO_LECTURA.includes(authStore.role)) {
+    return 'CONSULTA INSTITUCIONAL'
+  }
+
   return authStore.role === ROLES.CONSULTOR
     ? 'CONFIGURACIÓN DEL SISTEMA'
     : 'ADMINISTRADOR DEL SISTEMA'

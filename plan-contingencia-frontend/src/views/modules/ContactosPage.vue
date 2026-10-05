@@ -2,7 +2,7 @@
   <BasePage>
     <CrudHeader title="Contactos de Emergencia">
       <template #actions>
-        <PrimaryActionButton label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
+        <PrimaryActionButton :requires-write-access="true" label="Crear" icon="add_circle_outline" size="sm" @click="openCreateDialog" />
       </template>
     </CrudHeader>
 

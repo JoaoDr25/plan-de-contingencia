@@ -12,6 +12,7 @@ import actividadModel from '../models/actividadModel.js'
 import usuarioModel from '../models/usuarioModel.js'
 import contactosEmergenciaModel from '../models/contactoEmergenciaModel.js'
 import elementosProteccionPersonalModel from '../models/eppModel.js'
+import { enviarPdfPlanSubdireccion } from '../utils/verifyEmail.js'
 
 const crud = createCrudService(planContingenciaModel);
 
@@ -612,6 +613,31 @@ const generarPdfId = async (id) => {
 
     return pdfBuffer;
 }
+
+
+const notificarSubdireccionPlanAprobado = async (plan) => {
+    const destinatario = await usuarioModel.findOne({
+        rol: "SUBDIRECCION",
+        estado: "Activo",
+        correo: { $exists: true, $ne: "" }
+    }).select("correo nombre apellido");
+
+    if (!destinatario) {
+        console.error(
+            `No se envió el PDF del plan ${plan.numero}: no hay un usuario activo de Subdirección con correo institucional`
+        );
+        return;
+    }
+
+    const pdfBuffer = await generarPdfId(plan._id);
+
+    await enviarPdfPlanSubdireccion({
+        destinatario: destinatario.correo,
+        nombre: `${destinatario.nombre} ${destinatario.apellido}`,
+        numeroPlan: plan.numero,
+        pdfBuffer
+    });
+};
 
 
 
@@ -1354,6 +1380,8 @@ const registrarRevisionPlanId = async (
         plan.observaciones = observaciones;
     }
 
+    let planAprobadoEnEstaRevision = false;
+
     if (estado === "no aprobado") {
 
         plan.estado = "borrador";
@@ -1366,9 +1394,19 @@ const registrarRevisionPlanId = async (
 
         if (todasAprobadas) {
             plan.estado = "aprobado";
+            planAprobadoEnEstaRevision = true;
         }
     }
     await plan.save();
+
+    if (planAprobadoEnEstaRevision && usuario.rol === "COORDINACION") {
+        void notificarSubdireccionPlanAprobado(plan).catch((error) => {
+            console.error(
+                `No fue posible enviar por correo el PDF del plan ${plan.numero} a Subdirección:`,
+                error
+            );
+        });
+    }
 
     return plan;
 };

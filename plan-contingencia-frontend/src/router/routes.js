@@ -2,7 +2,13 @@ import { ROLES } from 'src/constants/system/roles.constants.js'
 
 const CONSULTOR_ROL = [ROLES.CONSULTOR]
 const ADMIN_ROL = [ROLES.ADMINISTRADOR]
-const ALL_ROL = [ROLES.SST, ROLES.PEDAGOGIA, ROLES.COORDINACION]
+const ALL_ROL = [
+  ROLES.SST,
+  ROLES.PEDAGOGIA,
+  ROLES.COORDINACION,
+  ROLES.SUBDIRECCION,
+  ROLES.BIENESTAR,
+]
 
 const routes = [
   {

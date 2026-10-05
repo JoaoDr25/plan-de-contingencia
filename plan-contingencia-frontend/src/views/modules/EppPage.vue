@@ -3,6 +3,7 @@
     <CrudHeader title="Elementos de Protección Personal (EPP)">
       <template #actions>
         <PrimaryActionButton
+          :requires-write-access="true"
           label="Crear"
           icon="add_circle_outline"
           size="sm"

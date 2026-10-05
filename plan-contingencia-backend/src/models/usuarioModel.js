@@ -75,6 +75,8 @@ const usuarioSchema = new mongoose.Schema({
             "PEDAGOGIA",
             "SST",
             "COORDINACION",
+            "SUBDIRECCION",
+            "BIENESTAR",
             null
         ],
         default: null,
