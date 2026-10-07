@@ -10,12 +10,14 @@ const normalizarEstado = (estado) => {
     return estado;
 }
 
+
 const normalizarDatosProtocolo = (data) => {
     data.tipo = data.tipo ?? data.tipoEmergencia;
     data.accion = data.accion ?? data.accionInmediata;
     data.medio = data.medio ?? data.medioComunicacion;
     data.estado = normalizarEstado(data.estado);
 }
+
 
 const create = async (data) => {
 
@@ -41,7 +43,6 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
 
     const normalizedFilter = {
@@ -54,7 +55,6 @@ const getAll = async (filter = {}) => {
 
     return await crud.getAll(normalizedFilter);
 }
-
 
 
 const getById = async (id) => {
@@ -74,7 +74,6 @@ const getById = async (id) => {
 
     return obtenerProtocoloId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -121,7 +120,6 @@ const updateById = async (id, data) => {
 }
 
 
-
 const deleteById = async (id) => {
 
     const riesgosAsociados = await riesgoModel.findOne({
@@ -154,7 +152,6 @@ const deleteById = async (id) => {
 
     return eliminarProtocoloId;
 }
-
 
 
 const cambiarEstadoId = async (id, estado) => {

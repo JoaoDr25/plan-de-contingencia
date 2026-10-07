@@ -13,7 +13,6 @@ import { validarObjectId } from '../middlewares/validateObjectId.js';
 
 const router = express.Router();
 
-
 router.post('/contactos-emergencia', crearContactoEmergencia);
 router.get('/contactos-emergencia', listarContactosEmergencia);
 router.get('/contactos-emergencia/:id', validarObjectId, obtenerContactoEmergenciaId);

@@ -28,7 +28,6 @@ const validarPeligros = async (peligros) => {
 }
 
 
-
 const create = async (data) => {
 
     const {
@@ -57,11 +56,9 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
     return await crud.getAll(filter).populate("peligros");
 }
-
 
 
 const getById = async (id) => {
@@ -82,7 +79,6 @@ const getById = async (id) => {
 
     return obtenerActividadId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -126,7 +122,6 @@ const updateById = async (id, data) => {
 
     return actualizarActividadId;
 };
-
 
 
 const deleteById = async (id) => {

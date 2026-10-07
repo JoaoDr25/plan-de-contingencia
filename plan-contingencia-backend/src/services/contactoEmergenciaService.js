@@ -9,12 +9,14 @@ const normalizarEstado = (estado) => {
     return estado;
 }
 
+
 const normalizarDatosContacto = (data) => {
     data.nombre = data.nombre ?? data.nombreEntidad;
     data.tipo = data.tipo ?? data.tipoContacto;
     data.telefono = data.telefono ?? data.telefonoPrincipal;
     data.estado = normalizarEstado(data.estado);
 }
+
 
 const create = async (data) => {
 
@@ -41,7 +43,6 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
 
     const normalizedFilter = {
@@ -54,7 +55,6 @@ const getAll = async (filter = {}) => {
 
     return await crud.getAll(normalizedFilter);
 }
-
 
 
 const getById = async (id) => {
@@ -74,7 +74,6 @@ const getById = async (id) => {
 
     return obtenerContactoEmergencia;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -119,7 +118,6 @@ const updateById = async (id, data) => {
 }
 
 
-
 const cambiarEstadoId = async (id, estado) => {
 
     const estadoNormalizado = normalizarEstado(estado);
@@ -153,6 +151,7 @@ const cambiarEstadoId = async (id, estado) => {
 
     return cambiarEstado;
 }
+
 
 const deleteById = async (id) => {
     

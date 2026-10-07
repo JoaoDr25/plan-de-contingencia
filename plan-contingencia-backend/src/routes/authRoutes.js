@@ -12,7 +12,6 @@ import { autenticarToken } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-
 router.post("/auth/validar-credenciales", validarCredenciales);
 router.post("/auth/login", login);
 router.post("/auth/verificar-codigo", verificarCodigo);

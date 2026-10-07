@@ -13,7 +13,6 @@ import { validarObjectId } from '../middlewares/validateObjectId.js';
 
 const router = express.Router();
 
-
 router.post('/epp', crearEpp);
 router.get('/epp', listarEpp);
 router.get('/epp/:id', validarObjectId, obtenerEppId);

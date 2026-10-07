@@ -12,7 +12,6 @@ const generarCodigo = () => {
         .toString();
 };
 
-
 // MODO DEMOSTRACIÓN: solo para despliegues de prueba sin servicio de correo
 // (por ejemplo, Render gratuito, que bloquea SMTP). Usa un código fijo
 // únicamente para las cuentas listadas en AUTH_DEMO_ALLOWED_EMAILS.

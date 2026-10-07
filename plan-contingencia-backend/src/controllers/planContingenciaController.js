@@ -3,7 +3,7 @@ import { sendSuccess } from '../utils/apiResponse.js';
 
 export const crearPlan = async (req, res, next) => {
     try {
-        const nuevoPlan = await planContingenciaService.create(req.body);
+        const nuevoPlan = await planContingenciaService.create(req.body, req.usuario);
 
         sendSuccess(res, {
             statusCode: 201,
@@ -55,7 +55,8 @@ export const actualizarPlanId = async (req, res, next) => {
         const actualizar =
             await planContingenciaService.updateById(
                 req.params.id,
-                req.body
+                req.body,
+                req.usuario
             );
 
         sendSuccess(res, {
@@ -70,12 +71,13 @@ export const actualizarPlanId = async (req, res, next) => {
 
 export const cambiarEstadoPlanId = async (req, res, next) => {
     try {
-        const { estado } = req.body;
+        const { estado, observaciones } = req.body;
 
         const cambiarEstado = await planContingenciaService.cambiarEstadoId(
             req.params.id,
             estado,
-            req.usuario
+            req.usuario,
+            observaciones
         )
 
         sendSuccess(res, {

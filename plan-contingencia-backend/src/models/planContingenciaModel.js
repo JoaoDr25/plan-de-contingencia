@@ -351,7 +351,24 @@ const planContingenciaSchema = new mongoose.Schema({
     observaciones: {
         type: String,
         trim: true
-    }
+    },
+
+    historialObservaciones: [{
+        texto: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        rol: {
+            type: String,
+            default: "ROL NO REGISTRADO",
+            trim: true
+        },
+        fecha: {
+            type: Date,
+            default: null
+        }
+    }]
 }, {
     timestamps: true
 });

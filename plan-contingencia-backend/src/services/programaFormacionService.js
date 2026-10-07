@@ -10,6 +10,7 @@ const normalizarEstado = (estado) => {
     return estado;
 }
 
+
 const normalizarDatosPrograma = (data) => {
     data.nivel = data.nivel ?? data.nivelFormacion;
     data.centro = data.centro ?? data.centroFormacion;
@@ -42,7 +43,6 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
 
     const normalizedFilter = {
@@ -55,7 +55,6 @@ const getAll = async (filter = {}) => {
 
     return await crud.getAll(normalizedFilter);
 }
-
 
 
 const getById = async (id) => {
@@ -75,7 +74,6 @@ const getById = async (id) => {
 
     return obtenerProgramaId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -120,7 +118,6 @@ const updateById = async (id, data) => {
 }
 
 
-
 const cambiarEstadoId = async (id, estado) => {
 
         const estadoNormalizado = normalizarEstado(estado);
@@ -156,7 +153,6 @@ const cambiarEstadoId = async (id, estado) => {
 } 
 
 
-
 const deleteById = async (id) => {
 
     const aprendicesAsociados = await aprendizModel.findOne({
@@ -189,7 +185,6 @@ const deleteById = async (id) => {
 
     return eliminarProgramaFormacionId;
 }
-
 
 export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };
 

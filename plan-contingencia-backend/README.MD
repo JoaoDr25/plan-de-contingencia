@@ -40,3 +40,10 @@ Para restaurar el envio, establece `AUTH_EMAIL_TEST_MODE=false` y reinicia el
 servidor. Fuera de `NODE_ENV=development` el envio permanece activo, incluso si
 la bandera esta habilitada. No habilites este modo en entornos compartidos ni
 de produccion: el codigo registrado en consola permite autenticar al usuario.
+
+# PDF del plan aprobado para Subdireccion
+
+La notificacion del plan aprobado adjunta el PDF y lo envia por SMTP al correo
+institucional del usuario activo de Subdireccion y a su correo personal, si esta
+registrado. Si ambas direcciones coinciden, se incluye un solo destinatario.
+Si no tiene correo personal, se mantiene el envio al institucional.

@@ -12,7 +12,6 @@ import {
 
  const router = express.Router();
 
-
  router.post('/actividades', crearActividad);
  router.get('/actividades', listarActividades);
  router.get('/actividades/:id', validarObjectId, obtenerActividadId);

@@ -10,6 +10,7 @@ const normalizarEstado = (estado) => {
     return estado;
 }
 
+
 const resolverProgramaFormacion = async (data) => {
     const programa = data.programaFormacionId
         ? await programaFormacionModel.findById(data.programaFormacionId)
@@ -31,6 +32,7 @@ const resolverProgramaFormacion = async (data) => {
     data.ficha = programa.ficha;
 }
 
+
 const normalizarDatosAprendiz = async (data) => {
     data.estado = normalizarEstado(data.estado);
 
@@ -38,6 +40,7 @@ const normalizarDatosAprendiz = async (data) => {
         await resolverProgramaFormacion(data);
     }
 }
+
 
 const create = async (data) => {
 
@@ -64,7 +67,6 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
 
     const normalizedFilter = {
@@ -78,7 +80,6 @@ const getAll = async (filter = {}) => {
     return await crud.getAll(normalizedFilter)
         .populate("programaFormacionId", "nombre ficha nivel nivelFormacion");
 }
-
 
 
 const getById = async (id) => {
@@ -99,7 +100,6 @@ const getById = async (id) => {
 
     return obtenerAprendizId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -144,7 +144,6 @@ const updateById = async (id, data) => {
 }
 
 
-
 const cambiarEstadoId = async (id, estado) => {
 
     const estadoNormalizado = normalizarEstado(estado);
@@ -180,7 +179,6 @@ const cambiarEstadoId = async (id, estado) => {
 }
 
 
-
 const deleteById = async (id) => {
 
     const eliminarAprendizId = await crud.delete(id);
@@ -198,7 +196,6 @@ const deleteById = async (id) => {
 
     return eliminarAprendizId;
 }
-
 
 export default { ...crud, create, getAll, getById, updateById, cambiarEstadoId, deleteById };
 

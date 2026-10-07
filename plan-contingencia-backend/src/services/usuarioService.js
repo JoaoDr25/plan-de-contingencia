@@ -10,6 +10,7 @@ const normalizarEstado = (estado) => {
     return estado;
 }
 
+
 const normalizarRol = (rol) => {
     if (!rol) return rol;
 
@@ -40,12 +41,14 @@ const normalizarRol = (rol) => {
     return roles[rol] ?? String(rol).trim().toUpperCase();
 }
 
+
 const normalizarDatosUsuario = (data) => {
     data.correo = data.correo ?? data.correoInstitucional;
     data.centro = data.centro ?? data.centroFormacion;
     data.rol = normalizarRol(data.rol ?? data.rolAsignado);
     data.estado = normalizarEstado(data.estado);
 }
+
 
 const create = async (data) => {
 
@@ -85,7 +88,6 @@ const create = async (data) => {
 
     return await crud.create(data);
 }
-
 
 
 const sincronizar = async () => {
@@ -144,7 +146,6 @@ const sincronizar = async () => {
 };
 
 
-
 const getAll = async (filter = {}) => {
 
     const normalizedFilter = {
@@ -166,7 +167,6 @@ const getAll = async (filter = {}) => {
 
     return await crud.getAll(normalizedFilter);
 }
-
 
 
 const getRevisores = async () => {
@@ -198,7 +198,6 @@ const getRevisores = async () => {
 };
 
 
-
 const getById = async (id) => {
 
     const obtenerUsuarioId = await crud.getById(id);
@@ -216,7 +215,6 @@ const getById = async (id) => {
 
     return obtenerUsuarioId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -281,7 +279,6 @@ const updateById = async (id, data) => {
 }
 
 
-
 const cambiarEstadoId = async (id, estado) => {
 
     const estadoNormalizado = normalizarEstado(estado);
@@ -315,7 +312,6 @@ const cambiarEstadoId = async (id, estado) => {
 
     return cambiarEstado;
 }
-
 
 
 const cambiarRolId = async (id, rol) => {
@@ -362,7 +358,6 @@ const cambiarRolId = async (id, rol) => {
 };
 
 
-
 const registrarAcceso = async (id) => {
 
     const registrarAccesoId = await crud.update(
@@ -383,7 +378,6 @@ const registrarAcceso = async (id) => {
 
     return registrarAccesoId;
 }
-
 
 
 const actualizarFirma = async (
@@ -460,7 +454,6 @@ const actualizarFirma = async (
 
     return usuario;
 };
-
 
 
 const deleteById = async (id) => {

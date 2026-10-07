@@ -9,6 +9,7 @@ const normalizarEstado = (estado) => {
     return estado;
 }
 
+
 const normalizarNivel = (nivel) => {
     if (!nivel) return nivel;
 
@@ -21,11 +22,13 @@ const normalizarNivel = (nivel) => {
     return niveles[nivel] ?? nivel;
 }
 
+
 const normalizarDatosEpp = (data) => {
     data.nombre = data.nombre ?? data.nombreEPP;
     data.nivel = normalizarNivel(data.nivel ?? data.nivelProteccion);
     data.estado = normalizarEstado(data.estado);
 }
+
 
 const create = async (data) => {
 
@@ -52,7 +55,6 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
 
     const normalizedFilter = {
@@ -65,7 +67,6 @@ const getAll = async (filter = {}) => {
 
     return await crud.getAll(normalizedFilter);
 }
-
 
 
 const getById = async (id) => {
@@ -85,7 +86,6 @@ const getById = async (id) => {
 
         return obtenerEppId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -130,7 +130,6 @@ const updateById = async (id, data) => {
 }
 
 
-
 const cambiarEstadoId = async (id, estado) => {
 
         const estadoNormalizado = normalizarEstado(estado);
@@ -164,7 +163,6 @@ const cambiarEstadoId = async (id, estado) => {
 
         return cambiarEstado;
 }
-
 
 
 const deleteById = async (id) => {

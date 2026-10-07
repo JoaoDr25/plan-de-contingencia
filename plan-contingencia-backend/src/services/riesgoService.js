@@ -17,6 +17,7 @@ const normalizarNivel = (nivel) => {
     return niveles[nivel] ?? nivel;
 }
 
+
 const normalizarDatosRiesgo = (data) => {
     if (data.riesgo || data.nombre) {
         data.riesgo = data.riesgo ?? data.nombre;
@@ -38,6 +39,7 @@ const normalizarDatosRiesgo = (data) => {
         data.peligroId = [...new Set(data.peligroId)];
     }
 }
+
 
 const validarRelaciones = async (data) => {
 
@@ -134,7 +136,6 @@ const sincronizarPeligros = async (riesgoId, nuevosPeligros = [], antiguosPeligr
 };
 
 
-
 const create = async (data) => {
 
     normalizarDatosRiesgo(data);
@@ -172,7 +173,6 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
     return await crud.getAll(filter)
         .populate("peligroId")
@@ -200,7 +200,6 @@ const getById = async (id) => {
 
     return obtenerRiesgoId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -264,7 +263,6 @@ const updateById = async (id, data) => {
 
     return actualizarRiesgoId;
 }
-
 
 
 const deleteById = async (id) => {

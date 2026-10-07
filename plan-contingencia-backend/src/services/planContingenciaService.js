@@ -1,9 +1,10 @@
 import { createCrudService } from '../services/baseCrudService.js'
 import { calcularCamposFaltantes } from "../utils/planValidation.js"
 import { generarDocumentoPdf } from '../utils/pdfGenerator.js'
+import { normalizarContactosAdicionales } from '../utils/contactosAdicionales.js'
+import { enviarPdfPlanSubdireccion } from '../utils/verifyEmail.js'
 
 import { SEGURIDAD_VIAL_ITEMS } from '../constants/seguridadVialItems.js'
-import { normalizarContactosAdicionales } from '../utils/contactosAdicionales.js'
 
 import planContingenciaModel from '../models/planContingenciaModel.js'
 import riesgoModel from '../models/riesgoModel.js'
@@ -13,7 +14,6 @@ import actividadModel from '../models/actividadModel.js'
 import usuarioModel from '../models/usuarioModel.js'
 import contactosEmergenciaModel from '../models/contactoEmergenciaModel.js'
 import elementosProteccionPersonalModel from '../models/eppModel.js'
-import { enviarPdfPlanSubdireccion } from '../utils/verifyEmail.js'
 
 const crud = createCrudService(planContingenciaModel);
 
@@ -35,6 +35,39 @@ const obtenerPlanFunction = async (id) => {
     return plan;
 }
 
+
+const agregarObservacion = (plan, texto, usuario, preservarObservacionAnterior = true) => {
+    const observacion = String(texto ?? "").trim();
+
+    if (!observacion) {
+        return false;
+    }
+
+    if (!Array.isArray(plan.historialObservaciones)) {
+        plan.historialObservaciones = [];
+    }
+
+    if (
+        preservarObservacionAnterior &&
+        !plan.historialObservaciones.length &&
+        plan.observaciones?.trim()
+    ) {
+        plan.historialObservaciones.push({
+            texto: plan.observaciones.trim(),
+            rol: "ROL NO REGISTRADO",
+            fecha: null
+        });
+    }
+
+    plan.historialObservaciones.push({
+        texto: observacion,
+        rol: usuario?.rol?.toUpperCase() || "ROL NO REGISTRADO",
+        fecha: new Date()
+    });
+    plan.observaciones = observacion;
+
+    return true;
+};
 
 
 const regresarABorradorSiAplica = async (plan) => {
@@ -64,8 +97,7 @@ const regresarABorradorSiAplica = async (plan) => {
 }
 
 
-
-const create = async (data) => {
+const create = async (data, usuarioAutenticado) => {
 
     const {
         programaFormacionId,
@@ -130,9 +162,31 @@ const create = async (data) => {
         .filter(Boolean)
         .join(" ");
 
+    const creador = usuarioAutenticado?.usuarioId
+        ? await usuarioModel.findById(usuarioAutenticado.usuarioId)
+        : usuario;
+
+    if (!creador) {
+        const error = new Error("Usuario autenticado no encontrado");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    if (creador.estado !== "Activo") {
+        const error = new Error("El usuario se encuentra inactivo");
+        error.statusCode = 403;
+        throw error;
+    }
+
+    const observacionInicial = String(data.observaciones ?? "").trim();
+    data.historialObservaciones = [];
+
+    if (observacionInicial) {
+        agregarObservacion(data, observacionInicial, creador, false);
+    }
+
     return await crud.create(data);
 }
-
 
 
 const populatePlanQuery = (query) => query
@@ -152,7 +206,6 @@ const populatePlanQuery = (query) => query
             }
         ]
     });
-
 
 const construirFiltroVisibilidad = (usuario, filter = {}) => {
 
@@ -178,7 +231,6 @@ const getAll = async (filter = {}, usuario) => {
 
     return listarPlanesId;
 };
-
 
 
 const getById = async (id, usuario) => {
@@ -208,8 +260,7 @@ const getById = async (id, usuario) => {
 }
 
 
-
-const updateById = async (id, data) => {
+const updateById = async (id, data, usuarioAutenticado) => {
 
     const plan = await obtenerPlanFunction(id);
 
@@ -234,8 +285,7 @@ const updateById = async (id, data) => {
         "tipoTransporte",
         "lugarSalida",
         "lugarDestino",
-        "contactoLugar",
-        "observaciones"
+        "contactoLugar"
     ];
 
     const datosActualizados = {};
@@ -245,6 +295,30 @@ const updateById = async (id, data) => {
         if (data[campo] !== undefined) {
             datosActualizados[campo] = data[campo];
         }
+    }
+
+    const nuevaObservacion = String(data.observaciones ?? "").trim();
+    const observacionActual = String(plan.observaciones ?? "").trim();
+    let seAgregoObservacion = false;
+
+    if (nuevaObservacion && nuevaObservacion !== observacionActual) {
+        const usuarioActual = await usuarioModel.findById(usuarioAutenticado?.usuarioId);
+
+        if (!usuarioActual) {
+            const error = new Error("Usuario autenticado no encontrado");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        if (usuarioActual.estado !== "Activo") {
+            const error = new Error("El usuario se encuentra inactivo");
+            error.statusCode = 403;
+            throw error;
+        }
+
+        agregarObservacion(plan, nuevaObservacion, usuarioActual);
+        datosActualizados.observaciones = plan.observaciones;
+        seAgregoObservacion = true;
     }
 
     if (data.programaFormacionId) {
@@ -293,10 +367,11 @@ const updateById = async (id, data) => {
         }
     }
 
-    const actualizarPlanId = await crud.update(
-        id,
-        datosActualizados
-    );
+    plan.set(datosActualizados);
+
+    const actualizarPlanId = seAgregoObservacion
+        ? await plan.save()
+        : await crud.update(id, datosActualizados);
 
     if (!actualizarPlanId) {
         const error = new Error(
@@ -311,8 +386,7 @@ const updateById = async (id, data) => {
 };
 
 
-
-const cambiarEstadoId = async (id, nuevoEstado, usuario) => {
+const cambiarEstadoId = async (id, nuevoEstado, usuario, observaciones = "") => {
 
     const plan = await obtenerPlanFunction(id);
 
@@ -451,13 +525,14 @@ const cambiarEstadoId = async (id, nuevoEstado, usuario) => {
             throw error;
         }
     }
+
+    agregarObservacion(plan, observaciones, usuarioActual);
     plan.estado = nuevoEstado;
 
     await plan.save();
 
     return plan;
 };
-
 
 
 const deleteById = async (id) => {
@@ -488,7 +563,6 @@ const deleteById = async (id) => {
     }
     return eliminarPlanId;
 }
-
 
 
 const generarPlanId = async (id) => {
@@ -554,7 +628,6 @@ const generarPlanId = async (id) => {
 
     return plan;
 };
-
 
 
 const generarPdfId = async (id) => {
@@ -623,7 +696,7 @@ const notificarSubdireccionPlanAprobado = async (plan) => {
         rol: "SUBDIRECCION",
         estado: "Activo",
         correo: { $exists: true, $ne: "" }
-    }).select("correo nombre apellido");
+    }).select("correo correoPersonal nombre apellido");
 
     if (!destinatario) {
         console.error(
@@ -632,16 +705,21 @@ const notificarSubdireccionPlanAprobado = async (plan) => {
         return;
     }
 
+    const correos = [...new Set(
+        [destinatario.correo, destinatario.correoPersonal]
+            .map((correo) => correo?.trim().toLowerCase())
+            .filter(Boolean)
+    )];
+
     const pdfBuffer = await generarPdfId(plan._id);
 
     await enviarPdfPlanSubdireccion({
-        destinatario: destinatario.correo,
+        destinatario: correos,
         nombre: `${destinatario.nombre} ${destinatario.apellido}`,
         numeroPlan: plan.numero,
         pdfBuffer
     });
 };
-
 
 
 const asociarRiesgosId = async (id, riesgosId) => {
@@ -693,7 +771,6 @@ const asociarRiesgosId = async (id, riesgosId) => {
 }
 
 
-
 const obtenerAsociacionRiesgoId = async (id) => {
 
     const plan = await planContingenciaModel.findById(id)
@@ -710,7 +787,6 @@ const obtenerAsociacionRiesgoId = async (id) => {
     }
     return plan.riesgosId;
 }
-
 
 
 const eliminarAsociacionRiesgoId = async (id, riesgoId) => {
@@ -744,7 +820,6 @@ const eliminarAsociacionRiesgoId = async (id, riesgoId) => {
 
     return plan;
 }
-
 
 
 const asociarAprendicesId = async (id, aprendicesId) => {
@@ -787,7 +862,6 @@ const asociarAprendicesId = async (id, aprendicesId) => {
 }
 
 
-
 const obtenerAsociacionAprendicesId = async (id) => {
 
     const plan = await planContingenciaModel.findById(id)
@@ -804,7 +878,6 @@ const obtenerAsociacionAprendicesId = async (id) => {
     }
     return plan.aprendicesId;
 }
-
 
 
 const eliminarAsociacionAprendicesId = async (id, aprendizId) => {
@@ -837,7 +910,6 @@ const eliminarAsociacionAprendicesId = async (id, aprendizId) => {
 
     return plan;
 }
-
 
 
 const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
@@ -919,7 +991,6 @@ const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
 }
 
 
-
 const seleccionarEppId = async (id, epp) => {
 
     const plan = await obtenerPlanFunction(id);
@@ -980,7 +1051,6 @@ const seleccionarEppId = async (id, epp) => {
         epp: epp.epp
     });
 }
-
 
 
 const registrarSeguridadVialId = async (id, seguridadVial) => {
@@ -1046,7 +1116,6 @@ const registrarSeguridadVialId = async (id, seguridadVial) => {
 }
 
 
-
 const registrarContextoAcademicoId = async (id, contextoAcademico) => {
 
     const plan = await obtenerPlanFunction(id);
@@ -1070,7 +1139,6 @@ const registrarContextoAcademicoId = async (id, contextoAcademico) => {
         contextoAcademico: contextoAcademico
     });
 }
-
 
 
 const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
@@ -1106,7 +1174,6 @@ const registrarArticulacionFormativaId = async (id, articulacionFormativa) => {
         articulacionFormativa: articulacionFormativa
     });
 }
-
 
 
 const registrarPlanTrabajoId = async (id, planTrabajo) => {
@@ -1169,7 +1236,6 @@ const registrarPlanTrabajoId = async (id, planTrabajo) => {
         planTrabajo: planTrabajo.planTrabajo
     });
 }
-
 
 
 const registrarRevision = async (id, decision, usuario) => {
@@ -1286,7 +1352,6 @@ const registrarRevision = async (id, decision, usuario) => {
 };
 
 
-
 const registrarRevisionPlanId = async (
     id,
     data,
@@ -1388,9 +1453,7 @@ const registrarRevisionPlanId = async (
 
     revisionActual.fecha = new Date();
 
-    if (observaciones) {
-        plan.observaciones = observaciones;
-    }
+    agregarObservacion(plan, observaciones, usuarioActual);
 
     let planAprobadoEnEstaRevision = false;
 
@@ -1448,4 +1511,3 @@ export default {
     registrarRevision,
     registrarRevisionPlanId
 };
-

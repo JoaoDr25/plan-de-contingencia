@@ -25,6 +25,7 @@ const normalizarRiesgosIds = (riesgos = []) => {
         .map(String);
 };
 
+
 const validarRiesgos = async (riesgos) => {
 
     const riesgosIds = normalizarRiesgosIds(riesgos);
@@ -48,7 +49,6 @@ const validarRiesgos = async (riesgos) => {
         throw error;
     }
 }
-
 
 
 const sincronizarRiesgos = async (
@@ -82,7 +82,6 @@ const sincronizarRiesgos = async (
         );
     }
 };
-
 
 
 const create = async (data) => {
@@ -125,12 +124,10 @@ const create = async (data) => {
 }
 
 
-
 const getAll = async (filter = {}) => {
 
     return await crud.getAll(filter).populate("riesgos");
 }
-
 
 
 const getById = async (id) => {
@@ -151,7 +148,6 @@ const getById = async (id) => {
 
     return obtenerPeligroId;
 }
-
 
 
 const updateById = async (id, data) => {
@@ -224,7 +220,6 @@ const updateById = async (id, data) => {
 
     return actualizarPeligroId;
 }
-
 
 
 const deleteById = async (id) => {
