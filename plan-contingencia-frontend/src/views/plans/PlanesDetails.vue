@@ -96,6 +96,7 @@ import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notificat
 import { ROLES } from 'src/constants/system/roles.constants'
 
 import { notifyError, notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
+import { openPdf } from 'src/utils/pdf.utils'
 
 import planContingenciaService from 'src/services/plans/planContingenciaService.js'
 
@@ -213,7 +214,11 @@ async function executePlanAction(action, observations = '') {
       case PLAN_ACTIONS.EJECUTAR:
       case PLAN_ACTIONS.CANCELAR:
       case PLAN_ACTIONS.MANDAR_EDICION:
-        await planContingenciaService.changeEstadoPlan(id, STATE_BY_ACTION[action])
+        await planContingenciaService.changeEstadoPlan(
+          id,
+          STATE_BY_ACTION[action],
+          observations,
+        )
         break
 
       case PLAN_ACTIONS.EDITAR:
@@ -221,7 +226,7 @@ async function executePlanAction(action, observations = '') {
         return true
 
       case PLAN_ACTIONS.IMPRIMIR:
-        await printPlan(id)
+        await openPdf(() => planContingenciaService.generarPdf(id))
         return true
 
       default:
@@ -253,13 +258,6 @@ async function executePlanAction(action, observations = '') {
   return true
 }
 
-async function printPlan(id) {
-  const blob = await planContingenciaService.generarPdf(id)
-  const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }))
-
-  window.open(url, '_blank', 'noopener')
-  setTimeout(() => URL.revokeObjectURL(url), 60000)
-}
 </script>
 
 <style scoped lang="scss">

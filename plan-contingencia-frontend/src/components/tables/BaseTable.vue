@@ -208,7 +208,6 @@ function resetActiveCell() {
   max-width: 260px;
 }
 
-/* Cells with interactive content (actions, chips, checkboxes) must never be clipped */
 .base-table__table :deep(tbody td:has(button, .q-btn, .q-chip, .q-checkbox, .q-toggle)) {
   max-width: none;
   overflow: visible;

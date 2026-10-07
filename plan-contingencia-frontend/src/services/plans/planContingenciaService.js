@@ -32,9 +32,10 @@ const updatePlan = async (id, planData) => {
   return mapPlanContingencia(response.data.data)
 }
 
-const changeEstadoPlan = async (id, estado) => {
+const changeEstadoPlan = async (id, estado, observaciones = '') => {
   const response = await api.patch(`/planes/${id}/estado`, {
     estado,
+    ...(observaciones ? { observaciones } : {}),
   })
 
   return mapPlanContingencia(response.data.data)

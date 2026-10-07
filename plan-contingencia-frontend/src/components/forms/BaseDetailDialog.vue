@@ -102,6 +102,11 @@ function closeDialog() {
   transform: translateY(4px);
 }
 
+.base-details__column :deep(.base-detail-item:not(.status-chip) .base-detail-item__value) {
+  text-transform: uppercase;
+  font-size: $font-size-xs;
+}
+
 .base-details__logo + .base-details__column {
   margin-left: 18px;
 }

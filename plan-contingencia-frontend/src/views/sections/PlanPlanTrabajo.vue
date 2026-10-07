@@ -52,6 +52,7 @@ defineProps({
 .plan-work-plan {
   width: 100%;
   padding-bottom: 8px;
+  padding-right: 50px;
 }
 
 .work-plan-table {
@@ -87,10 +88,11 @@ defineProps({
 
 .work-plan__value {
   min-width: 0;
-  font-size: $font-size-md;
+  font-size: $font-size-xs;
   line-height: 1.4;
   word-break: break-word;
   overflow-wrap: anywhere;
+  text-transform: uppercase;
 }
 
 .work-plan-empty {
@@ -125,7 +127,7 @@ defineProps({
     padding: 12px 14px;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
-    background-color: #ffffff;
+    background-color: $background-color;
   }
 
   .work-plan-row:last-child {

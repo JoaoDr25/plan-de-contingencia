@@ -178,10 +178,11 @@ function openRisks(danger) {
 
 .danger-item__value {
   min-width: 0;
-  font-size: $font-size-md;
-  line-height: 1.4;
+  font-size: $font-size-xs;
+  line-height: 1.2;
   overflow-wrap: break-word;
   word-break: break-word;
+  text-transform: uppercase;
 }
 
 .danger-item__action {
@@ -255,11 +256,13 @@ function openRisks(danger) {
 </style>
 
 <style lang="scss">
+@use 'src/css/typography.scss' as *;
+
 .plan-detail-risks-dialog table.risks-table th {
-  font-size: 0.75rem;
+  font-size: $font-size-xs;
 }
 
 .plan-detail-risks-dialog table.risks-table td {
-  font-size: 0.85rem;
+  font-size: $font-size-xs;
 }
 </style>

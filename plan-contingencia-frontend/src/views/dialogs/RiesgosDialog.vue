@@ -19,7 +19,6 @@
 import { reactive, computed, watch, ref } from 'vue'
 
 import { RISK_FORM_FIELDS } from 'src/constants/forms/riesgos_form.constants'
-// import { PROTOCOLOS_MOCK } from 'src/mocks/modules/protocolos.mock.js'
 import { notifyWarning } from 'src/utils/notifications.utils'
 import { toSentenceCase } from 'src/utils/text.utils'
 

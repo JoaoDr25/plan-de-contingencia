@@ -32,11 +32,14 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 .plan-section {
   display: flex;
   gap: 20px;
   padding: 20px;
-  background: #ffffff;
+  background: $color-surface;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
@@ -50,8 +53,8 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #eaf5ec;
-  color: #287c2d;
+  background: $color-background;
+  color: $color-primary-dark;
   border-radius: 8px;
 }
 
@@ -70,7 +73,7 @@ defineProps({
   font-weight: 700;
   line-height: 1.2;
   text-transform: uppercase;
-  color: #287c2d;
+  color: $color-primary-dark;
 }
 
 .plan-section__body {

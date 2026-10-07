@@ -387,7 +387,6 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -399,7 +398,7 @@ defineExpose({
   height: 70px !important;
   min-height: 70px;
   max-height: 70px;
-  line-height: 22px;
+  line-height: 19px;
   overflow-y: auto !important;
 }
 

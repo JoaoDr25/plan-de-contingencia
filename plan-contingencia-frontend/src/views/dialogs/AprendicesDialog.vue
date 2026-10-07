@@ -23,10 +23,9 @@
 import { reactive, computed, watch, ref } from 'vue'
 
 import { APPRENTICE_FORM_FIELDS } from 'src/constants/forms/aprendices_form.constants'
+import { notifyWarning, notifyError } from 'src/utils/notifications.utils'
 
 import programaService from 'src/services/modules/programaService.js'
-
-import { notifyWarning, notifyError } from 'src/utils/notifications.utils'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import BaseFormGrid from 'src/components/forms/BaseFormGrid.vue'

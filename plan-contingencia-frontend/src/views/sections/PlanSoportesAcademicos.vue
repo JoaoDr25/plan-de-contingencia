@@ -186,8 +186,9 @@ function getSupportName(link) {
   font-weight: 400;
   color: #333333;
   text-decoration: none;
-  font-size: $font-size-md;
-  line-height: 1.4;
+  font-size: $font-size-xs;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .support-item__link:hover {
@@ -221,7 +222,6 @@ function getSupportName(link) {
 
 .support-item__empty {
   font-size: $font-size-md;
-  color: #666666;
   line-height: 1.4;
 }
 

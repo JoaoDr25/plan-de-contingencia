@@ -130,6 +130,7 @@ function closeDialog() {
   border-bottom: 1px solid #d6d6d6;
   background-color: $color-surface;
   font-size: $font-size-xs;
+  text-transform: uppercase;
   font-weight: 600;
   text-align: left;
 }
@@ -138,7 +139,11 @@ function closeDialog() {
   padding: 12px 12px;
   border-bottom: 1px solid #e2e2e2;
   line-height: 1.4;
-  font-size: $font-size-md;
+  font-size: $font-size-xs;
+}
+
+.risks-table td:not(.risks-table__level) {
+  text-transform: uppercase;
 }
 
 .risks-table tbody tr:last-child td {

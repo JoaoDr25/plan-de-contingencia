@@ -158,7 +158,7 @@ function changeRowsPerPage(value) {
   padding: 0;
   border-radius: 4px;
   color: $color-text-secondary;
-  background-color: #f3f4f6;
+  background-color: $color-background;
 }
 
 .base-pagination__page {
@@ -169,7 +169,7 @@ function changeRowsPerPage(value) {
   justify-content: center;
   border-radius: 4px;
   cursor: pointer;
-  background: #f3f4f6;
+  background: $color-background;
   color: $color-text-primary;
   font-size: $font-size-xs;
   font-weight: 500;

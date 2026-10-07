@@ -66,7 +66,7 @@
         row-key="id"
         column-template="7% 24% 34% 25% 10%"
         max-body-height="150px"
-        class="parameter-card parameter-card--wide"
+        class="parameter-card parameter-card--wide parameter-card--security"
       >
         <template #header-icon>
           <q-icon name="expand_more" size="20px" />
@@ -235,6 +235,11 @@ const securityRows = SECURITY_VIAL_ITEMS.map((item, index) => ({
 
 .parameter-card--wide {
   grid-column: 1 / -1;
+}
+
+.parameter-card--security :deep(.base-data-card__columns > span:nth-child(5)),
+.parameter-card--security :deep(.base-data-card__row > span:nth-child(5)) {
+  text-align: center;
 }
 
 .parameter-card__footer-label {

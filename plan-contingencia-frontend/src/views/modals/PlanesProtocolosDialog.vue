@@ -93,6 +93,8 @@ function closeDialog() {
 .protocols-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: $font-size-xs;
+  text-transform: uppercase;
 }
 
 .protocols-table th {
@@ -111,7 +113,6 @@ function closeDialog() {
 .protocols-table td {
   padding: 12px;
   border-bottom: 1px solid #e2e2e2;
-  font-size: $font-size-md;
   line-height: 1.4;
 }
 

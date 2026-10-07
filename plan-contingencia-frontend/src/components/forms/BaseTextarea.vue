@@ -191,11 +191,13 @@ const resolvedIcon = computed(() => {
   background-color: $color-surface;
   border: 1px solid $color-border;
   font-size: $font-size-lg;
+  
 }
 
 .base-textarea--wizard :deep(.q-field__native) {
   min-height: 70px;
   padding-top: 10px;
+  line-height: 1.4;
 }
 
 .base-textarea--wizard :deep(.q-field__prepend .q-icon) {

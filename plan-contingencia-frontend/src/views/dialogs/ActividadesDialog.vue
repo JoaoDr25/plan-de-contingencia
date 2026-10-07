@@ -15,7 +15,6 @@
 import { reactive, computed, watch, ref } from 'vue'
 
 import { ACTIVITY_FORM_FIELDS } from 'src/constants/forms/actividades_form.constants'
-// import { PELIGROS_MOCK } from 'src/mocks/modules/peligros.mock.js'
 import { notifyWarning, notifyError } from 'src/utils/notifications.utils'
 import { toSentenceCase } from 'src/utils/text.utils'
 

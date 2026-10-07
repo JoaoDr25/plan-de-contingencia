@@ -16,16 +16,6 @@
       </span>
     </div>
 
-    <!-- <div class="info-item">
-            <span class="info-item__label">
-                Clasificación de la Información
-            </span>
-
-            <span class="info-item__value">
-                {{ formatClassification(plan.clasificacionInformacion) }}
-            </span>
-        </div> -->
-
     <div class="info-item">
       <span class="info-item__label"> Transporte </span>
 
@@ -84,15 +74,6 @@
       </span>
     </div>
 
-    <!-- <div class="info-item">
-            <span class="info-item__label">
-                Descripción de la Actividad
-            </span>
-
-            <span class="info-item__value">
-                {{ plan.descripcionActividad || 'No registrada' }}
-            </span>
-        </div> -->
   </div>
 </template>
 
@@ -115,15 +96,6 @@ function formatTransport(value) {
   return transportTypes[value] || 'No disponible'
 }
 
-// function formatClassification(value) {
-
-//     const classifications = {
-//         publica: 'Pública',
-//         clasificada: 'Clasificada',
-//         reservada: 'Reservada'
-//     }
-//     return classifications[value] || 'No disponible'
-// }
 </script>
 
 <style scoped lang="scss">
@@ -132,7 +104,7 @@ function formatTransport(value) {
 
 .plan-general-info {
   display: grid;
-  grid-template-columns: 1.8fr 1.9fr 1.1fr;
+  grid-template-columns: 1.8fr 1.8fr 1.1fr;
   column-gap: 40px;
   row-gap: 22px;
   padding-bottom: 8px;
@@ -156,10 +128,11 @@ function formatTransport(value) {
 }
 
 .info-item__value {
-  font-size: $font-size-md;
-  line-height: 1.4;
+  font-size: $font-size-xs;
+  line-height: 1.2;
   word-break: break-word;
   overflow-wrap: break-word;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1000px) {

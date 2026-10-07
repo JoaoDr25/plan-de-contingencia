@@ -49,6 +49,7 @@
 
         <BaseTextarea
           id="descripcion-actividad"
+          class="plan-information__description"
           v-model="form.descripcionActividad"
           label="Descripción de la actividad"
           placeholder="Describa brevemente la actividad a realizar"
@@ -418,6 +419,12 @@ onMounted(() => {
   color: $color-error;
 }
 
+.plan-information__description :deep(.q-field__native) {
+  max-height: 80px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
 .plan-information__notice {
   display: flex;
   align-items: flex-start;
@@ -449,6 +456,7 @@ onMounted(() => {
 .plan-information__notice span {
   color: $color-error;
 }
+
 
 @media (max-width: 800px) {
   .plan-information__grid {

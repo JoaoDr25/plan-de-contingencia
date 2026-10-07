@@ -184,7 +184,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 @use 'src/css/typography.scss' as *;
 
@@ -277,6 +276,11 @@ onMounted(() => {
   row-gap: 16px;
 }
 
+.detail-card__fields :deep(.base-detail-item__value) {
+  text-transform: uppercase;
+  font-size: $font-size-xs;
+}
+
 .detail-card__fields--user {
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr);
 }
@@ -292,8 +296,6 @@ onMounted(() => {
 .detail-card__fields--access {
   display: flex;
   flex-wrap: wrap;
-  // display: grid;
-  // grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 16px 32px;
   padding: 10px;
   padding-left: 30px;
@@ -403,7 +405,7 @@ onMounted(() => {
   }
 
   .detail-card :deep(.base-detail-item__value) {
-    font-size: 0.75rem;
+    font-size: $font-size-xs;
   }
 
   .detail-card__logo img {

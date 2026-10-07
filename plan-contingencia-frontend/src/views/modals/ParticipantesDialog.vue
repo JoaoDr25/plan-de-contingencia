@@ -143,7 +143,8 @@ function getParticipantNames(participant) {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 12.5px;
+  font-size: $font-size-xs;
+  text-transform: uppercase;
 }
 
 .participants-table__number-column {
@@ -161,8 +162,8 @@ function getParticipantNames(participant) {
   padding: 10px 12px;
   border-top: 1px solid #d6d6d6;
   border-bottom: 1px solid #d6d6d6;
-  background-color: #fafafa;
-  font-size: 0.75rem;
+  background-color: $color-background;
+  font-size: $font-size-xs;
   font-weight: 600;
   text-align: center;
 }
@@ -171,7 +172,7 @@ function getParticipantNames(participant) {
   padding: 12px 12px;
   border-bottom: 1px solid #e2e2e2;
   line-height: 1.4;
-  font-size: 0.85rem;
+  font-size: $font-size-xs;
   text-align: center;
 }
 
@@ -180,7 +181,7 @@ function getParticipantNames(participant) {
 }
 
 .participants-table tbody tr:hover {
-  background-color: #fafafa;
+  background-color: $color-background-secondary;
 }
 
 .participants-table__number {

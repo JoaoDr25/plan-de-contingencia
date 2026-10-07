@@ -118,6 +118,7 @@ import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notificat
 
 import { formatDate, formatHour } from 'src/utils/date.utils'
 import { notifyError, notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
+import { openPdf } from 'src/utils/pdf.utils'
 
 import { useAuthStore } from 'src/stores/auth.store'
 
@@ -309,8 +310,16 @@ async function executePlanAction(action, observations = '') {
       case PLAN_ACTIONS.EJECUTAR:
       case PLAN_ACTIONS.CANCELAR:
       case PLAN_ACTIONS.MANDAR_EDICION:
-        await planContingenciaService.changeEstadoPlan(id, STATE_BY_ACTION[action])
+        await planContingenciaService.changeEstadoPlan(
+          id,
+          STATE_BY_ACTION[action],
+          observations,
+        )
         break
+
+      case PLAN_ACTIONS.IMPRIMIR:
+        await openPdf(() => planContingenciaService.generarPdf(id))
+        return
 
       default:
         return
@@ -447,6 +456,11 @@ function viewFullPlan() {
   column-gap: 50px;
   row-gap: 16px;
   padding-left: 20px;
+}
+
+.detail-card__fields--plan :deep(.base-detail-item__value) {
+  text-transform: uppercase;
+  font-size: $font-size-xs;;
 }
 
 .detail-card__body--revision {

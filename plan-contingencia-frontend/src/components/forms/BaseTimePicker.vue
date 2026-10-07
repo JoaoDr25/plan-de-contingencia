@@ -154,7 +154,6 @@ function timeOptions(hr, min) {
   const upperBound = max0 ? max0.hours * 60 + max0.minutes : Infinity
 
   if (min === undefined) {
-    // Vista de horas: habilita la hora si contiene al menos un minuto dentro del rango.
     const hourStart = hr * 60
     const hourEnd = hourStart + 59
 

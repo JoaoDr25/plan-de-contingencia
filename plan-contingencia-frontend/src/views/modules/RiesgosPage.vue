@@ -350,7 +350,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-
 @use 'src/css/variables.scss' as *;
 
 .associated-protocols-cell {

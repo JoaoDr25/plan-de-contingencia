@@ -163,6 +163,22 @@ function handleCancel() {
   font-size: $font-size-sm;
 }
 
+.observations-input :deep(.q-field__control) {
+  border-radius: 5px;
+  background-color: $color-background-field;
+}
+
+.observations-input :deep(.q-field__control::before),
+.observations-input :deep(.q-field__control:hover::before),
+.observations-input :deep(.q-field__control::after) {
+  border: none;
+}
+
+.observations-input :deep(textarea.q-field__native) {
+  min-height: 100px;
+  line-height: $line-height-normal;
+}
+
 .base-confirmation-dialog__actions {
   display: flex;
   justify-content: center;

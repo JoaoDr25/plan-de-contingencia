@@ -134,12 +134,12 @@ const participants = computed(() => {
   font-size: $font-size-xs;
   font-weight: 700;
   text-transform: uppercase;
-  color: #287c2d;
+  color: $color-primary;
 }
 
 .summary-item__value {
-  font-size: $font-size-md;
-  color: #222222;
+  font-size: $font-size-xs;
+  text-transform: uppercase;
 }
 
 .participants-action__button {
@@ -151,30 +151,29 @@ const participants = computed(() => {
   padding: 0;
   border: none;
   background: transparent;
-  color: #2e7d32;
+  color: $color-primary;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .participants-action__icon {
-  color: #2e7d32;
+  color: $color-primary;
   transition:
     color 0.2s ease,
     transform 0.2s ease;
 }
 
 .participants-action__button:hover {
-  color: #287c2d;
+  color: $color-primary
 }
 
 .participants-action__button:hover .participants-action__icon {
-  color: #287c2d;
+  color: $color-primary;
   transform: scale(1.08);
 }
 
 .participants-action__empty {
   font-size: 13px;
-  color: #666666;
 }
 
 @media (max-width: 900px) {

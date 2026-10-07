@@ -23,14 +23,8 @@
         <div class="security-column__content">
           <ul class="security-list security-list-links">
             <li v-for="item in seguridadVialItems" :key="item.itemId">
-              <a
-                v-if="item.soporte"
-                :href="item.soporte"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="support-link"
-                title="Abrir soporte"
-              >
+              <a v-if="item.soporte" :href="item.soporte" target="_blank" rel="noopener noreferrer" class="support-link"
+                title="Abrir soporte">
                 <q-icon name="open_in_new" />
               </a>
 
@@ -45,11 +39,7 @@
 
         <div class="security-column__content">
           <div class="emergency-contact-list">
-            <div
-              v-for="contacto in contactosEmergencia"
-              :key="contacto._id"
-              class="emergency-contact"
-            >
+            <div v-for="contacto in contactosEmergencia" :key="contacto._id" class="emergency-contact">
               <div class="contact-info">
                 <strong>{{ contacto.nombre }}</strong>
 
@@ -68,7 +58,18 @@
     <div class="security-observations">
       <h3>OBSERVACIONES</h3>
 
-      <p>{{ plan.observaciones || 'Sin observaciones registradas.' }}</p>
+      <div v-if="observaciones.length" class="observation-list">
+        <div v-for="(observacion, index) in observaciones" :key="observacion._id || index">
+          <p class="observation-list__text">
+            <span class="observation-list__metadata">
+              {{ observacion.rol || 'ROL NO REGISTRADO' }} -
+              {{ formatObservationDate(observacion.fecha) }}:
+            </span>
+            <span class="observation-list__content">{{ observacion.texto }}</span>
+          </p>
+        </div>
+      </div>
+      <p v-else>Sin observaciones registradas.</p>
     </div>
   </section>
 </template>
@@ -117,6 +118,42 @@ const contactosEmergencia = computed(() => {
 
   return contactos
 })
+
+const observaciones = computed(() => {
+  const history = toObjects(props.plan.historialObservaciones)
+
+  if (history.length) {
+    return history
+  }
+
+  const legacyObservation = String(props.plan.observaciones ?? '').trim()
+
+  return legacyObservation
+    ? [{
+      texto: legacyObservation,
+      rol: 'ROL NO REGISTRADO',
+      fecha: null,
+    }]
+    : []
+})
+
+function formatObservationDate(value) {
+  if (!value) {
+    return 'Fecha no registrada'
+  }
+
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return 'Fecha no registrada'
+  }
+
+  return new Intl.DateTimeFormat('es-CO', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+    timeZone: 'America/Bogota',
+  }).format(date)
+}
 </script>
 
 <style scoped lang="scss">
@@ -181,7 +218,7 @@ const contactosEmergencia = computed(() => {
   padding-right: 0;
 }
 
-.security-column + .security-column {
+.security-column+.security-column {
   border-left: 1px solid #cfcfcf;
 }
 
@@ -208,9 +245,10 @@ const contactosEmergencia = computed(() => {
 
 .security-list li {
   margin-bottom: 10px;
-  font-size: $font-size-md;
+  font-size: $font-size-xs;
   line-height: 1.4;
   overflow-wrap: break-word;
+  text-transform: uppercase;
 }
 
 .security-list-links {
@@ -261,8 +299,9 @@ const contactosEmergencia = computed(() => {
   flex-direction: column;
   gap: 4px;
   min-width: 0;
-  font-size: $font-size-md;
-  line-height: 1;
+  font-size: $font-size-xs;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .contact-info strong,
@@ -271,7 +310,8 @@ const contactosEmergencia = computed(() => {
 }
 
 .contact-info p {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
+  line-height: 1.4;
 }
 
 .contact-info strong {
@@ -279,6 +319,7 @@ const contactosEmergencia = computed(() => {
   font-weight: 700;
   text-transform: uppercase;
   font-size: $font-size-xs;
+      line-height: 1.6;
 }
 
 .additional-contact {
@@ -308,10 +349,30 @@ const contactosEmergencia = computed(() => {
 
 .security-observations p {
   margin: 0;
-  font-size: $font-size-md;
-  line-height: 1.5;
+  font-size: $font-size-xs;
+  line-height: 1.6;
   overflow-wrap: break-word;
-  white-space: pre-line;
+  white-space: normal;
+  text-transform: uppercase;
+}
+
+.observation-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.observation-list__text {
+  margin: 0;
+  font-size: $font-size-xs;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-transform: uppercase;
+}
+
+.observation-list__content {
+  text-transform: capitalize;
 }
 
 @media (max-width: 1210px) {

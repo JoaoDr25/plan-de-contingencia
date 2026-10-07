@@ -79,7 +79,7 @@ function navigateTo(sectionRoute) {
   padding: 8px 16px;
   background: transparent;
   border: none;
-  color: #2e7d32;
+  color: $color-primary-dark;
   cursor: pointer;
   transition:
     background-color 0.2s ease,
@@ -87,13 +87,13 @@ function navigateTo(sectionRoute) {
 }
 
 .plans-section-nav__item:hover {
-  background-color: #2e7d32;
-  color: #ffffff;
+  background-color: $color-primary-dark;
+  color: $color-surface
 }
 
 .plans-section-nav__item--active {
-  background-color: #2e7d32;
-  color: #ffffff;
+  background-color: $color-primary-dark;
+  color: $color-surface;
 }
 
 .plans-section-nav__icon {

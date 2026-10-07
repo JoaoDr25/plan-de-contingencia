@@ -11,6 +11,12 @@ export const PLAN_ACTIONS = {
 }
 
 export const PLAN_DETAIL_ACTIONS = {
+  [ROLES.ADMINISTRADOR]: {
+    aprobado: [PLAN_ACTIONS.IMPRIMIR],
+    ejecutado: [PLAN_ACTIONS.IMPRIMIR],
+    cancelado: [PLAN_ACTIONS.IMPRIMIR],
+  },
+
   [ROLES.CONSULTOR]: {
     borrador: [PLAN_ACTIONS.EDITAR],
     aprobado: [PLAN_ACTIONS.IMPRIMIR],

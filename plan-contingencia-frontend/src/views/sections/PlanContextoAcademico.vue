@@ -60,11 +60,12 @@ defineProps({
 }
 
 .info-item__value {
-  font-size: $font-size-md;
-  line-height: 1.6;
+  font-size: $font-size-xs;
+  line-height: 1.8;
   word-break: break-word;
   white-space: pre-line;
   text-align: justify;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1000px) {

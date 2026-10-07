@@ -12,11 +12,6 @@
           <q-card class="login-page__card">
             <q-card-section>
               <div class="login-page__form-header">
-                <!-- <h2>Inicio de sesión</h2> -->
-
-                <!-- <p>
-                                    Ingrese sus Credenciales Institucionales
-                                </p> -->
                 <p v-if="!credentialsValidated">INGRESE SUS CREDENCIALES INSTITUCIONALES</p>
                 <p v-else-if="!pendingUserId">SOLICITE SU CÓDIGO DE VERIFICACIÓN</p>
                 <p v-else>VERIFIQUE SU CÓDIGO</p>

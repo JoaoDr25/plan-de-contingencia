@@ -241,6 +241,9 @@ function handleCancel() {
 </script>
 
 <style scoped lang="scss">
+@use 'src/css/variables.scss' as *;
+@use 'src/css/typography.scss' as *;
+
 :global(.plan-activity-actions .primary-action-button) {
   width: 115px !important;
   min-width: 115px !important;

@@ -132,11 +132,9 @@ function findTextCell(target) {
     cell = cell.parentElement
   }
 
-  // Only plain-text cells; cells with inner elements manage their own content
   return cell && cell.children.length === 0 ? cell : null
 }
 
-// Slides truncated text horizontally on hover so the full content can be read
 function onCellHover(event) {
   const cell = findTextCell(event.target)
 

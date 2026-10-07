@@ -91,6 +91,8 @@ function closeDialog() {
 .dangers-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: $font-size-xs;
+  text-transform: uppercase;
 }
 
 .dangers-table th {
@@ -109,7 +111,6 @@ function closeDialog() {
 .dangers-table td {
   padding: 12px;
   border-bottom: 1px solid #e2e2e2;
-  font-size: $font-size-md;
   line-height: 1.4;
 }
 
