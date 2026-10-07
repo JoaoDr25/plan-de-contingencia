@@ -127,7 +127,7 @@ defineProps({
     padding: 12px 14px;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
-    background-color: $background-color;
+    background-color: $color-background;
   }
 
   .work-plan-row:last-child {
