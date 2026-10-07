@@ -121,24 +121,27 @@ const planContingenciaSchema = new mongoose.Schema({
             }
         ],
 
-        otro: {
-            nombreEntidad: {
-                type: String,
-                trim: true
-            },
-            telefono: {
-                type: String,
-                trim: true
-            },
-            descripcion: {
-                type: String,
-                trim: true
-            },
-            ciudad: {
-                type: String,
-                trim: true
+        otro: [
+            {
+                nombreEntidad: {
+                    type: String,
+                    trim: true
+                },
+                telefono: {
+                    type: String,
+                    trim: true
+                },
+                descripcion: {
+                    type: String,
+                    trim: true
+                },
+                ciudad: {
+                    type: String,
+                    trim: true
+                },
+                _id: false
             }
-        }
+        ]
     },
     articulacionFormativa: {
         proyectoFormativo: {

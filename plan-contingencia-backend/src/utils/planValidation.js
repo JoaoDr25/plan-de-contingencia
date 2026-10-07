@@ -1,3 +1,5 @@
+import { normalizarContactosAdicionales } from "./contactosAdicionales.js";
+
 export const calcularCamposFaltantes = (plan) => {
     const camposFaltantes = [];
 
@@ -20,7 +22,7 @@ export const calcularCamposFaltantes = (plan) => {
         camposFaltantes.push("articulacionFormativa (Debe seleccionar al menos una opción o especificar en 'otro')");
     }
 
-    if (!plan.contactosEmergencia?.contactosBase?.length && !plan.contactosEmergencia?.otro?.nombreEntidad) {
+    if (!plan.contactosEmergencia?.contactosBase?.length && !normalizarContactosAdicionales(plan.contactosEmergencia?.otro).length) {
         camposFaltantes.push("contactosEmergencia")
     }
 

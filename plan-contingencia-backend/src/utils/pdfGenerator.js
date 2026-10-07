@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer';
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { normalizarContactosAdicionales } from "./contactosAdicionales.js";
 
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = path.dirname(_filename);
@@ -62,9 +63,7 @@ const obtenerContactosEmergencia = (plan) => {
    `;
     }
 
-    const otro = plan.contactosEmergencia.otro;
-
-    if (otro?.nombreEntidad) {
+    for (const otro of normalizarContactosAdicionales(plan.contactosEmergencia.otro)) {
 
         html += `
    <tr>
@@ -404,7 +403,7 @@ const obtenerSeguridadVial = (plan) => {
             <tr>
                 <td>${item.nombre}</td>
                 <td>${item.cumple ? "Sí" : "No"}</td>
-                <td>${item.observacion || ""}</td>
+                <td>${item.observacion?.trim() || "NO ESPECIFICA"}</td>
             </tr>
         `;
     }
@@ -515,24 +514,27 @@ export const generarDocumentoPdf = async (plan) => {
         headless: true
     });
 
-    const page = await browser.newPage();
+    try {
+        const page = await browser.newPage();
 
-    await page.setContent(htmlFinal, {
-        waitUntil: "networkidle0"
-    });
+        await page.setContent(htmlFinal, {
+            waitUntil: "networkidle0"
+        });
 
-    const pdf = await page.pdf({
-        format: "A4",
-        printBackground: true,
-        margin: {
-            top: "18mm",
-            right: "18mm",
-            bottom: "18mm",
-            left: "18mm"
-        }
-    });
+        const pdf = await page.pdf({
+            format: "A4",
+            printBackground: true,
+            margin: {
+                top: "18mm",
+                right: "18mm",
+                bottom: "18mm",
+                left: "18mm"
+            }
+        });
 
-    await browser.close();
-
-    return pdf;
+        // Puppeteer >= 22 devuelve Uint8Array; se convierte a Buffer para adjuntos y respuestas.
+        return Buffer.from(pdf);
+    } finally {
+        await browser.close();
+    }
 }

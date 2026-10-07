@@ -3,6 +3,7 @@ import { calcularCamposFaltantes } from "../utils/planValidation.js"
 import { generarDocumentoPdf } from '../utils/pdfGenerator.js'
 
 import { SEGURIDAD_VIAL_ITEMS } from '../constants/seguridadVialItems.js'
+import { normalizarContactosAdicionales } from '../utils/contactosAdicionales.js'
 
 import planContingenciaModel from '../models/planContingenciaModel.js'
 import riesgoModel from '../models/riesgoModel.js'
@@ -125,7 +126,9 @@ const create = async (data) => {
 
         throw error;
     }
-    data.usuarioNombre = usuario.nombre;
+    data.usuarioNombre = [usuario.nombre, usuario.apellido]
+        .filter(Boolean)
+        .join(" ");
 
     return await crud.create(data);
 }
@@ -843,9 +846,13 @@ const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
 
     await regresarABorradorSiAplica(plan);
 
+    const otros = normalizarContactosAdicionales(
+        contactosEmergencia.contactosEmergencia.otro
+    );
+
     if (
         !contactosEmergencia.contactosEmergencia.contactosBase?.length &&
-        !contactosEmergencia.contactosEmergencia.otro?.nombreEntidad
+        !otros.length
     ) {
         const error =
             new Error(
@@ -858,7 +865,7 @@ const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
     }
 
     const contactos =
-        contactosEmergencia.contactosEmergencia.contactosBase;
+        contactosEmergencia.contactosEmergencia.contactosBase ?? [];
 
     const duplicados =
         new Set(contactos).size !== contactos.length;
@@ -874,13 +881,13 @@ const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
         throw error;
     }
 
-    const otro = contactosEmergencia.contactosEmergencia.otro;
+    const otroSinTelefono = otros.find((otro) => !otro.telefono?.trim());
 
-    if (otro?.nombreEntidad && !otro.telefono?.trim()) {
+    if (otroSinTelefono) {
 
         const error =
             new Error(
-                "Debe registrar el teléfono del contacto adicional"
+                `Debe registrar el teléfono del contacto adicional ${otroSinTelefono.nombreEntidad}`
             );
 
         error.statusCode = 400;
@@ -904,8 +911,10 @@ const guardarContactosEmergenciaId = async (id, contactosEmergencia) => {
         }
     }
     return await crud.update(id, {
-        contactosEmergencia:
-            contactosEmergencia.contactosEmergencia
+        contactosEmergencia: {
+            contactosBase: contactos,
+            otro: otros
+        }
     });
 }
 
@@ -1028,7 +1037,10 @@ const registrarSeguridadVialId = async (id, seguridadVial) => {
     return await crud.update(id, {
         seguridadVial: {
             aplica,
-            items
+            items: items.map(item => ({
+                ...item,
+                observacion: item.observacion?.trim() || "NO ESPECIFICA"
+            }))
         }
     });
 }

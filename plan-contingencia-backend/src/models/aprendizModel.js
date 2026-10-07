@@ -37,22 +37,11 @@ const aprendizSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
-    // programa: {
-    //     type: String,
-    //     required: true,
-    //     trim: true,
-    //     alias: "programaFormacion"
-    // },
     programaFormacionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ProgramaFormacion",
         required: true
     },
-    // ficha: {
-    //     type: String,
-    //     required: true,
-    //     trim: true
-    // },
     eps: {
         type: String,
         required: true,
