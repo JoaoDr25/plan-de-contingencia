@@ -329,21 +329,21 @@
 </template>
 
 <script setup>
-import { computed, reactive, watchEffect } from 'vue'
+import { computed, onMounted, reactive, ref, watchEffect } from 'vue'
+
+import { normalizeAdditionalContacts } from 'src/utils/contacts.utils'
+import { notifyError } from 'src/utils/notifications.utils'
+import { useAuthStore } from 'src/stores/auth.store'
+import { SECURITY_VIAL_ITEMS } from 'src/constants/system/security.constants'
+
+import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
 import BaseTextarea from 'src/components/forms/BaseTextarea.vue'
 
-import { ACTIVIDADES_MOCK } from 'src/mocks/modules/actividades.mock'
-import { PROGRAMAS_MOCK } from 'src/mocks/modules/programas.mock'
-import { RIESGOS_MOCK } from 'src/mocks/modules/riesgos.mock'
-import { USUARIOS_MOCK } from 'src/mocks/modules/usuarios.mock'
-
-import { ROLES } from 'src/constants/system/roles.constants'
-import { SECURITY_VIAL_ITEMS } from 'src/constants/system/security.constants'
-
-import { useAuthStore } from 'src/stores/auth.store'
+import riesgoService from 'src/services/modules/riesgoService'
+import usuarioService from 'src/services/modules/usuarioService'
 
 const props = defineProps({
   modelValue: {
@@ -363,11 +363,23 @@ const currentUser = computed(() => {
 })
 
 const instructorName = computed(() => {
-  return currentUser.value?.nombre || plan.usuarioNombre || '—'
+  const fullName = [currentUser.value?.nombre, currentUser.value?.apellido]
+    .filter(Boolean)
+    .join(' ')
+
+  return fullName || plan.usuarioNombre || '—'
 })
 
 const instructorSignature = computed(() => {
-  return currentUser.value?.firma || plan.revision?.usuario?.firma || null
+  return currentUser.value?.firma || null
+})
+
+onMounted(async () => {
+  try {
+    await authStore.refreshCurrentUser()
+  } catch {
+    notifyError('Error al cargar la firma del instructor')
+  }
 })
 
 watchEffect(() => {
@@ -399,27 +411,43 @@ const generalSummary = computed(() => {
 })
 
 const participantsSummary = computed(() => {
-  const programa = PROGRAMAS_MOCK.find((item) => item._id === plan.programaFormacionId)
-
   return {
     aprendices: plan.aprendicesId.length,
-    ficha: programa?.ficha || '—',
+    ficha: plan.ficha || '—',
   }
 })
 
+const riskCatalog = ref([])
+
+async function loadRisks() {
+  try {
+    riskCatalog.value = await riesgoService.getRiesgos()
+  } catch {
+    notifyError('Error al cargar los riesgos')
+  }
+}
+
+onMounted(loadRisks)
+
 const selectedRisks = computed(() => {
-  return RIESGOS_MOCK.filter((riesgo) => plan.riesgosId.includes(riesgo._id))
+  return riskCatalog.value.filter((riesgo) => plan.riesgosId.includes(riesgo._id))
 })
+
+function countRisksByLevel(level) {
+  return selectedRisks.value.filter(
+    (riesgo) => String(riesgo.nivel ?? riesgo.nivelRiesgo ?? '').toUpperCase() === level,
+  ).length
+}
 
 const riskSummary = computed(() => {
   return {
-    total: selectedRisks.value.length,
+    total: plan.riesgosId.length,
 
-    alto: selectedRisks.value.filter((riesgo) => riesgo.nivel === 'Alto').length,
+    alto: countRisksByLevel('ALTO'),
 
-    medio: selectedRisks.value.filter((riesgo) => riesgo.nivel === 'Medio').length,
+    medio: countRisksByLevel('MEDIO'),
 
-    bajo: selectedRisks.value.filter((riesgo) => riesgo.nivel === 'Bajo').length,
+    bajo: countRisksByLevel('BAJO'),
   }
 })
 
@@ -436,26 +464,43 @@ const roadSafetySummary = computed(() => {
 const emergencyContactsCount = computed(() => {
   const baseCount = plan.contactosEmergencia?.contactosBase?.length || 0
 
-  const otro = plan.contactosEmergencia?.otro
-  const hasOtro = Boolean(otro?.nombreEntidad?.trim())
+  const otros = normalizeAdditionalContacts(plan.contactosEmergencia?.otro)
 
-  return baseCount + (hasOtro ? 1 : 0)
+  return baseCount + otros.length
 })
 
-function getUsersByRole(role) {
-  return USUARIOS_MOCK.filter((usuario) => usuario.rol === role && usuario.estado === 'Activo').map(
-    (usuario) => ({
-      label: usuario.nombre,
-      value: usuario._id,
-    }),
-  )
+const reviewersByRole = ref({
+  pedagogia: [],
+  sst: [],
+  coordinacion: [],
+})
+
+async function loadReviewers() {
+  try {
+    reviewersByRole.value = await usuarioService.getRevisores()
+  } catch {
+    notifyError('Error al cargar los responsables de revisión')
+  }
 }
 
-const pedagogiaOptions = computed(() => getUsersByRole(ROLES.PEDAGOGIA))
+onMounted(loadReviewers)
 
-const sstOptions = computed(() => getUsersByRole(ROLES.SST))
+function findReviewer(role, userId) {
+  return reviewersByRole.value[role]?.find((usuario) => usuario._id === userId) ?? null
+}
 
-const coordinacionOptions = computed(() => getUsersByRole(ROLES.COORDINACION))
+function getUsersByRole(role) {
+  return (reviewersByRole.value[role] ?? []).map((usuario) => ({
+    label: usuario.nombreCompleto || usuario.nombre,
+    value: usuario._id,
+  }))
+}
+
+const pedagogiaOptions = computed(() => getUsersByRole('pedagogia'))
+
+const sstOptions = computed(() => getUsersByRole('sst'))
+
+const coordinacionOptions = computed(() => getUsersByRole('coordinacion'))
 
 const selectedReviewers = reactive({
   pedagogia: plan.revision?.pedagogia?.usuarioId || null,
@@ -466,7 +511,7 @@ const selectedReviewers = reactive({
 })
 
 function updateReviewer(role, userId) {
-  const user = USUARIOS_MOCK.find((usuario) => usuario._id === userId)
+  const user = findReviewer(role, userId)
 
   if (!user) {
     return
@@ -475,7 +520,7 @@ function updateReviewer(role, userId) {
   plan.revision[role] = {
     ...plan.revision[role],
     usuarioId: user._id,
-    nombre: user.nombre,
+    nombre: user.nombreCompleto || user.nombre,
     firma: user.firma || null,
   }
 
@@ -483,25 +528,23 @@ function updateReviewer(role, userId) {
 }
 
 const pedagogiaSignature = computed(() => {
-  return getReviewerSignature(selectedReviewers.pedagogia, ROLES.PEDAGOGIA)
+  return getReviewerSignature('pedagogia', selectedReviewers.pedagogia)
 })
 
 const sstSignature = computed(() => {
-  return getReviewerSignature(selectedReviewers.sst, ROLES.SST)
+  return getReviewerSignature('sst', selectedReviewers.sst)
 })
 
 const coordinacionSignature = computed(() => {
-  return getReviewerSignature(selectedReviewers.coordinacion, ROLES.COORDINACION)
+  return getReviewerSignature('coordinacion', selectedReviewers.coordinacion)
 })
 
-function getReviewerSignature(userId) {
+function getReviewerSignature(role, userId) {
   if (!userId) {
     return null
   }
 
-  const user = USUARIOS_MOCK.find((usuario) => usuario._id === userId)
-
-  return user?.firma || null
+  return findReviewer(role, userId)?.firma || null
 }
 
 function goToStep(step) {

@@ -167,7 +167,7 @@
           placeholder="Escriba el contacto del lugar"
           type="tel"
           inputmode="numeric"
-          icon="contact_phone"
+          icon="phone"
           icon-position="append"
           required
           external-label

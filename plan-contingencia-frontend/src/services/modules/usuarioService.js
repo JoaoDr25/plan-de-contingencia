@@ -24,6 +24,17 @@ const getUsuarios = async (params = {}) => {
   return response.data.data.map(mapUsuario)
 }
 
+const getRevisores = async () => {
+  const response = await api.get('/usuarios/revisores')
+  const revisores = response.data.data ?? {}
+
+  return {
+    pedagogia: (revisores.pedagogia ?? []).map(mapUsuario),
+    sst: (revisores.sst ?? []).map(mapUsuario),
+    coordinacion: (revisores.coordinacion ?? []).map(mapUsuario),
+  }
+}
+
 const getUsuarioById = async (id) => {
   const response = await api.get(`/usuarios/${id}`)
 
@@ -64,6 +75,7 @@ const deleteUsuario = async (id) => {
 
 export default {
   getUsuarios,
+  getRevisores,
   getUsuarioById,
   createUsuario,
   updateUsuario,

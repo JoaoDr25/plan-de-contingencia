@@ -73,7 +73,7 @@
           <PrimaryActionButton label="Ver Plan" icon="visibility" size="sm" @click="viewFullPlan" />
         </div>
 
-        <PlanDetailsActions :role="activeRole" :plan="planData" @action="handlePlanAction" />
+        <PlanDetailsActions :role="detailActionsRole" :plan="planData" @action="handlePlanAction" />
       </div>
 
       <BaseConfirmationDialog
@@ -91,12 +91,14 @@
       />
     </div>
 
+    <div v-else-if="loadingPlan" class="plan-stage-detail__empty">Cargando información del plan...</div>
+
     <div v-else class="plan-stage-detail__empty">No se encontró información del plan.</div>
   </BasePage>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import BasePage from 'src/components/base/BasePage.vue'
@@ -110,23 +112,16 @@ import PlanRevision from 'src/views/sections/PlanRevision.vue'
 import logoSena from 'src/assets/logos/logo-sena.png'
 
 import { ROLES } from 'src/constants/system/roles.constants'
-import { PLANES_MOCK } from 'src/mocks/plans/planes.mock'
 import { PLAN_ACTIONS } from 'src/constants/plans/planActions'
 import { PLAN_ACTIONS_CONFIRMATION } from 'src/constants/actions/plan_confirmation.constants'
 import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notifications.constants'
 
 import { formatDate, formatHour } from 'src/utils/date.utils'
-import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
+import { notifyError, notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
 
 import { useAuthStore } from 'src/stores/auth.store'
 
-import {
-  approvePlan,
-  rejectPlan,
-  executePlan,
-  cancelPlan,
-  sendPlanToEdition,
-} from 'src/utils/workflow.utils'
+import planContingenciaService from 'src/services/plans/planContingenciaService.js'
 
 const props = defineProps({
   id: {
@@ -151,10 +146,30 @@ const internalRole = computed(() => authStore.role || ROLES.CONSULTOR)
 
 const showConfirmation = ref(false)
 const pendingAction = ref(null)
+const actionInProgress = ref(false)
 
-const localPlan = ref(
-  PLANES_MOCK.find((item) => item._id === (props.id || route.params.id)) || PLANES_MOCK[0],
-)
+const localPlan = ref(null)
+const loadingPlan = ref(false)
+
+const planId = computed(() => props.id || route.params.id)
+
+async function loadPlan() {
+  if (props.plan || !planId.value) {
+    return
+  }
+
+  loadingPlan.value = true
+
+  try {
+    localPlan.value = await planContingenciaService.getPlanById(planId.value)
+  } catch (error) {
+    notifyError(error)
+  } finally {
+    loadingPlan.value = false
+  }
+}
+
+onMounted(loadPlan)
 
 const planData = computed(() => props.plan || localPlan.value)
 
@@ -164,6 +179,9 @@ const canEditPlan = computed(() => {
   const isBorrador = String(planData.value?.estado || '').toLowerCase() === 'borrador'
   return isBorrador && activeRole.value === ROLES.CONSULTOR
 })
+
+// En borrador la edición ya la cubre el botón "Editar Plan" propio de esta vista.
+const detailActionsRole = computed(() => (canEditPlan.value ? '' : activeRole.value))
 
 const stageTitle = computed(() => {
   if (!planData.value) {
@@ -229,13 +247,19 @@ const confirmationConfig = computed(() => {
   )
 })
 
-function confirmPlanAction(payload) {
-  executePlanAction(pendingAction.value, payload?.observations)
+async function confirmPlanAction(payload) {
+  const action = pendingAction.value
   pendingAction.value = null
   showConfirmation.value = false
+
+  await executePlanAction(action, payload?.observations)
 }
 
 function handlePlanAction(action) {
+  if (actionInProgress.value) {
+    return
+  }
+
   if (PLAN_ACTIONS_CONFIRMATION[action]) {
     pendingAction.value = action
     showConfirmation.value = true
@@ -246,32 +270,58 @@ function handlePlanAction(action) {
   executePlanAction(action)
 }
 
-function executePlanAction(action, observations = '') {
-  let updatedPlan = { ...planData.value }
+const STATE_BY_ACTION = {
+  [PLAN_ACTIONS.EJECUTAR]: 'ejecutado',
+  [PLAN_ACTIONS.CANCELAR]: 'cancelado',
+  [PLAN_ACTIONS.MANDAR_EDICION]: 'borrador',
+}
 
-  switch (action) {
-    case PLAN_ACTIONS.APROBAR:
-      updatedPlan = approvePlan(updatedPlan, activeRole.value)
-      break
+async function refreshPlan(id) {
+  try {
+    localPlan.value = await planContingenciaService.getPlanById(id)
+  } catch (error) {
+    notifyError(error)
+  }
+}
 
-    case PLAN_ACTIONS.NO_APROBAR:
-      updatedPlan = rejectPlan(updatedPlan, activeRole.value, observations)
-      break
+async function executePlanAction(action, observations = '') {
+  const id = planData.value?._id
 
-    case PLAN_ACTIONS.EJECUTAR:
-      updatedPlan = executePlan(updatedPlan, activeRole.value)
-      break
-
-    case PLAN_ACTIONS.CANCELAR:
-      updatedPlan = cancelPlan(updatedPlan, activeRole.value, observations)
-      break
-
-    case PLAN_ACTIONS.MANDAR_EDICION:
-      updatedPlan = sendPlanToEdition(updatedPlan, activeRole.value, observations)
-      break
+  if (!id || actionInProgress.value) {
+    return
   }
 
-  localPlan.value = updatedPlan
+  actionInProgress.value = true
+
+  try {
+    switch (action) {
+      case PLAN_ACTIONS.APROBAR:
+        await planContingenciaService.registrarRevision(id, { estado: 'aprobado' })
+        break
+
+      case PLAN_ACTIONS.NO_APROBAR:
+        await planContingenciaService.registrarRevision(id, {
+          estado: 'no aprobado',
+          observaciones: observations,
+        })
+        break
+
+      case PLAN_ACTIONS.EJECUTAR:
+      case PLAN_ACTIONS.CANCELAR:
+      case PLAN_ACTIONS.MANDAR_EDICION:
+        await planContingenciaService.changeEstadoPlan(id, STATE_BY_ACTION[action])
+        break
+
+      default:
+        return
+    }
+  } catch (error) {
+    notifyError(error)
+    await refreshPlan(id)
+    return
+  } finally {
+    actionInProgress.value = false
+  }
 
   const notification = PLAN_ACTION_NOTIFICATIONS[action]
 
@@ -282,12 +332,14 @@ function executePlanAction(action, observations = '') {
       notifySuccess(notification.successMessage)
     }
   }
+
+  await refreshPlan(id)
 }
 
 function editPlan() {
   router.push({
     name: 'planes.create',
-    query: { id: planData.value?._id },
+    params: { id: planData.value?._id },
   })
 }
 
@@ -305,6 +357,13 @@ function viewFullPlan() {
 
 .plan-stage-detail-page {
   width: 100%;
+}
+
+@media (min-width: 1051px) {
+  .base-page.plan-stage-detail-page {
+    min-height: calc(100vh - 106px);
+    justify-content: center;
+  }
 }
 
 .plan-stage-detail {
@@ -430,10 +489,31 @@ function viewFullPlan() {
     column-gap: 20px;
   }
 
+  .detail-card__header {
+    justify-content: center;
+  }
+
   .detail-card__body--plan {
-    grid-template-columns: 110px minmax(0, 1fr);
-    gap: 24px;
-    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding-left: 0;
+  }
+
+  .detail-card__logo {
+    width: 100%;
+  }
+
+  .detail-card__logo img {
+    margin-left: 0;
+  }
+
+  .detail-card__fields--plan {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 0;
+    text-align: center;
   }
 }
 
@@ -474,14 +554,11 @@ function viewFullPlan() {
   }
 
   .detail-card__body--plan {
-    grid-template-columns: 100px minmax(0, 1fr);
-    gap: 20px;
     padding: 6px 0;
   }
 
   .detail-card__logo img {
     width: 110px;
-    margin-left: 0;
   }
 
   .detail-card__fields--plan {

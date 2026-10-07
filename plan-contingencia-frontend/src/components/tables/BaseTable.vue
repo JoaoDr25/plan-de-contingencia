@@ -1,5 +1,5 @@
 <template>
-  <div class="base-table">
+  <div class="base-table" @mouseover="onCellHover" @mouseleave="resetActiveCell">
     <q-table
       flat
       bordered
@@ -120,6 +120,48 @@ function getCellClass(column) {
     'base-table__ellipsis': column.ellipsis,
   }
 }
+
+const INTERACTIVE_CONTENT = 'button, .q-btn, .q-chip, .q-checkbox, .q-toggle, .marquee-cell__content'
+const MARQUEE_SPEED_PX_PER_SECOND = 40
+
+let activeCell = null
+
+// Slides truncated text horizontally on hover so the full content can be read
+function onCellHover(event) {
+  const cell = event.target.closest?.('tbody td')
+
+  if (cell === activeCell) {
+    return
+  }
+
+  resetActiveCell()
+
+  if (!cell || cell.querySelector(INTERACTIVE_CONTENT)) {
+    return
+  }
+
+  const overflow = cell.scrollWidth - cell.clientWidth
+
+  if (overflow <= 0) {
+    return
+  }
+
+  activeCell = cell
+  cell.style.transition = `text-indent ${Math.max(1, overflow / MARQUEE_SPEED_PX_PER_SECOND)}s linear`
+  cell.style.textOverflow = 'clip'
+  cell.style.textIndent = `-${overflow}px`
+}
+
+function resetActiveCell() {
+  if (!activeCell) {
+    return
+  }
+
+  activeCell.style.transition = 'text-indent 0.3s ease-out'
+  activeCell.style.textIndent = ''
+  activeCell.style.textOverflow = ''
+  activeCell = null
+}
 </script>
 
 <style scoped lang="scss">
@@ -160,7 +202,16 @@ function getCellClass(column) {
   height: 50px;
   text-transform: uppercase;
   border-bottom: 1px solid $color-border-table;
-  white-space: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* Cells with interactive content (actions, chips, checkboxes) must never be clipped */
+.base-table__table :deep(tbody td:has(button, .q-btn, .q-chip, .q-checkbox, .q-toggle)) {
+  max-width: none;
+  overflow: visible;
 }
 
 .base-table__table :deep(th) {

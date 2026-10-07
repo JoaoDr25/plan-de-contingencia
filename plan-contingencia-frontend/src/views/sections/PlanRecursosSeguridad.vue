@@ -68,15 +68,14 @@
     <div class="security-observations">
       <h3>OBSERVACIONES</h3>
 
-      <p>
-        {{ plan.observaciones || 'Sin observaciones registradas.' }}
-      </p>
+      <p>{{ plan.observaciones || 'Sin observaciones registradas.' }}</p>
     </div>
   </section>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { normalizeAdditionalContacts } from 'src/utils/contacts.utils'
 
 const props = defineProps({
   plan: {
@@ -85,82 +84,36 @@ const props = defineProps({
   },
 })
 
-const eppCatalogo = [
-  {
-    _id: '671800000000000000000001',
-    nombre: 'Casco de seguridad',
-  },
-  {
-    _id: '671800000000000000000002',
-    nombre: 'Guantes',
-  },
-  {
-    _id: '671800000000000000000003',
-    nombre: 'Botas de seguridad',
-  },
-  {
-    _id: '671800000000000000000004',
-    nombre: 'Chaleco reflectivo',
-  },
-  {
-    _id: '671800000000000000000005',
-    nombre: 'Respirador',
-  },
-]
+const toObjects = (items) =>
+  (Array.isArray(items) ? items : []).filter((item) => item && typeof item === 'object')
 
-const eppSeleccionado = computed(() => {
-  return eppCatalogo.filter((item) => props.plan.epp?.includes(item._id))
-})
+const eppSeleccionado = computed(() => toObjects(props.plan.epp))
 
 const seguridadVialItems = computed(() => {
   if (!props.plan.seguridadVial?.aplica) {
     return []
   }
 
-  return props.plan.seguridadVial.items || []
+  return (props.plan.seguridadVial.items || []).filter((item) => item?.cumple === true)
 })
 
-const contactosCatalogo = [
-  {
-    _id: '670700000000000000000001',
-    nombre: 'Centro de salud',
-    entidad: 'Hospital Regional',
-    telefono: '607 123 4567',
-    icono: 'local_hospital',
-  },
-  {
-    _id: '670700000000000000000002',
-    nombre: 'Policía Nacional',
-    entidad: 'Estación Socorro',
-    telefono: '123',
-    icono: 'local_police',
-  },
-  {
-    _id: '670700000000000000000003',
-    nombre: 'Póliza',
-    entidad: 'Seguros del Estado',
-    telefono: '018000 123456',
-    icono: 'health_and_safety',
-  },
-]
-
 const contactosEmergencia = computed(() => {
-  const ids = props.plan.contactosEmergencia?.contactosBase || []
-  const contactos = ids
-    .map((id) => contactosCatalogo.find((contacto) => contacto._id === id))
-    .filter(Boolean)
+  const contactos = toObjects(props.plan.contactosEmergencia?.contactosBase).map((contacto) => ({
+    _id: contacto._id,
+    nombre: contacto.nombre,
+    entidad: contacto.tipo,
+    telefono: contacto.telefono,
+  }))
 
-  const otro = props.plan.contactosEmergencia?.otro
-
-  if (otro?.nombreEntidad) {
+  normalizeAdditionalContacts(props.plan.contactosEmergencia?.otro).forEach((otro, index) => {
     contactos.push({
-      _id: 'contacto-adicional',
+      _id: `contacto-adicional-${index}`,
       nombre: 'Otro',
       entidad: otro.nombreEntidad,
       telefono: otro.telefono,
       icono: 'contact_phone',
     })
-  }
+  })
 
   return contactos
 })
@@ -214,7 +167,7 @@ const contactosEmergencia = computed(() => {
 }
 
 .security-column__content {
-  max-height: 180px;
+  max-height: 150px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 6px;
@@ -291,9 +244,8 @@ const contactosEmergencia = computed(() => {
 }
 
 .emergency-contact-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  display: grid;
+  gap: 30px;
   align-items: flex-start;
 }
 
@@ -307,10 +259,10 @@ const contactosEmergencia = computed(() => {
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   min-width: 0;
   font-size: $font-size-md;
-  line-height: 1.45;
+  line-height: 1;
 }
 
 .contact-info strong,
@@ -359,6 +311,7 @@ const contactosEmergencia = computed(() => {
   font-size: $font-size-md;
   line-height: 1.5;
   overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 @media (max-width: 1210px) {
@@ -428,7 +381,7 @@ const contactosEmergencia = computed(() => {
   }
 
   .emergency-contact {
-    margin-bottom: 15px;
+    margin-bottom: 0;
   }
 
   .contact-info {

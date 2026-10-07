@@ -87,6 +87,28 @@
 
       <span v-else class="support-item__empty"> No registrado </span>
     </div>
+
+    <div
+      v-if="plan.contextoAcademico?.consentimientoMenores && plan.contextoAcademico?.consentimientoLink"
+      class="support-item support-item--full"
+    >
+      <span class="support-item__label"> Consentimiento Informado </span>
+
+      <a
+        :href="plan.contextoAcademico.consentimientoLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="support-item__link"
+      >
+        <span class="support-item__icon">
+          <q-icon name="open_in_new" size="14px" />
+        </span>
+
+        <span class="support-item__name">
+          {{ getSupportName(plan.contextoAcademico.consentimientoLink) }}
+        </span>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -127,7 +149,7 @@ function getSupportName(link) {
 
 .plan-academic-supports {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 0.93fr;
   column-gap: 40px;
   row-gap: 22px;
   padding-bottom: 8px;
@@ -140,6 +162,10 @@ function getSupportName(link) {
   gap: 7px;
   min-width: 0;
   line-height: 1.3;
+}
+
+.support-item--full {
+  grid-column: 1 / -1;
 }
 
 .support-item__label {

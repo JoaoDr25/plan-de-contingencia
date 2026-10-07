@@ -3,25 +3,21 @@
     <div class="info-item">
       <span class="info-item__label"> Objetivo de la actividad </span>
 
-      <span class="info-item__value">
-        {{ plan.contextoAcademico?.objetivo || 'No disponible' }}
-      </span>
+      <span class="info-item__value">{{ plan.contextoAcademico?.objetivo || 'No disponible' }}</span>
     </div>
 
     <div class="info-item">
       <span class="info-item__label"> Competencias a desarrollar </span>
 
-      <span class="info-item__value">
-        {{ plan.contextoAcademico?.competencia || 'No disponible' }}
-      </span>
+      <span class="info-item__value">{{ plan.contextoAcademico?.competencia || 'No disponible' }}</span>
     </div>
 
     <div class="info-item">
-      <span class="info-item__label"> Resultados de aprendizaje esperados </span>
+      <span class="info-item__label"> Resultados de aprendizaje</span>
 
-      <span class="info-item__value">
-        {{ plan.contextoAcademico?.resultadoAprendizaje || 'No disponible' }}
-      </span>
+      <span class="info-item__value">{{
+        plan.contextoAcademico?.resultadoAprendizaje || 'No disponible'
+      }}</span>
     </div>
   </div>
 </template>
@@ -41,18 +37,17 @@ defineProps({
 
 .plan-academic-context {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
-  column-gap: 40px;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 50px;
   row-gap: 24px;
   padding-bottom: 8px;
-  padding-right: 8px;
+  padding-right: 50px;
 }
 
 .info-item {
   display: flex;
   flex-direction: column;
   gap: 7px;
-  line-height: 1.3;
   min-width: 0;
 }
 
@@ -60,20 +55,21 @@ defineProps({
   font-size: $font-size-xs;
   font-weight: 700;
   text-transform: uppercase;
-  color: #287c2d;
-  line-height: 1.2;
+  color: $color-primary;
+  line-height: 1.8;
 }
 
 .info-item__value {
   font-size: $font-size-md;
-  line-height: 1.4;
-  color: #222222;
+  line-height: 1.6;
   word-break: break-word;
+  white-space: pre-line;
+  text-align: justify;
 }
 
 @media (max-width: 1000px) {
   .plan-academic-context {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     column-gap: 30px;
     row-gap: 22px;
   }

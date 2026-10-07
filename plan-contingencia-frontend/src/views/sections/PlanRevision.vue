@@ -28,13 +28,45 @@ const props = defineProps({
   },
 })
 
-function getReviewStatus(role) {
-  return props.plan.revision?.[role]?.estado ?? 'pendiente'
+const REVIEW_ROLES = ['pedagogia', 'sst', 'coordinacion']
+
+const STATUS_LABELS = {
+  pendiente: 'Pendiente',
+  aprobado: 'Aprobado',
+  'no-aprobado': 'No aprobado',
+  generado: 'Generado',
 }
 
-function getReviewStatusLabel(role) {
-  const value = getReviewStatus(role).toLowerCase()
-  return value.charAt(0).toUpperCase() + value.slice(1)
+const planStatus = computed(() => String(props.plan.estado || 'borrador').toLowerCase())
+
+const isGenerated = computed(() => planStatus.value !== 'borrador')
+
+function getReviewStatus(role) {
+  if (!isGenerated.value) {
+    return 'pendiente'
+  }
+
+  const value = String(props.plan.revision?.[role]?.estado || 'pendiente').toLowerCase()
+
+  return value.replace(/\s+/g, '-')
+}
+
+function getReviewDetail(role) {
+  const review = props.plan.revision?.[role]
+
+  if (!isGenerated.value || !review?.fecha || getReviewStatus(role) === 'pendiente') {
+    return 'Pendiente de revisión'
+  }
+
+  const reviewer = review.nombre ? `${review.nombre} · ` : ''
+
+  return `${reviewer}${formatDateTime(review.fecha)}`
+}
+
+function getGenerationDate() {
+  const hasReviews = REVIEW_ROLES.some((role) => props.plan.revision?.[role]?.fecha)
+
+  return hasReviews ? props.plan.createdAt : props.plan.updatedAt || props.plan.createdAt
 }
 
 const formatDateTime = (value) => {
@@ -58,51 +90,34 @@ const formatDateTime = (value) => {
   }).format(date)
 }
 
-function getReviewDate(role) {
-  const map = {
-    generacion: props.plan.createdAt,
-    pedagogia: props.plan.revision?.pedagogia?.fecha ?? props.plan.updatedAt,
-    sst: props.plan.revision?.sst?.fecha ?? props.plan.updatedAt,
-    coordinacion: props.plan.revision?.coordinacion?.fecha ?? props.plan.updatedAt,
-  }
-
-  return map[role] ?? null
+const REVIEW_TITLES = {
+  pedagogia: 'REVISIÓN POR PEDAGOGÍA',
+  sst: 'REVISIÓN POR SST',
+  coordinacion: 'APROBACIÓN POR COORDINACIÓN',
 }
 
 const reviewSteps = computed(() => {
-  const planStatus = props.plan.estado ?? 'en revision'
-  const generationStatus = planStatus === 'aprobado' ? 'aprobado' : 'proceso'
-  const generationLabel = generationStatus === 'aprobado' ? 'Aprobado' : 'En proceso'
+  const generationStatus = isGenerated.value ? 'generado' : 'pendiente'
 
   return [
     {
       id: 'generacion',
       title: 'GENERACIÓN DEL PLAN',
       status: generationStatus,
-      statusLabel: generationLabel,
-      date: formatDateTime(getReviewDate('generacion')),
+      statusLabel: STATUS_LABELS[generationStatus],
+      date: isGenerated.value ? formatDateTime(getGenerationDate()) : 'Plan en borrador',
     },
-    {
-      id: 'pedagogia',
-      title: 'REVISIÓN POR PEDAGOGÍA',
-      status: getReviewStatus('pedagogia'),
-      statusLabel: getReviewStatusLabel('pedagogia'),
-      date: formatDateTime(getReviewDate('pedagogia')),
-    },
-    {
-      id: 'sst',
-      title: 'REVISIÓN POR SST',
-      status: getReviewStatus('sst'),
-      statusLabel: getReviewStatusLabel('sst'),
-      date: formatDateTime(getReviewDate('sst')),
-    },
-    {
-      id: 'coordinacion',
-      title: 'APROBACIÓN POR COORDINACIÓN',
-      status: getReviewStatus('coordinacion'),
-      statusLabel: getReviewStatusLabel('coordinacion'),
-      date: formatDateTime(getReviewDate('coordinacion')),
-    },
+    ...REVIEW_ROLES.map((role) => {
+      const status = getReviewStatus(role)
+
+      return {
+        id: role,
+        title: REVIEW_TITLES[role],
+        status,
+        statusLabel: STATUS_LABELS[status] || status,
+        date: getReviewDetail(role),
+      }
+    }),
   ]
 })
 </script>
@@ -177,8 +192,13 @@ const reviewSteps = computed(() => {
   text-transform: capitalize;
 }
 
-.status-proceso {
+.status-generado {
   background-color: $color-success;
+  color: $color-surface;
+}
+
+.status-no-aprobado {
+  background-color: $color-error;
   color: $color-surface;
 }
 

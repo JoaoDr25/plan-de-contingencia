@@ -5,6 +5,11 @@
     <div v-if="plan" class="plan-detail">
       <div class="plan-detail__header">
         <StatusChip class="plan-detail-status" :status="plan.estado" />
+
+        <div class="plan-detail__code">
+          <span class="plan-detail__code-label">Código del Plan:</span>
+          <span class="plan-detail__code-value">N° {{ plan.numero || 'N/A' }}</span>
+        </div>
       </div>
 
       <PlanSection number="1" title="Información General" icon="description">
@@ -40,7 +45,11 @@
       </PlanSection>
     </div>
 
-    <div class="plan-footer">
+    <div v-else-if="loadingPlan" class="plan-detail__empty">Cargando información del plan...</div>
+
+    <div v-else class="plan-detail__empty">No se encontró información del plan.</div>
+
+    <div v-if="plan" class="plan-footer">
       <PlanDetailsActions :role="role" :plan="plan" @action="handlePlanAction" />
     </div>
 
@@ -61,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from 'src/stores/auth.store'
 
@@ -81,22 +90,14 @@ import PlanRiesgos from '../sections/PlanRiesgos.vue'
 import PlanRecursosSeguridad from '../sections/PlanRecursosSeguridad.vue'
 import PlanRevision from '../sections/PlanRevision.vue'
 
-import { PLANES_MOCK } from 'src/mocks/plans/planes.mock.js'
-import { PLANES_HISTORICO_MOCK } from 'src/mocks/plans/historico.mock.js'
 import { PLAN_ACTIONS } from 'src/constants/plans/planActions'
 import { PLAN_ACTIONS_CONFIRMATION } from 'src/constants/actions/plan_confirmation.constants'
 import { PLAN_ACTION_NOTIFICATIONS } from 'src/constants/notifications/notifications.constants'
 import { ROLES } from 'src/constants/system/roles.constants'
 
-import { notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
+import { notifyError, notifySuccess, notifyWarning } from 'src/utils/notifications.utils'
 
-import {
-  approvePlan,
-  rejectPlan,
-  executePlan,
-  cancelPlan,
-  sendPlanToEdition,
-} from 'src/utils/workflow.utils'
+import planContingenciaService from 'src/services/plans/planContingenciaService.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -106,29 +107,31 @@ const role = computed(() => authStore.role || ROLES.CONSULTOR)
 
 const showConfirmation = ref(false)
 const pendingAction = ref(null)
+const actionInProgress = ref(false)
 
-const plan = ref(getPlanById(route.params.id))
+const plan = ref(null)
+const loadingPlan = ref(false)
 
-function getPlanById(id) {
-  const planMock = PLANES_MOCK.find((item) => item._id === id)
+async function loadPlan() {
+  const id = route.params.id
 
-  if (planMock) {
-    return planMock
+  if (!id) {
+    return
   }
 
-  const historicalPlan = PLANES_HISTORICO_MOCK.find((item) => item._id === id)
+  loadingPlan.value = true
 
-  if (!historicalPlan) {
-    return PLANES_MOCK[0]
-  }
-
-  return {
-    ...PLANES_MOCK[0],
-    ...historicalPlan,
-    fecha: historicalPlan.createdAt,
-    fechaCierre: historicalPlan.fechaCierre,
+  try {
+    plan.value = await planContingenciaService.getPlanById(id)
+  } catch (error) {
+    plan.value = null
+    notifyError(error)
+  } finally {
+    loadingPlan.value = false
   }
 }
+
+onMounted(loadPlan)
 
 const confirmationConfig = computed(() => {
   return (
@@ -142,6 +145,10 @@ const confirmationConfig = computed(() => {
 })
 
 function handlePlanAction(action) {
+  if (actionInProgress.value) {
+    return
+  }
+
   if (PLAN_ACTIONS_CONFIRMATION[action]) {
     pendingAction.value = action
     showConfirmation.value = true
@@ -151,49 +158,82 @@ function handlePlanAction(action) {
   executePlanAction(action)
 }
 
-function confirmPlanAction(payload) {
+async function confirmPlanAction(payload) {
   const currentAction = pendingAction.value
-  executePlanAction(currentAction, payload?.observations)
   pendingAction.value = null
   showConfirmation.value = false
 
-  if (currentAction === PLAN_ACTIONS.APROBAR && plan.value) {
+  const planId = plan.value?._id
+  const success = await executePlanAction(currentAction, payload?.observations)
+
+  if (success && currentAction === PLAN_ACTIONS.APROBAR && planId) {
     router.push({
       name: 'planes.stage',
-      params: { id: plan.value._id },
+      params: { id: planId },
     })
   }
 }
 
-function executePlanAction(action, observations = '') {
-  switch (action) {
-    case PLAN_ACTIONS.APROBAR:
-      plan.value = approvePlan(plan.value, role.value)
-      break
+const STATE_BY_ACTION = {
+  [PLAN_ACTIONS.EJECUTAR]: 'ejecutado',
+  [PLAN_ACTIONS.CANCELAR]: 'cancelado',
+  [PLAN_ACTIONS.MANDAR_EDICION]: 'borrador',
+}
 
-    case PLAN_ACTIONS.NO_APROBAR:
-      plan.value = rejectPlan(plan.value, role.value, observations)
-      break
+async function refreshPlan(id) {
+  try {
+    plan.value = await planContingenciaService.getPlanById(id)
+  } catch (error) {
+    notifyError(error)
+  }
+}
 
-    case PLAN_ACTIONS.EJECUTAR:
-      plan.value = executePlan(plan.value, role.value)
-      break
+async function executePlanAction(action, observations = '') {
+  const id = plan.value?._id
 
-    case PLAN_ACTIONS.CANCELAR:
-      plan.value = cancelPlan(plan.value, role.value, observations)
-      break
+  if (!id || actionInProgress.value) {
+    return false
+  }
 
-    case PLAN_ACTIONS.MANDAR_EDICION:
-      plan.value = sendPlanToEdition(plan.value, role.value, observations)
-      break
+  actionInProgress.value = true
 
-    case PLAN_ACTIONS.EDITAR:
-      console.log('Editar plan')
-      break
+  try {
+    switch (action) {
+      case PLAN_ACTIONS.APROBAR:
+        await planContingenciaService.registrarRevision(id, { estado: 'aprobado' })
+        break
 
-    case PLAN_ACTIONS.IMPRIMIR:
-      console.log('Imprimir plan')
-      break
+      case PLAN_ACTIONS.NO_APROBAR:
+        await planContingenciaService.registrarRevision(id, {
+          estado: 'no aprobado',
+          observaciones: observations,
+        })
+        break
+
+      case PLAN_ACTIONS.EJECUTAR:
+      case PLAN_ACTIONS.CANCELAR:
+      case PLAN_ACTIONS.MANDAR_EDICION:
+        await planContingenciaService.changeEstadoPlan(id, STATE_BY_ACTION[action])
+        break
+
+      case PLAN_ACTIONS.EDITAR:
+        router.push({ name: 'planes.create', params: { id } })
+        return true
+
+      case PLAN_ACTIONS.IMPRIMIR:
+        await printPlan(id)
+        return true
+
+      default:
+        return false
+    }
+  } catch (error) {
+    notifyError(error)
+    // Sincroniza la vista con el estado real (p. ej. si la revisión ya había sido registrada).
+    await refreshPlan(id)
+    return false
+  } finally {
+    actionInProgress.value = false
   }
 
   const notification = PLAN_ACTION_NOTIFICATIONS[action]
@@ -205,6 +245,20 @@ function executePlanAction(action, observations = '') {
       notifySuccess(notification.successMessage)
     }
   }
+
+  if (action !== PLAN_ACTIONS.APROBAR) {
+    await refreshPlan(id)
+  }
+
+  return true
+}
+
+async function printPlan(id) {
+  const blob = await planContingenciaService.generarPdf(id)
+  const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }))
+
+  window.open(url, '_blank', 'noopener')
+  setTimeout(() => URL.revokeObjectURL(url), 60000)
 }
 </script>
 
@@ -221,6 +275,12 @@ function executePlanAction(action, observations = '') {
   margin: 40px auto 10px;
 }
 
+.plan-detail__empty {
+  width: 90%;
+  margin: 40px auto 10px;
+  font-size: $font-size-md;
+}
+
 .plan-detail__header {
   display: flex;
   justify-content: space-between;
@@ -234,6 +294,25 @@ function executePlanAction(action, observations = '') {
   padding: 13px;
   font-weight: 500;
   font-size: $font-size-sm;
+}
+
+.plan-detail__code {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 15px 0 0;
+  white-space: nowrap;
+}
+
+.plan-detail__code-label {
+  font-size: $font-size-xs;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: $color-primary;
+}
+
+.plan-detail__code-value {
+  font-size: $font-size-md;
 }
 
 .plan-footer {

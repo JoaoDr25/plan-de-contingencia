@@ -1,5 +1,7 @@
 <template>
   <div class="plan-risks">
+    <div v-if="!dangers.length" class="plan-risks__empty">No hay riesgos asociados al plan.</div>
+
     <div v-for="danger in dangers" :key="danger.id" class="danger-item">
       <div class="danger-item__content">
         <span class="danger-item__label"> Peligro identificado </span>
@@ -20,13 +22,19 @@
     </div>
   </div>
 
-  <PlanesRiesgosDialog v-model="showModal" :danger="selectedDanger" />
+  <PlanesRiesgosDialog
+    v-model="showModal"
+    class="plan-detail-risks-dialog"
+    :danger="selectedDanger"
+  />
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import PlanesRiesgosDialog from '../modals/PlanesRiesgosDialog.vue'
+import actividadService from 'src/services/modules/actividadService'
+import peligroService from 'src/services/modules/peligroService'
 
 const props = defineProps({
   plan: {
@@ -39,31 +47,80 @@ const showModal = ref(false)
 
 const selectedDanger = ref(null)
 
-const planRisks = computed(() => {
-  if (!Array.isArray(props.plan.riesgos)) {
-    return []
-  }
+const actividadPeligros = ref(null)
 
-  const selectedIds = Array.isArray(props.plan.riesgosId) ? props.plan.riesgosId : []
+const actividadId = computed(() => {
+  const actividad = props.plan.actividadId
 
-  return props.plan.riesgos.filter(
-    (risk) => selectedIds.length === 0 || selectedIds.includes(risk._id),
-  )
+  return actividad && typeof actividad === 'object' ? actividad._id : actividad
 })
 
+watch(
+  actividadId,
+  async (id) => {
+    actividadPeligros.value = null
+
+    if (!id) {
+      return
+    }
+
+    try {
+      const [actividad, peligros] = await Promise.all([
+        actividadService.getActividadById(id),
+        peligroService.getPeligros(),
+      ])
+      const peligrosIds = new Set((actividad.peligrosIds ?? []).map(String))
+
+      actividadPeligros.value = peligros.filter((peligro) => peligrosIds.has(String(peligro._id)))
+    } catch (error) {
+      console.error('Error cargando los peligros de la actividad:', error)
+    }
+  },
+  { immediate: true },
+)
+
+const planRisks = computed(() => {
+  const risks = Array.isArray(props.plan.riesgosId) ? props.plan.riesgosId : []
+
+  return risks.filter((risk) => risk && typeof risk === 'object')
+})
+
+// Igual que en el wizard: cada riesgo seleccionado se agrupa bajo los peligros de la actividad que lo contienen.
 const dangers = computed(() => {
+  if (actividadPeligros.value) {
+    return actividadPeligros.value
+      .map((peligro) => {
+        const riesgosIds = new Set((peligro.riesgosIds ?? []).map(String))
+
+        return {
+          id: peligro._id,
+          nombre: peligro.nombre,
+          riesgos: planRisks.value.filter((risk) => riesgosIds.has(String(risk._id))),
+        }
+      })
+      .filter((danger) => danger.riesgos.length > 0)
+  }
+
   const grouped = {}
 
   planRisks.value.forEach((risk) => {
-    if (!grouped[risk.peligroId]) {
-      grouped[risk.peligroId] = {
-        id: risk.peligroId,
-        nombre: risk.peligroNombre,
-        riesgos: [],
-      }
-    }
+    const peligros = (Array.isArray(risk.peligroId) ? risk.peligroId : [risk.peligroId]).filter(
+      (peligro) => peligro && typeof peligro === 'object',
+    )
 
-    grouped[risk.peligroId].riesgos.push(risk)
+    const targets = peligros.length ? peligros : [{ _id: 'sin-peligro', nombre: 'Sin peligro' }]
+
+    targets.forEach((peligro) => {
+      if (!grouped[peligro._id]) {
+        grouped[peligro._id] = {
+          id: peligro._id,
+          nombre: peligro.nombre,
+          riesgos: [],
+        }
+      }
+
+      grouped[peligro._id].riesgos.push(risk)
+    })
   })
 
   return Object.values(grouped)
@@ -85,6 +142,11 @@ function openRisks(danger) {
   column-gap: 40px;
   row-gap: 22px;
   padding-bottom: 8px;
+}
+
+.plan-risks__empty {
+  grid-column: 1 / -1;
+  font-size: $font-size-md;
 }
 
 .danger-item {
@@ -189,5 +251,15 @@ function openRisks(danger) {
   .danger-item__value {
     font-size: $font-size-xs;
   }
+}
+</style>
+
+<style lang="scss">
+.plan-detail-risks-dialog table.risks-table th {
+  font-size: 0.75rem;
+}
+
+.plan-detail-risks-dialog table.risks-table td {
+  font-size: 0.85rem;
 }
 </style>

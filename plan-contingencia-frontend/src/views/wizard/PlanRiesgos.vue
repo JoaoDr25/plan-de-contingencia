@@ -182,12 +182,10 @@ const actividadNombre = computed(() => {
 })
 
 const riskGroups = computed(() => {
-  return peligros.value
-    .map((peligro) => ({
-      peligro,
-      riesgos: peligro.riesgosDetalle ?? [],
-    }))
-    .filter((group) => group.riesgos.length > 0)
+  return peligros.value.map((peligro) => ({
+    peligro,
+    riesgos: (peligro.riesgosDetalle ?? []).filter((riesgo) => riesgo && typeof riesgo === 'object'),
+  }))
 })
 
 async function loadData() {

@@ -80,6 +80,7 @@ import PlanRevision from '../wizard/PlanRevision.vue'
 
 import { createPlanContingenciaModel } from 'src/models/planContingencia.model'
 import { notifySuccess, notifyError } from 'src/utils/notifications.utils'
+import { normalizeAdditionalContacts } from 'src/utils/contacts.utils'
 import { PLAN_WIZARD_STEPS } from 'src/constants/plans/planWizard.js'
 // import { PLANES_MOCK } from 'src/mocks/plans/planes.mock.js'
 
@@ -99,7 +100,6 @@ const {
   registrarContextoAcademico,
   registrarArticulacionFormativa,
   registrarPlanTrabajo,
-  registrarRevision,
 } = planContingenciaService
 
 const TOTAL_STEPS = PLAN_WIZARD_STEPS.length
@@ -159,10 +159,7 @@ function normalizePlanForForm(plan) {
       ...defaults.contactosEmergencia,
       ...contactosEmergencia,
       contactosBase: (contactosEmergencia.contactosBase ?? []).map(referenceId),
-      otro: {
-        ...defaults.contactosEmergencia.otro,
-        ...contactosEmergencia.otro,
-      },
+      otro: normalizeAdditionalContacts(contactosEmergencia.otro),
     },
     articulacionFormativa: {
       ...defaults.articulacionFormativa,
@@ -181,9 +178,10 @@ function normalizePlanForForm(plan) {
       ...defaults.revision,
       ...revision,
       usuario: { ...defaults.revision.usuario, ...revision.usuario },
-      pedagogia: { ...defaults.revision.pedagogia, ...revision.pedagogia },
-      sst: { ...defaults.revision.sst, ...revision.sst },
-      coordinacion: { ...defaults.revision.coordinacion, ...revision.coordinacion },
+      // Reviewers must be chosen again on every submission; only the creator is kept
+      pedagogia: { ...defaults.revision.pedagogia },
+      sst: { ...defaults.revision.sst },
+      coordinacion: { ...defaults.revision.coordinacion },
     },
   }
 }
@@ -397,19 +395,22 @@ async function saveStep6() {
   if (!planId.value) return false
 
   try {
-    await seleccionarEpp(
-      planId.value,
-      planForm.value.epp,
-    )
+    await seleccionarEpp(planId.value, {
+      epp: planForm.value.epp,
+    })
 
     await registrarSeguridadVial(
       planId.value,
-      planForm.value.seguridadVial,
+      {
+        seguridadVial: planForm.value.seguridadVial,
+      },
     )
 
     await guardarContactosEmergencia(
       planId.value,
-      planForm.value.contactosEmergencia,
+      {
+        contactosEmergencia: planForm.value.contactosEmergencia,
+      },
     )
     return true
   } catch (error) {
@@ -422,10 +423,9 @@ async function saveStep7() {
   if (!planId.value) return false
 
   try {
-    await registrarRevision(
-      planId.value,
-      planForm.value.revision,
-    )
+    await planContingenciaService.updatePlan(planId.value, {
+      observaciones: planForm.value.observaciones ?? '',
+    })
     return true
   } catch (error) {
     notifyError(error)

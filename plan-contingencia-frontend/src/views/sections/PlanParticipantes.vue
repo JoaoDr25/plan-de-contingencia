@@ -5,7 +5,7 @@
         <span class="summary-item__label"> Programa de formación </span>
 
         <span class="summary-item__value">
-          {{ plan.programaFormacionNombre || 'No registrado' }}
+          {{ programaNombre || 'No registrado' }}
         </span>
       </div>
 
@@ -13,7 +13,7 @@
         <span class="summary-item__label"> Nivel de formación </span>
 
         <span class="summary-item__value">
-          {{ plan.programaFormacionNivel || 'No registrado' }}
+          {{ programaNivel || 'No registrado' }}
         </span>
       </div>
 
@@ -21,7 +21,7 @@
         <span class="summary-item__label"> Ficha </span>
 
         <span class="summary-item__value">
-          {{ plan.ficha || 'No registrada' }}
+          {{ ficha || 'No registrada' }}
         </span>
       </div>
 
@@ -57,8 +57,6 @@
 <script setup>
 import { computed, ref } from 'vue'
 
-import { MOCK_APRENDICES } from 'src/mocks/plans/planes.mock.js'
-
 import ParticipantesDialog from '../modals/ParticipantesDialog.vue'
 
 const props = defineProps({
@@ -70,10 +68,29 @@ const props = defineProps({
 
 const showDialog = ref(false)
 
-const participants = computed(() => {
-  const ids = props.plan.aprendicesId || []
+const programa = computed(() =>
+  props.plan.programaFormacionId && typeof props.plan.programaFormacionId === 'object'
+    ? props.plan.programaFormacionId
+    : {},
+)
 
-  return ids.map((id) => MOCK_APRENDICES.find((aprendiz) => aprendiz._id === id)).filter(Boolean)
+const programaNombre = computed(() => props.plan.programaFormacionNombre || programa.value.nombre)
+
+const programaNivel = computed(
+  () => props.plan.programaFormacionNivel || programa.value.nivelFormacion || programa.value.nivel,
+)
+
+const ficha = computed(() => props.plan.ficha || programa.value.ficha)
+
+const participants = computed(() => {
+  const aprendices = Array.isArray(props.plan.aprendicesId) ? props.plan.aprendicesId : []
+
+  return aprendices
+    .filter((aprendiz) => aprendiz && typeof aprendiz === 'object')
+    .map((aprendiz) => ({
+      ...aprendiz,
+      numeroDocumento: aprendiz.numeroDocumento || aprendiz.documento,
+    }))
 })
 </script>
 

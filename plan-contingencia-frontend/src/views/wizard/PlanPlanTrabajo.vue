@@ -88,6 +88,20 @@
         <q-td :props="props"> {{ props.row.duracion }} min </q-td>
       </template>
 
+      <template #body-cell-lugar="props">
+        <q-td :props="props" class="marquee-cell">
+          <div
+            class="marquee-cell__content"
+            @mouseenter="onMarqueeHover"
+            @mouseleave="onMarqueeLeave"
+          >
+            <span class="marquee-cell__text">
+              {{ props.row.lugar }}
+            </span>
+          </div>
+        </q-td>
+      </template>
+
       <template #body-cell-opciones="props">
         <q-td :props="props">
           <CrudActions
@@ -343,13 +357,77 @@ defineExpose({
   width: 100%;
 }
 
-.marquee-cell {
-  max-width: 0;
-}
-
 .plan-trabajo :deep(.base-table__table table) {
   table-layout: fixed;
-  min-width: 700px;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .plan-trabajo :deep(.base-table__table .q-table__middle) {
+    overflow-x: auto;
+  }
+
+  .plan-trabajo :deep(.base-table__table table) {
+    width: 850px !important;
+    min-width: 850px !important;
+    max-width: none;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(1)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(1)) {
+    width: 50px !important;
+    min-width: 50px !important;
+    max-width: 50px !important;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(2)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(2)) {
+    width: 145px !important;
+    min-width: 145px !important;
+    max-width: 145px !important;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(3)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(3)) {
+    width: 205px !important;
+    min-width: 205px !important;
+    max-width: 205px !important;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(4)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(4)) {
+    width: 95px !important;
+    min-width: 95px !important;
+    max-width: 95px !important;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(5)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(5)) {
+    width: 85px !important;
+    min-width: 85px !important;
+    max-width: 85px !important;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(6)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(6)) {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(7)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(7)) {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+  }
+
+  .plan-trabajo :deep(.base-table__table th:nth-child(8)),
+  .plan-trabajo :deep(.base-table__table td:nth-child(8)) {
+    width: 90px !important;
+    min-width: 90px !important;
+    max-width: 90px !important;
+  }
 }
 
 .marquee-cell__content {

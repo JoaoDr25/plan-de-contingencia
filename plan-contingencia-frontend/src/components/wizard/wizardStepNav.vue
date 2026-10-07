@@ -224,7 +224,7 @@ function handleStepClick(stepNumber) {
     justify-items: stretch;
     padding: 4px 0 0 0;
     margin: 0 auto;
-    column-gap: 10px;
+    column-gap: 25px;
   }
 
   .wizard-step-nav__step {
@@ -235,6 +235,16 @@ function handleStepClick(stepNumber) {
   .wizard-step-nav__label {
     white-space: nowrap;
     font-size: 0.71rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .wizard-step-nav {
+    column-gap: 20px;
+  }
+
+  .wizard-step-nav__step {
+    padding: 8px 8px 8px 0;
   }
 }
 </style>

@@ -111,14 +111,14 @@
 <script setup>
 import { onMounted, computed, ref } from 'vue'
 
-import BaseSearch from 'src/components/forms/BaseSearch.vue'
-import BaseTable from 'src/components/tables/BaseTable.vue'
-import StatusChip from 'src/components/states/StatusChip.vue'
-
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
 import { PLAN_APRENDICES_COLUMNS } from 'src/constants/tables/planAprendices.columns'
+
+import BaseSearch from 'src/components/forms/BaseSearch.vue'
+import BaseTable from 'src/components/tables/BaseTable.vue'
+import StatusChip from 'src/components/states/StatusChip.vue'
 
 import aprendizService from 'src/services/modules/aprendizService'
 
@@ -161,11 +161,23 @@ async function loadAprendices() {
     })
 
     aprendices.value = response.data ?? []
+    keepOnlyAvailableSelection()
   } catch (error) {
     console.error(error)
     aprendices.value = []
   } finally {
     loading.value = false
+  }
+}
+
+// Si cambió el programa de formación, descarta los aprendices seleccionados que ya no pertenecen a él.
+function keepOnlyAvailableSelection() {
+  const availableIds = new Set(aprendices.value.map((aprendiz) => String(aprendiz._id ?? aprendiz.id)))
+  const validIds = plan.aprendicesId.map(String).filter((id) => availableIds.has(id))
+
+  if (validIds.length !== plan.aprendicesId.length) {
+    plan.aprendicesId = validIds
+    emit('update:modelValue', plan)
   }
 }
 

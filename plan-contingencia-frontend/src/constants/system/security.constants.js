@@ -1,22 +1,24 @@
 export const SECURITY_VIAL_ITEMS = [
   {
-    id: 'licencia-conductor',
+    id: 'LICENCIA',
+    legacyId: 'licencia-conductor',
     label: 'Licencia del conductor',
   },
   {
-    id: 'soat',
+    id: 'SOAT',
     label: 'SOAT',
   },
   {
-    id: 'revision-tecnico-mecanica',
+    id: 'TECNOMECANICA',
+    legacyId: 'revision-tecnico-mecanica',
     label: 'Revisión tecnomecánica',
   },
   {
-    id: 'botiquin',
+    id: 'BOTIQUIN',
     label: 'Botiquín',
   },
   {
-    id: 'extintor',
+    id: 'EXTINTOR',
     label: 'Extintor',
   },
 ]

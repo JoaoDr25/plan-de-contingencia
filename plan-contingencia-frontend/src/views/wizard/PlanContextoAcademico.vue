@@ -395,6 +395,14 @@ defineExpose({
   width: 100%;
 }
 
+.contexto-field :deep(.base-textarea--wizard .q-field__native) {
+  height: 70px !important;
+  min-height: 70px;
+  max-height: 70px;
+  line-height: 22px;
+  overflow-y: auto !important;
+}
+
 .section-header {
   margin-bottom: 16px;
 
@@ -430,7 +438,6 @@ defineExpose({
   display: flex;
   align-items: center;
   gap: 8px;
-
   color: $color-primary;
   font-size: $font-size-sm;
   font-weight: 700;

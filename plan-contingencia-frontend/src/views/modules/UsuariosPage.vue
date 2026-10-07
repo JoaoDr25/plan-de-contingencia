@@ -230,6 +230,10 @@ async function updateUser(formData) {
   if (index !== -1) {
     sourceRows.value[index] = updatedUser
   }
+
+  if (String(id) === String(authStore.currentUser?._id ?? authStore.currentUser?.id)) {
+    await authStore.refreshCurrentUser()
+  }
   return updatedUser
 }
 

@@ -90,6 +90,18 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function refreshCurrentUser() {
+    if (!token.value) {
+      return currentUser.value
+    }
+
+    const { data } = await api.get('/auth/me')
+    currentUser.value = data.data
+    persistSession()
+
+    return currentUser.value
+  }
+
   function hasRole(requiredRole) {
     return role.value === requiredRole
   }
@@ -103,6 +115,7 @@ export const useAuthStore = defineStore('auth', () => {
     verificarCodigo,
     logout,
     hydrate,
+    refreshCurrentUser,
     hasRole,
   }
 })

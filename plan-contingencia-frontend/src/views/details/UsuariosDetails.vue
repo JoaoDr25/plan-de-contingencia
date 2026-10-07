@@ -195,6 +195,13 @@ onMounted(() => {
   padding: 18px 0 0;
 }
 
+@media (min-width: 1255px) {
+  .base-page.user-detail-page {
+    min-height: calc(100vh - 106px);
+    justify-content: center;
+  }
+}
+
 .detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

@@ -14,7 +14,11 @@
       </div>
     </header>
 
-    <div class="base-data-card__content-scroll">
+    <div
+      class="base-data-card__content-scroll"
+      @mouseover="onCellHover"
+      @mouseleave="resetActiveCell"
+    >
       <div v-if="columns.length" class="base-data-card__columns" :style="gridStyle">
         <span v-for="column in columns" :key="column.key">
           {{ column.label }}
@@ -110,6 +114,64 @@ const bodyStyle = computed(() => {
     overflowY: 'auto',
   }
 })
+
+const MARQUEE_SPEED_PX_PER_SECOND = 40
+
+let activeCell = null
+
+function findTextCell(target) {
+  const row = target.closest?.('.base-data-card__body > :not(.base-data-card__empty)')
+
+  if (!row) {
+    return null
+  }
+
+  let cell = target
+
+  while (cell && cell.parentElement !== row) {
+    cell = cell.parentElement
+  }
+
+  // Only plain-text cells; cells with inner elements manage their own content
+  return cell && cell.children.length === 0 ? cell : null
+}
+
+// Slides truncated text horizontally on hover so the full content can be read
+function onCellHover(event) {
+  const cell = findTextCell(event.target)
+
+  if (cell === activeCell) {
+    return
+  }
+
+  resetActiveCell()
+
+  if (!cell) {
+    return
+  }
+
+  const overflow = cell.scrollWidth - cell.clientWidth
+
+  if (overflow <= 0) {
+    return
+  }
+
+  activeCell = cell
+  cell.style.transition = `text-indent ${Math.max(1, overflow / MARQUEE_SPEED_PX_PER_SECOND)}s linear`
+  cell.style.textOverflow = 'clip'
+  cell.style.textIndent = `-${overflow}px`
+}
+
+function resetActiveCell() {
+  if (!activeCell) {
+    return
+  }
+
+  activeCell.style.transition = 'text-indent 0.3s ease-out'
+  activeCell.style.textIndent = ''
+  activeCell.style.textOverflow = ''
+  activeCell = null
+}
 </script>
 
 <style scoped lang="scss">
@@ -210,6 +272,14 @@ const bodyStyle = computed(() => {
   min-width: 0;
   padding: 6px 8px;
   line-height: 1.25;
+}
+
+/* Plain-text cells (default rows and custom body slot rows) stay on one line */
+.base-data-card__body > :deep(:not(.base-data-card__empty) > :not(:has(*))) {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .base-data-card__empty {

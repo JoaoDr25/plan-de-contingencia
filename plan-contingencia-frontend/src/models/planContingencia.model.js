@@ -34,12 +34,7 @@ export function createPlanContingenciaModel() {
     contactosEmergencia: {
       contactosBase: [],
 
-      otro: {
-        nombreEntidad: '',
-        telefono: '',
-        descripcion: '',
-        ciudad: '',
-      },
+      otro: [],
     },
 
     articulacionFormativa: {

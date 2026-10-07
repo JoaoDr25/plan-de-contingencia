@@ -1,16 +1,10 @@
 <template>
   <div class="plan-general-info">
     <div class="info-item">
-      <span class="info-item__label"> Código del Plan </span>
-
-      <span class="info-item__value"> N° {{ plan.numero || 'N/A' }} </span>
-    </div>
-
-    <div class="info-item">
       <span class="info-item__label"> Programa de Formación </span>
 
       <span class="info-item__value">
-        {{ plan.programaFormacionNombre || 'No disponible' }}
+        {{ plan.programaFormacionNombre || plan.programaFormacionId?.nombre || 'No disponible' }}
       </span>
     </div>
 
@@ -33,6 +27,14 @@
         </div> -->
 
     <div class="info-item">
+      <span class="info-item__label"> Transporte </span>
+
+      <span class="info-item__value">
+        {{ formatTransport(plan.tipoTransporte) }}
+      </span>
+    </div>
+
+    <div class="info-item">
       <span class="info-item__label"> Lugar de Salida </span>
 
       <span class="info-item__value">
@@ -49,18 +51,20 @@
     </div>
 
     <div class="info-item">
-      <span class="info-item__label"> Transporte </span>
+      <span class="info-item__label"> Contacto Lugar </span>
 
       <span class="info-item__value">
-        {{ formatTransport(plan.tipoTransporte) }}
+        {{ plan.contactoLugar || 'No disponible' }}
       </span>
     </div>
+
+
 
     <div class="info-item">
       <span class="info-item__label"> Actividad </span>
 
       <span class="info-item__value">
-        {{ plan.descripcionActividad || 'No disponible' }}
+        {{ plan.actividadId?.nombre || 'No disponible' }}
       </span>
     </div>
 
@@ -128,7 +132,7 @@ function formatTransport(value) {
 
 .plan-general-info {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
+  grid-template-columns: 1.8fr 1.9fr 1.1fr;
   column-gap: 40px;
   row-gap: 22px;
   padding-bottom: 8px;

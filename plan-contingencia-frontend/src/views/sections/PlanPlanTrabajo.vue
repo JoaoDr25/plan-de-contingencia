@@ -62,7 +62,7 @@ defineProps({
 .work-plan-header,
 .work-plan-row {
   display: grid;
-  grid-template-columns: 120px minmax(0, 2.2fr) minmax(75px, 0.5fr) minmax(0, 1.4fr);
+  grid-template-columns: 0.5fr 2fr 0.6fr 0.94fr;
   column-gap: 32px;
   align-items: center;
 }
@@ -96,6 +96,13 @@ defineProps({
 .work-plan-empty {
   font-size: $font-size-md;
   line-height: 1.4;
+}
+
+@media (min-width: 901px) {
+  .work-plan-header > :nth-child(3),
+  .work-plan-row > :nth-child(3) {
+    text-align: center;
+  }
 }
 
 @media (max-width: 900px) {

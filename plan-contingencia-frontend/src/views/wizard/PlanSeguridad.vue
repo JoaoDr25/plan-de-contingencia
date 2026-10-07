@@ -99,6 +99,7 @@
           :show-type="false"
           :single-column="true"
           :width="400"
+          class="plan-security-contact-dialog"
           custom-title="AGREGAR CONTACTO DE EMERGENCIA"
           @save="handleAdditionalContactSave"
         />
@@ -147,7 +148,7 @@
                 <BaseInput
                   v-model="row.observacion"
                   label="Observación"
-                  placeholder="Especifique..."
+                  placeholder="NO ESPECIFICA"
                   size="wizard"
                   external-label
                   @update:model-value="emitPlanUpdate"
@@ -156,6 +157,7 @@
 
               <div class="security-vial-field">
                 <BaseInput
+                  :key="`${row.itemId}-${row.cumple}`"
                   v-model="row.soporte"
                   label="Soporte"
                   placeholder="https://ejemplo.com/documento.pdf"
@@ -163,6 +165,7 @@
                   icon-position="prepend"
                   size="wizard"
                   external-label
+                  :rules="getSupportRules(row)"
                   @update:model-value="emitPlanUpdate"
                 />
               </div>
@@ -175,7 +178,12 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+
+import { notifyError, notifyWarning } from 'src/utils/notifications.utils'
+import { normalizeAdditionalContacts } from 'src/utils/contacts.utils'
+
+import { SECURITY_VIAL_ITEMS } from 'src/constants/system/security.constants'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
 import BaseSelect from 'src/components/forms/BaseSelect.vue'
@@ -184,11 +192,8 @@ import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 
 import ContactosDialog from 'src/views/dialogs/ContactosDialog.vue'
 
-import { EPP_MOCK } from 'src/mocks/modules/epp.mock'
-import { CONTACTOS_MOCK } from 'src/mocks/modules/contactos.mock'
-import { notifyWarning } from 'src/utils/notifications.utils'
-
-import { SECURITY_VIAL_ITEMS } from 'src/constants/system/security.constants'
+import contactoService from 'src/services/modules/contactoService.js'
+import eppService from 'src/services/modules/eppService.js'
 
 const props = defineProps({
   modelValue: {
@@ -208,18 +213,15 @@ if (!Array.isArray(plan.epp)) {
 if (!plan.contactosEmergencia) {
   plan.contactosEmergencia = {
     contactosBase: [],
-    otro: {
-      nombreEntidad: '',
-      telefono: '',
-      ciudad: '',
-      descripcion: '',
-    },
+    otro: [],
   }
 }
 
 if (!Array.isArray(plan.contactosEmergencia.contactosBase)) {
   plan.contactosEmergencia.contactosBase = []
 }
+
+plan.contactosEmergencia.otro = normalizeAdditionalContacts(plan.contactosEmergencia.otro)
 
 function initializeSecurityVialItems() {
   if (!plan.seguridadVial) {
@@ -238,7 +240,9 @@ function initializeSecurityVialItems() {
   const existingItems = plan.seguridadVial.items
 
   const initializedItems = SECURITY_VIAL_ITEMS.map((item) => {
-    const existingItem = existingItems.find((securityItem) => securityItem.itemId === item.id)
+    const existingItem = existingItems.find(
+      (securityItem) => securityItem.itemId === item.id || securityItem.itemId === item.legacyId,
+    )
 
     if (existingItem) {
       return {
@@ -299,8 +303,66 @@ function emitPlanUpdate() {
   emit('update:modelValue', plan)
 }
 
+const DEFAULT_OBSERVATION = 'NO ESPECIFICA'
+
+function isValidUrl(value) {
+  try {
+    const url = new URL(value)
+    return ['http:', 'https:'].includes(url.protocol)
+  } catch {
+    return false
+  }
+}
+
+function getSupportRules(row) {
+  return [
+    (value) => row.cumple !== true || Boolean(value?.trim()) || 'Adjunte el soporte',
+    (value) => !value?.trim() || isValidUrl(value.trim()) || 'Ingrese una URL válida',
+  ]
+}
+
+function applyDefaultObservations() {
+  plan.seguridadVial.items.forEach((item) => {
+    if (!item.observacion?.trim()) {
+      item.observacion = DEFAULT_OBSERVATION
+    }
+  })
+}
+
+const eppCatalog = ref([])
+const contactCatalog = ref([])
+
+async function loadCatalogs() {
+  const [eppResult, contactResult] = await Promise.allSettled([
+    eppService.getEpps(),
+    contactoService.getContactos(),
+  ])
+
+  if (eppResult.status === 'fulfilled') {
+    eppCatalog.value = eppResult.value.data ?? []
+    const validEppIds = new Set(eppCatalog.value.map((item) => item._id))
+    plan.epp = plan.epp.filter((id) => validEppIds.has(id))
+  } else {
+    notifyError('Error al cargar los elementos de protección personal')
+  }
+
+  if (contactResult.status === 'fulfilled') {
+    contactCatalog.value = contactResult.value.data ?? []
+    const validContactIds = new Set(contactCatalog.value.map((contacto) => contacto._id))
+    plan.contactosEmergencia.contactosBase = plan.contactosEmergencia.contactosBase.filter((id) =>
+      validContactIds.has(id),
+    )
+  } else {
+    notifyError('Error al cargar los contactos de emergencia')
+  }
+
+  emitPlanUpdate()
+}
+
+onMounted(loadCatalogs)
+
 const eppOptions = computed(() => {
-  return EPP_MOCK.filter((item) => item.estado === 'Activo')
+  return eppCatalog.value.filter((item) => item.estado === 'Activo')
 })
 
 function isEppSelected(id) {
@@ -332,56 +394,49 @@ function handleAdditionalContactSave(formData) {
   const nombreEntidad = formData.nombre ?? formData.nombreEntidad ?? ''
   const descripcion = formData.direccion ?? formData.descripcion ?? ''
 
-  plan.contactosEmergencia.otro = {
+  plan.contactosEmergencia.otro.push({
     nombreEntidad: nombreEntidad.trim(),
-    telefono: formData.telefono ?? '',
-    ciudad: formData.ciudad ?? '',
+    telefono: (formData.telefono ?? '').trim(),
+    ciudad: (formData.ciudad ?? '').trim(),
     descripcion: descripcion.trim(),
-  }
+  })
 
   showAddContactDialog.value = false
   emitPlanUpdate()
 }
 
 const contactOptions = computed(() => {
-  return CONTACTOS_MOCK.filter((contacto) => contacto.estado === 'Activo').map((contacto) => ({
-    label: `${contacto.tipo} - ${contacto.nombre}`,
-    value: contacto._id,
-  }))
+  return contactCatalog.value
+    .filter((contacto) => contacto.estado === 'Activo')
+    .map((contacto) => ({
+      label: `${contacto.tipo} - ${contacto.nombre}`,
+      value: contacto._id,
+    }))
 })
 
+const ADDITIONAL_CONTACT_PREFIX = 'plan-contacto-adicional-'
+
 const selectedContacts = computed(() => {
-  const baseContacts = CONTACTOS_MOCK.filter((contacto) =>
+  const baseContacts = contactCatalog.value.filter((contacto) =>
     plan.contactosEmergencia.contactosBase.includes(contacto._id),
   )
 
-  const otro = plan.contactosEmergencia?.otro
+  const additionalContacts = plan.contactosEmergencia.otro.map((otro, index) => ({
+    _id: `${ADDITIONAL_CONTACT_PREFIX}${index}`,
+    nombre: otro.nombreEntidad,
+    tipo: 'Otro',
+    telefono: otro.telefono,
+    descripcion: otro.descripcion,
+    ciudad: otro.ciudad,
+  }))
 
-  if (!otro?.nombreEntidad) {
-    return baseContacts
-  }
-
-  return [
-    ...baseContacts,
-    {
-      _id: 'plan-contacto-adicional',
-      nombre: otro.nombreEntidad,
-      tipo: 'Otro',
-      telefono: otro.telefono,
-      descripcion: otro.descripcion,
-      ciudad: otro.ciudad,
-    },
-  ]
+  return [...baseContacts, ...additionalContacts]
 })
 
 function removeContact(id) {
-  if (id === 'plan-contacto-adicional') {
-    plan.contactosEmergencia.otro = {
-      nombreEntidad: '',
-      telefono: '',
-      descripcion: '',
-      ciudad: '',
-    }
+  if (id.startsWith(ADDITIONAL_CONTACT_PREFIX)) {
+    const index = Number(id.slice(ADDITIONAL_CONTACT_PREFIX.length))
+    plan.contactosEmergencia.otro.splice(index, 1)
     emitPlanUpdate()
     return
   }
@@ -412,46 +467,39 @@ function validate() {
     return false
   }
 
-  const otro = plan.contactosEmergencia?.otro
-
-  const hasBaseContact = plan.contactosEmergencia?.contactosBase?.length > 0
-  const hasCompleteOtherContact = Boolean(
-    otro?.nombreEntidad?.trim() &&
-    otro?.telefono?.trim() &&
-    otro?.ciudad?.trim() &&
-    otro?.descripcion?.trim(),
-  )
-  const hasPartialOtherContact = Boolean(
-    otro?.nombreEntidad?.trim() ||
-    otro?.telefono?.trim() ||
-    otro?.ciudad?.trim() ||
-    otro?.descripcion?.trim(),
+  const supportsValid = plan.seguridadVial.items.every(
+    (item) =>
+      (item.cumple !== true || Boolean(item.soporte?.trim())) &&
+      (!item.soporte?.trim() || isValidUrl(item.soporte.trim())),
   )
 
-  if (hasPartialOtherContact && !hasCompleteOtherContact) {
-    notifyWarning('Complete todos los datos del contacto adicional')
+  if (!supportsValid) {
     return false
   }
 
-  if (!hasBaseContact && !hasCompleteOtherContact) {
+  const otros = plan.contactosEmergencia?.otro ?? []
+
+  const hasBaseContact = plan.contactosEmergencia?.contactosBase?.length > 0
+  const allOtherContactsComplete = otros.every((otro) =>
+    Boolean(
+      otro?.nombreEntidad?.trim() &&
+      otro?.telefono?.trim() &&
+      otro?.ciudad?.trim() &&
+      otro?.descripcion?.trim(),
+    ),
+  )
+
+  if (!allOtherContactsComplete) {
+    notifyWarning('Complete todos los datos de los contactos adicionales')
+    return false
+  }
+
+  if (!hasBaseContact && !otros.length) {
     notifyWarning('Agregue al menos un contacto de emergencia')
     return false
   }
 
-  if (
-    otro &&
-    (otro.nombreEntidad?.trim() ||
-      otro.telefono?.trim() ||
-      otro.ciudad?.trim() ||
-      otro.descripcion?.trim())
-  ) {
-    return Boolean(
-      otro.nombreEntidad?.trim() &&
-      otro.telefono?.trim() &&
-      otro.ciudad?.trim() &&
-      otro.descripcion?.trim(),
-    )
-  }
+  applyDefaultObservations()
 
   return true
 }
@@ -460,6 +508,13 @@ defineExpose({
   validate,
 })
 </script>
+
+<style lang="scss">
+// The dialog is teleported to body, so scoped styles cannot reach it.
+.plan-security-contact-dialog .base-dialog {
+  width: 400px !important;
+}
+</style>
 
 <style scoped lang="scss">
 @use 'src/css/variables.scss' as *;
