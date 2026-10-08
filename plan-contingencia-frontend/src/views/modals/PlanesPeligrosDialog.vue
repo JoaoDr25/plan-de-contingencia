@@ -119,7 +119,7 @@ function closeDialog() {
 }
 
 .dangers-table tbody tr:hover {
-  background-color: $color-surface;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .dangers-table__number {

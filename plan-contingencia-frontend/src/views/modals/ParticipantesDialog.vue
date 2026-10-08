@@ -162,7 +162,7 @@ function getParticipantNames(participant) {
   padding: 10px 12px;
   border-top: 1px solid #d6d6d6;
   border-bottom: 1px solid #d6d6d6;
-  background-color: $color-background;
+  background-color: $color-surface;
   font-size: $font-size-xs;
   font-weight: 600;
   text-align: center;
@@ -176,12 +176,19 @@ function getParticipantNames(participant) {
   text-align: center;
 }
 
+.participants-table th:nth-child(4),
+.participants-table th:nth-child(5),
+.participants-table td:nth-child(4),
+.participants-table td:nth-child(5) {
+  text-align: left;
+}
+
 .participants-table tbody tr:last-child td {
   border-bottom: none;
 }
 
 .participants-table tbody tr:hover {
-  background-color: $color-background-secondary;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .participants-table__number {
@@ -203,6 +210,10 @@ function getParticipantNames(participant) {
 @media (max-width: 700px) {
   .participants-table {
     min-width: 650px;
+  }
+
+  .participants-table-wrapper .participants-table thead th {
+    background-color: $color-surface;
   }
 }
 </style>

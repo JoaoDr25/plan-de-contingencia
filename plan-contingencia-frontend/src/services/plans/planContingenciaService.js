@@ -3,6 +3,7 @@ import api from '../auth/api.js'
 const mapPlanContingencia = (plan) => {
   return {
     ...plan,
+    instructorNombre: plan.usuarioNombre ?? '',
   }
 }
 

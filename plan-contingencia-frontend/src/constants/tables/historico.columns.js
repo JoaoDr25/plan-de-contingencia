@@ -45,7 +45,7 @@ export const PLANES_HISTORICO_COLUMNS = [
     field: 'fechaCierre',
     align: 'center',
     sortable: true,
-    format: (value) => formatDate(value),
+    format: (value) => formatDate(value) || '-',
   },
   {
     name: 'estado',

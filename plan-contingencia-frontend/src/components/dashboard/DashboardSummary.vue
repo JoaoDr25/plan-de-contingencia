@@ -25,7 +25,11 @@ import DashboardStatCard from './DashboardStatCard.vue'
 const props = defineProps({
   plans: {
     type: Array,
-    default: () => [],
+    default: null,
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -56,11 +60,14 @@ const summaryItems = computed(() => {
 
   return accessibleSummaryItems.value.map((item) => ({
     ...item,
-    value:
-      item.status === 'todos'
-        ? plans.length
-        : plans.filter((plan) => normalizeStatus(plan.estado) === normalizeStatus(item.status))
-            .length,
+    value: props.loading
+      ? '...'
+      : plans === null
+        ? '—'
+        : item.status === 'todos'
+          ? plans.length
+          : plans.filter((plan) => normalizeStatus(plan.estado) === normalizeStatus(item.status))
+              .length,
   }))
 })
 

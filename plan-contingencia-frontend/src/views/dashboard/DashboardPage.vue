@@ -2,17 +2,36 @@
   <BasePage>
     <DashboardHeader />
 
-    <DashboardSummary :plans="PLANES_MOCK" />
+    <DashboardSummary :plans="plans" :loading="loadingPlans" />
 
     <DashboardModules />
   </BasePage>
 </template>
 
 <script setup>
-import { PLANES_MOCK } from 'src/mocks/plans/planes.mock'
+import { onMounted, ref } from 'vue'
+
+import { notifyError } from 'src/utils/notifications.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import DashboardHeader from 'src/components/dashboard/DashboardHeader.vue'
 import DashboardSummary from 'src/components/dashboard/DashboardSummary.vue'
 import DashboardModules from 'src/components/dashboard/DashboardModules.vue'
+
+import planContingenciaService from 'src/services/plans/planContingenciaService'
+
+const plans = ref(null)
+const loadingPlans = ref(true)
+
+async function loadPlans() {
+  try {
+    plans.value = await planContingenciaService.getPlanes()
+  } catch (error) {
+    notifyError(error)
+  } finally {
+    loadingPlans.value = false
+  }
+}
+
+onMounted(loadPlans)
 </script>

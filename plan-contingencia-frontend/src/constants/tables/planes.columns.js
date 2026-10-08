@@ -1,4 +1,4 @@
-import { formatTime } from 'src/utils/date.utils'
+import { formatDate, formatTime } from 'src/utils/date.utils'
 
 export const PLANES_COLUMNS = [
   {
@@ -37,6 +37,7 @@ export const PLANES_COLUMNS = [
     field: 'fecha',
     align: 'center',
     sortable: false,
+    format: (value) => formatDate(value),
   },
   {
     name: 'hora',

@@ -90,8 +90,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
+import { PLANES_CONSULTA_COLUMNS } from 'src/constants/tables/consulta.columns'
+import { usePlanesConsultaTable } from 'src/composables/useConsultaTable'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -106,17 +110,23 @@ import StatusChip from 'src/components/states/StatusChip.vue'
 import PlanActions from 'src/components/actions/PlanActions.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
 
-import { PLAN_STATUS_OPTIONS } from 'src/constants/filters/planes.constants'
-import { PLANES_CONSULTA_COLUMNS } from 'src/constants/tables/consulta.columns'
-import { PLANES_CONSULTA_MOCK } from 'src/mocks/plans/consulta.mock'
-
-import { usePlanesConsultaTable } from 'src/composables/useConsultaTable'
+import planContingenciaService from 'src/services/plans/planContingenciaService'
 
 const router = useRouter()
 
-const sourceRows = ref(PLANES_CONSULTA_MOCK)
+const sourceRows = ref([])
 
 const loading = ref(false)
+
+async function loadPlanes() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await planContingenciaService.getPlanes()
+  } finally {
+    loading.value = false
+  }
+}
 
 const {
   codigoPlan,
@@ -159,6 +169,10 @@ function clearFilters() {
   dateFrom.value = ''
   dateTo.value = ''
 }
+
+onMounted(() => {
+  loadPlanes()
+})
 </script>
 
 <style scoped lang="scss">

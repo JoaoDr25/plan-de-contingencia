@@ -121,7 +121,7 @@ function closeDialog() {
 }
 
 .protocols-table tbody tr:hover {
-  background-color: $color-surface;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .protocols-table__number {

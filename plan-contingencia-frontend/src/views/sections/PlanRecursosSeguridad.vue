@@ -204,7 +204,7 @@ function formatObservationDate(value) {
 }
 
 .security-column__content {
-  max-height: 150px;
+  max-height: 152px;
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 6px;

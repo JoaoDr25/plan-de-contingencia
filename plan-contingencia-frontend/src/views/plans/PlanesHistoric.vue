@@ -61,8 +61,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+import { HISTORICO_STATUS_OPTIONS } from 'src/constants/filters/historico.constants'
+import { PLANES_HISTORICO_COLUMNS } from 'src/constants/tables/historico.columns'
+import { usePlanesHistoricoTable } from 'src/composables/useHistoricoTable'
+import { notifyError } from 'src/utils/notifications.utils'
 
 import BasePage from 'src/components/base/BasePage.vue'
 import CrudHeader from 'src/components/cruds/CrudHeader.vue'
@@ -77,17 +82,25 @@ import StatusChip from 'src/components/states/StatusChip.vue'
 import PlanActions from 'src/components/actions/PlanActions.vue'
 import PlanSectionNav from 'src/components/plans/PlanSectionNav.vue'
 
-import { HISTORICO_STATUS_OPTIONS } from 'src/constants/filters/historico.constants'
-import { PLANES_HISTORICO_COLUMNS } from 'src/constants/tables/historico.columns'
-import { PLANES_HISTORICO_MOCK } from 'src/mocks/plans/historico.mock'
-
-import { usePlanesHistoricoTable } from 'src/composables/useHistoricoTable'
+import planContingenciaService from 'src/services/plans/planContingenciaService'
 
 const router = useRouter()
 
-const sourceRows = ref(PLANES_HISTORICO_MOCK)
+const sourceRows = ref([])
 
 const loading = ref(false)
+
+async function loadPlanes() {
+  loading.value = true
+
+  try {
+    sourceRows.value = await planContingenciaService.getPlanes()
+  } catch (error) {
+    notifyError(error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const {
   selectedStatus,
@@ -122,6 +135,10 @@ function clearFilters() {
   dateTo.value = ''
   searchText.value = ''
 }
+
+onMounted(() => {
+  loadPlanes()
+})
 </script>
 
 <style scoped lang="scss">

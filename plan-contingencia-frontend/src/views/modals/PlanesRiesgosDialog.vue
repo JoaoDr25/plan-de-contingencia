@@ -151,7 +151,7 @@ function closeDialog() {
 }
 
 .risks-table tbody tr:hover {
-  background-color: $color-surface;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 .risks-table__number {
