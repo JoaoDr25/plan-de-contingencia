@@ -11,7 +11,20 @@
     "lint:check": "prettier \"**/*.{js,vue,css,scss,html,md,json}\" --ignore-path .gitignore && eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
     "dev": "quasar dev",
     "build": "quasar build",
-    "postinstall": "quasar prepare --silent"
+    "postinstall": "quasar prepare --silent",
+    "test:unit:ui": "vitest --ui",
+    "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
+    "test:unit": "vitest",
+    "test:unit:ci": "vitest run",
+    "test:examples": "vitest run test/vitest/__tests__",
+    "test:composables": "vitest run test/vitest/unit/composables",
+    "test:services": "vitest run test/vitest/unit/services",
+    "test:stores": "vitest run test/vitest/unit/stores",
+    "test:utils": "vitest run test/vitest/unit/utils test/vitest/unit/validators",
+    "test:components": "vitest run test/vitest/components",
+    "test:plans": "vitest run test/vitest/integration/plans",
+    "test:router": "vitest run test/vitest/integration/router",
+    "test:wizard": "vitest run test/vitest/components/wizard test/vitest/components/plans/PlanSeguridad.test.js test/vitest/integration/plans/PlanCreate.test.js"
   },
   "dependencies": {
     "@quasar/extras": "^2.0.0",
@@ -24,15 +37,20 @@
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "@quasar/app-vite": "^2.6.1",
+    "@quasar/quasar-app-extension-testing-unit-vitest": "^2.0.0",
     "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/test-utils": "^2.4.11",
     "autoprefixer": "^10.4.27",
     "eslint": "^9.39.4",
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.4.0",
+    "jsdom": "^30.1.2",
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
     "vite-plugin-checker": "^0.12.0",
-    "vue-eslint-parser": "^10.4.0"
+    "vitest": "^4.1.11",
+    "vue-eslint-parser": "^10.4.0",
+    "@vitest/ui": "^4.1.11"
   },
   "keywords": [
     "quasar",

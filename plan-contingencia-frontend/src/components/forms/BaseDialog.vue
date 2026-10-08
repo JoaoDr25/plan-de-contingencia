@@ -4,7 +4,11 @@
     :persistent="persistent"
     @update:model-value="$emit('update:modelValue', $event)"
   >
-    <q-card class="base-dialog" :style="{ width, maxWidth: 'calc(100vw - 32px)' }">
+    <q-card
+      class="base-dialog"
+      :class="{ 'base-dialog--scrollable': scrollable }"
+      :style="{ width, maxWidth: 'calc(100vw - 32px)' }"
+    >
       <div class="base-dialog__header">
         {{ title }}
       </div>
@@ -42,6 +46,10 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  scrollable: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 defineEmits(['update:modelValue'])
@@ -67,6 +75,10 @@ defineEmits(['update:modelValue'])
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 0.5px;
+}
+
+.base-dialog--scrollable {
+  overflow-y: auto;
 }
 
 .base-dialog__body {

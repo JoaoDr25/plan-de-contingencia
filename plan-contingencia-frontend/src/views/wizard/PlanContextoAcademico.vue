@@ -197,9 +197,10 @@
           </div>
         </div>
 
-        <div v-if="form.contextoAcademico.consentimientoMenores" class="conditional-field">
+        <div class="conditional-field">
           <label class="contexto-field__label" for="consentimiento-informado"
-            >Consentimiento informado <span>*</span></label
+            >Consentimiento informado
+            <span v-if="form.contextoAcademico.consentimientoMenores">*</span></label
           >
 
           <p class="contexto-field__help">
@@ -213,10 +214,15 @@
             placeholder="https://ejemplo.edu.co/consentimiento.pdf"
             type="url"
             icon="link"
-            required
+            :required="form.contextoAcademico.consentimientoMenores"
             external-label
             size="wizard"
-            :rules="[requiredRule, urlRule]"
+            :rules="
+              form.contextoAcademico.consentimientoMenores
+                ? [requiredRule, urlRule]
+                : [optionalUrlRule]
+            "
+            reactive-rules
           />
         </div>
 
@@ -264,9 +270,9 @@
           />
         </div>
 
-        <div v-if="form.articulacionFormativa.otroSeleccionado" class="contexto-field">
+        <div class="contexto-field">
           <label class="contexto-field__label" for="otra-articulacion"
-            >Especificación <span>*</span></label
+            >Especificación <span v-if="form.articulacionFormativa.otroSeleccionado">*</span></label
           >
 
           <BaseInput
@@ -275,10 +281,11 @@
             label="Especificación"
             placeholder="Especifique..."
             :maxlength="50"
-            required
+            :required="form.articulacionFormativa.otroSeleccionado"
             external-label
             size="wizard"
-            :rules="[requiredRule]"
+            :rules="form.articulacionFormativa.otroSeleccionado ? [requiredRule] : []"
+            reactive-rules
           />
         </div>
       </section>
@@ -287,7 +294,6 @@
 </template>
 
 <script setup>
-
 import { reactive } from 'vue'
 
 import BaseInput from 'src/components/forms/BaseInput.vue'
@@ -304,7 +310,12 @@ const emit = defineEmits(['update:modelValue'])
 
 const form = reactive(props.modelValue)
 
-const opcionesArticulacion = ['proyectoFormativo', 'visitaEmpresa', 'investigacion', 'otroSeleccionado']
+const opcionesArticulacion = [
+  'proyectoFormativo',
+  'visitaEmpresa',
+  'investigacion',
+  'otroSeleccionado',
+]
 
 function seleccionarArticulacion(opcionSeleccionada, value) {
   if (value) {
@@ -320,7 +331,9 @@ function seleccionarArticulacion(opcionSeleccionada, value) {
   emit('update:modelValue', form)
 }
 
-const articulacionInicial = opcionesArticulacion.filter((opcion) => form.articulacionFormativa[opcion])
+const articulacionInicial = opcionesArticulacion.filter(
+  (opcion) => form.articulacionFormativa[opcion],
+)
 
 if (articulacionInicial.length !== 1) {
   seleccionarArticulacion(articulacionInicial[0] ?? 'otroSeleccionado', true)
@@ -383,7 +396,6 @@ function validate() {
 defineExpose({
   validate,
 })
-
 </script>
 
 <style scoped lang="scss">

@@ -29,7 +29,7 @@ export const PLANES_HISTORICO_COLUMNS = [
     field: 'descripcionActividad',
     align: 'left',
     sortable: true,
-    ellipsis: true,
+    ellipsis: true
   },
   {
     name: 'fechaCreacion',

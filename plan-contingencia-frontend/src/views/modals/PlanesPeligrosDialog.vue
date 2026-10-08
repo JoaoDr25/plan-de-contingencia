@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog v-model="dialog" :title="dialogTitle" width="900px">
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="900px" scrollable>
     <div class="dangers-dialog">
       <div class="dangers-table-wrapper">
         <table class="dangers-table">
@@ -13,8 +13,8 @@
           </thead>
 
           <tbody>
-            <tr v-for="(danger, index) in dangers" :key="danger._id">
-              <td class="dangers-table__number">{{ index + 1 }}</td>
+            <tr v-for="(danger, index) in paginatedRows" :key="danger._id">
+              <td class="dangers-table__number">{{ startRow + index }}</td>
               <td>{{ danger.nombre || 'No disponible' }}</td>
               <td>{{ danger.categoria || 'No disponible' }}</td>
               <td>{{ danger.descripcion || 'No disponible' }}</td>
@@ -32,17 +32,21 @@
 
     <template #actions>
       <div class="dangers-dialog__actions">
-        <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
+        <q-pagination class="dangers-dialog__pagination" v-if="totalPages > 1" v-model="currentPage" :max="totalPages"
+          :max-pages="5" direction-links boundary-links size="sm" color="primary" />
+        <SecondaryActionButton class="dangers-dialog__close" label="Cerrar" icon="close" size="sm"
+          @click="closeDialog" />
       </div>
     </template>
   </BaseDialog>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import { useCrudTable } from 'src/composables/useCrudTable'
 
 const props = defineProps({
   modelValue: {
@@ -68,6 +72,15 @@ const dialogTitle = computed(() => {
 
 const dangers = computed(() => props.activity?.peligros ?? [])
 
+const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+  sourceRows: dangers,
+  defaultRowsPerPage: 4,
+})
+
+watch([() => props.modelValue, () => props.activity], () => {
+  currentPage.value = 1
+})
+
 function closeDialog() {
   dialog.value = false
 }
@@ -83,9 +96,7 @@ function closeDialog() {
 
 .dangers-table-wrapper {
   width: 100%;
-  max-height: min(320px, 45vh);
   overflow-x: auto;
-  overflow-y: auto;
 }
 
 .dangers-table {
@@ -109,9 +120,10 @@ function closeDialog() {
 }
 
 .dangers-table td {
-  padding: 12px;
+  padding: 8px 12px;
   border-bottom: 1px solid #e2e2e2;
   line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .dangers-table tbody tr:last-child td {
@@ -134,9 +146,21 @@ function closeDialog() {
 
 .dangers-dialog__actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
-  padding: 5px 5px 0 0;
+  padding: 5px 15px 0 0;
+}
+
+.dangers-dialog__pagination {
+  margin-left: 18px;
+  padding-bottom: 5px;
+}
+
+.dangers-dialog__close {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 @media (max-width: 700px) {

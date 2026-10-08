@@ -6,14 +6,14 @@ export const PLANES_COLUMNS = [
     label: 'N',
     field: 'numero',
     align: 'center',
-    sortable: false,
+    sortable: false
   },
   {
     name: 'ficha',
     label: 'Ficha',
     field: 'ficha',
     align: 'left',
-    sortable: true,
+    sortable: true
   },
   {
     name: 'programa',
@@ -21,7 +21,7 @@ export const PLANES_COLUMNS = [
     field: 'programaFormacionNombre',
     align: 'left',
     sortable: true,
-    ellipsis: true,
+    ellipsis: true
   },
   {
     name: 'actividad',
@@ -29,7 +29,7 @@ export const PLANES_COLUMNS = [
     field: 'descripcionActividad',
     align: 'left',
     sortable: true,
-    ellipsis: true,
+    ellipsis: true
   },
   {
     name: 'fecha',
@@ -37,7 +37,7 @@ export const PLANES_COLUMNS = [
     field: 'fecha',
     align: 'center',
     sortable: false,
-    format: (value) => formatDate(value),
+    format: (value) => formatDate(value)
   },
   {
     name: 'hora',
@@ -45,18 +45,18 @@ export const PLANES_COLUMNS = [
     field: 'createdAt',
     align: 'center',
     sortable: false,
-    format: (value) => formatTime(value),
+    format: (value) => formatTime(value)
   },
   {
     name: 'estado',
     label: 'Estado',
     field: 'estado',
-    align: 'center',
+    align: 'center'
   },
   {
     name: 'opciones',
     label: 'Opciones',
     field: 'opciones',
-    align: 'center',
+    align: 'center'
   },
 ]

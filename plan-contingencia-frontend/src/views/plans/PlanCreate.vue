@@ -14,17 +14,26 @@
 
     <template v-else>
       <header class="plan-create-header">
-        <CrudHeader :title="planId ? 'Editar Plan de Contingencia' : 'Crear Plan de Contingencia'"
-          :uppercase-title="true" />
+        <CrudHeader
+          :title="planId ? 'Editar Plan de Contingencia' : 'Crear Plan de Contingencia'"
+          :uppercase-title="true"
+        />
       </header>
 
-      <wizardStepNav :current-step="currentStep" :completed-steps="completedSteps"
-        @update:current-step="handleStepNavigation" />
+      <wizardStepNav
+        :current-step="currentStep"
+        :completed-steps="completedSteps"
+        @update:current-step="handleStepNavigation"
+      />
 
       <q-form ref="wizardFormRef" class="wizard-form" @submit.prevent>
         <PlanInformacionGeneral v-if="currentStep === 1" ref="currentStepRef" v-model="planForm" />
 
-        <PlanContextoAcademico v-else-if="currentStep === 2" ref="currentStepRef" v-model="planForm" />
+        <PlanContextoAcademico
+          v-else-if="currentStep === 2"
+          ref="currentStepRef"
+          v-model="planForm"
+        />
 
         <PlanPlanTrabajo v-else-if="currentStep === 3" ref="currentStepRef" v-model="planForm" />
 
@@ -34,27 +43,54 @@
 
         <PlanSeguridad v-else-if="currentStep === 6" ref="currentStepRef" v-model="planForm" />
 
-        <PlanRevision v-else-if="currentStep === 7" ref="currentStepRef" v-model="planForm"
-          @go-to-step="handleStepNavigation" />
+        <PlanRevision
+          v-else-if="currentStep === 7"
+          ref="currentStepRef"
+          v-model="planForm"
+          @go-to-step="handleStepNavigation"
+        />
       </q-form>
 
       <footer class="wizard-actions">
         <SecondaryActionButton label="Cancelar" icon="cancel" size="sm" @click="handleCancel" />
 
         <div class="wizard-actions__navigation">
-          <SecondaryActionButton v-if="currentStep > 1" class="wizard-actions__button" label="Anterior"
-            icon="arrow_back" size="sm" @click="goToPreviousStep" />
+          <SecondaryActionButton
+            v-if="currentStep > 1"
+            class="wizard-actions__button"
+            label="Anterior"
+            icon="arrow_back"
+            size="sm"
+            @click="goToPreviousStep"
+          />
 
-          <PrimaryActionButton v-if="currentStep < TOTAL_STEPS" class="wizard-actions__button" label="Siguiente"
-            size="sm" @click="goToNextStep" />
+          <PrimaryActionButton
+            v-if="currentStep < TOTAL_STEPS"
+            class="wizard-actions__button"
+            label="Siguiente"
+            size="sm"
+            @click="goToNextStep"
+          />
 
-          <PrimaryActionButton v-else class="wizard-actions__button" label="Generar Plan" size="sm"
-            :disable="!canGeneratePlan" @click="showGenerateConfirmation = true" />
+          <PrimaryActionButton
+            v-else
+            class="wizard-actions__button"
+            label="Generar Plan"
+            size="sm"
+            :disable="!canGeneratePlan"
+            @click="showGenerateConfirmation = true"
+          />
         </div>
       </footer>
 
-      <BaseConfirmationDialog v-model="showGenerateConfirmation" title="Generar plan de contingencia"
-        confirm-label="Generar" cancel-label="Cancelar" variant="primary" @confirm="generatePlan" />
+      <BaseConfirmationDialog
+        v-model="showGenerateConfirmation"
+        title="Generar plan de contingencia"
+        confirm-label="Generar"
+        cancel-label="Cancelar"
+        variant="primary"
+        @confirm="generatePlan"
+      />
     </template>
   </BasePage>
 </template>
@@ -108,6 +144,7 @@ const currentStep = ref(1)
 const completedSteps = ref([])
 const planId = ref(null)
 const savedAprendicesId = ref([])
+const savedObservations = ref('')
 const loadingPlan = ref(Boolean(route.params.id))
 const planLoadError = ref(false)
 
@@ -144,6 +181,7 @@ function normalizePlanForForm(plan) {
   return {
     ...defaults,
     ...plan,
+    observaciones: '',
     programaFormacionId: referenceId(plan.programaFormacionId),
     programaFormacionNombre: plan.programaFormacionNombre ?? programa?.nombre ?? '',
     programaFormacionNivel:
@@ -195,6 +233,7 @@ onMounted(async () => {
   try {
     const existingPlan = await planContingenciaService.getPlanById(id)
     planId.value = existingPlan._id ?? id
+    savedObservations.value = existingPlan.observaciones ?? ''
     const normalizedPlan = normalizePlanForForm(existingPlan)
     Object.assign(planForm.value, normalizedPlan)
     savedAprendicesId.value = [...normalizedPlan.aprendicesId]
@@ -308,7 +347,10 @@ async function saveCurrentStep() {
 async function saveStep1() {
   try {
     const createdPlan = planId.value
-      ? await planContingenciaService.updatePlan(planId.value, planForm.value)
+      ? await planContingenciaService.updatePlan(planId.value, {
+          ...planForm.value,
+          observaciones: savedObservations.value,
+        })
       : await crearPlan(planForm.value)
 
     planId.value = createdPlan._id
@@ -325,15 +367,9 @@ async function saveStep2() {
   if (!planId.value) return false
 
   try {
-    await registrarContextoAcademico(
-      planId.value,
-      planForm.value.contextoAcademico,
-    )
+    await registrarContextoAcademico(planId.value, planForm.value.contextoAcademico)
 
-    await registrarArticulacionFormativa(
-      planId.value,
-      planForm.value.articulacionFormativa,
-    )
+    await registrarArticulacionFormativa(planId.value, planForm.value.articulacionFormativa)
     return true
   } catch (error) {
     notifyError(error)
@@ -380,10 +416,7 @@ async function saveStep5() {
   if (!planId.value) return false
 
   try {
-    await asociarRiesgos(
-      planId.value,
-      planForm.value.riesgosId,
-    )
+    await asociarRiesgos(planId.value, planForm.value.riesgosId)
     return true
   } catch (error) {
     notifyError(error)
@@ -399,19 +432,13 @@ async function saveStep6() {
       epp: planForm.value.epp,
     })
 
-    await registrarSeguridadVial(
-      planId.value,
-      {
-        seguridadVial: planForm.value.seguridadVial,
-      },
-    )
+    await registrarSeguridadVial(planId.value, {
+      seguridadVial: planForm.value.seguridadVial,
+    })
 
-    await guardarContactosEmergencia(
-      planId.value,
-      {
-        contactosEmergencia: planForm.value.contactosEmergencia,
-      },
-    )
+    await guardarContactosEmergencia(planId.value, {
+      contactosEmergencia: planForm.value.contactosEmergencia,
+    })
     return true
   } catch (error) {
     notifyError(error)
@@ -423,8 +450,15 @@ async function saveStep7() {
   if (!planId.value) return false
 
   try {
+    const newObservation = String(planForm.value.observaciones ?? '').trim()
+    const observations = savedObservations.value
+      ? newObservation
+        ? `${savedObservations.value}\nObservaciones del autor: ${newObservation}`
+        : savedObservations.value
+      : newObservation
+
     await planContingenciaService.updatePlan(planId.value, {
-      observaciones: planForm.value.observaciones ?? '',
+      observaciones: observations,
     })
     return true
   } catch (error) {
@@ -464,7 +498,6 @@ async function generatePlan() {
 function handleCancel() {
   router.back()
 }
-
 </script>
 
 <style scoped lang="scss">

@@ -29,7 +29,7 @@
               </td>
 
               <td>
-                {{ participant.tipo || participant.tipoDocumento || 'No disponible' }}
+                {{ getDocumentTypeLabel(participant.tipo || participant.tipoDocumento) }}
               </td>
 
               <td>
@@ -97,6 +97,17 @@ const dialog = computed({
 
 function closeDialog() {
   dialog.value = false
+}
+
+function getDocumentTypeLabel(value) {
+  const type = String(value ?? '').trim()
+  const labels = {
+    CC: 'Cédula de Ciudadanía',
+    TI: 'Tarjeta de Identidad',
+    CE: 'Cédula de Extranjería',
+  }
+
+  return labels[type.toUpperCase()] || type || 'No disponible'
 }
 
 function getParticipantNames(participant) {
@@ -204,7 +215,7 @@ function getParticipantNames(participant) {
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  padding: 5px 28px 0 0;
+  padding: 5px 15px 0 0;
 }
 
 @media (max-width: 700px) {

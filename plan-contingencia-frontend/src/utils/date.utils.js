@@ -30,6 +30,17 @@ export function formatDate(value) {
   }).format(date)
 }
 
+export function getDateOnly(value) {
+  const formatted = formatDate(value)
+
+  if (!formatted) {
+    return ''
+  }
+
+  const [day, month, year] = formatted.split('/')
+  return `${year}-${month}-${day}`
+}
+
 export function formatTime(value) {
   if (!value) {
     return ''
@@ -67,5 +78,3 @@ export function formatHour(value) {
 
   return `${String(formattedHours).padStart(2, '0')}:${minutes} ${period}`
 }
-
-

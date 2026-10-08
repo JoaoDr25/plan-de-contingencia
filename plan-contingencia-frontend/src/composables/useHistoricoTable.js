@@ -1,5 +1,5 @@
 import { computed, ref, watch } from 'vue'
-import { formatDate } from 'src/utils/date.utils'
+import { getDateOnly } from 'src/utils/date.utils'
 
 export function usePlanesHistoricoTable({ sourceRows, defaultRowsPerPage = 8 }) {
   const selectedStatus = ref('todos')
@@ -18,21 +18,6 @@ export function usePlanesHistoricoTable({ sourceRows, defaultRowsPerPage = 8 }) 
       .trim()
   }
 
-  function getDateOnly(value) {
-    if (!value) {
-      return ''
-    }
-
-    const formatted = formatDate(value)
-
-    if (!formatted) {
-      return ''
-    }
-
-    const [day, month, year] = formatted.split('/')
-    return `${year}-${month}-${day}`
-  }
-
   const HISTORICO_STATES = ['ejecutado', 'cancelado']
 
   const filteredRows = computed(() => {
@@ -48,8 +33,7 @@ export function usePlanesHistoricoTable({ sourceRows, defaultRowsPerPage = 8 }) 
       }
 
       const matchesStatus =
-        selectedStatus.value === 'todos' ||
-        normalizedStatus === normalizeText(selectedStatus.value)
+        selectedStatus.value === 'todos' || normalizedStatus === normalizeText(selectedStatus.value)
 
       const matchesSearch =
         !search ||
@@ -57,20 +41,14 @@ export function usePlanesHistoricoTable({ sourceRows, defaultRowsPerPage = 8 }) 
           .filter(Boolean)
           .some((value) => normalizeText(value).includes(search))
 
-      const fechaCreacion = getDateOnly(plan.createdAt)
+      const fechaCierre = getDateOnly(plan.fechaCierre)
 
       const matchesDateFrom =
-        !dateFrom.value || (fechaCreacion !== '' && fechaCreacion >= dateFrom.value)
+        !dateFrom.value || (fechaCierre !== '' && fechaCierre >= dateFrom.value)
 
-      const matchesDateTo =
-        !dateTo.value || (fechaCreacion !== '' && fechaCreacion <= dateTo.value)
+      const matchesDateTo = !dateTo.value || (fechaCierre !== '' && fechaCierre <= dateTo.value)
 
-      return (
-        matchesStatus &&
-        matchesSearch &&
-        matchesDateFrom &&
-        matchesDateTo
-      )
+      return matchesStatus && matchesSearch && matchesDateFrom && matchesDateTo
     })
   })
 

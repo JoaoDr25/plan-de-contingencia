@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog v-model="dialog" :title="dialogTitle" width="1100px">
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="1100px" scrollable>
     <div class="risks-dialog">
       <div class="risks-table-wrapper">
         <table class="risks-table">
@@ -18,9 +18,9 @@
           </thead>
 
           <tbody>
-            <tr v-for="(risk, index) in risks" :key="risk._id">
+            <tr v-for="(risk, index) in paginatedRows" :key="risk._id">
               <td class="risks-table__number">
-                {{ index + 1 }}
+                {{ startRow + index }}
               </td>
 
               <td>
@@ -52,18 +52,21 @@
 
     <template #actions>
       <div class="risks-dialog__actions">
-        <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
+        <q-pagination class="risks-dialog__pagination" v-if="totalPages > 1" v-model="currentPage" :max="totalPages"
+          :max-pages="5" direction-links boundary-links size="sm" color="primary" />
+        <SecondaryActionButton class="risks-dialog__close" label="Cerrar" icon="close" size="sm" @click="closeDialog" />
       </div>
     </template>
   </BaseDialog>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import LevelChip from 'src/components/states/LevelChip.vue'
+import { useCrudTable } from 'src/composables/useCrudTable'
 
 const props = defineProps({
   modelValue: {
@@ -96,6 +99,15 @@ const risks = computed(() => {
   return props.danger?.riesgos ?? []
 })
 
+const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+  sourceRows: risks,
+  defaultRowsPerPage: 4,
+})
+
+watch([() => props.modelValue, () => props.danger], () => {
+  currentPage.value = 1
+})
+
 function closeDialog() {
   dialog.value = false
 }
@@ -111,9 +123,7 @@ function closeDialog() {
 
 .risks-table-wrapper {
   width: 100%;
-  max-height: min(320px, 45vh);
   overflow-x: auto;
-  overflow-y: auto;
 }
 
 .risks-table {
@@ -136,9 +146,10 @@ function closeDialog() {
 }
 
 .risks-table td {
-  padding: 12px 12px;
+  padding: 8px 12px;
   border-bottom: 1px solid #e2e2e2;
   line-height: 1.4;
+  overflow-wrap: anywhere;
   font-size: $font-size-xs;
 }
 
@@ -171,9 +182,21 @@ function closeDialog() {
 
 .risks-dialog__actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
-  padding: 5px 5px 0 0;
+  padding: 5px 15px 0 0;
+}
+
+.risks-dialog__pagination {
+  margin-left: 18px;
+  padding-bottom: 5px;
+}
+
+.risks-dialog__close {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 @media (max-width: 700px) {

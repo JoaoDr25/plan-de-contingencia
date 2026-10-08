@@ -1,4 +1,5 @@
 import { computed, ref, watch } from 'vue'
+import { getDateOnly } from 'src/utils/date.utils'
 
 export function usePlanesConsultaTable({ sourceRows, defaultRowsPerPage = 8 }) {
   const codigoPlan = ref('')
@@ -48,9 +49,12 @@ export function usePlanesConsultaTable({ sourceRows, defaultRowsPerPage = 8 }) {
         normalizeText(selectedStatus.value) === 'todos' ||
         normalizeText(row.estado) === normalizeText(selectedStatus.value)
 
-      const matchesDateFrom = !dateFrom.value || row.createdAt >= dateFrom.value
+      const fechaCreacion = getDateOnly(row.createdAt)
 
-      const matchesDateTo = !dateTo.value || row.createdAt <= dateTo.value
+      const matchesDateFrom =
+        !dateFrom.value || (fechaCreacion !== '' && fechaCreacion >= dateFrom.value)
+
+      const matchesDateTo = !dateTo.value || (fechaCreacion !== '' && fechaCreacion <= dateTo.value)
 
       return (
         matchesCodigo &&

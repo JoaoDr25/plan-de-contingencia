@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog v-model="dialog" :title="dialogTitle" width="1000px">
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="1000px" scrollable>
     <div class="protocols-dialog">
       <div class="protocols-table-wrapper">
         <table class="protocols-table">
@@ -14,8 +14,8 @@
           </thead>
 
           <tbody>
-            <tr v-for="(protocol, index) in protocols" :key="protocol._id">
-              <td class="protocols-table__number">{{ index + 1 }}</td>
+            <tr v-for="(protocol, index) in paginatedRows" :key="protocol._id">
+              <td class="protocols-table__number">{{ startRow + index }}</td>
               <td>{{ protocol.tipo || 'No disponible' }}</td>
               <td>{{ protocol.accion || 'No disponible' }}</td>
               <td>{{ protocol.responsable || 'No disponible' }}</td>
@@ -34,17 +34,35 @@
 
     <template #actions>
       <div class="protocols-dialog__actions">
-        <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
+        <q-pagination
+          class="protocols-dialog__pagination"
+          v-if="totalPages > 1"
+          v-model="currentPage"
+          :max="totalPages"
+          :max-pages="5"
+          direction-links
+          boundary-links
+          size="sm"
+          color="primary"
+        />
+        <SecondaryActionButton
+          class="protocols-dialog__close"
+          label="Cerrar"
+          icon="close"
+          size="sm"
+          @click="closeDialog"
+        />
       </div>
     </template>
   </BaseDialog>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import { useCrudTable } from 'src/composables/useCrudTable'
 
 const props = defineProps({
   modelValue: {
@@ -70,6 +88,15 @@ const dialogTitle = computed(() => {
 
 const protocols = computed(() => props.risk?.protocolos ?? [])
 
+const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+  sourceRows: protocols,
+  defaultRowsPerPage: 4,
+})
+
+watch([() => props.modelValue, () => props.risk], () => {
+  currentPage.value = 1
+})
+
 function closeDialog() {
   dialog.value = false
 }
@@ -85,9 +112,7 @@ function closeDialog() {
 
 .protocols-table-wrapper {
   width: 100%;
-  max-height: min(320px, 45vh);
   overflow-x: auto;
-  overflow-y: auto;
 }
 
 .protocols-table {
@@ -111,9 +136,10 @@ function closeDialog() {
 }
 
 .protocols-table td {
-  padding: 12px;
+  padding: 8px 12px;
   border-bottom: 1px solid #e2e2e2;
   line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .protocols-table tbody tr:last-child td {
@@ -136,9 +162,21 @@ function closeDialog() {
 
 .protocols-dialog__actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
-  padding: 5px 5px 0 0;
+  padding: 5px 15px 0 0;
+}
+
+.protocols-dialog__pagination {
+  margin-left: 18px;
+  padding-bottom: 5px;
+}
+
+.protocols-dialog__close {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 @media (max-width: 700px) {
