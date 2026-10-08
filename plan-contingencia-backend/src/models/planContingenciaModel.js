@@ -287,6 +287,10 @@ const planContingenciaSchema = new mongoose.Schema({
         enum: ["borrador", "en revision", "aprobado", "cancelado", "ejecutado"],
         default: "borrador"
     },
+    fechaCierre: {
+        type: Date,
+        default: null
+    },
     revision: {
         validacionInformacion: {
             type: Boolean,
@@ -316,7 +320,7 @@ const planContingenciaSchema = new mongoose.Schema({
             },
             fecha: Date
         },
-        
+
         sst: {
             usuarioId: {
                 type: mongoose.Schema.Types.ObjectId,

@@ -527,7 +527,14 @@ const cambiarEstadoId = async (id, nuevoEstado, usuario, observaciones = "") => 
     }
 
     agregarObservacion(plan, observaciones, usuarioActual);
+
     plan.estado = nuevoEstado;
+
+    if (
+        ["ejecutado", "cancelado"].includes(nuevoEstado)
+    ) {
+        plan.fechaCierre = new Date();
+    }
 
     await plan.save();
 
