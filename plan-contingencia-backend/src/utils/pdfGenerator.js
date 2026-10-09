@@ -815,12 +815,13 @@ export const generarDocumentoPdf = async (plan, opciones = {}) => {
 
         const pdf = await page.pdf({
             format: "A4",
+            preferCSSPageSize: true,
             printBackground: true,
             margin: {
-                top: "18mm",
-                right: "18mm",
-                bottom: "18mm",
-                left: "18mm"
+                top: "6mm",
+                right: "15mm",
+                bottom: "25mm",
+                left: "15mm"
             }
         });
 
