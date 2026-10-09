@@ -114,7 +114,7 @@ import { onMounted, computed, ref } from 'vue'
 import { useCrudTable } from 'src/composables/useCrudTable'
 import { notifyWarning } from 'src/utils/notifications.utils'
 
-import { PLAN_APRENDICES_COLUMNS } from 'src/constants/tables/planAprendices.columns'
+import { PLAN_APRENDICES_COLUMNS } from 'src/constants/tables/planParticipantes.columns'
 
 import BaseSearch from 'src/components/forms/BaseSearch.vue'
 import BaseTable from 'src/components/tables/BaseTable.vue'

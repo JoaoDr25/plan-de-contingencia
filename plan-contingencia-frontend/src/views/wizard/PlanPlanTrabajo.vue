@@ -148,7 +148,7 @@ import CrudActions from 'src/components/actions/CrudActions.vue'
 import PrimaryActionButton from 'src/components/actions/PrimaryActionButton.vue'
 import BaseConfirmationDialog from 'src/components/base/BaseConfirmationDialog.vue'
 
-import PlanesActividadDialog from '../modals/PlanesActividadDialog.vue'
+import PlanesActividadDialog from '../dialogs/PlanesActividadDialog.vue'
 
 const props = defineProps({
   modelValue: {

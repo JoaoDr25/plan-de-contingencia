@@ -23,25 +23,49 @@
           </thead>
 
           <tbody>
-            <tr v-for="(participant, index) in participants" :key="participant._id">
+            <tr v-for="(participant, index) in paginatedRows" :key="participant._id">
               <td class="participants-table__number">
-                {{ index + 1 }}
+                {{ startRow + index }}
               </td>
 
               <td>
-                {{ getDocumentTypeLabel(participant.tipo || participant.tipoDocumento) }}
+                <span
+                  class="participants-table__cell-content"
+                  :title="getDocumentTypeLabel(participant.tipo || participant.tipoDocumento)"
+                  tabindex="0"
+                >
+                  {{ getDocumentTypeLabel(participant.tipo || participant.tipoDocumento) }}
+                </span>
               </td>
 
               <td>
-                {{ participant.numeroDocumento || 'No disponible' }}
+                <span
+                  class="participants-table__cell-content"
+                  :title="participant.numeroDocumento || 'No disponible'"
+                  tabindex="0"
+                >
+                  {{ participant.numeroDocumento || 'No disponible' }}
+                </span>
               </td>
 
               <td>
-                {{ getParticipantNames(participant).names }}
+                <span
+                  class="participants-table__cell-content"
+                  :title="getParticipantNames(participant).names"
+                  tabindex="0"
+                >
+                  {{ getParticipantNames(participant).names }}
+                </span>
               </td>
 
               <td>
-                {{ getParticipantNames(participant).surnames }}
+                <span
+                  class="participants-table__cell-content"
+                  :title="getParticipantNames(participant).surnames"
+                  tabindex="0"
+                >
+                  {{ getParticipantNames(participant).surnames }}
+                </span>
               </td>
             </tr>
 
@@ -57,17 +81,38 @@
 
     <template #actions>
       <div class="participants-dialog__actions">
-        <SecondaryActionButton label="Cerrar" icon="close" size="sm" @click="closeDialog" />
+        <q-pagination
+          v-if="totalPages > 1"
+          class="participants-dialog__pagination"
+          v-model="currentPage"
+          :max="totalPages"
+          :max-pages="paginationMaxPages"
+          direction-links
+          boundary-links
+          size="sm"
+          color="primary"
+        />
+        <SecondaryActionButton
+          class="participants-dialog__close"
+          label="Cerrar"
+          icon="close"
+          size="sm"
+          @click="closeDialog"
+        />
       </div>
     </template>
   </BaseDialog>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
+import { useQuasar } from 'quasar'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
+import { useCrudTable } from 'src/composables/useCrudTable'
+
+const $q = useQuasar()
 
 const props = defineProps({
   modelValue: {
@@ -82,6 +127,21 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+})
+
+const paginationMaxPages = computed(() => {
+  if ($q.screen.width <= 400) return 1
+  if ($q.screen.width <= 600) return 3
+  return 5
+})
+
+const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+  sourceRows: computed(() => props.participants),
+  defaultRowsPerPage: 4,
+})
+
+watch([() => props.modelValue, () => props.plan, () => props.participants], () => {
+  currentPage.value = 1
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -187,6 +247,26 @@ function getParticipantNames(participant) {
   text-align: center;
 }
 
+.participants-table__cell-content {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.participants-table__cell-content::-webkit-scrollbar {
+  display: none;
+}
+
+.participants-table__cell-content:focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
+
 .participants-table th:nth-child(4),
 .participants-table th:nth-child(5),
 .participants-table td:nth-child(4),
@@ -213,9 +293,22 @@ function getParticipantNames(participant) {
 
 .participants-dialog__actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
   padding: 5px 15px 0 0;
+}
+
+.participants-dialog__pagination {
+  flex-shrink: 0;
+  margin-left: 18px;
+  padding-bottom: 5px;
+}
+
+.participants-dialog__close {
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 @media (max-width: 700px) {
@@ -225,6 +318,18 @@ function getParticipantNames(participant) {
 
   .participants-table-wrapper .participants-table thead th {
     background-color: $color-surface;
+  }
+}
+
+@media (max-width: 600px) {
+  .participants-dialog__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .participants-dialog__pagination,
+  .participants-dialog__close {
+    margin-left: 0;
   }
 }
 </style>

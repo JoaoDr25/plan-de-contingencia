@@ -32,10 +32,24 @@
 
     <template #actions>
       <div class="dangers-dialog__actions">
-        <q-pagination class="dangers-dialog__pagination" v-if="totalPages > 1" v-model="currentPage" :max="totalPages"
-          :max-pages="5" direction-links boundary-links size="sm" color="primary" />
-        <SecondaryActionButton class="dangers-dialog__close" label="Cerrar" icon="close" size="sm"
-          @click="closeDialog" />
+        <q-pagination
+          class="dangers-dialog__pagination"
+          v-if="totalPages > 1"
+          v-model="currentPage"
+          :max="totalPages"
+          :max-pages="paginationMaxPages"
+          direction-links
+          boundary-links
+          size="sm"
+          color="primary"
+        />
+        <SecondaryActionButton
+          class="dangers-dialog__close"
+          label="Cerrar"
+          icon="close"
+          size="sm"
+          @click="closeDialog"
+        />
       </div>
     </template>
   </BaseDialog>
@@ -43,10 +57,13 @@
 
 <script setup>
 import { computed, watch } from 'vue'
+import { useQuasar } from 'quasar'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import { useCrudTable } from 'src/composables/useCrudTable'
+
+const $q = useQuasar()
 
 const props = defineProps({
   modelValue: {
@@ -68,6 +85,12 @@ const dialog = computed({
 
 const dialogTitle = computed(() => {
   return props.activity?.nombre || 'Peligros asociados'
+})
+
+const paginationMaxPages = computed(() => {
+  if ($q.screen.width <= 400) return 1
+  if ($q.screen.width <= 600) return 3
+  return 5
 })
 
 const dangers = computed(() => props.activity?.peligros ?? [])
@@ -156,6 +179,7 @@ function closeDialog() {
 .dangers-dialog__pagination {
   margin-left: 18px;
   padding-bottom: 5px;
+  flex-shrink: 0;
 }
 
 .dangers-dialog__close {
@@ -166,6 +190,18 @@ function closeDialog() {
 @media (max-width: 700px) {
   .dangers-table {
     min-width: 800px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dangers-dialog__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dangers-dialog__pagination,
+  .dangers-dialog__close {
+    margin-left: 0;
   }
 }
 </style>

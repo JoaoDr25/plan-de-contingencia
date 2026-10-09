@@ -3,7 +3,7 @@ export const PLAN_APRENDICES_COLUMNS = [
     name: 'index',
     label: 'N',
     field: 'codigo',
-    align: 'center',
+    align: 'center'
   },
   {
     name: 'nombreCompleto',
@@ -24,38 +24,38 @@ export const PLAN_APRENDICES_COLUMNS = [
       CE: 'Cédula de Extranjería',
     })[String(value ?? '').trim().toUpperCase()] || value,
     align: 'left',
-    sortable: true,
+    sortable: true
   },
   {
     name: 'documento',
     label: 'Documento',
     field: 'documento',
     align: 'left',
-    sortable: true,
+    sortable: true
   },
   {
     name: 'eps',
     label: 'Nombre EPS',
     field: 'eps',
     align: 'left',
-    sortable: true,
+    sortable: true
   },
   {
     name: 'contacto',
     label: 'Contacto de Emergencia',
     field: 'telefono',
-    align: 'center',
+    align: 'center'
   },
   {
     name: 'estado',
     label: 'Estado',
     field: 'estado',
-    align: 'center',
+    align: 'center'
   },
   {
     name: 'marcar',
     label: 'Marcar',
     field: 'marcar',
-    align: 'center',
+    align: 'center'
   },
 ]

@@ -39,7 +39,7 @@
           v-if="totalPages > 1"
           v-model="currentPage"
           :max="totalPages"
-          :max-pages="5"
+          :max-pages="paginationMaxPages"
           direction-links
           boundary-links
           size="sm"
@@ -59,10 +59,13 @@
 
 <script setup>
 import { computed, watch } from 'vue'
+import { useQuasar } from 'quasar'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import { useCrudTable } from 'src/composables/useCrudTable'
+
+const $q = useQuasar()
 
 const props = defineProps({
   modelValue: {
@@ -84,6 +87,12 @@ const dialog = computed({
 
 const dialogTitle = computed(() => {
   return props.risk?.riesgo || 'Protocolos asociados'
+})
+
+const paginationMaxPages = computed(() => {
+  if ($q.screen.width <= 400) return 1
+  if ($q.screen.width <= 600) return 3
+  return 5
 })
 
 const protocols = computed(() => props.risk?.protocolos ?? [])
@@ -172,6 +181,7 @@ function closeDialog() {
 .protocols-dialog__pagination {
   margin-left: 18px;
   padding-bottom: 5px;
+  flex-shrink: 0;
 }
 
 .protocols-dialog__close {
@@ -182,6 +192,18 @@ function closeDialog() {
 @media (max-width: 700px) {
   .protocols-table {
     min-width: 720px;
+  }
+}
+
+@media (max-width: 600px) {
+  .protocols-dialog__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .protocols-dialog__pagination,
+  .protocols-dialog__close {
+    margin-left: 0;
   }
 }
 </style>

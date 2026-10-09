@@ -52,9 +52,24 @@
 
     <template #actions>
       <div class="risks-dialog__actions">
-        <q-pagination class="risks-dialog__pagination" v-if="totalPages > 1" v-model="currentPage" :max="totalPages"
-          :max-pages="5" direction-links boundary-links size="sm" color="primary" />
-        <SecondaryActionButton class="risks-dialog__close" label="Cerrar" icon="close" size="sm" @click="closeDialog" />
+        <q-pagination
+          class="risks-dialog__pagination"
+          v-if="totalPages > 1"
+          v-model="currentPage"
+          :max="totalPages"
+          :max-pages="paginationMaxPages"
+          direction-links
+          boundary-links
+          size="sm"
+          color="primary"
+        />
+        <SecondaryActionButton
+          class="risks-dialog__close"
+          label="Cerrar"
+          icon="close"
+          size="sm"
+          @click="closeDialog"
+        />
       </div>
     </template>
   </BaseDialog>
@@ -62,11 +77,14 @@
 
 <script setup>
 import { computed, watch } from 'vue'
+import { useQuasar } from 'quasar'
 
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import LevelChip from 'src/components/states/LevelChip.vue'
 import { useCrudTable } from 'src/composables/useCrudTable'
+
+const $q = useQuasar()
 
 const props = defineProps({
   modelValue: {
@@ -93,6 +111,12 @@ const dialog = computed({
 const dialogTitle = computed(() => {
   const dangerName = props.danger?.nombre
   return dangerName ? `${dangerName}` : 'No Identificado'
+})
+
+const paginationMaxPages = computed(() => {
+  if ($q.screen.width <= 400) return 1
+  if ($q.screen.width <= 600) return 3
+  return 5
 })
 
 const risks = computed(() => {
@@ -192,6 +216,7 @@ function closeDialog() {
 .risks-dialog__pagination {
   margin-left: 18px;
   padding-bottom: 5px;
+  flex-shrink: 0;
 }
 
 .risks-dialog__close {
@@ -202,6 +227,18 @@ function closeDialog() {
 @media (max-width: 700px) {
   .risks-table {
     min-width: 650px;
+  }
+}
+
+@media (max-width: 600px) {
+  .risks-dialog__actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .risks-dialog__pagination,
+  .risks-dialog__close {
+    margin-left: 0;
   }
 }
 </style>
