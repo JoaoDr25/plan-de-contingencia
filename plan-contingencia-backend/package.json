@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
+    "build": "npm install && npx puppeteer browsers install chrome",
     "numeros:renumerar": "node src/utils/renumerarNumero.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

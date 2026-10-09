@@ -1,296 +1,1001 @@
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>Plan de Contingencia</title>
 
     <style>
         @page {
-            size: A4;
-            margin: 18mm;
+            size: A4 portrait;
+            margin: 6mm 15mm 7mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Aptos Narrow", Calibri, Carlito, "Segoe UI", Arial, sans-serif;
             font-size: 11px;
-            margin: 0;
+            line-height: 1.3;
             color: #000;
+            background: #fff;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
-        h1,
-        h2,
-        h3 {
-            margin: 5px 0;
+        h1, h2, h3, p {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        td, th {
+            border: 0.45pt solid #333;
+            padding: 2px 3px;
+            vertical-align: middle;
+            overflow-wrap: anywhere;
+        }
+
+        th {
+            font-weight: bold;
             text-align: center;
         }
 
-        .header {
+        /* Encabezado institucional */
+        .document-header {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .document-header td {
+            border: var(--linea-externa);
+            padding: 0;
+        }
+
+        .document-header .logo-cell {
+            border-right: var(--linea-interna);
+        }
+
+        .document-header .metadata {
+            border-left: var(--linea-interna);
+        }
+
+        .logo-cell {
+            height: 62px;
+            /* Igual al ancho de .metadata, para que el logo quede centrado respecto a la página (sobre "PROCESO") */
+            padding-left: 14.5% !important;
             text-align: center;
         }
 
         .logo {
-            height: 60px;
-            margin-bottom: 5px;
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 95px;
+            max-height: 58px;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .metadata {
+            width: 14.5%;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        .metadata div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 31px;
+            padding: 2px;
+        }
+
+        .metadata div + div {
+            border-top: var(--linea-interna);
+        }
+
+        .metadata .metadata-value {
+            font-weight: normal;
+        }
+
+        .title-band {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .title-band td {
+            border: var(--linea-interna);
+            border-left: var(--linea-externa);
+            border-right: var(--linea-externa);
+            padding: 2px 4px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .title-band .dark,
+        .black-bar {
+            background: #000;
+            color: #fff;
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .black-bar {
+            padding: 2px 4px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Casillas de selección: texto normal y casilla/X de trazo delgado, como en el formato */
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+        }
+
+        /* Transporte y Articulación formativa van en mayúscula (sin negrita); Clasificación conserva mayúscula inicial */
+        .info-table .option {
+            text-transform: uppercase;
+        }
+
+        /* Seminegrita: Calibri no trae peso intermedio, así que se engrosa levemente el trazo */
+        .articulacion-row .option {
+            -webkit-text-stroke: 0.25px #000;
+        }
+
+        .articulacion-row .check-box {
+            -webkit-text-stroke: 0;
+        }
+
+        .check-box {
+            display: inline-block;
+            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+            border: var(--linea-interna);
+            text-align: center;
+            font-size: 12px;
+            line-height: 15px;
+        }
+
+        .option-detail {
+            margin-top: 1px;
+            font-size: 9px;
+            font-weight: normal;
+            text-transform: none;
+        }
+
+        .classification {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .classification td {
+            height: 20px;
+            padding: 2px 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .classification .check-box {
+            width: 18px;
+            height: 18px;
+            line-height: 17px;
+            font-size: 14px;
+            font-weight: normal;
+            margin-right: 18%;
+        }
+
+        /* Bloque de información general */
+        .info-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .info-table td {
+            height: 15px;
+            padding: 2px 3px;
+            font-size: 10.5px;
+            line-height: 1.3;
+        }
+
+        .info-table .label {
+            font-size: 10px !important;
+        }
+
+        .info-table .label-center {
+            text-align: center;
+        }
+
+        .info-heading td {
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .info-text {
+            vertical-align: top !important;
+        }
+
+        .info-text .instruction {
+            display: inline;
+            margin: 0;
+        }
+
+        .info-text .value {
+            margin-top: 3px;
+            min-height: 18px;
+        }
+
+        .info-table a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        a {
+            font-style: italic;
         }
 
         .section {
-            margin-top: 12px;
+            margin-top: 0;
         }
 
+        /* Solo las franjas del encabezado van en negro; los títulos de bloque van sin fondo, como el formato */
         .section-title {
+            padding: 3px 4px;
+            text-align: center;
+            font-size: 12px;
             font-weight: bold;
-            background: #e5e5e5;
-            padding: 4px;
-            border: 1px solid #000;
+            line-height: 1.3;
+            text-transform: uppercase;
+            border: 0.5pt solid #000;
         }
 
-        .table {
+        .subsection-title {
+            border: 0.5pt solid #333;
+            padding: 3px 4px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 10.5px;
+            text-transform: uppercase;
+        }
+
+        .data-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .data-table td,
+        .data-table th {
+            padding: 2px 3px;
+            font-size: 10.5px;
+            line-height: 1.3;
+        }
+
+        .label {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 9.5px !important;
+        }
+
+        .field-value {
+            min-height: 12px;
+        }
+
+        .description-cell {
+            min-height: 20px;
+            vertical-align: top;
+        }
+
+        .content-block {
+            padding: 3px 4px;
+            border: 0.45pt solid #333;
+            font-size: 10.5px;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
+        }
+
+        .content-block p {
+            margin: 2px 0;
+        }
+
+        .content-block ol,
+        .content-block ul {
+            margin: 3px 0 3px 16px;
+            padding: 0;
+        }
+
+        .content-block li {
+            margin: 2px 0;
+            padding-left: 1px;
+        }
+
+        .instruction {
+            margin: 3px 0;
+            font-size: 10px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        .compact-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .compact-table td,
+        .compact-table th {
+            padding: 2px;
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .compact-table th {
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .subdocument {
             width: 100%;
             border-collapse: collapse;
-            page-break-inside: avoid;
+            table-layout: fixed;
         }
 
-        .table td,
-        .table th {
-            border: 1px solid #000;
-            padding: 4px;
-            vertical-align: top;
-            page-break-inside: avoid;
+        .subdocument table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
         }
 
-        .small-text {
+        .subdocument td,
+        .subdocument th {
+            border: 0.45pt solid #333;
+            padding: 2px 3px;
             font-size: 10px;
+            vertical-align: middle;
+            overflow-wrap: anywhere;
+        }
+
+        .subdocument th {
+            text-align: center;
+        }
+
+        .subdocument p {
+            margin: 2px 0;
+        }
+
+        .subdocument ol,
+        .subdocument ul {
+            margin: 3px 0 3px 15px;
+            padding: 0;
+        }
+
+        .subdocument li {
+            margin: 2px 0;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-wrap: anywhere;
+        }
+
+        .table-wrap table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+
+        .table-wrap td.cell-center {
+            text-align: center;
+        }
+
+        .content-block--italic {
+            font-style: italic;
+        }
+
+        /* Observaciones como texto corrido, una debajo de otra, sin cuadrícula */
+        .observation-item {
+            margin: 2px 0;
+        }
+
+        .table-wrap td,
+        .table-wrap th {
+            border: 0.45pt solid #333;
+            padding: 2px 3px;
+            font-size: 10px;
+        }
+
+        .table-wrap th {
+            text-align: center;
+        }
+
+        .emergency-intro {
+            padding: 4px;
+            border: 0.45pt solid #333;
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .signatures {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .signatures td {
+            width: 25%;
+            padding: 4px 5px;
+            vertical-align: top;
+            font-size: 9px;
+        }
+
+        /* Cada dato se escribe sobre una línea, a continuación de su rótulo */
+        .signature-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            margin-top: 6px;
+        }
+
+        .signature-row:first-child {
+            margin-top: 0;
+        }
+
+        .signature-label {
+            flex-shrink: 0;
+            font-size: 8.5px;
+            font-weight: bold;
+        }
+
+        .signature-value {
+            flex: 1;
+            min-width: 0;
+            min-height: 10px;
+            padding: 0 2px 1px;
+            border-bottom: var(--linea-interna);
+            white-space: nowrap;
+            overflow: hidden;
+            overflow-wrap: anywhere;
+        }
+
+        .signature-row:not(.signature-row--firma) {
+            align-items: baseline;
+        }
+
+        /* Misma altura en las cuatro columnas para que Firma y Fecha queden alineadas aunque un nombre ocupe dos renglones */
+        .signature-row:first-child {
+            align-items: flex-end;
+            min-height: 22px;
+        }
+
+        .signature-row--firma .signature-value {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            height: 40px;
+        }
+
+        .signature-image {
+            display: block;
+            max-width: 100%;
+            max-height: 38px;
+            object-fit: contain;
+        }
+
+        .signature-empty {
+            color: #444;
+            font-size: 9px;
+        }
+
+        .technical-observation {
+            padding: 10px 5px 14px;
+            font-size: 10.5px;
+            line-height: 1.3;
+        }
+
+        .technical-observation .title {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .technical-observation p {
+            margin: 0;
+            text-align: justify;
+        }
+
+        .footer {
+            margin-top: 3px;
+            text-align: center;
+            font-size: 8.5px;
         }
 
         .page-break {
             page-break-after: always;
+            break-after: page;
         }
 
-        .footer {
-            text-align: center;
-            font-size: 10px;
-            margin-top: 10px;
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        tr,
+        .section-title,
+        .subsection-title,
+        .signatures,
+        .technical-observation {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Títulos e introducciones no quedan solos al final de una hoja: pasan junto con el inicio de su tabla */
+        .section-title,
+        .subsection-title,
+        .emergency-intro,
+        .section > .content-block:not(:last-child),
+        .content-block > p:not(:last-child) {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+
+        .emergency-intro,
+        .content-block:not(:has(table)),
+        .content-block > p {
+            break-inside: avoid;
+        }
+
+        /* Bloques cortos: si no caben en la hoja se pasan completos a la siguiente */
+        .section--compact {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        /* Las tablas largas continúan en la siguiente hoja repitiendo la fila de títulos */
+        .table-wrap thead {
+            display: table-header-group;
+        }
+
+        .table-wrap a,
+        .content-block a,
+        .subdocument a {
+            color: #000;
+            text-decoration: none;
+            overflow-wrap: anywhere;
+        }
+
+        img {
+            page-break-inside: avoid;
+        }
+
+        /*
+         * Jerarquía de líneas (fuera del encabezado):
+         * gruesas para el marco de cada sección, títulos y separadores de bloque;
+         * delgadas para las divisiones internas de las tablas.
+         */
+        :root {
+            --grosor-externo: 2pt;
+            --linea-externa: var(--grosor-externo) solid #000;
+            --linea-interna: 0.25pt solid #000;
+        }
+
+        /* Bloques contiguos como en el formato: se superponen para compartir una sola línea gruesa */
+        .section,
+        .info-table,
+        .technical-observation {
+            margin-top: calc(var(--grosor-externo) * -1);
+        }
+
+        .classification td,
+        .info-table td,
+        .table-wrap td,
+        .table-wrap th,
+        .signatures td {
+            border: var(--linea-interna);
+        }
+
+        /*
+         * Marco grueso aplicado en las celdas de la orilla: al unir bordes, Chrome prioriza el borde
+         * de la celda sobre el de la tabla, así que el marco no puede depender solo de la tabla.
+         */
+        :is(.classification, .info-table, .section > .table-wrap table, .signatures) tr > :first-child {
+            border-left: var(--linea-externa);
+        }
+
+        :is(.classification, .info-table, .section > .table-wrap table, .signatures) tr > :last-child {
+            border-right: var(--linea-externa);
+        }
+
+        :is(.classification, .info-table, .section > .table-wrap table, .signatures)
+            > :is(thead, tbody):not(thead ~ *, tbody ~ *) > tr:first-child > * {
+            border-top: var(--linea-externa);
+        }
+
+        :is(.classification, .info-table, .section > .table-wrap table, .signatures)
+            > :is(thead, tbody):not(:has(~ thead, ~ tbody)) > tr:last-child > * {
+            border-bottom: var(--linea-externa);
+        }
+
+        .info-table .info-heading td,
+        .info-table .info-text,
+        .info-table tr:has(+ tr > .info-text) > td {
+            border-bottom: var(--linea-externa);
+        }
+
+        .info-table .info-text {
+            border-top: var(--linea-externa);
+        }
+
+        .section-title,
+        .subsection-title,
+        .content-block,
+        .emergency-intro,
+        .technical-observation {
+            border: var(--linea-externa);
+        }
+
+        /* Dentro de una sección, los bloques contiguos comparten una sola línea en vez de sumar dos.
+           Se elimina el borde inferior del bloque anterior para que las tablas conserven su borde superior
+           (necesario cuando la fila de títulos se repite en una hoja nueva). */
+        .section > :has(+ .section-title, + .subsection-title, + .content-block, + .emergency-intro, + .table-wrap, + .signatures) {
+            border-bottom: none;
+        }
+
+        /* Cuando no hay registros la sección muestra solo texto; se enmarca igual que los demás bloques */
+        .section > .table-wrap:not(:has(table)) {
+            padding: 3px 4px;
+            border: var(--linea-externa);
+            font-size: 10.5px;
+        }
+
+        .section > .table-wrap > p {
+            margin: 0;
+        }
+
+        /* Separa la fila de títulos de columna del contenido de cada tabla */
+        .table-wrap thead th {
+            border-bottom: var(--linea-interna);
         }
     </style>
-
 </head>
 
 <body>
 
-    <div class="header">
-        <img src="{{logo}}" class="logo">
-        <h3>PROCESO</h3>
-        <h3>GESTIÓN ORGANIZACIONAL Y DEL RIESGO</h3>
-        <h2>PLAN DE CONTINGENCIA</h2>
-    </div>
-
-    <table class="table">
+    <!-- ENCABEZADO INSTITUCIONAL -->
+    <table class="document-header">
         <tr>
-            <td><b>Versión:</b> 01</td>
-            <td><b>Código:</b> {{codigo}}</td>
+            <td class="logo-cell">
+                <img src="{{logo}}" class="logo" alt="Logo SENA">
+            </td>
+            <td class="metadata">
+                <div>Versión: 01</div>
+                <div>
+                    <span>Código:</span>
+                    <span class="metadata-value">FORMATO DE APOYO</span>
+                </div>
+            </td>
         </tr>
     </table>
 
+    <table class="title-band">
+        <tr><td class="dark">Proceso</td></tr>
+        <tr><td>Gestión organizacional y del riesgo</td></tr>
+        <tr><td class="dark">Nombre del formato</td></tr>
+        <tr><td>Plan de contingencia salidas pedagógicas y/o actividades Centro Agroturístico</td></tr>
+        <tr><td class="dark">Clasificación de la información</td></tr>
+    </table>
+
+    <table class="classification">
+        <tr>
+            <td>
+                <div class="option">Pública <span class="check-box">{{publica}}</span></div>
+            </td>
+            <td>
+                <div class="option">Pública Clasificada <span class="check-box">{{clasificada}}</span></div>
+            </td>
+            <td>
+                <div class="option">Pública Reservada <span class="check-box">{{reservada}}</span></div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- INFORMACIÓN GENERAL -->
+    <table class="info-table">
+        <colgroup>
+            <col style="width: 16%;">
+            <col style="width: 21%;">
+            <col style="width: 12%;">
+            <col style="width: 9%;">
+            <col style="width: 9%;">
+            <col style="width: 12%;">
+            <col style="width: 10.5%;">
+            <col style="width: 10.5%;">
+        </colgroup>
+
+        <tr class="info-heading">
+            <td colspan="8">Información</td>
+        </tr>
+
+        <tr>
+            <td class="label">Programa de formación</td>
+            <td colspan="2">{{programa}}</td>
+            <td colspan="2" class="label label-center">Actividad</td>
+            <td colspan="3">{{actividad}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Ficha No.</td>
+            <td colspan="2">{{ficha}}</td>
+            <td colspan="2" class="label label-center">Instructor</td>
+            <td colspan="3">{{instructor}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Fecha de salida</td>
+            <td colspan="2">{{fechaSalida}}</td>
+            <td colspan="2" class="label label-center">Transporte</td>
+            <td><div class="option">SENA <span class="check-box">{{sena}}</span></div></td>
+            <td><div class="option">Externo <span class="check-box">{{externo}}</span></div></td>
+            <td><div class="option">Aprendiz <span class="check-box">{{aprendiz}}</span></div></td>
+        </tr>
+
+        <tr>
+            <td class="label">Hora de salida</td>
+            <td colspan="2">{{horaSalida}}</td>
+            <td colspan="2" class="label label-center">No. de aprendices</td>
+            <td colspan="3">{{cantidadAprendices}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Hora de regreso</td>
+            <td colspan="2">{{horaRegreso}}</td>
+            <td colspan="2" class="label label-center">Nivel de formación</td>
+            <td colspan="3">{{nivelFormacion}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Lugar</td>
+            <td colspan="2">{{lugarDestino}}</td>
+            <td colspan="2" class="label label-center">Contacto del lugar</td>
+            <td colspan="3">{{contactoLugar}}</td>
+        </tr>
+
+        <tr>
+            <td class="label">Lugar de salida</td>
+            <td colspan="2">{{lugarSalida}}</td>
+            <td colspan="2" class="label label-center">Tipo de actividad</td>
+            <td colspan="3">{{tipoActividad}}</td>
+        </tr>
+
+        <tr class="articulacion-row">
+            <td class="label">Articulación formativa</td>
+            <td><div class="option">Proyecto formativo <span class="check-box">{{proyectoFormativo}}</span></div></td>
+            <td colspan="2"><div class="option">Visita a empresa o granja <span class="check-box">{{visitaEmpresa}}</span></div></td>
+            <td colspan="2"><div class="option">Investigación <span class="check-box">{{investigacion}}</span></div></td>
+            <td colspan="2">
+                <div class="option">Otro <span class="check-box">{{otroArticulacion}}</span></div>
+                {{otroArticulacionTexto}}
+            </td>
+        </tr>
+
+        <tr>
+            <td class="label">Descripción de la actividad</td>
+            <td colspan="7">{{descripcionActividad}}</td>
+        </tr>
+
+        <tr>
+            <td colspan="8" class="info-text">
+                <b>ACTAS DE BUEN COMPORTAMIENTO:</b>
+                <i class="instruction">Adjunte el link con consolidado u otro donde se encuentran las actas.</i>
+                <div class="value">{{actasComportamiento}}</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="8" class="info-text">
+                <b>CONSENTIMIENTO INFORMADO PARA MENORES DE EDAD:</b>
+                <i class="instruction">En caso de que dentro del grupo de aprendices participantes haya menores de edad, debe adjuntarse el consentimiento informado firmado por el acudiente, debidamente diligenciado antes de la salida.</i>
+                <div class="value">{{consentimiento}}</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="8" class="info-text">
+                <b>OBJETIVO:</b>
+                <i class="instruction">Explicar brevemente la razón académica de la salida y debe corresponder con la planeación pedagógica (incluir soporte de planeación pedagógica y guía de aprendizaje).</i>
+                <div class="value">{{objetivo}}</div>
+                <div class="value">{{soportesAcademicos}}</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="8" class="info-text">
+                <b>COMPETENCIA:</b>
+                <i class="instruction">Escriba aquí la competencia del Programa de Formación el cual está desarrollando.</i>
+                <div class="value">{{competencia}}</div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="8" class="info-text">
+                <b>RESULTADO DE APRENDIZAJE:</b>
+                <i class="instruction">Escriba aquí el resultado de aprendizaje y justifique brevemente por qué requiere reforzarse mediante una salida práctica o actividad externa, y cuál debe corresponder con la planeación pedagógica.</i>
+                <div class="value">{{resultados}}</div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- PLAN DE TRABAJO -->
     <div class="section">
-        <div class="section-title">CLASIFICACIÓN DE LA INFORMACIÓN</div>
-        Pública {{publica}}
-        Pública Clasificada {{clasificada}}
-        Pública Reservada {{reservada}}
+        <div class="content-block">
+            <p>
+                <b>PLAN DE TRABAJO:</b> <i>Explique brevemente cuál será el cronograma de
+                trabajo durante la salida pedagógica o actividad, indicando las
+                actividades principales, el orden en que se realizarán y los
+                tiempos estimados para cada una.</i>
+            </p>
+        </div>
+
+        <div class="table-wrap">{{planTrabajo}}</div>
     </div>
 
+    <!-- ELEMENTOS DE PROTECCIÓN PERSONAL -->
     <div class="section">
-        <div class="section-title">INFORMACIÓN GENERAL</div>
+        <div class="section-title">
+            ELEMENTOS DE PROTECCIÓN PERSONAL
+        </div>
 
-        <table class="table">
-            <tr>
-                <td><b>Programa</b></td>
-                <td>{{programa}}</td>
-                <td><b>Instructor</b></td>
-                <td>{{instructor}}</td>
-            </tr>
-            <tr>
-                <td><b>Ficha</b></td>
-                <td>{{ficha}}</td>
-                <td><b>No. Aprendices</b></td>
-                <td>{{cantidadAprendices}}</td>
-            </tr>
-            <tr>
-                <td><b>Fecha salida</b></td>
-                <td>{{fechaSalida}}</td>
-                <td><b>Lugar</b></td>
-                <td>{{lugarDestino}}</td>
-            </tr>
-            <tr>
-                <td><b>Hora salida</b></td>
-                <td>{{horaSalida}}</td>
-                <td><b>Hora regreso</b></td>
-                <td>{{horaRegreso}}</td>
-            </tr>
-            <tr>
-                <td><b>Transporte</b></td>
-                <td>SENA {{sena}} EXTERNO {{externo}} APRENDIZ {{aprendiz}}</td>
-                <td><b>Contacto</b></td>
-                <td>{{contactoLugar}}</td>
-            </tr>
-        </table>
+        <div class="content-block content-block--italic">
+            <p>
+                Antes de iniciar la actividad, el instructor debe verificar que
+                los aprendices lleven los elementos de protección personal,
+                según el programa de formación y si les aplica.
+            </p>
+        </div>
+
+        <div class="table-wrap">{{epp}}</div>
     </div>
 
+    <!-- LISTADO DE APRENDICES -->
     <div class="section">
-        <div class="section-title">ARTICULACIÓN FORMATIVA</div>
-        <p>{{articulacion}}</p>
+        <div class="section-title">LISTADO DE EMERGENCIA DE APRENDICES</div>
+
+        <div class="emergency-intro content-block--italic">
+            Es importante contar con un listado de emergencias actualizado que
+            incluya los datos básicos de cada aprendiz, como parte fundamental
+            del plan de contingencia. A continuación se presenta el consolidado
+            con la siguiente información:
+            <br>
+            Nombre del aprendiz | Número de documento | EPS a la que está afiliado |
+            Nombre del contacto de emergencia | Teléfono del contacto de emergencia |
+            Información médica relevante (enfermedades preexistentes, alergias u
+            otras condiciones que deban tenerse en cuenta en caso de emergencia).
+        </div>
+
+        <div class="table-wrap">{{aprendices}}</div>
     </div>
 
+    <!-- IDENTIFICACIÓN DE RIESGOS -->
     <div class="section">
-        <div class="section-title">SOPORTES</div>
-        <p>{{soportes}}</p>
+        <div class="section-title">IDENTIFICACIÓN DE RIESGOS</div>
+        <div class="table-wrap">{{riesgos}}</div>
     </div>
 
+    <!-- PROTOCOLO EN CASO DE ACCIDENTE -->
     <div class="section">
-        <div class="section-title">OBJETIVO</div>
-        <p>{{objetivo}}</p>
+        <div class="section-title">PROTOCOLO EN CASO DE UN ACCIDENTE</div>
+
+        <div class="content-block">
+            <b>Protocolo para el instructor:</b>
+            <ol>
+                <li>
+                    Atención inmediata al aprendiz afectado. Si el instructor
+                    cuenta con conocimientos en primeros auxilios, debe aplicarlos
+                    para estabilizar al aprendiz mientras se coordina la atención
+                    médica oportuna.
+                </li>
+                <li>Informar al Coordinador de Formación y al área de Bienestar al Aprendiz.</li>
+                <li>Informar a la aseguradora (activar protocolo de atención médica, válida únicamente en hospitales del Estado).</li>
+                <li>Trasladar al centro de salud más cercano si es necesario.</li>
+                <li>Registrar el accidente en el formato de reporte SENA (pendiente incluir formato).</li>
+            </ol>
+        </div>
+
+        <div class="subsection-title">Contactos de emergencia</div>
+        <div class="table-wrap">{{contactosEmergencia}}</div>
     </div>
 
-    <div class="section">
-        <div class="section-title">COMPETENCIA</div>
-        <p>{{competencia}}</p>
-    </div>
-
-    <div class="section">
-        <div class="section-title">RESULTADOS DE APRENDIZAJE</div>
-        <p>{{resultados}}</p>
-    </div>
-
-    <div class="section">
-        <div class="section-title">PLAN DE TRABAJO</div>
-        {{planTrabajo}}
-    </div>
-
-    <div class="section">
-        <div class="section-title">PARTICIPANTES</div>
-        {{aprendices}}
-    </div>
-
-    <div class="section">
-        <div class="section-title">RIESGOS IDENTIFICADOS</div>
-        {{riesgos}}
-    </div>
-
-    <div class="section">
-        <div class="section-title">PROTOCOLOS DE EMERGENCIA</div>
-        {{protocolos}}
-    </div>
-
-    <div class="section">
-        <div class="section-title">CONTACTOS DE EMERGENCIA</div>
-        {{contactosEmergencia}}
-    </div>
-
-    <div class="section">
-        <div class="section-title">ELEMENTOS DE PROTECCIÓN PERSONAL</div>
-        {{epp}}
-    </div>
-
-    <div class="section">
-        <div class="section-title">SEGURIDAD VIAL</div>
-        {{seguridadVial}}
-    </div>
-
-    <div class="section">
-        <div class="section-title">PLAN DE ACCIÓN EN CASO DE ACCIDENTE</div>
-
-        <p>
-            En caso de presentarse un accidente durante el desarrollo de la salida pedagógica o actividad, el instructor
-            responsable deberá seguir el siguiente procedimiento institucional:
-        </p>
-
-        <ol>
-
-            <li>
-                Brindar atención inmediata al aprendiz afectado. Si cuenta con conocimientos en primeros auxilios,
-                estabilizar al aprendiz mientras se coordina la atención médica.
-            </li>
-
-            <li>
-                Informar inmediatamente al Coordinador de Formación y al área de Bienestar al Aprendiz.
-            </li>
-
-            <li>
-                Comunicarse con la aseguradora correspondiente para activar el protocolo de atención.
-            </li>
-
-            <li>
-                Gestionar el traslado al centro asistencial más cercano cuando sea necesario.
-            </li>
-
-            <li>
-                Registrar el incidente en el formato oficial establecido por el SENA.
-            </li>
-
-        </ol>
-    </div>
-
-    <div class="section">
+    <div class="section section--compact">
         <div class="section-title">PROTOCOLO DE ACTIVACIÓN DE PÓLIZA</div>
 
-        <ol>
-
-            <li>
-                Verificar que el aprendiz se encuentre cubierto por la póliza institucional.
-            </li>
-
-            <li>
-                Comunicarse con la línea de atención de la aseguradora.
-            </li>
-
-            <li>
-                Suministrar la información solicitada (aprendiz, documento, tipo de accidente, lugar y hora del evento).
-            </li>
-
-            <li>
-                Esperar la asignación del número de caso y las instrucciones para la atención médica.
-            </li>
-
-            <li>
-                Conservar el soporte de atención y el número del caso para el respectivo seguimiento institucional.
-            </li>
-
-        </ol>
+        <div class="content-block">
+            <ol>
+                <li>Confirmar que el aprendiz esté cubierto por la póliza (matrícula activa).</li>
+                <li>Llamar al número nacional de la aseguradora (proveer número local).</li>
+                <li>Proveer datos: nombre del aprendiz, documento, tipo de accidente, lugar.</li>
+                <li>Esperar el número de caso y la autorización para atención médica, válida únicamente en hospitales del Estado.</li>
+                <li>En caso de traslado a una clínica particular, la atención estará sujeta a la decisión y aceptación de dicha clínica.</li>
+                <li>Archivar el soporte de atención médica y número de caso.</li>
+            </ol>
+        </div>
     </div>
 
+    <!-- PLAN DE ACCIÓN EN CASO DE EMERGENCIA -->
+    <div class="section">
+        <div class="section-title">PLAN DE ACCIÓN EN CASO DE EMERGENCIA</div>
+
+        <div class="content-block content-block--italic">
+            Según la naturaleza de la actividad y los peligros identificados en la
+            fase de planeación, a continuación se presenta el Plan de Acción
+            correspondiente, que será activado en caso de materialización del
+            riesgo. Su ejecución debe ser dirigida por el instructor o
+            responsable de la actividad pedagógica.
+        </div>
+
+        <div class="table-wrap">{{protocolos}}</div>
+    </div>
+
+    <!-- SEGURIDAD VIAL -->
+    <div class="section section--compact">
+        <div class="section-title">SEGURIDAD VIAL</div>
+
+        <div class="content-block content-block--italic">
+            Esta sección debe ser diligenciada únicamente cuando el transporte
+            es suministrado por el SENA o contratado por la entidad. No aplica
+            si los aprendices se desplazan por cuenta propia o en transporte
+            particular.
+        </div>
+
+        <div class="table-wrap">{{seguridadVial}}</div>
+    </div>
+
+    <!-- OBSERVACIONES -->
     <div class="section">
         <div class="section-title">OBSERVACIONES</div>
-        <p>{{observaciones}}</p>
+        <div class="content-block">{{observaciones}}</div>
     </div>
 
-    <div class="section">
-        <div class="section-title">FIRMAS</div>
-
-        <table class="table">
-            <tr>
-                <td>Instructor</td>
-                <td>Pedagogía</td>
-                <td>Responsable SST</td>
-                <td>Coordinador</td>
-            </tr>
-            <tr>
-                <td height="50"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+    <!-- FIRMAS -->
+    <div class="section section--compact">
+        {{firmas}}
     </div>
 
-    <div class="section small-text">
-        <b>OBSERVACIÓN TÉCNICA:</b><br>
-        Revisado el presente plan, se otorga aval en DEPENDENCIA ENCARGADA DE REVISIÓN.
+    <!-- OBSERVACIÓN TÉCNICA INSTITUCIONAL -->
+    <div class="technical-observation">
+        <div class="title">Observación Técnica:</div>
+        <p>
+            Revisado el presente Plan de Contingencia, se otorga aval en materia
+            de prevención y gestión de riesgos por parte del Sistema de Gestión
+            de Seguridad y Salud en el Trabajo (SG-SST) del Centro Agroturístico.
+            Se recuerda que la autorización formal para la ejecución de la
+            actividad corresponde a la Subdirección o Coordinación Académica del
+            Centro Agroturístico que aplique. Es fundamental seguir las
+            recomendaciones indicadas en este plan y conservar trazabilidad del
+            envío por correo.
+        </p>
     </div>
 
-    <div class="footer">
-
-    </div>
+    <div class="footer"></div>
 
 </body>
-
 </html>

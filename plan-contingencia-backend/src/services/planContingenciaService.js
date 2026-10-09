@@ -663,7 +663,7 @@ const generarPdfId = async (id) => {
                 "Plan de contingencia no encontrado"
             );
 
-        error.statusCode = 400;
+        error.statusCode = 404;
 
         throw error;
     }
@@ -692,7 +692,13 @@ const generarPdfId = async (id) => {
 
         throw error;
     }
-    const pdfBuffer = await generarDocumentoPdf(plan);
+
+    // Se consulta aparte para no alterar plan.usuarioId, que se valida como campo obligatorio.
+    const instructor = await usuarioModel.findById(plan.usuarioId)
+        .select("nombre apellido firma")
+        .lean();
+
+    const pdfBuffer = await generarDocumentoPdf(plan, { instructor });
 
     return pdfBuffer;
 }
