@@ -20,7 +20,9 @@ import authRoutes from './src/routes/authRoutes.js';
 import { autenticarToken } from './src/middlewares/authMiddleware.js';
 import { bloquearEscrituraRolesSoloLectura } from './src/middlewares/readOnlyRoles.js';
 import { errorHandler } from './src/middlewares/errorHandler.js'
+import dns from 'node:dns';
 
+dns.setServers(['8.8.8.8']);
 dotenv.config();
 
 const app = express();
