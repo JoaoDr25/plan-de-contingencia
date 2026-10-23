@@ -7,14 +7,10 @@
 <script setup>
 import { computed } from 'vue'
 
-const { columns, tabletColumns, gap } = defineProps({
+const { columns, gap } = defineProps({
   columns: {
     type: Number,
     default: 1,
-  },
-  tabletColumns: {
-    type: Number,
-    default: 2,
   },
   gap: {
     type: String,
@@ -24,7 +20,6 @@ const { columns, tabletColumns, gap } = defineProps({
 
 const gridStyle = computed(() => ({
   '--grid-columns': columns,
-  '--grid-tablet-columns': tabletColumns,
   '--grid-gap': gap,
 }))
 </script>
@@ -41,9 +36,9 @@ const gridStyle = computed(() => ({
   width: 100%;
 }
 
-@media (max-width: 599px) {
+@media (max-width: 768px) {
   .base-form-grid {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .base-form-grid :deep(.base-input--textarea:not(.base-input--wizard) .q-field__control) {
@@ -61,12 +56,6 @@ const gridStyle = computed(() => ({
   .base-form-grid :deep(.base-input--textarea:not(.base-input--wizard):not(.q-field--float) .q-field__label) {
     top: 50%;
     transform: translateY(-50%);
-  }
-}
-
-@media (min-width: 600px) and (max-width: 1024px) {
-  .base-form-grid {
-    grid-template-columns: repeat(var(--grid-tablet-columns), minmax(0, 1fr));
   }
 }
 </style>
