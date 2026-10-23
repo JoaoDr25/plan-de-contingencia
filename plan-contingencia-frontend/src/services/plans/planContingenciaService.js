@@ -57,6 +57,7 @@ const generarPlan = async (id) => {
 const generarPdf = async (id) => {
   const response = await api.get(`/planes/${id}/generar-pdf`, {
     responseType: 'blob',
+    timeout: 20000,
   })
 
   return response.data

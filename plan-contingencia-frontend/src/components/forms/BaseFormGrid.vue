@@ -38,7 +38,24 @@ const gridStyle = computed(() => ({
 
 @media (max-width: 768px) {
   .base-form-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .base-form-grid :deep(.base-input--textarea:not(.base-input--wizard) .q-field__control) {
+    min-height: 50px;
+    height: 50px;
+  }
+
+  .base-form-grid :deep(.base-input--textarea:not(.base-input--wizard) .q-field__native) {
+    min-height: 0;
+    height: 26px;
+    line-height: 20px;
+    padding-top: 4px;
+  }
+
+  .base-form-grid :deep(.base-input--textarea:not(.base-input--wizard):not(.q-field--float) .q-field__label) {
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 </style>

@@ -62,7 +62,11 @@ defineEmits(['update:modelValue'])
 .base-dialog {
   width: min(100%, 600px);
   max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -83,11 +87,23 @@ defineEmits(['update:modelValue'])
 
 .base-dialog__body {
   padding: 15px 22px 15px;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .base-dialog__footer {
   padding: 0 24px 20px;
   display: flex;
   justify-content: center;
+  flex-shrink: 0;
+}
+</style>
+
+<style lang="scss">
+@media (max-width: 768px) {
+  /* Overrides the inline width so single-column form dialogs match the two-column ones */
+  .base-dialog:has(.base-form-grid) {
+    width: 700px !important;
+  }
 }
 </style>
