@@ -79,10 +79,7 @@ defineEmits(['update:modelValue'])
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 0.5px;
-}
-
-.base-dialog--scrollable {
-  overflow-y: auto;
+  flex-shrink: 0;
 }
 
 .base-dialog__body {
@@ -99,11 +96,3 @@ defineEmits(['update:modelValue'])
 }
 </style>
 
-<style lang="scss">
-@media (max-width: 768px) {
-  /* Overrides the inline width so single-column form dialogs match the two-column ones */
-  .base-dialog:has(.base-form-grid) {
-    width: 700px !important;
-  }
-}
-</style>
