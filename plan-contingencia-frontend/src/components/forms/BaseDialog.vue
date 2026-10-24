@@ -6,8 +6,15 @@
   >
     <q-card
       class="base-dialog"
-      :class="{ 'base-dialog--scrollable': scrollable }"
-      :style="{ width, maxWidth: 'calc(100vw - 32px)' }"
+      :class="{
+        'base-dialog--scrollable': scrollable,
+        'base-dialog--tablet-width': tabletWidth,
+      }"
+      :style="{
+        width,
+        '--tablet-dialog-width': tabletWidth,
+        maxWidth: 'calc(100vw - 32px)',
+      }"
     >
       <div class="base-dialog__header">
         {{ title }}
@@ -37,6 +44,10 @@ defineProps({
   width: {
     type: String,
     default: '600px',
+  },
+  tabletWidth: {
+    type: String,
+    default: '',
   },
   persistent: {
     type: Boolean,
@@ -97,13 +108,19 @@ defineEmits(['update:modelValue'])
   justify-content: center;
   flex-shrink: 0;
 }
+
+@media (max-width: 767px) {
+  .base-dialog--tablet-width {
+    max-height: min(500px, calc(100vh - 32px));
+    max-height: min(500px, calc(100dvh - 32px));
+  }
+}
 </style>
 
 <style lang="scss">
-@media (max-width: 768px) {
-  /* Overrides the inline width so single-column form dialogs match the two-column ones */
-  .base-dialog:has(.base-form-grid) {
-    width: 700px !important;
+@media (min-width: 768px) and (max-width: 1200px) {
+  .base-dialog--tablet-width {
+    width: min(var(--tablet-dialog-width), calc(100vw - 32px)) !important;
   }
 }
 </style>

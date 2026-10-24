@@ -1,6 +1,6 @@
 <template>
-  <BaseDialog v-model="dialog" :title="dialogTitle" width="400px">
-    <BaseFormGrid>
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="400px" tablet-width="700px">
+    <BaseFormGrid class="base-form-grid--module-dialog">
       <BaseFormField
         v-for="field in dangerFormFields"
         :key="field.model"
