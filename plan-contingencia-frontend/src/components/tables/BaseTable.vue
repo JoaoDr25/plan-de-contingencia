@@ -61,6 +61,7 @@
 <script setup>
 import BaseTableInfo from './BaseTableInfo.vue'
 import BasePagination from 'src/components/tables/BasePagination.vue'
+import { useTableCellMarquee } from 'src/composables/useTableCellMarquee'
 
 const { rows, columns, rowKey, loading, currentPage, totalPages, start, end, total } = defineProps({
   rows: {
@@ -107,6 +108,8 @@ const { rows, columns, rowKey, loading, currentPage, totalPages, start, end, tot
 
 const emit = defineEmits(['change-page', 'change-rows-per-page'])
 
+const { onCellHover, resetActiveCell } = useTableCellMarquee()
+
 function getCellStyle(column) {
   return {
     width: column.width,
@@ -121,47 +124,6 @@ function getCellClass(column) {
   }
 }
 
-const INTERACTIVE_CONTENT = 'button, .q-btn, .q-chip, .q-checkbox, .q-toggle, .marquee-cell__content'
-const MARQUEE_SPEED_PX_PER_SECOND = 40
-
-let activeCell = null
-
-// Slides truncated text horizontally on hover so the full content can be read
-function onCellHover(event) {
-  const cell = event.target.closest?.('tbody td')
-
-  if (cell === activeCell) {
-    return
-  }
-
-  resetActiveCell()
-
-  if (!cell || cell.querySelector(INTERACTIVE_CONTENT)) {
-    return
-  }
-
-  const overflow = cell.scrollWidth - cell.clientWidth
-
-  if (overflow <= 0) {
-    return
-  }
-
-  activeCell = cell
-  cell.style.transition = `text-indent ${Math.max(1, overflow / MARQUEE_SPEED_PX_PER_SECOND)}s linear`
-  cell.style.textOverflow = 'clip'
-  cell.style.textIndent = `-${overflow}px`
-}
-
-function resetActiveCell() {
-  if (!activeCell) {
-    return
-  }
-
-  activeCell.style.transition = 'text-indent 0.3s ease-out'
-  activeCell.style.textIndent = ''
-  activeCell.style.textOverflow = ''
-  activeCell = null
-}
 </script>
 
 <style scoped lang="scss">

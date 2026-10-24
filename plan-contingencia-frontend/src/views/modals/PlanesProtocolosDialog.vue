@@ -1,15 +1,42 @@
 <template>
   <BaseDialog v-model="dialog" :title="dialogTitle" width="1000px" scrollable>
     <div class="protocols-dialog">
-      <div class="protocols-table-wrapper">
+      <div
+        class="protocols-table-wrapper"
+        @mouseover="onCellHover"
+        @mouseleave="resetActiveCell"
+      >
         <table class="protocols-table">
+          <colgroup>
+            <col class="protocols-table__number-column" />
+            <col class="protocols-table__type-column" />
+            <col class="protocols-table__action-column" />
+            <col class="protocols-table__responsible-column" />
+            <col class="protocols-table__medium-column" />
+          </colgroup>
           <thead>
             <tr>
               <th class="protocols-table__number">N</th>
-              <th>TIPO</th>
-              <th>ACCIÓN</th>
-              <th>RESPONSABLE</th>
-              <th>MEDIO</th>
+              <th :aria-sort="getSortAria('tipo')">
+                <button type="button" class="protocols-table__sort" @click="sortByColumn('tipo')">
+                  TIPO <q-icon :name="getSortIcon('tipo')" size="14px" />
+                </button>
+              </th>
+              <th :aria-sort="getSortAria('accion')">
+                <button type="button" class="protocols-table__sort" @click="sortByColumn('accion')">
+                  ACCIÓN <q-icon :name="getSortIcon('accion')" size="14px" />
+                </button>
+              </th>
+              <th :aria-sort="getSortAria('responsable')">
+                <button type="button" class="protocols-table__sort" @click="sortByColumn('responsable')">
+                  RESPONSABLE <q-icon :name="getSortIcon('responsable')" size="14px" />
+                </button>
+              </th>
+              <th :aria-sort="getSortAria('medio')">
+                <button type="button" class="protocols-table__sort" @click="sortByColumn('medio')">
+                  MEDIO <q-icon :name="getSortIcon('medio')" size="14px" />
+                </button>
+              </th>
             </tr>
           </thead>
 
@@ -17,7 +44,11 @@
             <tr v-for="(protocol, index) in paginatedRows" :key="protocol._id">
               <td class="protocols-table__number">{{ startRow + index }}</td>
               <td>{{ protocol.tipo || 'No disponible' }}</td>
-              <td>{{ protocol.accion || 'No disponible' }}</td>
+              <td>
+                <div class="modal-marquee-cell__content">
+                  <span class="modal-marquee-cell__text">{{ protocol.accion || 'No disponible' }}</span>
+                </div>
+              </td>
               <td>{{ protocol.responsable || 'No disponible' }}</td>
               <td>{{ protocol.medio || 'No disponible' }}</td>
             </tr>
@@ -64,8 +95,11 @@ import { useQuasar } from 'quasar'
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import { useCrudTable } from 'src/composables/useCrudTable'
+import { useSortableRows } from 'src/composables/useSortableRows'
+import { useTableCellMarquee } from 'src/composables/useTableCellMarquee'
 
 const $q = useQuasar()
+const { onCellHover, resetActiveCell } = useTableCellMarquee()
 
 const props = defineProps({
   modelValue: {
@@ -97,10 +131,25 @@ const paginationMaxPages = computed(() => {
 
 const protocols = computed(() => props.risk?.protocolos ?? [])
 
-const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+const { sortedRows, toggleSort, getSortIcon, getSortAria } = useSortableRows({
   sourceRows: protocols,
+  sortValues: {
+    tipo: (protocol) => protocol.tipo || 'No disponible',
+    accion: (protocol) => protocol.accion || 'No disponible',
+    responsable: (protocol) => protocol.responsable || 'No disponible',
+    medio: (protocol) => protocol.medio || 'No disponible',
+  },
+})
+
+const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+  sourceRows: sortedRows,
   defaultRowsPerPage: 4,
 })
+
+function sortByColumn(column) {
+  toggleSort(column)
+  currentPage.value = 1
+}
 
 watch([() => props.modelValue, () => props.risk], () => {
   currentPage.value = 1
@@ -126,9 +175,31 @@ function closeDialog() {
 
 .protocols-table {
   width: 100%;
+  min-width: 720px;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: $font-size-xs;
   text-transform: uppercase;
+}
+
+.protocols-table__number-column {
+  width: 55px;
+}
+
+.protocols-table__type-column {
+  width: 16%;
+}
+
+.protocols-table__action-column {
+  width: 42%;
+}
+
+.protocols-table__responsible-column {
+  width: 21%;
+}
+
+.protocols-table__medium-column {
+  width: 21%;
 }
 
 .protocols-table th {
@@ -142,13 +213,56 @@ function closeDialog() {
   font-size: $font-size-xs;
   font-weight: 600;
   text-align: left;
+  white-space: nowrap;
+  max-width: 260px;
 }
 
 .protocols-table td {
   padding: 8px 12px;
   border-bottom: 1px solid #e2e2e2;
   line-height: 1.4;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 260px;
+}
+
+.protocols-table th:nth-child(3),
+.protocols-table td:nth-child(3) {
+  max-width: 420px;
+}
+
+.protocols-table .modal-marquee-cell__content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.protocols-table .modal-marquee-cell__text {
+  display: inline-block;
+  transition: transform 2s linear;
+}
+
+.protocols-table .modal-marquee-cell__text.is-marquee {
+  transform: translateX(var(--marquee-distance, 0));
+}
+
+.protocols-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.protocols-table__sort:focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
 }
 
 .protocols-table tbody tr:last-child td {
@@ -187,12 +301,6 @@ function closeDialog() {
 .protocols-dialog__close {
   margin-left: auto;
   flex-shrink: 0;
-}
-
-@media (max-width: 700px) {
-  .protocols-table {
-    min-width: 720px;
-  }
 }
 
 @media (max-width: 600px) {

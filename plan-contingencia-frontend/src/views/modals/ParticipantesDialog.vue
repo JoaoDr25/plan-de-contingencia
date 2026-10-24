@@ -1,7 +1,11 @@
 <template>
   <BaseDialog v-model="dialog" title="Participantes del plan" width="850px">
     <div class="participants-dialog">
-      <div class="participants-table-wrapper">
+      <div
+        class="participants-table-wrapper"
+        @mouseover="onCellHover"
+        @mouseleave="resetActiveCell"
+      >
         <table class="participants-table">
           <colgroup>
             <col class="participants-table__number-column" />
@@ -12,13 +16,33 @@
             <tr>
               <th class="participants-table__number">N</th>
 
-              <th>TIPO DE DOCUMENTO</th>
+              <th :aria-sort="getSortAria('tipo')">
+                <button type="button" class="participants-table__sort" @click="sortByColumn('tipo')">
+                  TIPO DE DOCUMENTO
+                  <q-icon :name="getSortIcon('tipo')" size="14px" />
+                </button>
+              </th>
 
-              <th>DOCUMENTO</th>
+              <th :aria-sort="getSortAria('documento')">
+                <button type="button" class="participants-table__sort" @click="sortByColumn('documento')">
+                  DOCUMENTO
+                  <q-icon :name="getSortIcon('documento')" size="14px" />
+                </button>
+              </th>
 
-              <th>NOMBRES</th>
+              <th :aria-sort="getSortAria('nombres')">
+                <button type="button" class="participants-table__sort" @click="sortByColumn('nombres')">
+                  NOMBRES
+                  <q-icon :name="getSortIcon('nombres')" size="14px" />
+                </button>
+              </th>
 
-              <th>APELLIDOS</th>
+              <th :aria-sort="getSortAria('apellidos')">
+                <button type="button" class="participants-table__sort" @click="sortByColumn('apellidos')">
+                  APELLIDOS
+                  <q-icon :name="getSortIcon('apellidos')" size="14px" />
+                </button>
+              </th>
             </tr>
           </thead>
 
@@ -111,8 +135,11 @@ import { useQuasar } from 'quasar'
 import BaseDialog from 'src/components/forms/BaseDialog.vue'
 import SecondaryActionButton from 'src/components/actions/SecondaryActionButton.vue'
 import { useCrudTable } from 'src/composables/useCrudTable'
+import { useSortableRows } from 'src/composables/useSortableRows'
+import { useTableCellMarquee } from 'src/composables/useTableCellMarquee'
 
 const $q = useQuasar()
+const { onCellHover, resetActiveCell } = useTableCellMarquee()
 
 const props = defineProps({
   modelValue: {
@@ -135,10 +162,30 @@ const paginationMaxPages = computed(() => {
   return 5
 })
 
-const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+const {
+  sortedRows,
+  toggleSort,
+  getSortIcon,
+  getSortAria,
+} = useSortableRows({
   sourceRows: computed(() => props.participants),
+  sortValues: {
+    tipo: (participant) => getDocumentTypeLabel(participant.tipo || participant.tipoDocumento),
+    documento: (participant) => participant.numeroDocumento || 'No disponible',
+    nombres: (participant) => getParticipantNames(participant).names,
+    apellidos: (participant) => getParticipantNames(participant).surnames,
+  },
+})
+
+const { currentPage, paginatedRows, totalPages, startRow } = useCrudTable({
+  sourceRows: sortedRows,
   defaultRowsPerPage: 4,
 })
+
+function sortByColumn(column) {
+  toggleSort(column)
+  currentPage.value = 1
+}
 
 watch([() => props.modelValue, () => props.plan, () => props.participants], () => {
   currentPage.value = 1
@@ -212,6 +259,7 @@ function getParticipantNames(participant) {
 
 .participants-table {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
   table-layout: fixed;
   font-size: $font-size-xs;
@@ -237,6 +285,8 @@ function getParticipantNames(participant) {
   font-size: $font-size-xs;
   font-weight: 600;
   text-align: center;
+  white-space: nowrap;
+  max-width: 260px;
 }
 
 .participants-table td {
@@ -245,21 +295,37 @@ function getParticipantNames(participant) {
   line-height: 1.4;
   font-size: $font-size-xs;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+.participants-table__sort {
+  display: inline-flex;
+  align-items: center;
+  justify-content: inherit;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.participants-table__sort:focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
 }
 
 .participants-table__cell-content {
   display: block;
   max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
   white-space: nowrap;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.participants-table__cell-content::-webkit-scrollbar {
-  display: none;
 }
 
 .participants-table__cell-content:focus-visible {
@@ -312,10 +378,6 @@ function getParticipantNames(participant) {
 }
 
 @media (max-width: 700px) {
-  .participants-table {
-    min-width: 650px;
-  }
-
   .participants-table-wrapper .participants-table thead th {
     background-color: $color-surface;
   }
@@ -333,3 +395,4 @@ function getParticipantNames(participant) {
   }
 }
 </style>
+
