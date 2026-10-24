@@ -423,6 +423,10 @@ onMounted(() => {
     column-gap: 18px;
     padding: 6px 0 6px 18px;
   }
+
+  .detail-card__fields--user > :nth-child(2) {
+    display: none;
+  }
 }
 
 @media (max-width: 720px) {
