@@ -1,6 +1,6 @@
 <template>
-  <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
-    <BaseFormGrid :columns="2">
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="700px" mobile-width="400px">
+    <BaseFormGrid :columns="2" :mobile-columns="1">
       <BaseFormField
         v-for="field in PROGRAM_FORM_FIELDS"
         :key="field.model"

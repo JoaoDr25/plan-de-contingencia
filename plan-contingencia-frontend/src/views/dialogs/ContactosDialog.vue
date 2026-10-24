@@ -1,6 +1,6 @@
 <template>
-  <BaseDialog v-model="dialog" :title="dialogTitle" width="700px">
-    <BaseFormGrid :columns="singleColumn ? 1 : 2">
+  <BaseDialog v-model="dialog" :title="dialogTitle" width="700px" mobile-width="400px">
+    <BaseFormGrid :columns="singleColumn ? 1 : 2" :mobile-columns="1">
       <BaseFormField v-for="field in visibleFields" :key="field.model" :field="field" v-model="form[field.model]" />
     </BaseFormGrid>
 
@@ -24,10 +24,10 @@ import BaseDialogActions from 'src/components/forms/BaseDialogActions.vue'
 const {
   modelValue,
   mode, contact,
-  showStatus, 
-  showType, 
-  customTitle, 
-  singleColumn 
+  showStatus,
+  showType,
+  customTitle,
+  singleColumn
 } =
   defineProps({
     modelValue: {

@@ -9,10 +9,12 @@
       :class="{
         'base-dialog--scrollable': scrollable,
         'base-dialog--tablet-width': tabletWidth,
+        'base-dialog--mobile-width': mobileWidth,
       }"
       :style="{
         width,
         '--tablet-dialog-width': tabletWidth,
+        '--mobile-dialog-width': mobileWidth,
         maxWidth: 'calc(100vw - 32px)',
       }"
     >
@@ -46,6 +48,10 @@ defineProps({
     default: '600px',
   },
   tabletWidth: {
+    type: String,
+    default: '',
+  },
+  mobileWidth: {
     type: String,
     default: '',
   },
@@ -118,6 +124,12 @@ defineEmits(['update:modelValue'])
 </style>
 
 <style lang="scss">
+@media (max-width: 767px) {
+  .base-dialog--mobile-width {
+    width: min(var(--mobile-dialog-width), calc(100vw - 32px)) !important;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .base-dialog--tablet-width {
     width: min(var(--tablet-dialog-width), calc(100vw - 32px)) !important;

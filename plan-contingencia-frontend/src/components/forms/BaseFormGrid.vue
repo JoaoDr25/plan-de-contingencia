@@ -7,10 +7,14 @@
 <script setup>
 import { computed } from 'vue'
 
-const { columns, gap } = defineProps({
+const { columns, mobileColumns, gap } = defineProps({
   columns: {
     type: Number,
     default: 1,
+  },
+  mobileColumns: {
+    type: Number,
+    default: 2,
   },
   gap: {
     type: String,
@@ -20,6 +24,7 @@ const { columns, gap } = defineProps({
 
 const gridStyle = computed(() => ({
   '--grid-columns': columns,
+  '--grid-mobile-columns': mobileColumns,
   '--grid-gap': gap,
 }))
 </script>
@@ -38,7 +43,7 @@ const gridStyle = computed(() => ({
 
 @media (max-width: 768px) {
   .base-form-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--grid-mobile-columns), minmax(0, 1fr));
   }
 
   .base-form-grid :deep(.base-input--textarea:not(.base-input--wizard) .q-field__control) {

@@ -350,4 +350,10 @@ async function handleVerify() {
     white-space: normal;
   }
 }
+
+@media (min-width: 601px) and (max-width: 1200px) {
+  .login-page__header {
+    margin-bottom: 2rem;
+  }
+}
 </style>
